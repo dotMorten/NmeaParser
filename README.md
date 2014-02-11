@@ -24,6 +24,7 @@ public class Gprmc : NmeaMessage
 }
 ```
 
+If you add new messages, please fork, provide a simple unit test for the message and submit a pull request.
 
 Usage - Windows Store
 =====================
