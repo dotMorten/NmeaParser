@@ -5,6 +5,25 @@ Library for handling Bluetooth devices in Windows Store and Windows Phone, in pa
 
 This library makes it easy to connect and listen for NMEA messages from Bluetooth Devices in Windows Store and Windows Phone apps.
 
+Currently supported devices:
+- Generic GPS NMEA
+- Trimble Laser Range Finder
+- TruePulse Laser Range Finder
+
+The API is easily extensible with more NMEA message. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageAttribute to tag it with the NMEA Message Token.
+
+Example:
+```
+[NmeaMessageType(Type = "GPRMC")]
+public class Gprmc : NmeaMessage
+{
+	protected override void LoadMessage(string[] message)
+	{
+		//Process message parts
+	}
+}
+```
+
 
 Usage - Windows Store
 =====================
