@@ -10,7 +10,7 @@ Currently supported devices:
 - Trimble Laser Range Finder
 - TruePulse Laser Range Finder
 
-The API is easily extensible with more NMEA message. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageAttribute to tag it with the NMEA Message Token.
+The API is easily extensible with more NMEA message. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
 
 Example:
 ```
