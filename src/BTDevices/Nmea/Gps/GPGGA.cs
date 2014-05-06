@@ -34,7 +34,7 @@ namespace BTDevices.Nmea.Gps
 				Latitude *= -1;
 			Longitude = int.Parse(message[3].Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(message[3].Substring(3), CultureInfo.InvariantCulture) / 60;
 			if (message[4] == "W")
-				Latitude *= -1;
+				Longitude *= -1;
 			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
 			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
 			Hdop = double.Parse(message[7], CultureInfo.InvariantCulture);
