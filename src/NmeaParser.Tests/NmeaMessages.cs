@@ -132,5 +132,20 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(2.98, ptlna.SlopeDistance);
 			Assert.AreEqual('M', ptlna.SlopeDistanceUnits);
 		}
+
+		[TestMethod]
+		public void TestPgrme()
+		{
+			string input = "$PGRME,2.3,M,3.3,M,4.0,M*2B";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrme));
+			NmeaParser.Nmea.Gps.Garmin.Pgrme rme = (NmeaParser.Nmea.Gps.Garmin.Pgrme)msg;
+			Assert.AreEqual(2.3, rme.HorizontalError);
+			Assert.AreEqual("M", rme.HorizontalErrorUnits);
+			Assert.AreEqual(3.3, rme.VerticalError);
+			Assert.AreEqual("M", rme.VerticalErrorUnits);
+			Assert.AreEqual(4.0, rme.SphericalError);
+			Assert.AreEqual("M", rme.SphericalErrorUnits);			
+		}
 	}
 }

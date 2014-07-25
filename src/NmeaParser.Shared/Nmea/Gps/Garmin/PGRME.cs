@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTDevices.Nmea.Gps
+namespace NmeaParser.Nmea.Gps.Garmin
 {
 	/// <summary>
 	///  Recommended Minimum
