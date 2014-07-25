@@ -15,11 +15,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRangeMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserTech\LaserRange\PLTIT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserRangeMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserTech\PLTIT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\Trimble\PTNLA.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\Trimble\PTNLB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\NmeaMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Trimble\LaserRange\PTNLA.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Trimble\LaserRange\PTNLB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\UnknownMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StreamDevice.cs" />
   </ItemGroup>

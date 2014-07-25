@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+using NmeaParser.Nmea;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Nmea.LaserRange
 {
 	/// <summary>
 	/// Laser Range Measurement

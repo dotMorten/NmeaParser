@@ -121,8 +121,8 @@ namespace NmeaParser.Tests
 		{
 			string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
 			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Nmea.Trimble.LaserRange.Ptnla));
-			Nmea.Trimble.LaserRange.Ptnla ptlna = (Nmea.Trimble.LaserRange.Ptnla)msg;
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.LaserRange.Trimble.Ptnla));
+			NmeaParser.Nmea.LaserRange.Trimble.Ptnla ptlna = (NmeaParser.Nmea.LaserRange.Trimble.Ptnla)msg;
 			Assert.AreEqual(2.94, ptlna.HorizontalDistance);
 			Assert.AreEqual('M', ptlna.HorizontalDistanceUnits);
 			Assert.AreEqual(288.1, ptlna.HorizontalAngle);

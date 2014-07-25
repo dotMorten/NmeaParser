@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.LaserTech.LaserRange
+namespace NmeaParser.Nmea.LaserRange.LaserTech
 {
 	/// <summary>
 	/// Laser Range 
