@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinPhone", "WinPhone", "{26
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinStore", "WinStore", "{07131E3E-1C4E-41CB-BD14-7950AA858A23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTDevices.WinStore", "BTDevices\BTDevices.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTDevices.Tests", "BTDevices.Tests\BTDevices.Tests.csproj", "{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests", "NmeaParser.Tests\NmeaParser.Tests.csproj", "{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTDevices.WinPhone", "BTDevices\BTDevices.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinPhone", "NmeaParser\NmeaParser.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
