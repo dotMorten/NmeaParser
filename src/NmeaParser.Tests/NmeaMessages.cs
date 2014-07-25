@@ -21,12 +21,69 @@ using System.Text;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using NmeaParser.Nmea;
 using NmeaParser.Nmea.Gps;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace NmeaParser.Tests
 {
     [TestClass]
     public class NmeaMessages
     {
+		[TestMethod]
+		public async Task ParseNmeaFile()
+		{
+			var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
+			System.IO.StreamReader reader = new System.IO.StreamReader(await file.OpenStreamForReadAsync());
+			while(!reader.EndOfStream)
+			{
+				var line = reader.ReadLine();
+				if(line.StartsWith("$"))
+				{
+					var msg = NmeaMessage.Parse(line);
+					Assert.IsNotNull(msg);
+					Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+				}
+			}
+		}
+
+		[TestMethod]
+		public void TestGprmb_Empty()
+		{
+			string input = "$GPRMB,A,,,,,,,,,,,,A,A*0B";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gprmb));
+			Gprmb rmb = (Gprmb)msg;
+			Assert.AreEqual(true, rmb.Arrived);
+			Assert.AreEqual(double.NaN, rmb.CrossTrackError);
+			Assert.AreEqual(double.NaN, rmb.DestinationLatitude);
+			Assert.AreEqual(double.NaN, rmb.DestinationLongitude);
+			Assert.AreEqual(0, rmb.DestinationWaypointID);
+			Assert.AreEqual(0, rmb.OriginWaypointID);
+			Assert.AreEqual(double.NaN, rmb.RangeToDestination);
+			Assert.AreEqual(Gprmb.DataStatus.OK, rmb.Status);
+			Assert.AreEqual(double.NaN, rmb.TrueBearing);
+			Assert.AreEqual(double.NaN, rmb.Velocity);
+		}
+
+		[TestMethod]
+		public void TestGprmb()
+		{
+			string input = "$GPRMB,A,0.66,L,003,004,4917.24,S,12309.57,W,001.3,052.5,000.5,V*3D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gprmb));
+			Gprmb rmb = (Gprmb)msg;
+			Assert.AreEqual(Gprmb.DataStatus.OK, rmb.Status);
+			Assert.AreEqual(-.66, rmb.CrossTrackError);
+			Assert.AreEqual(3, rmb.OriginWaypointID);
+			Assert.AreEqual(4, rmb.DestinationWaypointID);
+			Assert.AreEqual(-49.287333333333333333, rmb.DestinationLatitude);
+			Assert.AreEqual(-123.1595, rmb.DestinationLongitude);
+			Assert.AreEqual(1.3, rmb.RangeToDestination);
+			Assert.AreEqual(52.5, rmb.TrueBearing);
+			Assert.AreEqual(.5, rmb.Velocity);
+			Assert.AreEqual(false, rmb.Arrived);
+		}
+
         [TestMethod]
         public void TestGprmc()
         {

@@ -9,8 +9,8 @@
     <ProjectGuid>{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BTDevices.Tests</RootNamespace>
-    <AssemblyName>BTDevices.Tests</AssemblyName>
+    <RootNamespace>NmeaParser.Tests</RootNamespace>
+    <AssemblyName>NmeaParser.Tests</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -56,6 +56,10 @@
     <None Include="NmeaParser.Tests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\NmeaSampleData.txt">
+      <Link>NmeaSampleData.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\UnitTestLogo.scale-100.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRangeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserTech\LaserRange\PLTIT.cs" />
