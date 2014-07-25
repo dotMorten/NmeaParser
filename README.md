@@ -5,10 +5,10 @@ Library for handling data NMEA streams coming in from Bluetooth devices in Windo
 
 There's also generic support for NMEA files (for simulation/playback) and raw streams.
 
-This library makes it easy to connect and listen for NMEA messages from Bluetooth Devices in Windows Store and Windows Phone apps.
+This library makes it easy to connect and listen for NMEA messages from various  Devices in Windows Store, Windows Phone and Windows Desktop apps.
 
-Currently supported devices:
-- Generic GPS NMEA
+Currently supported nmea messages:
+- Generic GPS NMEA (GPRMC and GPGGA)
 - Trimble Laser Range Finder
 - TruePulse Laser Range Finder
 
@@ -21,7 +21,7 @@ public class Gprmc : NmeaMessage
 {
 	protected override void LoadMessage(string[] message)
 	{
-		//Process message parts
+		//TODO: Process message parts
 	}
 }
 ```
