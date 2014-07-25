@@ -1,7 +1,7 @@
 Nmea Parser
 =========
 
-Library for handling Bluetooth devices in Windows Store and Windows Phone, in particular devices using NMEA messages.
+Library for handling data NMEA streams coming in from Bluetooth devices in Windows Store and Windows Phone.
 
 This library makes it easy to connect and listen for NMEA messages from Bluetooth Devices in Windows Store and Windows Phone apps.
 
