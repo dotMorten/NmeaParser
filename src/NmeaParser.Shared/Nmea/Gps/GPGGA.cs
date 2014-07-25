@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 namespace NmeaParser.Nmea.Gps
 {
 	/// <summary>
-	///  Recommended Minimum
+	///  Global Positioning System Fix Data
 	/// </summary>
 	[NmeaMessageType(Type = "GPGGA")]
 	public class Gpgga : NmeaMessage
@@ -58,10 +58,16 @@ namespace NmeaParser.Nmea.Gps
 			AltitudeUnits = message[9];
 			HeightOfGeoid = double.Parse(message[10], CultureInfo.InvariantCulture);
 			HeightOfGeoidUnits = message[11];
-			if (message[12].Length > 0)
-				TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(int.Parse(message[12], CultureInfo.InvariantCulture));
+			if (message[0].Length == 6)
+			{
+				TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2)),
+								   int.Parse(message[0].Substring(2, 2)),
+								   int.Parse(message[0].Substring(4, 2)));
+			}
 			if (message[13].Length > 0)
 				DgpsStationID = int.Parse(message[13], CultureInfo.InvariantCulture);
+			else
+				DgpsStationID = -1;
 		}
 
 		/// <summary>
