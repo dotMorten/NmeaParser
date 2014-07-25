@@ -48,12 +48,12 @@ var TruePulse360B = devices.Where(t => t.Name.StartsWith("TP360B-")).FirstOrDefa
 RfcommDeviceService rfcommService = await RfcommDeviceService.FromIdAsync(TruePulse360B.Id);
 if (rfcommService != null)
 {
-	var rangeFinder = new BTDevices.NmeaDevice(rfcommService);
+	var rangeFinder = new NmeaParser.BluetoothDevice(rfcommService);
 	rangeFinder.MessageReceived += device_NmeaMessageReceived;
 	await rangeFinder.StartAsync();				
 }
 ...
-private void device_NmeaMessageReceived(BTDevices.NmeaDevice sender, BTDevices.Nmea.NmeaMessage args)
+private void device_NmeaMessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
 {
    // called when a message is received
 }
@@ -74,12 +74,27 @@ var devices = await PeerFinder.FindAllPeersAsync();
 var TruePulse360B = devices.Where(t => t.DisplayName.StartsWith("TP360B-")).FirstOrDefault();
 if (TruePulse360B != null)
 {
-	var device = new BTDevices.NmeaDevice((PeerInformation)TruePulse360B);
+	var device = new NmeaParser.BluetoothDevice((PeerInformation)TruePulse360B);
 	device.MessageReceived += device_NmeaMessageReceived;
 }
 ...
-private void device_NmeaMessageReceived(BTDevices.NmeaDevice sender, BTDevices.Nmea.NmeaMessage args)
+private void device_NmeaMessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
 {
    // called when a message is received
 }								
 ```
+
+Usage - Windows Desktop
+======================
+```
+	var port = new System.IO.Ports.SerialPort("COM3", 9600);
+	var device = new NmeaParser.SerialPortDevice(port);
+	device.MessageReceived += device_NmeaMessageReceived;
+...
+private void device_NmeaMessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
+{
+   // called when a message is received
+}								
+```
+
+
