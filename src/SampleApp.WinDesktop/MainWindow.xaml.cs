@@ -23,16 +23,19 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
-			var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
+			NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt", 100);
 			device.MessageReceived += device_MessageReceived;
 			device.OpenAsync();
+			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
+			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
+			mapView.LocationDisplay.IsEnabled = true;
 		}
 
 		private void device_MessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				output.Text += args.MessageType + ": " + args.ToString() + '\n';
+				output.Text = args.MessageType + ": " + args.ToString() + '\n';
 			});
 		}
 	}

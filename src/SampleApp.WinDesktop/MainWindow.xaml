@@ -1,10 +1,23 @@
 ﻿<Window x:Class="SampleApp.WinDesktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
 		<TextBox x:Name="output"
 				 AcceptsReturn="True"
 				 />
+		
+		<esri:MapView x:Name="mapView" Grid.Row="1">
+			<esri:Map>
+				<esri:ArcGISTiledMapServiceLayer
+					ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/ESRI_StreetMap_World_2D/MapServer" />
+			</esri:Map>
+		</esri:MapView>
+		
 	</Grid>
 </Window>
