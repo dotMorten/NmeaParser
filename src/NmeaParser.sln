@@ -7,19 +7,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinPhone", "WinPhone", "{26
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinStore", "WinStore", "{07131E3E-1C4E-41CB-BD14-7950AA858A23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser.WinStore\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests", "NmeaParser.Tests\NmeaParser.Tests.csproj", "{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinPhone", "NmeaParser\NmeaParser.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinPhone", "NmeaParser.WinPhone\NmeaParser.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Shared", "NmeaParser\NmeaParser.Shared\NmeaParser.Shared.shproj", "{E15EDBD9-0356-422B-8C29-18833787356E}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Shared", "NmeaParser.Shared\NmeaParser.Shared.shproj", "{E15EDBD9-0356-422B-8C29-18833787356E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinDesktop", "WinDesktop", "{AFA7C5B0-1A9C-4C85-880D-C6AF2C061961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinDesktop", "NmeaParser.WinDesktop\NmeaParser.WinDesktop.csproj", "{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
-		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
-		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{df711ab9-f14e-4f1f-b8f2-b6ddc4691554}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +91,16 @@ Global
 		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Release|x64.ActiveCfg = Release|Any CPU
 		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Release|x86.Build.0 = Release|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|x64.ActiveCfg = Release|Any CPU
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +109,6 @@ Global
 		{62A55887-10F5-40D2-9352-96246D1B11D3} = {07131E3E-1C4E-41CB-BD14-7950AA858A23}
 		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C} = {07131E3E-1C4E-41CB-BD14-7950AA858A23}
 		{EA42A713-BC6E-4914-B54B-47C0891B7421} = {26A0F6A9-4B11-46F4-BB01-50D37D1C3CB4}
+		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554} = {AFA7C5B0-1A9C-4C85-880D-C6AF2C061961}
 	EndGlobalSection
 EndGlobal

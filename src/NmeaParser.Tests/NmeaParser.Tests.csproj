@@ -136,9 +136,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NmeaParser\NmeaParser.WinStore.csproj">
+    <ProjectReference Include="..\NmeaParser.WinStore\NmeaParser.WinStore.csproj">
       <Project>{62a55887-10f5-40d2-9352-96246d1b11d3}</Project>
-      <Name>BTDevices.WinStore</Name>
+      <Name>NmeaParser.WinStore</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
