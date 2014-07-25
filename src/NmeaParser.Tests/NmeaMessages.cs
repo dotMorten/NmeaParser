@@ -147,5 +147,50 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(4.0, rme.SphericalError);
 			Assert.AreEqual("M", rme.SphericalErrorUnits);			
 		}
+
+		[TestMethod]
+		public void TestGpgsa_Empty()
+		{
+			string input = "$GPGSA,A,3,,,,,,16,18,,22,24,,,,,*14";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsa));
+			Gpgsa gsa = (Gpgsa)msg;
+			Assert.AreEqual(Gpgsa.ModeSelection.Auto, gsa.GpsMode);
+			Assert.AreEqual(Gpgsa.Mode._3D, gsa.FixMode);
+			Assert.AreEqual(4, gsa.SVs.Length);
+			Assert.AreEqual(16, gsa.SVs[0]);
+			Assert.AreEqual(18, gsa.SVs[1]);
+			Assert.AreEqual(22, gsa.SVs[2]);
+			Assert.AreEqual(24, gsa.SVs[3]);
+			Assert.AreEqual(double.NaN, gsa.PDop);
+			Assert.AreEqual(double.NaN, gsa.HDop);
+			Assert.AreEqual(double.NaN, gsa.VDop);
+		}
+		[TestMethod]
+		public void TestGpgsa()
+		{
+			string input = "$GPGSA,M,2,19,28,14,18,27,22,31,39,40,42,43,44,1.7,1.0,1.3*3C";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsa));
+			Gpgsa gsa = (Gpgsa)msg;
+			Assert.AreEqual(Gpgsa.ModeSelection.Manual, gsa.GpsMode);
+			Assert.AreEqual(Gpgsa.Mode._2D, gsa.FixMode);
+			Assert.AreEqual(12, gsa.SVs.Length);
+			Assert.AreEqual(19, gsa.SVs[0]);
+			Assert.AreEqual(28, gsa.SVs[1]);
+			Assert.AreEqual(14, gsa.SVs[2]);
+			Assert.AreEqual(18, gsa.SVs[3]);
+			Assert.AreEqual(27, gsa.SVs[4]);
+			Assert.AreEqual(22, gsa.SVs[5]);
+			Assert.AreEqual(31, gsa.SVs[6]);
+			Assert.AreEqual(39, gsa.SVs[7]);
+			Assert.AreEqual(40, gsa.SVs[8]);
+			Assert.AreEqual(42, gsa.SVs[9]);
+			Assert.AreEqual(43, gsa.SVs[10]);
+			Assert.AreEqual(44, gsa.SVs[11]);
+			Assert.AreEqual(1.7, gsa.PDop);
+			Assert.AreEqual(1.0, gsa.HDop);
+			Assert.AreEqual(1.3, gsa.VDop);
+		}
 	}
 }
