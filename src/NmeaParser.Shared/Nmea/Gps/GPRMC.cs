@@ -27,7 +27,7 @@ namespace NmeaParser.Nmea.Gps
 				Latitude *= -1;
 			Longitude = int.Parse(message[4].Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(message[4].Substring(3), CultureInfo.InvariantCulture) / 60;
 			if (message[5] == "W")
-				Latitude *= -1;
+				Longitude *= -1;
 			Speed = double.Parse(message[6], CultureInfo.InvariantCulture);
 			Course = double.Parse(message[7], CultureInfo.InvariantCulture);
 			MagneticVariation = double.Parse(message[9], CultureInfo.InvariantCulture);
