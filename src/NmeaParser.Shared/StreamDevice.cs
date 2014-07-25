@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// Generic stream device
+	/// </summary>
     public class StreamDevice : NmeaDevice
     {
 		System.IO.Stream m_stream;
