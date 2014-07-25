@@ -31,4 +31,4 @@ If you add new messages, please fork, provide a simple unit test for the message
 Usage
 =====================
 
-Please see the [WIKI](/dotMorten/NmeaParser/wiki) how to use it on the various platforms
+Please see the [WIKI](http://www.github.com/dotMorten/NmeaParser/wiki) how to use it on the various platforms
