@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTDevices.Nmea
+namespace NmeaParser.Nmea
 {
 	/// <summary>
 	/// Laser Range Measurement

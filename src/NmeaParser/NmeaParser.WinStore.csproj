@@ -9,8 +9,8 @@
     <ProjectGuid>{62A55887-10F5-40D2-9352-96246D1B11D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BTDevices</RootNamespace>
-    <AssemblyName>BTDevices.WinStore</AssemblyName>
+    <RootNamespace>NmeaParser</RootNamespace>
+    <AssemblyName>NmeaParser.WinStore</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -36,25 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Folder Include="Nmea\Gps\Garmin\" />
-    <Folder Include="Nmea\Navigation\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Device.cs" />
-    <Compile Include="NmeaDevice.cs" />
-    <Compile Include="Nmea\Gps\GPGGA.cs" />
-    <Compile Include="Nmea\Gps\GPRMC.cs" />
-    <Compile Include="Nmea\LaserTech\LaserRange\PLTIT.cs" />
-    <Compile Include="Nmea\LaserRangeMessage.cs" />
-    <Compile Include="Nmea\NmeaMessage.cs" />
-    <Compile Include="Nmea\Trimble\LaserRange\PTNLA.cs" />
-    <Compile Include="Nmea\Trimble\LaserRange\PTNLB.cs" />
-    <Compile Include="Nmea\UnknownMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
+  <Import Project="NmeaParser.Shared\NmeaParser.Shared.projitems" Label="Shared" Condition="Exists('NmeaParser.Shared\NmeaParser.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using BTDevices.Nmea;
-using BTDevices.Nmea.Gps;
+using NmeaParser.Nmea;
+using NmeaParser.Nmea.Gps;
 
-namespace BTDevices.Tests
+namespace NmeaParser.Tests
 {
     [TestClass]
     public class NmeaMessages

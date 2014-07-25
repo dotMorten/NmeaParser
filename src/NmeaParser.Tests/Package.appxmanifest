@@ -6,10 +6,10 @@
             Version="1.0.0.0" />
   
   <Properties>
-    <DisplayName>BTDevices.Tests</DisplayName>
+    <DisplayName>NmeaParser.Tests</DisplayName>
     <PublisherDisplayName>mort5161</PublisherDisplayName>
     <Logo>Images\UnitTestStoreLogo.png</Logo>
-    <Description>BTDevices.Tests</Description>
+    <Description>NmeaParser.Tests</Description>
   </Properties>
   
   <Prerequisites>

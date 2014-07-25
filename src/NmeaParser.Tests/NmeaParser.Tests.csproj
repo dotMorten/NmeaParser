@@ -136,7 +136,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BTDevices\BTDevices.WinStore.csproj">
+    <ProjectReference Include="..\NmeaParser\NmeaParser.WinStore.csproj">
       <Project>{62a55887-10f5-40d2-9352-96246d1b11d3}</Project>
       <Name>BTDevices.WinStore</Name>
     </ProjectReference>

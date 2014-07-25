@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinPhone", "WinPhone", "{26A0F6A9-4B11-46F4-BB01-50D37D1C3CB4}"
 EndProject
@@ -13,7 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests", "NmeaPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinPhone", "NmeaParser\NmeaParser.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Shared", "NmeaParser\NmeaParser.Shared\NmeaParser.Shared.shproj", "{E15EDBD9-0356-422B-8C29-18833787356E}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
+		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
+		NmeaParser\NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -84,8 +91,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EA42A713-BC6E-4914-B54B-47C0891B7421} = {26A0F6A9-4B11-46F4-BB01-50D37D1C3CB4}
 		{62A55887-10F5-40D2-9352-96246D1B11D3} = {07131E3E-1C4E-41CB-BD14-7950AA858A23}
 		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C} = {07131E3E-1C4E-41CB-BD14-7950AA858A23}
+		{EA42A713-BC6E-4914-B54B-47C0891B7421} = {26A0F6A9-4B11-46F4-BB01-50D37D1C3CB4}
 	EndGlobalSection
 EndGlobal

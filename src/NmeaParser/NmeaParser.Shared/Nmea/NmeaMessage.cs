@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BTDevices.Nmea
+namespace NmeaParser.Nmea
 {
 	public class NmeaMessageType : Attribute { public string Type { get; set; } }
 	

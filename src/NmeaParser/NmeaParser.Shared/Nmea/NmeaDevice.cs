@@ -11,7 +11,7 @@ using BTDevice = Windows.Networking.Proximity.PeerInformation;
 #endif
 using Windows.Foundation;
 
-namespace BTDevices
+namespace NmeaParser
 {
 	public class NmeaDevice : Device
 	{
@@ -37,7 +37,7 @@ namespace BTDevices
 		{
 			try
 			{
-				var msg = BTDevices.Nmea.NmeaMessage.Parse(p);
+				var msg = NmeaParser.Nmea.NmeaMessage.Parse(p);
 				if (msg != null)
 					OnMessageReceived(msg);
 			}

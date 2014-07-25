@@ -15,7 +15,7 @@ using Windows.Foundation;
 using BTDevice = Windows.Networking.Proximity.PeerInformation;
 #endif
 
-namespace BTDevices
+namespace NmeaParser
 {
 	public abstract class Device : IDisposable
 	{

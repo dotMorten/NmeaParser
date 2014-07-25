@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e15edbd9-0356-422b-8c29-18833787356e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>NmeaParser.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Device.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRangeMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserTech\LaserRange\PLTIT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\NmeaDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\NmeaMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Trimble\LaserRange\PTNLA.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Trimble\LaserRange\PTNLB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\UnknownMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Nmea\Navigation\" />
+  </ItemGroup>
+</Project>
