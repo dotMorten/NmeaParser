@@ -16,17 +16,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Nmea.LaserRange.Trimble
 {
-	public class UnknownMessage : NmeaMessage
+	/// <summary>
+	/// Burden finder
+	/// </summary>
+	[NmeaMessageType(Type = "PTNLA")]
+	public class Ptnla : LaserRangeMessage
 	{
-		public string[] Values { get { return base.MessageParts; } }
-		protected override void LoadMessage(string[] message)
-		{
-		}
 	}
 }

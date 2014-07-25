@@ -1,4 +1,20 @@
-﻿using System;
+﻿﻿//
+// Copyright (c) 2014 Morten Nielsen
+//
+// Licensed under the Microsoft Public License (Ms-PL) (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://opensource.org/licenses/Ms-PL.html
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,12 +38,8 @@ namespace NmeaParser.Nmea.Gps
 								   int.Parse(message[0].Substring(2, 2)),
 								   int.Parse(message[0].Substring(4, 2)), DateTimeKind.Utc);
 			Active = (message[1] == "A");
-			Latitude = int.Parse(message[2].Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(message[2].Substring(2), CultureInfo.InvariantCulture) / 60;
-			if (message[3] == "S")
-				Latitude *= -1;
-			Longitude = int.Parse(message[4].Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(message[4].Substring(3), CultureInfo.InvariantCulture) / 60;
-			if (message[5] == "W")
-				Longitude *= -1;
+			Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
+			Longitude = NmeaMessage.StringToLongitude(message[4], message[5]);
 			Speed = double.Parse(message[6], CultureInfo.InvariantCulture);
 			Course = double.Parse(message[7], CultureInfo.InvariantCulture);
 			MagneticVariation = double.Parse(message[9], CultureInfo.InvariantCulture);

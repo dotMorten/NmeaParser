@@ -16,17 +16,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Nmea.LaserRange.LaserTech
 {
-	public class UnknownMessage : NmeaMessage
+	/// <summary>
+	/// Laser Range 
+	/// </summary>
+	[NmeaMessageType(Type = "PLTIT")]
+	public class Pltit : LaserRangeMessage
 	{
-		public string[] Values { get { return base.MessageParts; } }
-		protected override void LoadMessage(string[] message)
-		{
-		}
 	}
 }

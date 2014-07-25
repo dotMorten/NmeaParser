@@ -1,4 +1,20 @@
-﻿using System;
+﻿﻿//
+// Copyright (c) 2014 Morten Nielsen
+//
+// Licensed under the Microsoft Public License (Ms-PL) (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://opensource.org/licenses/Ms-PL.html
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,7 +24,7 @@ using System.Threading.Tasks;
 namespace NmeaParser.Nmea.Gps
 {
 	/// <summary>
-	///  Recommended Minimum
+	///  Global Positioning System Fix Data
 	/// </summary>
 	[NmeaMessageType(Type = "GPGGA")]
 	public class Gpgga : NmeaMessage
@@ -29,12 +45,8 @@ namespace NmeaParser.Nmea.Gps
 		protected override void LoadMessage(string[] message)
 		{
 			var time = message[0];
-			Latitude = int.Parse(message[1].Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(message[1].Substring(2), CultureInfo.InvariantCulture) / 60;
-			if (message[2] == "S")
-				Latitude *= -1;
-			Longitude = int.Parse(message[3].Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(message[3].Substring(3), CultureInfo.InvariantCulture) / 60;
-			if (message[4] == "W")
-				Longitude *= -1;
+			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
+			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
 			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
 			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
 			Hdop = double.Parse(message[7], CultureInfo.InvariantCulture);
@@ -42,10 +54,16 @@ namespace NmeaParser.Nmea.Gps
 			AltitudeUnits = message[9];
 			HeightOfGeoid = double.Parse(message[10], CultureInfo.InvariantCulture);
 			HeightOfGeoidUnits = message[11];
-			if (message[12].Length > 0)
-				TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(int.Parse(message[12], CultureInfo.InvariantCulture));
+			if (message[0].Length == 6)
+			{
+				TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2)),
+								   int.Parse(message[0].Substring(2, 2)),
+								   int.Parse(message[0].Substring(4, 2)));
+			}
 			if (message[13].Length > 0)
 				DgpsStationID = int.Parse(message[13], CultureInfo.InvariantCulture);
+			else
+				DgpsStationID = -1;
 		}
 
 		/// <summary>
