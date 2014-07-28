@@ -237,5 +237,31 @@ namespace NmeaParser.Tests
 			Assert.IsNotNull(gsv.SVs);
 			Assert.AreEqual(0, gsv.SVs.Length);
 		}
+
+		[TestMethod]
+		public void TestGpgll()
+		{
+			string input = "$GPGLL,4916.45,N,12311.12,W,225444,A,*1D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgll));
+			Gpgll gll = (Gpgll)msg;
+			Assert.IsTrue(gll.DataActive);
+			Assert.AreEqual(49.2741666666666666667, gll.Latitude);
+			Assert.AreEqual(-123.18533333333333333, gll.Longitude);
+			Assert.AreEqual(new TimeSpan(22,54,44), gll.FixTime);
+		}
+
+		[TestMethod]
+		public void TestGpgll_NoFixTime_OrActiveIndicator()
+		{
+			string input = "$GPGLL,3751.65,S,14507.36,E*77";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgll));
+			Gpgll gll = (Gpgll)msg;
+			Assert.IsTrue(gll.DataActive);
+			Assert.AreEqual(-37.860833333333333333, gll.Latitude);
+			Assert.AreEqual(145.1226666666666666667, gll.Longitude);
+			Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
+		}
 	}
 }
