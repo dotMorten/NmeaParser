@@ -192,5 +192,50 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(1.0, gsa.HDop);
 			Assert.AreEqual(1.3, gsa.VDop);
 		}
+
+		[TestMethod]
+		public void TestGpgsv()
+		{
+			string input = "$GPGSV,3,3,11,22,42,067,42,24,14,311,43,27,05,244,00,,,,*4D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsv));
+			Gpgsv gsv = (Gpgsv)msg;
+			Assert.AreEqual(3, gsv.TotalMessages);
+			Assert.AreEqual(3, gsv.MessageNumber);
+			Assert.AreEqual(11, gsv.SVsInView);
+			Assert.IsNotNull(gsv.SVs);
+			Assert.AreEqual(3, gsv.SVs.Length);
+			var sv = gsv.SVs[0];
+			Assert.AreEqual(22, sv.PrnNumber);
+			Assert.AreEqual(42, sv.Elevation);
+			Assert.AreEqual(67, sv.Azimuth);
+			Assert.AreEqual(42, sv.SignalToNoiseRatio);
+
+			sv = gsv.SVs[1];
+			Assert.AreEqual(24, sv.PrnNumber);
+			Assert.AreEqual(14, sv.Elevation);
+			Assert.AreEqual(311, sv.Azimuth);
+			Assert.AreEqual(43, sv.SignalToNoiseRatio);
+
+			sv = gsv.SVs[2];
+			Assert.AreEqual(27, sv.PrnNumber);
+			Assert.AreEqual(5, sv.Elevation);
+			Assert.AreEqual(244, sv.Azimuth);
+			Assert.AreEqual(00, sv.SignalToNoiseRatio);
+		}
+
+		[TestMethod]
+		public void TestGpgsv_Empty()
+		{
+			string input = "$GPGSV,1,1,0,,,,,,,,,,,,,,,,*49";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsv));
+			Gpgsv gsv = (Gpgsv)msg;
+			Assert.AreEqual(1, gsv.TotalMessages);
+			Assert.AreEqual(1, gsv.MessageNumber);
+			Assert.AreEqual(0, gsv.SVsInView);
+			Assert.IsNotNull(gsv.SVs);
+			Assert.AreEqual(0, gsv.SVs.Length);
+		}
 	}
 }
