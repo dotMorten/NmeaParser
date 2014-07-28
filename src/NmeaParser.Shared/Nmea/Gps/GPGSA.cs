@@ -90,16 +90,16 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Dilution of precision
 		/// </summary>
-		public double PDop { get; set; }
+		public double PDop { get; private set; }
 
 		/// <summary>
 		/// Horizontal dilution of precision
 		/// </summary>
-		public double HDop { get; set; }
+		public double HDop { get; private set; }
 
 		/// <summary>
 		/// Vertical dilution of precision
 		/// </summary>
-		public double VDop { get; set; }
+		public double VDop { get; private set; }
 	}
 }
