@@ -115,6 +115,8 @@ namespace NmeaParser.Nmea
 		{
 			try
 			{
+				if (value.Length < 3)
+					return double.NaN;
 				double latitude = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(value.Substring(2), CultureInfo.InvariantCulture) / 60;
 				if (ns == "S")
 					latitude *= -1;
@@ -126,6 +128,8 @@ namespace NmeaParser.Nmea
 		{
 			try
 			{
+				if (value.Length < 4)
+					return double.NaN;
 				double longitude = int.Parse(value.Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(value.Substring(3), CultureInfo.InvariantCulture) / 60;
 				if (ew == "W")
 					longitude *= -1;
