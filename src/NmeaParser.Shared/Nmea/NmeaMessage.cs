@@ -48,7 +48,7 @@ namespace NmeaParser.Nmea
 					checksumTest ^= Convert.ToByte(message[i]);
 				}
 				if (checksum != checksumTest)
-					throw new ArgumentException("Invalid nmea message: Checksum failure");
+					throw new ArgumentException(string.Format("Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
 			}
 
 			string[] parts = message.Split(new char[] { ',' });

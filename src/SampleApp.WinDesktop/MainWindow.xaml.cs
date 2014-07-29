@@ -23,19 +23,35 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
-			NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt", 100);
+			NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt", 50);
 			device.MessageReceived += device_MessageReceived;
-			device.OpenAsync();
+			var _ = device.OpenAsync();
 			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
 			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
 			mapView.LocationDisplay.IsEnabled = true;
+			_ = mapView.ZoomToScaleAsync(25000);
 		}
 
+		Dictionary<int, NmeaParser.Nmea.Gps.Gpgsv> gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>();
 		private void device_MessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				output.Text = args.MessageType + ": " + args.ToString() + '\n';
+				output.Text += args.MessageType + ": " + args.ToString() + '\n';
+				output.Select(output.Text.Length - 1, 0); //scroll to bottom
+
+				//Merge all gpgsv satellite messages
+				if(args is NmeaParser.Nmea.Gps.Gpgsv)
+				{
+					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args;
+					if(gpgsv.MessageNumber == 1)
+					{
+						gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>(); //first one. Replace list
+					}
+					gpgsvList[gpgsv.MessageNumber] = gpgsv;
+					if(gpgsv.MessageNumber == gpgsv.TotalMessages)
+						satView.GpgsvMessages = gpgsvList.Values;
+				}
 			});
 		}
 	}

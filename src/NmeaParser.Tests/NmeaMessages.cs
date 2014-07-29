@@ -147,5 +147,121 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(4.0, rme.SphericalError);
 			Assert.AreEqual("M", rme.SphericalErrorUnits);			
 		}
+
+		[TestMethod]
+		public void TestGpgsa_Empty()
+		{
+			string input = "$GPGSA,A,3,,,,,,16,18,,22,24,,,,,*14";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsa));
+			Gpgsa gsa = (Gpgsa)msg;
+			Assert.AreEqual(Gpgsa.ModeSelection.Auto, gsa.GpsMode);
+			Assert.AreEqual(Gpgsa.Mode._3D, gsa.FixMode);
+			Assert.AreEqual(4, gsa.SVs.Length);
+			Assert.AreEqual(16, gsa.SVs[0]);
+			Assert.AreEqual(18, gsa.SVs[1]);
+			Assert.AreEqual(22, gsa.SVs[2]);
+			Assert.AreEqual(24, gsa.SVs[3]);
+			Assert.AreEqual(double.NaN, gsa.PDop);
+			Assert.AreEqual(double.NaN, gsa.HDop);
+			Assert.AreEqual(double.NaN, gsa.VDop);
+		}
+		[TestMethod]
+		public void TestGpgsa()
+		{
+			string input = "$GPGSA,M,2,19,28,14,18,27,22,31,39,40,42,43,44,1.7,1.0,1.3*3C";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsa));
+			Gpgsa gsa = (Gpgsa)msg;
+			Assert.AreEqual(Gpgsa.ModeSelection.Manual, gsa.GpsMode);
+			Assert.AreEqual(Gpgsa.Mode._2D, gsa.FixMode);
+			Assert.AreEqual(12, gsa.SVs.Length);
+			Assert.AreEqual(19, gsa.SVs[0]);
+			Assert.AreEqual(28, gsa.SVs[1]);
+			Assert.AreEqual(14, gsa.SVs[2]);
+			Assert.AreEqual(18, gsa.SVs[3]);
+			Assert.AreEqual(27, gsa.SVs[4]);
+			Assert.AreEqual(22, gsa.SVs[5]);
+			Assert.AreEqual(31, gsa.SVs[6]);
+			Assert.AreEqual(39, gsa.SVs[7]);
+			Assert.AreEqual(40, gsa.SVs[8]);
+			Assert.AreEqual(42, gsa.SVs[9]);
+			Assert.AreEqual(43, gsa.SVs[10]);
+			Assert.AreEqual(44, gsa.SVs[11]);
+			Assert.AreEqual(1.7, gsa.PDop);
+			Assert.AreEqual(1.0, gsa.HDop);
+			Assert.AreEqual(1.3, gsa.VDop);
+		}
+
+		[TestMethod]
+		public void TestGpgsv()
+		{
+			string input = "$GPGSV,3,3,11,22,42,067,42,24,14,311,43,27,05,244,00,,,,*4D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsv));
+			Gpgsv gsv = (Gpgsv)msg;
+			Assert.AreEqual(3, gsv.TotalMessages);
+			Assert.AreEqual(3, gsv.MessageNumber);
+			Assert.AreEqual(11, gsv.SVsInView);
+			Assert.IsNotNull(gsv.SVs);
+			Assert.AreEqual(3, gsv.SVs.Length);
+			var sv = gsv.SVs[0];
+			Assert.AreEqual(22, sv.PrnNumber);
+			Assert.AreEqual(42, sv.Elevation);
+			Assert.AreEqual(67, sv.Azimuth);
+			Assert.AreEqual(42, sv.SignalToNoiseRatio);
+
+			sv = gsv.SVs[1];
+			Assert.AreEqual(24, sv.PrnNumber);
+			Assert.AreEqual(14, sv.Elevation);
+			Assert.AreEqual(311, sv.Azimuth);
+			Assert.AreEqual(43, sv.SignalToNoiseRatio);
+
+			sv = gsv.SVs[2];
+			Assert.AreEqual(27, sv.PrnNumber);
+			Assert.AreEqual(5, sv.Elevation);
+			Assert.AreEqual(244, sv.Azimuth);
+			Assert.AreEqual(00, sv.SignalToNoiseRatio);
+		}
+
+		[TestMethod]
+		public void TestGpgsv_Empty()
+		{
+			string input = "$GPGSV,1,1,0,,,,,,,,,,,,,,,,*49";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgsv));
+			Gpgsv gsv = (Gpgsv)msg;
+			Assert.AreEqual(1, gsv.TotalMessages);
+			Assert.AreEqual(1, gsv.MessageNumber);
+			Assert.AreEqual(0, gsv.SVsInView);
+			Assert.IsNotNull(gsv.SVs);
+			Assert.AreEqual(0, gsv.SVs.Length);
+		}
+
+		[TestMethod]
+		public void TestGpgll()
+		{
+			string input = "$GPGLL,4916.45,N,12311.12,W,225444,A,*1D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgll));
+			Gpgll gll = (Gpgll)msg;
+			Assert.IsTrue(gll.DataActive);
+			Assert.AreEqual(49.2741666666666666667, gll.Latitude);
+			Assert.AreEqual(-123.18533333333333333, gll.Longitude);
+			Assert.AreEqual(new TimeSpan(22,54,44), gll.FixTime);
+		}
+
+		[TestMethod]
+		public void TestGpgll_NoFixTime_OrActiveIndicator()
+		{
+			string input = "$GPGLL,3751.65,S,14507.36,E*77";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgll));
+			Gpgll gll = (Gpgll)msg;
+			Assert.IsTrue(gll.DataActive);
+			Assert.AreEqual(-37.860833333333333333, gll.Latitude);
+			Assert.AreEqual(145.1226666666666666667, gll.Longitude);
+			Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
+		}
 	}
 }
