@@ -26,6 +26,7 @@ namespace NmeaParser
 {
 	public abstract class NmeaDevice : IDisposable
 	{
+		private object lockObject = new object();
 		private string message = "";
 		private Stream m_stream;
 		System.Threading.CancellationTokenSource tcs;
@@ -88,14 +89,20 @@ namespace NmeaParser
 		private void OnData(byte[] data)
 		{
 			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-			message += nmea;
-			var lineEnd = message.IndexOf("\n");
-			if (lineEnd > -1)
+			string line = null;
+			lock (lockObject)
 			{
-				string line = message.Substring(0, lineEnd);
-				message = message.Substring(lineEnd).Trim();
-				ProcessMessage(line.Trim());
+				message += nmea;
+
+				var lineEnd = message.IndexOf("\n");
+				if (lineEnd > -1)
+				{
+					line = message.Substring(0, lineEnd).Trim();
+					message = message.Substring(lineEnd).Trim();
+				}
 			}
+			if (!string.IsNullOrEmpty(line))
+				ProcessMessage(line);
 		}
 
 		private void ProcessMessage(string p)
