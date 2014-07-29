@@ -29,7 +29,10 @@
 
 		<TabItem Header="Map">
 			<esri:MapView x:Name="mapView" Grid.Row="1">
-				<esri:Map>
+					<local:RestoreAutoPanMode.RestoreAutoPanSettings>
+						<local:RestoreAutoPanMode DelayInSeconds="5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
+					</local:RestoreAutoPanMode.RestoreAutoPanSettings>
+					<esri:Map>
 					<esri:ArcGISTiledMapServiceLayer
 						ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
 				</esri:Map>

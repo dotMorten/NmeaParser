@@ -29,7 +29,7 @@ namespace SampleApp.WinDesktop
 			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
 			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
 			mapView.LocationDisplay.IsEnabled = true;
-			_ = mapView.ZoomToScaleAsync(25000);
+			_ = mapView.ZoomToScaleAsync(5000, TimeSpan.Zero);
 		}
 
 		Dictionary<int, NmeaParser.Nmea.Gps.Gpgsv> gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>();

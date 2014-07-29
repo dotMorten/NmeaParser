@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="RestoreAutoPanMode.cs" />
     <Compile Include="SatelliteSnr.xaml.cs">
       <DependentUpon>SatelliteSnr.xaml</DependentUpon>
     </Compile>
