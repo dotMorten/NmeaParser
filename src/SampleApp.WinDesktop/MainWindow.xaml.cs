@@ -20,6 +20,8 @@ namespace SampleApp.WinDesktop
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private Queue<string> messages = new Queue<string>(101);
+		
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -27,12 +29,14 @@ namespace SampleApp.WinDesktop
 			device.MessageReceived += device_MessageReceived;
 			var _ = device.OpenAsync();
 		}
-
+		
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				output.Text += args.Message.MessageType + ": " + args.Message.ToString() + '\n';
+				messages.Enqueue(args.Message.MessageType + ": " + args.Message.ToString());
+				if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
+				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
 				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
