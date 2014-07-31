@@ -15,15 +15,16 @@ namespace SampleApp.WinDesktop
 			device.MessageReceived += device_MessageReceived;
 		}
 
-		private void device_MessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
+		void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
 		{
-			if (args is NmeaParser.Nmea.Gps.Garmin.Pgrme)
+			var message = e.Message;
+			if (message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
 			{
-				m_Accuracy = ((NmeaParser.Nmea.Gps.Garmin.Pgrme)args).HorizontalError;
+				m_Accuracy = ((NmeaParser.Nmea.Gps.Garmin.Pgrme)message).HorizontalError;
 			}
-			else if (args is NmeaParser.Nmea.Gps.Gprmc)
+			else if (message is NmeaParser.Nmea.Gps.Gprmc)
 			{
-				var rmc = (NmeaParser.Nmea.Gps.Gprmc)args;
+				var rmc = (NmeaParser.Nmea.Gps.Gprmc)message;
 				if(rmc.Active && LocationChanged != null)
 				{
 					LocationChanged(this, new Esri.ArcGISRuntime.Location.LocationInfo()
@@ -44,8 +45,8 @@ namespace SampleApp.WinDesktop
 
 		public System.Threading.Tasks.Task StopAsync()
 		{
-			return this.device.CloseAsync();
 			m_Accuracy = double.NaN;
+			return this.device.CloseAsync();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,9 +30,19 @@ namespace SampleApp.WinDesktop
 			device.MessageReceived += device_MessageReceived;
 			var _ = device.OpenAsync();
 			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
-			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
 			mapView.LocationDisplay.IsEnabled = true;
-			_ = mapView.ZoomToScaleAsync(5000, TimeSpan.Zero);
+			mapView.LocationDisplay.LocationProvider.LocationChanged += LocationProvider_LocationChanged;
+			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
+		}
+
+		private void LocationProvider_LocationChanged(object sender, Esri.ArcGISRuntime.Location.LocationInfo e)
+		{
+			Dispatcher.BeginInvoke((Action)delegate()
+			{
+				//Zoom in on first location fix
+				mapView.LocationDisplay.LocationProvider.LocationChanged -= LocationProvider_LocationChanged;
+				mapView.SetView(e.Location, 5000);
+			});
 		}
 		
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
