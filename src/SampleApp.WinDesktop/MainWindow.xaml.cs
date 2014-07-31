@@ -29,17 +29,17 @@ namespace SampleApp.WinDesktop
 		}
 
 		Dictionary<int, NmeaParser.Nmea.Gps.Gpgsv> gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>();
-		private void device_MessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
+		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				output.Text += args.MessageType + ": " + args.ToString() + '\n';
+				output.Text += args.Message.MessageType + ": " + args.ToString() + '\n';
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
 				//Merge all gpgsv satellite messages
-				if(args is NmeaParser.Nmea.Gps.Gpgsv)
+				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
 				{
-					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args;
+					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
 					if(gpgsv.MessageNumber == 1)
 					{
 						gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>(); //first one. Replace list

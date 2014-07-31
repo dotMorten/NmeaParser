@@ -39,9 +39,9 @@ namespace NmeaParser.Tests
 				var line = reader.ReadLine();
 				if(line.StartsWith("$"))
 				{
-					var msg = NmeaMessage.Parse(line);
-					Assert.IsNotNull(msg);
-					Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+						var msg = NmeaMessage.Parse(line);
+						Assert.IsNotNull(msg);
+						Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
 				}
 			}
 		}
@@ -330,5 +330,22 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.GpsAltitude, rmz.FixDimension, "FixDimension");
 		}
 
+		[TestMethod]
+		public void TestGprte()
+		{
+			string input = "$GPRTE,2,1,c,0,W3IWI,DRIVWY,32CEDR,32-29,32BKLD,32-I95,32-US1,BW-32,BW-198*69";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gprte));
+			Gprte gsv = (Gprte)msg;
+			Assert.AreEqual(2, gsv.TotalMessages);
+			Assert.AreEqual(1, gsv.MessageNumber);
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Gprte.WaypointListType.CompleteWaypointsList, gsv.ListType);
+			Assert.AreEqual("0", gsv.RouteID);
+			Assert.AreEqual("0", gsv.RouteID);
+			Assert.AreEqual(9, gsv.Waypoints.Length);
+			Assert.AreEqual("W3IWI", gsv.Waypoints[0]);
+			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
+			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
+		}
 	}
 }

@@ -27,7 +27,7 @@ namespace NmeaParser.Nmea.Gps
 	///  GPS Satellites in view
 	/// </summary>
 	[NmeaMessageType(Type = "GPGSV")]
-	public sealed class Gpgsv : NmeaMessage
+	public sealed class Gpgsv : NmeaMessage, IMultiPartMessage<SatelitteVehicle>
 	{
 		protected override void LoadMessage(string[] message)
 		{
@@ -65,6 +65,17 @@ namespace NmeaParser.Nmea.Gps
 		/// Dilution of precision
 		/// </summary>
 		public SatelitteVehicle[] SVs { get; private set; }
+
+		public IEnumerator<SatelitteVehicle> GetEnumerator()
+		{
+			foreach(var sv in SVs)
+				yield return sv;
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 
 	public sealed class SatelitteVehicle

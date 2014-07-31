@@ -119,10 +119,10 @@ namespace NmeaParser
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
 		{
 			if (MessageReceived != null)
-				MessageReceived(this, msg);
+				MessageReceived(this, new NmeaMessageReceivedEventArgs(msg));
 		}
 
-		public event TypedEventHandler<NmeaDevice, Nmea.NmeaMessage> MessageReceived;
+		public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
 
 		public void Dispose()
 		{
@@ -141,5 +141,16 @@ namespace NmeaParser
 				m_stream = null;
 			}
 		}
+	}
+
+	public sealed class NmeaMessageReceivedEventArgs : EventArgs
+	{
+		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message) {
+			Message = message;
+			MessageList = new[] { message };
+		}
+		public Nmea.NmeaMessage Message { get; private set; }
+		public bool IsMultiPart { get; internal set; }
+		public Nmea.NmeaMessage[] MessageList { get; internal set; }
 	}
 }
