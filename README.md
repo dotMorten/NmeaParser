@@ -8,9 +8,10 @@ There's also generic support for NMEA files (for simulation/playback) and raw st
 This library makes it easy to connect and listen for NMEA messages from various  Devices in Windows Store, Windows Phone and Windows Desktop apps.
 
 Currently supported nmea messages:
-- Generic GPS NMEA (GPRMC and GPGGA)
-- Trimble Laser Range Finder
-- TruePulse Laser Range Finder
+- Generic GPS NMEA (GPRMC, GPGGA, GPGLL, GPGSA, GPGSCV, GPRMB, GPRMC)
+- Garmin GPS NMEA (PGRME)
+- Trimble Laser Range Finder (PTNLA, PTNLB)
+- TruePulse Laser Range Finder (PLTIT)
 
 The API is easily extensible with more NMEA message. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
 
