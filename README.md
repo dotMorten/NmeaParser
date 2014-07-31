@@ -13,7 +13,7 @@ Currently supported nmea messages:
 - Trimble Laser Range Finder (PTNLA, PTNLB)
 - TruePulse Laser Range Finder (PLTIT)
 
-The API is easily extensible with more NMEA message. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
+The API is easily extensible with more NMEA messages. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
 
 Example:
 ```
