@@ -28,25 +28,18 @@ namespace SampleApp.WinDesktop
 			var _ = device.OpenAsync();
 		}
 
-		Dictionary<int, NmeaParser.Nmea.Gps.Gpgsv> gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>();
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				output.Text += args.Message.MessageType + ": " + args.ToString() + '\n';
+				output.Text += args.Message.MessageType + ": " + args.Message.ToString() + '\n';
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				//Merge all gpgsv satellite messages
 				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
 				{
 					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
-					if(gpgsv.MessageNumber == 1)
-					{
-						gpgsvList = new Dictionary<int,NmeaParser.Nmea.Gps.Gpgsv>(); //first one. Replace list
-					}
-					gpgsvList[gpgsv.MessageNumber] = gpgsv;
-					if(gpgsv.MessageNumber == gpgsv.TotalMessages)
-						satView.GpgsvMessages = gpgsvList.Values;
+					if(args.IsMultiPart && args.MessageParts != null)
+						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
 				}
 			});
 		}

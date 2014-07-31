@@ -4,8 +4,8 @@ using System.Text;
 
 namespace NmeaParser
 {
-    interface IMultiPartMessage<T> : IEnumerable<T>
-    {
+	interface IMultiPartMessage : System.Collections.IEnumerable
+	{
 		/// <summary>
 		/// Total number of messages of this type in this cycle
 		/// </summary>
@@ -15,5 +15,8 @@ namespace NmeaParser
 		/// Message number
 		/// </summary>
 		int MessageNumber { get; }
+	}
+	interface IMultiPartMessage<T> : IMultiPartMessage, IEnumerable<T>
+    {
 	}
 }
