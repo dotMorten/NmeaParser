@@ -263,5 +263,46 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(145.1226666666666666667, gll.Longitude);
 			Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
 		}
+
+
+		[TestMethod]
+		public void TestGpbod_Empty()
+		{
+			string input = "$GPBOD,,T,,M,,*47";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(double.NaN, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(double.NaN, bod.MagneticBearing, "MagneticBearing");
+			Assert.IsNull(bod.OriginID, "OriginID");
+			Assert.IsNull(bod.DestinationID, "DestinationID");
+		}
+
+		[TestMethod]
+		public void TestGpbod_GoToMode()
+		{
+			string input = "$GPBOD,099.3,T,105.6,M,POINTB,*48";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(99.3, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(105.6, bod.MagneticBearing, "MagneticBearing");
+			Assert.AreEqual("POINTB", bod.DestinationID, "DestinationID");
+			Assert.IsNull(bod.OriginID, "OriginID");
+		}
+
+
+		[TestMethod]
+		public void TestGpbod()
+		{
+			string input = "$GPBOD,097.0,T,103.2,M,POINTB,POINTA*4A";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(97d, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(103.2, bod.MagneticBearing, "MagneticBearing");
+			Assert.AreEqual("POINTB", bod.DestinationID, "DestinationID");
+			Assert.AreEqual("POINTA", bod.OriginID, "OriginID");
+		}
 	}
 }

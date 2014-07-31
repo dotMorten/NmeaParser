@@ -98,7 +98,7 @@ namespace NmeaParser
 				if (lineEnd > -1)
 				{
 					line = message.Substring(0, lineEnd).Trim();
-					message = message.Substring(lineEnd).Trim();
+					message = message.Substring(lineEnd);
 				}
 			}
 			if (!string.IsNullOrEmpty(line))

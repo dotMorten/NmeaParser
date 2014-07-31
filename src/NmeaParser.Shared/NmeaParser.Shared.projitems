@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGLL.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPBOD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGSV.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGSA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />

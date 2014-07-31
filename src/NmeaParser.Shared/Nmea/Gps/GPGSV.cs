@@ -36,7 +36,7 @@ namespace NmeaParser.Nmea.Gps
 			SVsInView = int.Parse(message[2]);
 
 			List<SatelitteVehicle> svs = new List<SatelitteVehicle>();
-			for (int i = 3; i < 18; i+=4)
+			for (int i = 3; i < message.Length - 4; i += 4)
 			{
 				if (message[i].Length == 0)
 					continue;
