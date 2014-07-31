@@ -22,7 +22,9 @@ namespace SampleApp.Store
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainPage()
+		private Queue<string> messages = new Queue<string>(101);
+
+		public MainPage()
         {
             this.InitializeComponent();
 			LoadData();
@@ -36,9 +38,11 @@ namespace SampleApp.Store
         }
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
-			Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+			var _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
 			{
-				output.Text += args.Message.MessageType + ": " + args.Message.ToString() + '\n';
+				messages.Enqueue(args.Message.MessageType + ": " + args.Message.ToString());
+				if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
+				output.Text = string.Join("\n", messages.ToArray());
 			});
 		}
     }
