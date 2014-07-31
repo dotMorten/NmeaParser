@@ -304,5 +304,31 @@ namespace NmeaParser.Tests
 			Assert.AreEqual("POINTB", bod.DestinationID, "DestinationID");
 			Assert.AreEqual("POINTA", bod.OriginID, "OriginID");
 		}
+
+
+		[TestMethod]
+		public void TestPgrmz_Empty()
+		{
+			string input = "$PGRMZ,,,*7E";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+			Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.None, rmz.FixDimension, "FixDimension");
+		}
+
+		[TestMethod]
+		public void TestPgrmz()
+		{
+			string input = "$PGRMZ,93,f,3*21";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+			Assert.AreEqual(93d, rmz.Altitude, "Altitude");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.GpsAltitude, rmz.FixDimension, "FixDimension");
+		}
+
 	}
 }
