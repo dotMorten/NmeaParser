@@ -32,13 +32,13 @@ namespace SampleApp.Store
 			var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
 			var device = new NmeaParser.NmeaFileDevice(file);
 			device.MessageReceived += device_MessageReceived;
-			device.OpenAsync();
+			var _ = device.OpenAsync();
         }
-		private void device_MessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.Nmea.NmeaMessage args)
+		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
 			{
-				output.Text += args.MessageType + ": " + args.ToString() + '\n';
+				output.Text += args.Message.MessageType + ": " + args.Message.ToString() + '\n';
 			});
 		}
     }

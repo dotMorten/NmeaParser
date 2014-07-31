@@ -40,6 +40,7 @@ namespace NmeaParser
 			tcs = new System.Threading.CancellationTokenSource();
 			m_stream = await OpenStreamAsync();
 			StartParser();
+			MultiPartMessageCache.Clear();
 		}
 
 		private void StartParser()
@@ -82,6 +83,7 @@ namespace NmeaParser
 			}
 			await closeTask.Task;
 			await CloseStreamAsync(m_stream);
+			MultiPartMessageCache.Clear();
 			m_stream = null;
 		}
 		protected abstract Task CloseStreamAsync(Stream stream);
@@ -98,7 +100,7 @@ namespace NmeaParser
 				if (lineEnd > -1)
 				{
 					line = message.Substring(0, lineEnd).Trim();
-					message = message.Substring(lineEnd).Trim();
+					message = message.Substring(lineEnd + 1);
 				}
 			}
 			if (!string.IsNullOrEmpty(line))
@@ -118,11 +120,47 @@ namespace NmeaParser
 
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
 		{
+			var args = new NmeaMessageReceivedEventArgs(msg);
+			if (msg is IMultiPartMessage)
+			{
+				args.IsMultiPart = true;
+				var multi = (IMultiPartMessage)msg;
+				if (MultiPartMessageCache.ContainsKey(msg.MessageType))
+				{
+					var dic = MultiPartMessageCache[msg.MessageType];
+					if (dic.ContainsKey(multi.MessageNumber - 1) && !dic.ContainsKey(multi.MessageNumber))
+					{
+						dic[multi.MessageNumber] = msg;
+					}
+					else //Something is out of order. Clear cache
+						MultiPartMessageCache.Remove(msg.MessageType);
+				}
+				else if (multi.MessageNumber == 1)
+				{
+					MultiPartMessageCache[msg.MessageType] = new Dictionary<int, Nmea.NmeaMessage>(multi.TotalMessages);
+					MultiPartMessageCache[msg.MessageType][1] = msg;
+				}
+				if (MultiPartMessageCache.ContainsKey(msg.MessageType))
+				{
+					var dic = MultiPartMessageCache[msg.MessageType];
+					if (dic.Count == multi.TotalMessages) //We have a full list
+					{
+						MultiPartMessageCache.Remove(msg.MessageType);
+						args.MessageParts = dic.Values.ToArray();
+					}
+				}
+			}
+
 			if (MessageReceived != null)
-				MessageReceived(this, msg);
+			{
+				MessageReceived(this, args);
+			}
 		}
 
-		public event TypedEventHandler<NmeaDevice, Nmea.NmeaMessage> MessageReceived;
+		private Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache
+			= new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
+
+		public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
 
 		public void Dispose()
 		{
@@ -141,5 +179,15 @@ namespace NmeaParser
 				m_stream = null;
 			}
 		}
+	}
+
+	public sealed class NmeaMessageReceivedEventArgs : EventArgs
+	{
+		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message) {
+			Message = message;
+		}
+		public Nmea.NmeaMessage Message { get; private set; }
+		public bool IsMultiPart { get; internal set; }
+		public Nmea.NmeaMessage[] MessageParts { get; internal set; }
 	}
 }

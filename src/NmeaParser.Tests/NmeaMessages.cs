@@ -39,9 +39,9 @@ namespace NmeaParser.Tests
 				var line = reader.ReadLine();
 				if(line.StartsWith("$"))
 				{
-					var msg = NmeaMessage.Parse(line);
-					Assert.IsNotNull(msg);
-					Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+						var msg = NmeaMessage.Parse(line);
+						Assert.IsNotNull(msg);
+						Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
 				}
 			}
 		}
@@ -262,6 +262,90 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(-37.860833333333333333, gll.Latitude);
 			Assert.AreEqual(145.1226666666666666667, gll.Longitude);
 			Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
+		}
+
+
+		[TestMethod]
+		public void TestGpbod_Empty()
+		{
+			string input = "$GPBOD,,T,,M,,*47";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(double.NaN, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(double.NaN, bod.MagneticBearing, "MagneticBearing");
+			Assert.IsNull(bod.OriginID, "OriginID");
+			Assert.IsNull(bod.DestinationID, "DestinationID");
+		}
+
+		[TestMethod]
+		public void TestGpbod_GoToMode()
+		{
+			string input = "$GPBOD,099.3,T,105.6,M,POINTB,*48";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(99.3, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(105.6, bod.MagneticBearing, "MagneticBearing");
+			Assert.AreEqual("POINTB", bod.DestinationID, "DestinationID");
+			Assert.IsNull(bod.OriginID, "OriginID");
+		}
+
+
+		[TestMethod]
+		public void TestGpbod()
+		{
+			string input = "$GPBOD,097.0,T,103.2,M,POINTB,POINTA*4A";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpbod));
+			Gpbod bod = (Gpbod)msg;
+			Assert.AreEqual(97d, bod.TrueBearing, "TrueBearing");
+			Assert.AreEqual(103.2, bod.MagneticBearing, "MagneticBearing");
+			Assert.AreEqual("POINTB", bod.DestinationID, "DestinationID");
+			Assert.AreEqual("POINTA", bod.OriginID, "OriginID");
+		}
+
+
+		[TestMethod]
+		public void TestPgrmz_Empty()
+		{
+			string input = "$PGRMZ,,,*7E";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+			Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.None, rmz.FixDimension, "FixDimension");
+		}
+
+		[TestMethod]
+		public void TestPgrmz()
+		{
+			string input = "$PGRMZ,93,f,3*21";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+			Assert.AreEqual(93d, rmz.Altitude, "Altitude");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.GpsAltitude, rmz.FixDimension, "FixDimension");
+		}
+
+		[TestMethod]
+		public void TestGprte()
+		{
+			string input = "$GPRTE,2,1,c,0,W3IWI,DRIVWY,32CEDR,32-29,32BKLD,32-I95,32-US1,BW-32,BW-198*69";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gprte));
+			Gprte gsv = (Gprte)msg;
+			Assert.AreEqual(2, gsv.TotalMessages);
+			Assert.AreEqual(1, gsv.MessageNumber);
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Gprte.WaypointListType.CompleteWaypointsList, gsv.ListType);
+			Assert.AreEqual("0", gsv.RouteID);
+			Assert.AreEqual("0", gsv.RouteID);
+			Assert.AreEqual(9, gsv.Waypoints.Length);
+			Assert.AreEqual("W3IWI", gsv.Waypoints[0]);
+			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
+			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
 		}
 	}
 }
