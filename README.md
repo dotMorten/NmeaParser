@@ -28,6 +28,11 @@ public class Gprmc : NmeaMessage
 
 If you add new messages, please fork, provide a simple unit test for the message and submit a pull request.
 
+
+### NuGet
+You can get the library via [NuGet](http://www.nuget.org) if you have the extension installed for Visual Studio or via the PowerShell package manager.  This control is published via NuGet at [SharpGIS.NmeaParser](https://nuget.org/packages/SharpGIS.NmeaParser).
+
+
 Usage
 =====================
 
