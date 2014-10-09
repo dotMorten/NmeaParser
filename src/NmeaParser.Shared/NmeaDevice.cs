@@ -26,10 +26,10 @@ namespace NmeaParser
 {
 	public abstract class NmeaDevice : IDisposable
 	{
-		private object lockObject = new object();
-		private string message = "";
+		private object m_lockObject = new object();
+		private string m_message = "";
 		private Stream m_stream;
-		System.Threading.CancellationTokenSource tcs;
+		System.Threading.CancellationTokenSource m_cts;
 		TaskCompletionSource<bool> closeTask;
 
 		protected NmeaDevice()
@@ -37,7 +37,12 @@ namespace NmeaParser
 		}
 		public async Task OpenAsync()
 		{
-			tcs = new System.Threading.CancellationTokenSource();
+			lock (m_lockObject)
+			{
+				if (IsOpen) return;
+				IsOpen = true;
+			}
+			m_cts = new System.Threading.CancellationTokenSource();
 			m_stream = await OpenStreamAsync();
 			StartParser();
 			MultiPartMessageCache.Clear();
@@ -45,7 +50,8 @@ namespace NmeaParser
 
 		private void StartParser()
 		{
-			var token = tcs.Token;
+			var token = m_cts.Token;
+			System.Diagnostics.Debug.WriteLine("Starting parser...");
 			var _ = Task.Run(async () =>
 			{
 				var stream = m_stream;
@@ -74,17 +80,19 @@ namespace NmeaParser
 		protected abstract Task<Stream> OpenStreamAsync();
 		public async Task CloseAsync()
 		{
-			if (tcs != null)
+			if (m_cts != null)
 			{
 				closeTask = new TaskCompletionSource<bool>();
-				if (tcs != null)
-					tcs.Cancel();
-				tcs = null;
+				if (m_cts != null)
+					m_cts.Cancel();
+				m_cts = null;
 			}
 			await closeTask.Task;
 			await CloseStreamAsync(m_stream);
 			MultiPartMessageCache.Clear();
 			m_stream = null;
+			lock (m_lockObject)
+				IsOpen = false;
 		}
 		protected abstract Task CloseStreamAsync(Stream stream);
 
@@ -92,15 +100,15 @@ namespace NmeaParser
 		{
 			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
 			string line = null;
-			lock (lockObject)
+			lock (m_lockObject)
 			{
-				message += nmea;
+				m_message += nmea;
 
-				var lineEnd = message.IndexOf("\n");
+				var lineEnd = m_message.IndexOf("\n");
 				if (lineEnd > -1)
 				{
-					line = message.Substring(0, lineEnd).Trim();
-					message = message.Substring(lineEnd + 1);
+					line = m_message.Substring(0, lineEnd).Trim();
+					m_message = m_message.Substring(lineEnd + 1);
 				}
 			}
 			if (!string.IsNullOrEmpty(line))
@@ -170,15 +178,17 @@ namespace NmeaParser
 		{
 			if (m_stream != null)
 			{
-				if (tcs != null)
+				if (m_cts != null)
 				{
-					tcs.Cancel();
-					tcs = null;
+					m_cts.Cancel();
+					m_cts = null;
 				}
 				CloseStreamAsync(m_stream);
 				m_stream = null;
 			}
 		}
+
+		public bool IsOpen { get; private set; }
 	}
 
 	public sealed class NmeaMessageReceivedEventArgs : EventArgs
