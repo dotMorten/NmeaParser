@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp.WinDesktop
+namespace SampleApp
 {
 	/// <summary>
 	/// Interaction logic for SatelliteView.xaml

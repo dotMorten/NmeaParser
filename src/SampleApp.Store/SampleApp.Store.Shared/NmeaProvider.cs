@@ -1,7 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using System;
 
-namespace SampleApp.WinDesktop
+namespace SampleApp
 {
 	public class NmeaLocationProvider : Esri.ArcGISRuntime.Location.ILocationProvider
 	{

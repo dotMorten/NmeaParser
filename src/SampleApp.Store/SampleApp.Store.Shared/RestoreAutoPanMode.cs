@@ -11,7 +11,7 @@ using System.Windows.Threading;
 #endif
 
 
-namespace SampleApp.WinDesktop
+namespace SampleApp
 {
 	public class RestoreAutoPanMode
 	{
@@ -109,7 +109,7 @@ namespace SampleApp.WinDesktop
 		public bool IsEnabled { get; set; }
 
 
-		public int DelayInSeconds { get; set; }
+		public double DelayInSeconds { get; set; }
 
 
 		public AutoPanMode PanMode { get; set; }

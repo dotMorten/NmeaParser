@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SampleApp.WinDesktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:local="clr-namespace:SampleApp.WinDesktop"
+		xmlns:local="clr-namespace:SampleApp"
 		xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
         Title="Sample App" Height="450" Width="525">
 	<Grid>
@@ -30,7 +30,7 @@
 		<TabItem Header="Map">
 			<esri:MapView x:Name="mapView" Grid.Row="1">
 					<local:RestoreAutoPanMode.RestoreAutoPanSettings>
-						<local:RestoreAutoPanMode DelayInSeconds="5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
+						<local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
 					</local:RestoreAutoPanMode.RestoreAutoPanSettings>
 					<esri:Map>
 					<esri:ArcGISTiledMapServiceLayer

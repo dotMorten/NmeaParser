@@ -28,11 +28,9 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 			NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt", 50);
 			device.MessageReceived += device_MessageReceived;
-			var _ = device.OpenAsync();
 			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
 			mapView.LocationDisplay.IsEnabled = true;
 			mapView.LocationDisplay.LocationProvider.LocationChanged += LocationProvider_LocationChanged;
-			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
 		}
 
 		private void LocationProvider_LocationChanged(object sender, Esri.ArcGISRuntime.Location.LocationInfo e)
@@ -42,6 +40,7 @@ namespace SampleApp.WinDesktop
 				//Zoom in on first location fix
 				mapView.LocationDisplay.LocationProvider.LocationChanged -= LocationProvider_LocationChanged;
 				mapView.SetView(e.Location, 5000);
+				mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
 			});
 		}
 		
