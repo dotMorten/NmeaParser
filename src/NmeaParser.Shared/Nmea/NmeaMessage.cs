@@ -74,31 +74,31 @@ namespace NmeaParser.Nmea
 			return msg;
 		}
 
-		private static void LoadResponseTypes()
-		{
-			messageTypes = new Dictionary<string, ConstructorInfo>();
-			var typeinfo = (typeof(NmeaMessage)).Assembly.GetCustomAttributes(typeof(NmeaMessage), false);
+        private static void LoadResponseTypes()
+        {
+            messageTypes = new Dictionary<string, ConstructorInfo>();
+            var typeinfo = (typeof(NmeaMessage)).Assembly.GetCustomAttributes(typeof(NmeaMessage), false);
             foreach (var subclass in (typeof(NmeaMessage)).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
-			{
-				var attr = subclass.GetCustomAttributes(true).FirstOrDefault();
-				if (attr != null)
-				{                    
-					if (!subclass.IsAbstract)
-					{
-						foreach (var c in subclass.GetConstructors())
-						{
-							var pinfo = c.GetParameters();
-							if (pinfo.Length == 0)
-							{
+            {
+                var attr = subclass.GetCustomAttributes(true).FirstOrDefault();
+                if (attr != null)
+                {                    
+                    if (!subclass.IsAbstract)
+                    {
+                        foreach (var c in subclass.GetConstructors())
+                        {
+                            var pinfo = c.GetParameters();
+                            if (pinfo.Length == 0)
+                            {
                                 string type = ((NmeaParser.Nmea.NmeaMessageType)(attr)).Type;
-								messageTypes.Add(type, c);
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
+                                messageTypes.Add(type, c);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 		private static Dictionary<string, ConstructorInfo> messageTypes;
 
