@@ -1,6 +1,6 @@
 ####Note!
 
-This fork is downgraded from .NET Framework 4.5 to target 4.0.
+This fork is downgraded to target .NET Framework 4.0
 
 ###Nmea Parser
 
