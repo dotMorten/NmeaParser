@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//    http://opensource.org/licenses/Ms-PL.html
+//	http://opensource.org/licenses/Ms-PL.html
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -74,31 +74,31 @@ namespace NmeaParser.Nmea
 			return msg;
 		}
 
-        private static void LoadResponseTypes()
-        {
-            messageTypes = new Dictionary<string, ConstructorInfo>();
-            var typeinfo = (typeof(NmeaMessage)).Assembly.GetCustomAttributes(typeof(NmeaMessage), false);
-            foreach (var subclass in (typeof(NmeaMessage)).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
-            {
-                var attr = subclass.GetCustomAttributes(true).FirstOrDefault();
-                if (attr != null)
-                {                    
-                    if (!subclass.IsAbstract)
-                    {
-                        foreach (var c in subclass.GetConstructors())
-                        {
-                            var pinfo = c.GetParameters();
-                            if (pinfo.Length == 0)
-                            {
-                                string type = ((NmeaParser.Nmea.NmeaMessageType)(attr)).Type;
-                                messageTypes.Add(type, c);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+		private static void LoadResponseTypes()
+		{
+			messageTypes = new Dictionary<string, ConstructorInfo>();
+			var typeinfo = (typeof(NmeaMessage)).Assembly.GetCustomAttributes(typeof(NmeaMessage), false);
+			foreach (var subclass in (typeof(NmeaMessage)).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
+			{
+				var attr = subclass.GetCustomAttributes(true).FirstOrDefault();
+				if (attr != null)
+				{					
+					if (!subclass.IsAbstract)
+					{
+						foreach (var c in subclass.GetConstructors())
+						{
+							var pinfo = c.GetParameters();
+							if (pinfo.Length == 0)
+							{
+								string type = ((NmeaParser.Nmea.NmeaMessageType)(attr)).Type;
+								messageTypes.Add(type, c);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
 
 		private static Dictionary<string, ConstructorInfo> messageTypes;
 
