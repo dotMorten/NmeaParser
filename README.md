@@ -1,5 +1,8 @@
-Nmea Parser
-=========
+####Note!
+
+This fork is downgraded from .NET Framework 4.5 to target 4.0.
+
+###Nmea Parser
 
 Library for handling data NMEA streams coming in from Bluetooth devices in Windows Store and Windows Phone, and Serial ports in Windows Desktop apps. 
 
@@ -27,14 +30,6 @@ public class Gprmc : NmeaMessage
 }
 ```
 
-If you add new messages, please fork, provide a simple unit test for the message and submit a pull request.
-
-
-### NuGet
-You can get the library via [NuGet](http://www.nuget.org) if you have the extension installed for Visual Studio or via the PowerShell package manager.  This control is published via NuGet at [SharpGIS.NmeaParser](https://nuget.org/packages/SharpGIS.NmeaParser).
-
-
-Usage
-=====================
+###Usage
 
 Please see the [WIKI](http://www.github.com/dotMorten/NmeaParser/wiki) how to use it on the various platforms
