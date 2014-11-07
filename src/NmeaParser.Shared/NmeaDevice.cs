@@ -52,7 +52,7 @@ namespace NmeaParser
 		{
 			var token = m_cts.Token;
 			System.Diagnostics.Debug.WriteLine("Starting parser...");
-			var _ = Task.Run(async () =>
+			var _ = TaskEx.Run(async () =>
 			{
 				var stream = m_stream;
 				byte[] buffer = new byte[1024];
@@ -70,7 +70,7 @@ namespace NmeaParser
 					{
 						OnData(buffer.Take(readCount).ToArray());
 					}
-					await Task.Delay(10, token);
+					await TaskEx.Delay(10, token);
 				}
 				if (closeTask != null)
 					closeTask.SetResult(true);

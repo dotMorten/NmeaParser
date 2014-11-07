@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -76,20 +77,21 @@ namespace NmeaParser.Nmea
 		private static void LoadResponseTypes()
 		{
 			messageTypes = new Dictionary<string, ConstructorInfo>();
-			var typeinfo = typeof(NmeaMessage).GetTypeInfo();
-			foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
+			var typeinfo = (typeof(NmeaMessage)).Assembly.GetCustomAttributes(typeof(NmeaMessage), false);
+            foreach (var subclass in (typeof(NmeaMessage)).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
 			{
-				var attr = subclass.GetCustomAttribute<NmeaMessageType>(false);
+				var attr = subclass.GetCustomAttributes(true).FirstOrDefault();
 				if (attr != null)
-				{
+				{                    
 					if (!subclass.IsAbstract)
 					{
-						foreach (var c in subclass.DeclaredConstructors)
+						foreach (var c in subclass.GetConstructors())
 						{
 							var pinfo = c.GetParameters();
 							if (pinfo.Length == 0)
 							{
-								messageTypes.Add(attr.Type, c);
+                                string type = ((NmeaParser.Nmea.NmeaMessageType)(attr)).Type;
+								messageTypes.Add(type, c);
 								break;
 							}
 						}

@@ -59,14 +59,14 @@ namespace NmeaParser
 		{
 			StreamReader sr = System.IO.File.OpenText(m_filename);
 			m_stream = new BufferedStream(sr, m_readSpeed);
-			return Task.FromResult<Stream>(m_stream);
+			return TaskEx.FromResult<Stream>(m_stream);
 #endif
 		}
 
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			m_stream.Dispose();
-			return Task.FromResult(true);
+			return TaskEx.FromResult(true);
 		}
 
 		// stream that slowly populates a buffer from a StreamReader to simulate nmea messages coming in line by line

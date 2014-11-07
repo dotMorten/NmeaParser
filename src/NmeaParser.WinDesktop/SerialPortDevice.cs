@@ -35,13 +35,13 @@ namespace NmeaParser
 		protected override Task<System.IO.Stream> OpenStreamAsync()
 		{
 			m_port.Open();
-			return Task.FromResult<System.IO.Stream>(m_port.BaseStream);
+			return TaskEx.FromResult<System.IO.Stream>(m_port.BaseStream);
 		}
 
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			m_port.Close();
-			return Task.FromResult(true);
+			return TaskEx.FromResult(true);
 		}
 	}
 }

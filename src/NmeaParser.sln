@@ -1,67 +1,37 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser.WinStore\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests", "NmeaParser.Tests\NmeaParser.Tests.csproj", "{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinPhone", "NmeaParser.WinPhone\NmeaParser.WinPhone.csproj", "{EA42A713-BC6E-4914-B54B-47C0891B7421}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Shared", "NmeaParser.Shared\NmeaParser.Shared.shproj", "{E15EDBD9-0356-422B-8C29-18833787356E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinDesktop", "NmeaParser.WinDesktop\NmeaParser.WinDesktop.csproj", "{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NmeaParser", "NmeaParser", "{1701F3BA-A09C-4706-A612-24FD9340FC18}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CF767486-305D-40EE-8845-58EF76C16D85}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.WinDesktop", "SampleApp.WinDesktop\SampleApp.WinDesktop.csproj", "{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Store-Universal", "Store-Universal", "{71F04187-BE90-47DE-A7BD-4D6CED50D446}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SampleApp.Store.Shared", "SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.shproj", "{95E812E6-17C2-494F-A446-FDE42D75331C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Store.Windows", "SampleApp.Store\SampleApp.Store.Windows\SampleApp.Store.Windows.csproj", "{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Store.WindowsPhone", "SampleApp.Store\SampleApp.Store.WindowsPhone\SampleApp.Store.WindowsPhone.csproj", "{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{7ABA337E-6748-484E-A0F4-E1715E1C95F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{28B8E327-C504-4E08-B2CE-09D1CBB8B904}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleApps", "SampleApps", "{A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2ECD5D29-8F1B-41C6-B953-B87E367F8199}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{df711ab9-f14e-4f1f-b8f2-b6ddc4691554}*SharedItemsImports = 4
-		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{9ee3ea1d-f28c-4cf2-b540-db0415050d5f}*SharedItemsImports = 4
-		NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
-		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{c4b3935b-7ed4-40cc-b1d2-bc2b854e319d}*SharedItemsImports = 4
-		NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
-		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{95e812e6-17c2-494f-a446-fde42d75331c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{62A55887-10F5-40D2-9352-96246D1B11D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62A55887-10F5-40D2-9352-96246D1B11D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62A55887-10F5-40D2-9352-96246D1B11D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62A55887-10F5-40D2-9352-96246D1B11D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA42A713-BC6E-4914-B54B-47C0891B7421}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,34 +40,14 @@ Global
 		{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{62A55887-10F5-40D2-9352-96246D1B11D3} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
-		{5B5BAF9D-3FB9-47F9-AE07-B8CC43EC887C} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
-		{EA42A713-BC6E-4914-B54B-47C0891B7421} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 		{E15EDBD9-0356-422B-8C29-18833787356E} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 		{DF711AB9-F14E-4F1F-B8F2-B6DDC4691554} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 		{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F} = {7ABA337E-6748-484E-A0F4-E1715E1C95F1}
-		{71F04187-BE90-47DE-A7BD-4D6CED50D446} = {A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}
-		{95E812E6-17C2-494F-A446-FDE42D75331C} = {71F04187-BE90-47DE-A7BD-4D6CED50D446}
-		{C4B3935B-7ED4-40CC-B1D2-BC2B854E319D} = {71F04187-BE90-47DE-A7BD-4D6CED50D446}
-		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F} = {71F04187-BE90-47DE-A7BD-4D6CED50D446}
 		{7ABA337E-6748-484E-A0F4-E1715E1C95F1} = {A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}
-		{28B8E327-C504-4E08-B2CE-09D1CBB8B904} = {CF767486-305D-40EE-8845-58EF76C16D85}
 	EndGlobalSection
 EndGlobal

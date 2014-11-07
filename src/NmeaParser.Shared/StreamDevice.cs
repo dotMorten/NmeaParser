@@ -35,12 +35,12 @@ namespace NmeaParser
 
 		protected override Task<Stream> OpenStreamAsync()
 		{
-			return Task.FromResult(m_stream);
+			return TaskEx.FromResult(m_stream);
 		}
 
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
-			return Task.FromResult(true); //do nothing
+			return TaskEx.FromResult(true); //do nothing
 		}
 
 		protected override void Dispose(bool force)
