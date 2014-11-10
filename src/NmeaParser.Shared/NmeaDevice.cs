@@ -51,30 +51,41 @@ namespace NmeaParser
 		private void StartParser()
 		{
 			var token = m_cts.Token;
-			System.Diagnostics.Debug.WriteLine("Starting parser...");
-			var _ = TaskEx.Run(async () =>
-			{
-				var stream = m_stream;
-				byte[] buffer = new byte[1024];
-				while (!token.IsCancellationRequested)
-				{
-					int readCount = 0;
-					try
-					{
-						readCount = await stream.ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
-					}
-					catch { }
-					if (token.IsCancellationRequested)
-						break;
-					if (readCount > 0)
-					{
-						OnData(buffer.Take(readCount).ToArray());
-					}
-					await TaskEx.Delay(10, token);
-				}
-				if (closeTask != null)
-					closeTask.SetResult(true);
-			});
+			System.Diagnostics.Debug.WriteLine("Parser started");
+			TaskEx.Run(async () =>
+			    {
+				    var stream = m_stream;
+				    byte[] buffer = new byte[1024];
+				    while (!token.IsCancellationRequested)
+				    {
+                        try
+                        {
+                            int readCount = 0;
+                            try
+                            {
+                                readCount = await stream.ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
+                            }
+                            catch (Exception e)
+                            {
+                                if (e is TaskCanceledException)
+                                    throw;
+                            }
+
+                            if (readCount > 0)
+                            {
+                                OnData(buffer.Take(readCount).ToArray());
+                            }
+                            await TaskEx.Delay(10, token);
+                        }
+                        catch (TaskCanceledException te)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Parse Task was canceled");
+                            break;
+                        }
+				    }
+                    if (closeTask != null)
+                        closeTask.SetResult(true);
+			    }, token);
 		}
 
 		protected abstract Task<Stream> OpenStreamAsync();
@@ -87,7 +98,9 @@ namespace NmeaParser
 					m_cts.Cancel();
 				m_cts = null;
 			}
-			await closeTask.Task;
+			closeTask.Task.Wait();
+            System.Diagnostics.Debug.WriteLine("Parser stopped");
+
 			await CloseStreamAsync(m_stream);
 			MultiPartMessageCache.Clear();
 			m_stream = null;
@@ -123,7 +136,10 @@ namespace NmeaParser
 				if (msg != null)
 					OnMessageReceived(msg);
 			}
-			catch { }
+			catch
+            {
+                System.Diagnostics.Debug.WriteLine("Trouble processing message");
+            }
 		}
 
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
