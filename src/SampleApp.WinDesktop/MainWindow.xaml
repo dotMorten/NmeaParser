@@ -26,8 +26,9 @@
 				</Grid>
 			</TabItem>
 		</TabControl>
-		
-		<Grid.ColumnDefinitions>
+        <Button Content="Start/Stop" HorizontalAlignment="Left" Margin="432,33,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+
+        <Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
