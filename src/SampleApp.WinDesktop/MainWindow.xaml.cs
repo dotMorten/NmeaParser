@@ -21,13 +21,13 @@ namespace SampleApp.WinDesktop
 	public partial class MainWindow : Window
 	{
 		private Queue<string> messages = new Queue<string>(101);
-		
+        private NmeaParser.NmeaDevice device; 
+
 		public MainWindow()
 		{
 			InitializeComponent();
-			var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
+			device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
 			device.MessageReceived += device_MessageReceived;
-			var _ = device.OpenAsync();
 		}
 		
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
@@ -47,5 +47,13 @@ namespace SampleApp.WinDesktop
 				}
 			});
 		}
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (device.IsOpen)
+                await device.CloseAsync();
+            else
+                await device.OpenAsync();
+        }
 	}
 }
