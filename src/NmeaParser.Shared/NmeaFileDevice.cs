@@ -84,6 +84,9 @@ namespace NmeaParser
 			}
 			private void OnRead(object state)
 			{
+                if (m_sr == null)
+                    return;
+
 				if (m_sr.EndOfStream)
 					m_sr.BaseStream.Seek(0, SeekOrigin.Begin); //start over
 					
