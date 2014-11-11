@@ -9,6 +9,7 @@
     <Import_RootNamespace>NmeaParser</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BufferedStreamDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IMultiPartMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
