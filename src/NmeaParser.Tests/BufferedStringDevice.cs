@@ -9,7 +9,7 @@ namespace NmeaParser.Tests
 	internal class BufferedStringDevice : NmeaParser.BufferedStreamDevice
 	{
 		string m_data;
-		public BufferedStringDevice(string data)
+		public BufferedStringDevice(string data) : base(1)
 		{
 			m_data = data;
 		}
