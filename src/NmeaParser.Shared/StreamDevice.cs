@@ -28,16 +28,29 @@ namespace NmeaParser
     public class StreamDevice : NmeaDevice
     {
 		System.IO.Stream m_stream;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StreamDevice"/> class.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
 		public StreamDevice(Stream stream) : base()
 		{
 			m_stream = stream;
 		}
 
+		/// <summary>
+		/// Opens the stream asynchronous.
+		/// </summary>
+		/// <returns></returns>
 		protected override Task<Stream> OpenStreamAsync()
 		{
 			return Task.FromResult(m_stream);
 		}
 
+		/// <summary>
+		/// Closes the stream asynchronous.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			return Task.FromResult(true); //do nothing

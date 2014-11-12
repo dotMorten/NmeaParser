@@ -30,17 +30,30 @@ namespace NmeaParser
 	{
 		private System.IO.Ports.SerialPort m_port;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SerialPortDevice"/> class.
+		/// </summary>
+		/// <param name="port">The serial port.</param>
 		public SerialPortDevice(System.IO.Ports.SerialPort port)
 		{
 			m_port = port;
 		}
 
+		/// <summary>
+		/// Creates the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <returns></returns>
 		protected override Task<System.IO.Stream> OpenStreamAsync()
 		{
 			m_port.Open();
 			return Task.FromResult<System.IO.Stream>(m_port.BaseStream);
 		}
 
+		/// <summary>
+		/// Closes the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			m_port.Close();

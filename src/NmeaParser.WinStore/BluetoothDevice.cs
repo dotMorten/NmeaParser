@@ -40,11 +40,19 @@ namespace NmeaParser
 		private BTDevice m_device;
 		private StreamSocket m_socket;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BluetoothDevice"/> class.
+		/// </summary>
+		/// <param name="device">The device.</param>
 		public BluetoothDevice(BTDevice device)
 		{
 			m_device = device;
 		}
 
+		/// <summary>
+		/// Creates the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <returns></returns>
 		protected override async Task<System.IO.Stream> OpenStreamAsync()
 		{
 			var socket = new Windows.Networking.Sockets.StreamSocket();
@@ -59,6 +67,11 @@ namespace NmeaParser
 			return socket.InputStream.AsStreamForRead();
 		}
 
+		/// <summary>
+		/// Closes the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			stream.Dispose();

@@ -35,7 +35,7 @@ namespace NmeaParser
 #endif
 		int m_readSpeed;
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
 		/// </summary>
 		/// <param name="filename"></param>
 		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
@@ -48,6 +48,10 @@ namespace NmeaParser
 			m_filename = filename;
 			m_readSpeed = readSpeed;
 		}
+		/// <summary>
+		/// Gets the stream to perform buffer reads on.
+		/// </summary>
+		/// <returns></returns>
 		protected override Task<Stream> GetStreamAsync()
 		{
 #if NETFX_CORE

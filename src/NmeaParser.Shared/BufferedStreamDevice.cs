@@ -41,8 +41,16 @@ namespace NmeaParser
 			m_readSpeed = readSpeed;
 		}
 
+		/// <summary>
+		/// Gets the stream to perform buffer reads on.
+		/// </summary>
+		/// <returns></returns>
 		protected abstract Task<System.IO.Stream> GetStreamAsync();
 
+		/// <summary>
+		/// Opens the stream asynchronous.
+		/// </summary>
+		/// <returns></returns>
 		protected sealed async override Task<System.IO.Stream> OpenStreamAsync()
 		{
 			var stream = await GetStreamAsync();
@@ -51,6 +59,11 @@ namespace NmeaParser
 			return m_stream;
 		}
 
+		/// <summary>
+		/// Closes the stream asynchronous.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
 			m_stream.Dispose();
@@ -65,6 +78,11 @@ namespace NmeaParser
 			byte[] buffer = new byte[0];
 			System.Threading.Timer timer;
 			object lockObj = new object();
+			/// <summary>
+			/// Initializes a new instance of the <see cref="BufferedStream"/> class.
+			/// </summary>
+			/// <param name="stream">The stream.</param>
+			/// <param name="readSpeed">The read speed.</param>
 			public BufferedStream(StreamReader stream, int readSpeed)
 			{
 				m_sr = stream;
@@ -86,13 +104,46 @@ namespace NmeaParser
 					buffer = newBuffer;
 				}
 			}
+			/// <summary>
+			/// Gets a value indicating whether this instance can read.
+			/// </summary>
+			/// <value>
+			///   <c>true</c> if this instance can read; otherwise, <c>false</c>.
+			/// </value>
 			public override bool CanRead { get { return true; } }
+			/// <summary>
+			/// Gets a value indicating whether this instance can seek.
+			/// </summary>
+			/// <value>
+			///   <c>true</c> if this instance can seek; otherwise, <c>false</c>.
+			/// </value>
 			public override bool CanSeek { get { return false; } }
+			/// <summary>
+			/// Gets a value indicating whether this instance can write.
+			/// </summary>
+			/// <value>
+			///   <c>true</c> if this instance can write; otherwise, <c>false</c>.
+			/// </value>
 			public override bool CanWrite { get { return false; } }
+			/// <summary>
+			/// Flushes this instance.
+			/// </summary>
 			public override void Flush() { }
-
+			/// <summary>
+			/// Gets the length.
+			/// </summary>
+			/// <value>
+			/// The length.
+			/// </value>
 			public override long Length { get { return m_sr.BaseStream.Length; } }
 
+			/// <summary>
+			/// Gets or sets the position.
+			/// </summary>
+			/// <value>
+			/// The position.
+			/// </value>
+			/// <exception cref="System.NotSupportedException"></exception>
 			public override long Position
 			{
 				get { return m_sr.BaseStream.Position; }
@@ -101,7 +152,13 @@ namespace NmeaParser
 					throw new NotSupportedException();
 				}
 			}
-
+			/// <summary>
+			/// Reads the specified buffer.
+			/// </summary>
+			/// <param name="buffer">The buffer.</param>
+			/// <param name="offset">The offset.</param>
+			/// <param name="count">The count.</param>
+			/// <returns></returns>
 			public override int Read(byte[] buffer, int offset, int count)
 			{
 				lock (lockObj)
@@ -124,20 +181,44 @@ namespace NmeaParser
 				}
 			}
 
+			/// <summary>
+			/// Seeks the specified offset.
+			/// </summary>
+			/// <param name="offset">The offset.</param>
+			/// <param name="origin">The origin.</param>
+			/// <returns></returns>
+			/// <exception cref="System.NotSupportedException"></exception>
 			public override long Seek(long offset, SeekOrigin origin)
 			{
 				throw new NotSupportedException();
 			}
 
+			/// <summary>
+			/// Sets the length.
+			/// </summary>
+			/// <param name="value">The value.</param>
+			/// <exception cref="System.NotSupportedException"></exception>
 			public override void SetLength(long value)
 			{
 				throw new NotSupportedException();
 			}
 
+			/// <summary>
+			/// Writes the specified buffer.
+			/// </summary>
+			/// <param name="buffer">The buffer.</param>
+			/// <param name="offset">The offset.</param>
+			/// <param name="count">The count.</param>
+			/// <exception cref="System.NotSupportedException"></exception>
 			public override void Write(byte[] buffer, int offset, int count)
 			{
 				throw new NotSupportedException();
 			}
+
+			/// <summary>
+			/// Releases unmanaged and - optionally - managed resources.
+			/// </summary>
+			/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 			protected override void Dispose(bool disposing)
 			{
 				base.Dispose(disposing);
