@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// A file-based NMEA device reading from a NMEA log file.
+	/// </summary>
 	public class NmeaFileDevice : BufferedStreamDevice
 	{
 #if NETFX_CORE

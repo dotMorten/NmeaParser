@@ -24,6 +24,9 @@ using Windows.Foundation;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// A generic abstract NMEA device
+	/// </summary>
 	public abstract class NmeaDevice : IDisposable
 	{
 		private object m_lockObject = new object();

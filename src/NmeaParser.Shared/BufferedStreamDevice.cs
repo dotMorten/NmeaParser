@@ -23,6 +23,10 @@ using System.Threading.Tasks;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// An abstract generic NMEA device that reads a stream at a decreased pace,
+	/// mostly used to emulate NMEA input from files and strings.
+	/// </summary>
 	public abstract class BufferedStreamDevice : NmeaDevice
 	{
 		BufferedStream m_stream;
@@ -36,6 +40,7 @@ namespace NmeaParser
 		{
 			m_readSpeed = readSpeed;
 		}
+
 		protected abstract Task<System.IO.Stream> GetStreamAsync();
 
 		protected sealed async override Task<System.IO.Stream> OpenStreamAsync()
@@ -52,8 +57,8 @@ namespace NmeaParser
 			return Task.FromResult(true);
 		}
 
-		// stream that slowly populates a buffer from a StreamReader to simulate nmea messages coming in line by line
-		// at a steady stream
+		// stream that slowly populates a buffer from a StreamReader to simulate nmea messages coming
+		// in line by line at a steady stream
 		private class BufferedStream : Stream
 		{
 			StreamReader m_sr;

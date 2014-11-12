@@ -32,6 +32,9 @@ using BTDevice = Windows.Networking.Proximity.PeerInformation;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// A Bluetooth NMEA device
+	/// </summary>
 	public class BluetoothDevice : NmeaDevice
 	{
 		private BTDevice m_device;
