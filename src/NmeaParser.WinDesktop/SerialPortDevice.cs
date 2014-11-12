@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// A Serial Port NMEA device
+	/// </summary>
 	public class SerialPortDevice : NmeaDevice
 	{
 		private System.IO.Ports.SerialPort m_port;
@@ -42,6 +45,18 @@ namespace NmeaParser
 		{
 			m_port.Close();
 			return Task.FromResult(true);
+		}
+
+		/// <summary>
+		/// Writes data to the serial port (useful for RTCM/dGPS scenarios)
+		/// </summary>
+		/// <param name="buffer">The byte array that contains the data to write to the port.</param>
+		/// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
+		/// bytes to the port.</param>
+		/// <param name="count">The number of bytes to write.</param>
+		public void Write(byte[] buffer, int offset, int count)
+		{
+			m_port.Write(buffer, offset, count);
 		}
 	}
 }
