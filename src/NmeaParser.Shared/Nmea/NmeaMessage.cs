@@ -137,5 +137,18 @@ namespace NmeaParser.Nmea
 			}
 			catch { return double.NaN; }
 		}
+		internal static double StringToDouble(string value)
+		{
+			try
+			{
+				double result = double.NaN;
+				if(double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+				{
+					return result;
+				}
+				return double.NaN;
+			}
+			catch { return double.NaN; }
+		}
 	}
 }

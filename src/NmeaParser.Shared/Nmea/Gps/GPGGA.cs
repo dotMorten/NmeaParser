@@ -49,10 +49,10 @@ namespace NmeaParser.Nmea.Gps
 			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
 			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
 			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
-			Hdop = double.Parse(message[7], CultureInfo.InvariantCulture);
-			Altitude = double.Parse(message[8], CultureInfo.InvariantCulture);
+			Hdop = NmeaMessage.StringToDouble(message[7]);
+			Altitude = NmeaMessage.StringToDouble(message[8]);
 			AltitudeUnits = message[9];
-			HeightOfGeoid = double.Parse(message[10], CultureInfo.InvariantCulture);
+			HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
 			HeightOfGeoidUnits = message[11];
 			if (message[0].Length == 6)
 			{

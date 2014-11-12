@@ -31,19 +31,22 @@ namespace NmeaParser.Nmea.Gps
 	{
 		protected override void LoadMessage(string[] message)
 		{
-			FixTime = new DateTime(int.Parse(message[8].Substring(4, 2)) + 2000,
-								   int.Parse(message[8].Substring(2, 2)),
-								   int.Parse(message[8].Substring(0, 2)),
-								   int.Parse(message[0].Substring(0, 2)),
-								   int.Parse(message[0].Substring(2, 2)),
-								   int.Parse(message[0].Substring(4, 2)), DateTimeKind.Utc);
+			if (message[8].Length == 6 && message[0].Length == 6)
+			{
+				FixTime = new DateTime(int.Parse(message[8].Substring(4, 2)) + 2000,
+									   int.Parse(message[8].Substring(2, 2)),
+									   int.Parse(message[8].Substring(0, 2)),
+									   int.Parse(message[0].Substring(0, 2)),
+									   int.Parse(message[0].Substring(2, 2)),
+									   int.Parse(message[0].Substring(4, 2)), DateTimeKind.Utc);
+			}
 			Active = (message[1] == "A");
 			Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
 			Longitude = NmeaMessage.StringToLongitude(message[4], message[5]);
-			Speed = double.Parse(message[6], CultureInfo.InvariantCulture);
-			Course = double.Parse(message[7], CultureInfo.InvariantCulture);
-			MagneticVariation = double.Parse(message[9], CultureInfo.InvariantCulture);
-			if (message[10] == "W")
+			Speed = NmeaMessage.StringToDouble(message[6]);
+			Course = NmeaMessage.StringToDouble(message[7]);
+			MagneticVariation = NmeaMessage.StringToDouble(message[9]);			
+			if (!double.IsNaN(MagneticVariation) && message[10] == "W")
 				MagneticVariation *= -1;
 		}
 
