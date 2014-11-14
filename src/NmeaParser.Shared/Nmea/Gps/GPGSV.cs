@@ -105,5 +105,45 @@ namespace NmeaParser.Nmea.Gps
 		/// Signal-to-Noise ratio, 0-99 dB (-1 when not tracking) 
 		/// </summary>
 		public int SignalToNoiseRatio { get; private set; }
+
+		/// <summary>
+		/// Satellite system
+		/// </summary>
+		public SatelliteSystem System
+		{
+			get
+			{
+				if (PrnNumber >= 1 && PrnNumber <= 32)
+					return SatelliteSystem.Gps;
+				if (PrnNumber >= 33 && PrnNumber <= 64)
+					return SatelliteSystem.Waas;
+				if (PrnNumber >= 65 && PrnNumber <= 96)
+					return SatelliteSystem.Glonass;
+				return SatelliteSystem.Unknown;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Satellite system
+	/// </summary>
+	public enum SatelliteSystem
+	{
+		/// <summary>
+		/// Unknown
+		/// </summary>
+		Unknown,
+		/// <summary>
+		/// GPS - Global Positioning System (NAVSTAR)
+		/// </summary>
+		Gps,
+		/// <summary>
+		/// WAAS - Wide Area Augmentation System
+		/// </summary>
+		Waas,
+		/// <summary>
+		/// GLONASS - Globalnaya navigatsionnaya sputnikovaya sistema
+		/// </summary>
+		Glonass
 	}
 }

@@ -196,7 +196,7 @@ namespace NmeaParser.Tests
 		[TestMethod]
 		public void TestGpgsv()
 		{
-			string input = "$GPGSV,3,3,11,22,42,067,42,24,14,311,43,27,05,244,00,,,,*4D";
+			string input = "$GPGSV,3,3,11,22,42,067,42,75,14,311,43,50,05,244,00,,,,*49";
 			var msg = NmeaMessage.Parse(input);
 			Assert.IsInstanceOfType(msg, typeof(Gpgsv));
 			Gpgsv gsv = (Gpgsv)msg;
@@ -210,18 +210,21 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(42, sv.Elevation);
 			Assert.AreEqual(67, sv.Azimuth);
 			Assert.AreEqual(42, sv.SignalToNoiseRatio);
+			Assert.AreEqual(SatelliteSystem.Gps, sv.System);
 
 			sv = gsv.SVs[1];
-			Assert.AreEqual(24, sv.PrnNumber);
+			Assert.AreEqual(75, sv.PrnNumber);
 			Assert.AreEqual(14, sv.Elevation);
 			Assert.AreEqual(311, sv.Azimuth);
 			Assert.AreEqual(43, sv.SignalToNoiseRatio);
+			Assert.AreEqual(SatelliteSystem.Glonass, sv.System);
 
 			sv = gsv.SVs[2];
-			Assert.AreEqual(27, sv.PrnNumber);
+			Assert.AreEqual(50, sv.PrnNumber);
 			Assert.AreEqual(5, sv.Elevation);
 			Assert.AreEqual(244, sv.Azimuth);
 			Assert.AreEqual(00, sv.SignalToNoiseRatio);
+			Assert.AreEqual(SatelliteSystem.Waas, sv.System);
 		}
 
 		[TestMethod]
