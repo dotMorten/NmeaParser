@@ -29,7 +29,11 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPBOD")]
 	public class Gpbod : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			if (message[0].Length > 0)
 				TrueBearing = double.Parse(message[0], CultureInfo.InvariantCulture);

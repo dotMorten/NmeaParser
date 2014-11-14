@@ -22,10 +22,20 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
+	/// <summary>
+	/// Represents an unknown message type
+	/// </summary>
 	public class UnknownMessage : NmeaMessage
 	{
+		/// <summary>
+		/// Gets the nmea value aarray.
+		/// </summary>
 		public string[] Values { get { return base.MessageParts; } }
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 		}
 	}

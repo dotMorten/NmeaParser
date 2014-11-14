@@ -29,12 +29,25 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPRTE")]
 	public sealed class Gprte : NmeaMessage, IMultiPartMessage<string>
 	{
+		/// <summary>
+		/// Waypoint tpe
+		/// </summary>
 		public enum WaypointListType
 		{
+			/// <summary>
+			/// Complete list of waypoints
+			/// </summary>
 			CompleteWaypointsList,
+			/// <summary>
+			/// List of remaining waypoints
+			/// </summary>
 			RemainingWaypointsList
 		}
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			TotalMessages = int.Parse(message[0]);
 			MessageNumber = int.Parse(message[1]);
@@ -53,21 +66,35 @@ namespace NmeaParser.Nmea.Gps
 		/// </summary>
 		public int MessageNumber { get; private set; }
 
+		/// <summary>
+		/// Gets the type of the list.
+		/// </summary>
 		public WaypointListType ListType { get; private set; }
-		
-		public string RouteID { get; set; }
+
+		/// <summary>
+		/// Gets the route identifier.
+		/// </summary>
+		public string RouteID { get; private set; }
 		
 		/// <summary>
 		/// Waypoints
 		/// </summary>
 		public string[] Waypoints { get; private set; }
 
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns> A System.Collections.Generic.IEnumerator{T} that can be used to iterate through the collection.</returns>
 		IEnumerator<string> IEnumerable<string>.GetEnumerator()
 		{
 			foreach (string waypoint in Waypoints)
 				yield return waypoint;
 		}
 
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns> An System.Collections.IEnumerator object that can be used to iterate through the collection.</returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return ((IEnumerable<string>)this).GetEnumerator();

@@ -29,7 +29,11 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPGSV")]
 	public sealed class Gpgsv : NmeaMessage, IMultiPartMessage<SatelitteVehicle>
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			TotalMessages = int.Parse(message[0]);
 			MessageNumber = int.Parse(message[1]);
@@ -66,18 +70,29 @@ namespace NmeaParser.Nmea.Gps
 		/// </summary>
 		public SatelitteVehicle[] SVs { get; private set; }
 
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns> A System.Collections.Generic.IEnumerator{SatelitteVehicle} that can be used to iterate through the collection.</returns>
 		public IEnumerator<SatelitteVehicle> GetEnumerator()
 		{
 			foreach(var sv in SVs)
 				yield return sv;
 		}
 
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns> An System.Collections.IEnumerator object that can be used to iterate through the collection.</returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}
 	}
 
+	/// <summary>
+	/// Satellite vehicle
+	/// </summary>
 	public sealed class SatelitteVehicle
 	{
 		internal SatelitteVehicle(string[] message, int startIndex)

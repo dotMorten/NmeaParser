@@ -34,7 +34,6 @@ namespace NmeaParser
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="filename"></param>
 		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
 		protected BufferedStreamDevice( int readSpeed = 200)
 		{

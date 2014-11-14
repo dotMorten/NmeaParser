@@ -29,7 +29,11 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPGLL")]
 	public class Gpgll : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			var time = message[0];
 			Latitude = NmeaMessage.StringToLatitude(message[0], message[1]);
@@ -56,9 +60,15 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Time since last DGPS update
 		/// </summary>
-		public TimeSpan FixTime { get; set; }
+		public TimeSpan FixTime { get; private set; }
 
-		public bool DataActive { get; set; }
+		/// <summary>
+		/// Gets a value indicating whether data is active.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if data is active; otherwise, <c>false</c>.
+		/// </value>
+		public bool DataActive { get; private set; }
 
 	}
 }

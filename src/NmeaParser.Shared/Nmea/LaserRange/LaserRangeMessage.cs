@@ -29,7 +29,11 @@ namespace NmeaParser.Nmea.LaserRange
 	/// </summary>
 	public abstract class LaserRangeMessage : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			HorizontalVector = message[0];
 			HorizontalDistance = double.Parse(message[1], CultureInfo.InvariantCulture);
@@ -42,22 +46,49 @@ namespace NmeaParser.Nmea.LaserRange
 			SlopeDistanceUnits = message[8][0];
 		}
 
+		/// <summary>
+		/// Gets the horizontal vector.
+		/// </summary>
 		public string HorizontalVector { get; private set; }
 
+		/// <summary>
+		/// Gets the horizontal distance.
+		/// </summary>
 		public double HorizontalDistance { get; private set; }
 
+		/// <summary>
+		/// Gets the units of the <see cref="HorizontalDistance"/> value.
+		/// </summary>
 		public char HorizontalDistanceUnits { get; private set; }
 
+		/// <summary>
+		/// Gets the horizontal angle.
+		/// </summary>
 		public double HorizontalAngle { get; private set; }
 
+		/// <summary>
+		/// Gets the units of the <see cref="HorizontalAngle"/> value.
+		/// </summary>
 		public char HorizontalAngleUnits { get; private set; }
 
+		/// <summary>
+		/// Gets the vertical angle.
+		/// </summary>
 		public double VerticalAngle { get; private set; }
 
+		/// <summary>
+		/// Gets the units of the <see cref="VerticalAngle"/> value.
+		/// </summary>
 		public char VerticalAngleUnits { get; private set; }
 
+		/// <summary>
+		/// Gets the slope distance.
+		/// </summary>
 		public double SlopeDistance { get; private set; }
 
+		/// <summary>
+		/// Gets the units of the <see cref="SlopeDistance"/> value.
+		/// </summary>
 		public char SlopeDistanceUnits { get; private set; }
 	}
 }

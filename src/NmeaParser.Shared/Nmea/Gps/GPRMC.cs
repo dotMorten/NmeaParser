@@ -29,7 +29,11 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPRMC")]
 	public class Gprmc : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			if (message[8].Length == 6 && message[0].Length == 6)
 			{

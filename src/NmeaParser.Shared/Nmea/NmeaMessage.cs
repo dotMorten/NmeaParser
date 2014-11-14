@@ -24,10 +24,31 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	public class NmeaMessageType : Attribute { public string Type { get; set; } }
-	
+	/// <summary>
+	/// Nmea message attribute type used on concrete <see cref="NmeaMessage"/> implementations.
+	/// </summary>
+	public class NmeaMessageTypeAttribute : Attribute
+	{
+		/// <summary>
+		/// Gets or sets the NMEA message type.
+		/// </summary>
+		public string Type { get; set; }
+	}
+
+	/// <summary>
+	/// NMEA Message base class.
+	/// </summary>
 	public abstract class NmeaMessage
 	{
+		/// <summary>
+		/// Parses the specified NMEA message.
+		/// </summary>
+		/// <param name="message">The NMEA message string.</param>
+		/// <returns></returns>
+		/// <exception cref="System.ArgumentException">
+		/// Invalid nmea message: Missing starting character '$'
+		/// or checksum failure
+		/// </exception>
 		public static NmeaMessage Parse(string message)
 		{
 			int checksum = -1;
@@ -69,7 +90,7 @@ namespace NmeaParser.Nmea
 			}
 			msg.MessageType = MessageType;
 			msg.MessageParts = MessageParts;
-			msg.LoadMessage(MessageParts);
+			msg.OnLoadMessage(MessageParts);
 			return msg;
 		}
 
@@ -79,7 +100,7 @@ namespace NmeaParser.Nmea
 			var typeinfo = typeof(NmeaMessage).GetTypeInfo();
 			foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
 			{
-				var attr = subclass.GetCustomAttribute<NmeaMessageType>(false);
+				var attr = subclass.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
 				if (attr != null)
 				{
 					if (!subclass.IsAbstract)
@@ -100,12 +121,31 @@ namespace NmeaParser.Nmea
 
 		private static Dictionary<string, ConstructorInfo> messageTypes;
 
+		/// <summary>
+		/// Gets the NMEA message parts.
+		/// </summary>
 		protected string[] MessageParts { get; private set; }
 
+		/// <summary>
+		/// Gets the type id for the message.
+		/// </summary>
 		public string MessageType { get; private set; }
 
-		protected virtual void LoadMessage(string[] message) { MessageParts = message; }
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		/// <remarks>
+		/// Implement this method to create a custom NMEA message.
+		/// </remarks>
+		protected virtual void OnLoadMessage(string[] message) { MessageParts = message; }
 
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString()
 		{
 			return string.Format("${0},{1}", MessageType, string.Join(",", MessageParts));

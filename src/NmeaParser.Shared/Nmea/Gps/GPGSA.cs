@@ -29,19 +29,44 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPGSA")]
 	public class Gpgsa : NmeaMessage
 	{
+		/// <summary>
+		/// Mode selection
+		/// </summary>
 		public enum ModeSelection
 		{
+			/// <summary>
+			/// Auto
+			/// </summary>
 			Auto,
+			/// <summary>
+			/// Manual mode
+			/// </summary>
 			Manual,
 		}
+		/// <summary>
+		/// Fix Mode
+		/// </summary>
 		public enum Mode : int
 		{
+			/// <summary>
+			/// Not available
+			/// </summary>
 			NotAvailable = 1,
+			/// <summary>
+			/// 2D Fix
+			/// </summary>
 			_2D = 2,
+			/// <summary>
+			/// 3D Fix
+			/// </summary>
 			_3D = 3
 		}
 
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			GpsMode = message[0] == "A" ? ModeSelection.Auto : ModeSelection.Manual;
 			FixMode = (Mode)int.Parse(message[1]);

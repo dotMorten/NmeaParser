@@ -29,11 +29,23 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	[NmeaMessageType(Type = "PGRMZ")]
 	public class Pgrmz : NmeaMessage
 	{
+		/// <summary>
+		/// Altitude unit
+		/// </summary>
 		public enum AltitudeUnit
 		{
+			/// <summary>
+			/// Unknown
+			/// </summary>
 			Unknown,
+			/// <summary>
+			/// Feet
+			/// </summary>
 			Feet
 		}
+		/// <summary>
+		/// Position Fix Dimension
+		/// </summary>
 		public enum PositionFixDimension : int
 		{
 			/// <summary>
@@ -49,7 +61,11 @@ namespace NmeaParser.Nmea.Gps.Garmin
 			/// </summary>
 			GpsAltitude = 3
 		}
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			if (message[0].Length > 0)
 				Altitude = double.Parse(message[0], CultureInfo.InvariantCulture);

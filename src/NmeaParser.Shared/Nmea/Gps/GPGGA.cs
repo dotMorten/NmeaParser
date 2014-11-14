@@ -29,20 +29,36 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPGGA")]
 	public class Gpgga : NmeaMessage
 	{
+		/// <summary>
+		/// Fix quality
+		/// </summary>
 		public enum FixQuality : int
 		{
+			/// <summary>Invalid</summary>
 			Invalid = 0,
+			/// <summary>GPS</summary>
 			GpsFix = 1,
+			/// <summary>Differential GPS</summary>
 			DgpsFix = 2,
+			/// <summary>Precise Positioning Service</summary>
 			PpsFix = 3,
+			/// <summary>Real Time Kinematic (Fixed)</summary>
 			Rtk = 4,
+			/// <summary>Real Time Kinematic (Floating)</summary>
 			FloatRtk = 5,
+			/// <summary>Estimated</summary>
 			Estimated = 6,
+			/// <summary>Manual input</summary>
 			ManualInput = 7,
+			/// <summary>Simulation</summary>
 			Simulation = 8
 		}
 
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			var time = message[0];
 			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);

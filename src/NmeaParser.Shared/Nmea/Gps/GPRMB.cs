@@ -29,12 +29,25 @@ namespace NmeaParser.Nmea.Gps
 	[NmeaMessageType(Type = "GPRMB")]
 	public class Gprmb : NmeaMessage
 	{
+		/// <summary>
+		/// Data status
+		/// </summary>
 		public enum DataStatus
 		{
+			/// <summary>
+			/// OK
+			/// </summary>
 			OK,
+			/// <summary>
+			/// Warning
+			/// </summary>
 			Warning
 		}
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
 			Status = message[0] == "A" ? DataStatus.OK : Gprmb.DataStatus.Warning;
 			double tmp;
