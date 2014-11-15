@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	/// <summary>
 	///  Recommended Minimum
 	/// </summary>
-	[NmeaMessageType(Type = "PGRME")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrme")]
+	[NmeaMessageType("PGRME")]
 	public class Pgrme : NmeaMessage
 	{
 		/// <summary>
@@ -35,6 +36,9 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 6)
+				throw new ArgumentException("Invalid PGRME", "message"); 
+			
 			HorizontalError = NmeaMessage.StringToDouble(message[0]);
 			HorizontalErrorUnits = message[1];
 			VerticalError = NmeaMessage.StringToDouble(message[2]);

@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	/// Recommended minimum navigation information
 	/// </summary>
-	[NmeaMessageType(Type = "GPRMB")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmb")]
+	[NmeaMessageType("GPRMB")]
 	public class Gprmb : NmeaMessage
 	{
 		/// <summary>
@@ -35,9 +36,9 @@ namespace NmeaParser.Nmea.Gps
 		public enum DataStatus
 		{
 			/// <summary>
-			/// OK
+			/// Ok
 			/// </summary>
-			OK,
+			Ok,
 			/// <summary>
 			/// Warning
 			/// </summary>
@@ -49,7 +50,10 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
-			Status = message[0] == "A" ? DataStatus.OK : Gprmb.DataStatus.Warning;
+			if (message == null || message.Length < 13)
+				throw new ArgumentException("Invalid GPRMB", "message"); 
+			
+			Status = message[0] == "A" ? DataStatus.Ok : Gprmb.DataStatus.Warning;
 			double tmp;
 			if (double.TryParse(message[1], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
 			{
@@ -62,9 +66,9 @@ namespace NmeaParser.Nmea.Gps
 				CrossTrackError = double.NaN;
 
 			if(message[3].Length > 0)
-				OriginWaypointID = int.Parse(message[3], CultureInfo.InvariantCulture);
+				OriginWaypointId = int.Parse(message[3], CultureInfo.InvariantCulture);
 			if (message[3].Length > 0)
-				DestinationWaypointID = int.Parse(message[4], CultureInfo.InvariantCulture);
+				DestinationWaypointId = int.Parse(message[4], CultureInfo.InvariantCulture);
 			DestinationLatitude = NmeaMessage.StringToLatitude(message[5], message[6]);
 			DestinationLongitude = NmeaMessage.StringToLongitude(message[7], message[8]);
 			if (double.TryParse(message[9], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
@@ -95,12 +99,12 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Origin waypoint ID
 		/// </summary>
-		public double OriginWaypointID { get; private set; }
+		public double OriginWaypointId { get; private set; }
 
 		/// <summary>
 		/// Destination waypoint ID
 		/// </summary>
-		public double DestinationWaypointID { get; private set; }
+		public double DestinationWaypointId { get; private set; }
 
 		/// <summary>
 		/// Destination Latitude

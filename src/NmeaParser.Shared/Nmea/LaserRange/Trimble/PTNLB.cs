@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.LaserRange.Trimble
 	/// <summary>
 	/// Tree Measurement
 	/// </summary>
-	[NmeaMessageType(Type = "PTNLB")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnlb")]
+	[NmeaMessageType("PTNLB")]
 	public class Ptnlb : NmeaMessage
 	{
 		/// <summary>
@@ -35,6 +36,9 @@ namespace NmeaParser.Nmea.LaserRange.Trimble
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 6)
+				throw new ArgumentException("Invalid PTNLB", "message"); 
+			
 			TreeHeight = message[0];
 			MeasuredTreeHeight = double.Parse(message[1], CultureInfo.InvariantCulture);
 			MeasuredTreeHeightUnits = message[2][0];

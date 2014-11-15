@@ -32,10 +32,16 @@ namespace NmeaParser
 		BufferedStream m_stream;
 		int m_readSpeed;
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BufferedStreamDevice"/> class.
+		/// </summary>
+		protected BufferedStreamDevice() : this(200)
+		{
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BufferedStreamDevice"/> class.
 		/// </summary>
 		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
-		protected BufferedStreamDevice( int readSpeed = 200)
+		protected BufferedStreamDevice(int readSpeed)
 		{
 			m_readSpeed = readSpeed;
 		}
@@ -44,6 +50,7 @@ namespace NmeaParser
 		/// Gets the stream to perform buffer reads on.
 		/// </summary>
 		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		protected abstract Task<System.IO.Stream> GetStreamAsync();
 
 		/// <summary>
@@ -74,8 +81,8 @@ namespace NmeaParser
 		private class BufferedStream : Stream
 		{
 			StreamReader m_sr;
-			byte[] buffer = new byte[0];
-			System.Threading.Timer timer;
+			byte[] m_buffer = new byte[0];
+			System.Threading.Timer m_timer;
 			object lockObj = new object();
 			/// <summary>
 			/// Initializes a new instance of the <see cref="BufferedStream"/> class.
@@ -85,7 +92,7 @@ namespace NmeaParser
 			public BufferedStream(StreamReader stream, int readSpeed)
 			{
 				m_sr = stream;
-				timer = new System.Threading.Timer(OnRead, null, 0, readSpeed); //add a new line to buffer every 100 ms
+				m_timer = new System.Threading.Timer(OnRead, null, 0, readSpeed); //add a new line to buffer every 100 ms
 			}
 			private void OnRead(object state)
 			{
@@ -97,10 +104,10 @@ namespace NmeaParser
 				var bytes = Encoding.UTF8.GetBytes(line);
 				lock (lockObj)
 				{
-					byte[] newBuffer = new byte[buffer.Length + bytes.Length];
-					buffer.CopyTo(newBuffer, 0);
-					bytes.CopyTo(newBuffer, buffer.Length);
-					buffer = newBuffer;
+					byte[] newBuffer = new byte[m_buffer.Length + bytes.Length];
+					m_buffer.CopyTo(newBuffer, 0);
+					bytes.CopyTo(newBuffer, m_buffer.Length);
+					m_buffer = newBuffer;
 				}
 			}
 			/// <summary>
@@ -162,19 +169,19 @@ namespace NmeaParser
 			{
 				lock (lockObj)
 				{
-					if (this.buffer.Length <= count)
+					if (this.m_buffer.Length <= count)
 					{
-						int length = this.buffer.Length;
-						this.buffer.CopyTo(buffer, 0);
-						this.buffer = new byte[0];
+						int length = this.m_buffer.Length;
+						this.m_buffer.CopyTo(buffer, 0);
+						this.m_buffer = new byte[0];
 						return length;
 					}
 					else
 					{
-						Array.Copy(this.buffer, buffer, count);
-						byte[] newBuffer = new byte[this.buffer.Length - count];
-						Array.Copy(this.buffer, count, newBuffer, 0, newBuffer.Length);
-						this.buffer = newBuffer;
+						Array.Copy(this.m_buffer, buffer, count);
+						byte[] newBuffer = new byte[this.m_buffer.Length - count];
+						Array.Copy(this.m_buffer, count, newBuffer, 0, newBuffer.Length);
+						this.m_buffer = newBuffer;
 						return count;
 					}
 				}
@@ -203,7 +210,7 @@ namespace NmeaParser
 			}
 
 			/// <summary>
-			/// Writes the specified buffer.
+			/// Writes the specified buffer to the device.
 			/// </summary>
 			/// <param name="buffer">The buffer.</param>
 			/// <param name="offset">The offset.</param>
@@ -222,7 +229,7 @@ namespace NmeaParser
 			{
 				base.Dispose(disposing);
 				m_sr.Dispose();
-				timer.Dispose();
+				m_timer.Dispose();
 			}
 		}
 	}

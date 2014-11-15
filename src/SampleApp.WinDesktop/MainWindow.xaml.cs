@@ -42,7 +42,7 @@ namespace SampleApp.WinDesktop
 				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
 				{
 					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
-					if(args.IsMultiPart && args.MessageParts != null)
+					if(args.IsMultipart && args.MessageParts != null)
 						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
 				}
 			});

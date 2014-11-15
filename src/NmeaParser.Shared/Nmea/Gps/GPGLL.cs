@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  Geographic position, latitude / longitude
 	/// </summary>
-	[NmeaMessageType(Type = "GPGLL")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgll")]
+	[NmeaMessageType("GPGLL")]
 	public class Gpgll : NmeaMessage
 	{
 		/// <summary>
@@ -35,14 +36,15 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
-			var time = message[0];
+			if (message == null || message.Length < 4)
+				throw new ArgumentException("Invalid GPGLL", "message");
 			Latitude = NmeaMessage.StringToLatitude(message[0], message[1]);
 			Longitude = NmeaMessage.StringToLongitude(message[2], message[3]);
 			if (message.Length >= 5 && message[4].Length == 6) //Some older GPS doesn't broadcast fix time
 			{
-				FixTime = new TimeSpan(int.Parse(message[4].Substring(0, 2)),
-								   int.Parse(message[4].Substring(2, 2)),
-								   int.Parse(message[4].Substring(4, 2)));
+				FixTime = new TimeSpan(int.Parse(message[4].Substring(0, 2), CultureInfo.InvariantCulture),
+								   int.Parse(message[4].Substring(2, 2), CultureInfo.InvariantCulture),
+								   int.Parse(message[4].Substring(4, 2), CultureInfo.InvariantCulture));
 			}
 			DataActive = (message.Length < 6 || message[5] == "A");
 		}

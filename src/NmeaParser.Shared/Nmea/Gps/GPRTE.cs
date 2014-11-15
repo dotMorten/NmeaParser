@@ -26,7 +26,9 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  Routes
 	/// </summary>
-	[NmeaMessageType(Type = "GPRTE")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprte")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+	[NmeaMessageType("GPRTE")]
 	public sealed class Gprte : NmeaMessage, IMultiPartMessage<string>
 	{
 		/// <summary>
@@ -49,10 +51,13 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
-			TotalMessages = int.Parse(message[0]);
-			MessageNumber = int.Parse(message[1]);
+			if (message == null || message.Length < 4)
+				throw new ArgumentException("Invalid GPRTE", "message");
+
+			TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
+			MessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
 			ListType = message[2] == "c" ? WaypointListType.CompleteWaypointsList : WaypointListType.RemainingWaypointsList;
-			RouteID = message[3];
+			RouteId = message[3];
 			Waypoints = message.Skip(4).ToArray();
 		}
 
@@ -74,12 +79,12 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Gets the route identifier.
 		/// </summary>
-		public string RouteID { get; private set; }
+		public string RouteId { get; private set; }
 		
 		/// <summary>
 		/// Waypoints
 		/// </summary>
-		public string[] Waypoints { get; private set; }
+		public IReadOnlyList<string> Waypoints { get; private set; }
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.

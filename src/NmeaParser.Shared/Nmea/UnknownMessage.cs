@@ -28,9 +28,9 @@ namespace NmeaParser.Nmea
 	public class UnknownMessage : NmeaMessage
 	{
 		/// <summary>
-		/// Gets the nmea value aarray.
+		/// Gets the nmea value array.
 		/// </summary>
-		public string[] Values { get { return base.MessageParts; } }
+		public IReadOnlyList<string> Values { get { return base.MessageParts; } }
 		/// <summary>
 		/// Called when the message is being loaded.
 		/// </summary>

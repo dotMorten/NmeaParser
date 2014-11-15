@@ -27,12 +27,21 @@ namespace NmeaParser.Nmea
 	/// <summary>
 	/// Nmea message attribute type used on concrete <see cref="NmeaMessage"/> implementations.
 	/// </summary>
-	public class NmeaMessageTypeAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+	public sealed class NmeaMessageTypeAttribute : Attribute
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NmeaMessageTypeAttribute"/> class.
+		/// </summary>
+		/// <param name="nmeaType">The type.</param>
+		public NmeaMessageTypeAttribute(string nmeaType)
+		{
+			NmeaType = nmeaType;
+		}
 		/// <summary>
 		/// Gets or sets the NMEA message type.
 		/// </summary>
-		public string Type { get; set; }
+		public string NmeaType { get; private set; }
 	}
 
 	/// <summary>
@@ -51,6 +60,9 @@ namespace NmeaParser.Nmea
 		/// </exception>
 		public static NmeaMessage Parse(string message)
 		{
+			if (string.IsNullOrEmpty(message))
+				throw new ArgumentNullException("message"); 
+			
 			int checksum = -1;
 			if (message[0] != '$')
 				throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
@@ -69,7 +81,7 @@ namespace NmeaParser.Nmea
 					checksumTest ^= Convert.ToByte(message[i]);
 				}
 				if (checksum != checksumTest)
-					throw new ArgumentException(string.Format("Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
+					throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
 			}
 
 			string[] parts = message.Split(new char[] { ',' });
@@ -110,7 +122,7 @@ namespace NmeaParser.Nmea
 							var pinfo = c.GetParameters();
 							if (pinfo.Length == 0)
 							{
-								messageTypes.Add(attr.Type, c);
+								messageTypes.Add(attr.NmeaType, c);
 								break;
 							}
 						}
@@ -124,10 +136,10 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Gets the NMEA message parts.
 		/// </summary>
-		protected string[] MessageParts { get; private set; }
+		protected IReadOnlyList<string> MessageParts { get; private set; }
 
 		/// <summary>
-		/// Gets the type id for the message.
+		/// Gets the NMEA type id for the message.
 		/// </summary>
 		public string MessageType { get; private set; }
 
@@ -148,47 +160,37 @@ namespace NmeaParser.Nmea
 		/// </returns>
 		public override string ToString()
 		{
-			return string.Format("${0},{1}", MessageType, string.Join(",", MessageParts));
+			return string.Format(CultureInfo.InvariantCulture, "${0},{1}", MessageType, string.Join(",", MessageParts));
 		}
 
 		internal static double StringToLatitude(string value, string ns)
 		{
-			try
-			{
-				if (value.Length < 3)
-					return double.NaN;
-				double latitude = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(value.Substring(2), CultureInfo.InvariantCulture) / 60;
-				if (ns == "S")
-					latitude *= -1;
-				return latitude;
-			}
-			catch { return double.NaN; }
+			if (value == null || value.Length < 3)
+				return double.NaN;
+			double latitude = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(value.Substring(2), CultureInfo.InvariantCulture) / 60;
+			if (ns == "S")
+				latitude *= -1;
+			return latitude;
 		}
+
 		internal static double StringToLongitude(string value, string ew)
 		{
-			try
-			{
-				if (value.Length < 4)
-					return double.NaN;
-				double longitude = int.Parse(value.Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(value.Substring(3), CultureInfo.InvariantCulture) / 60;
-				if (ew == "W")
-					longitude *= -1;
-				return longitude;
-			}
-			catch { return double.NaN; }
+			if (value == null || value.Length < 4)
+				return double.NaN;
+			double longitude = int.Parse(value.Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(value.Substring(3), CultureInfo.InvariantCulture) / 60;
+			if (ew == "W")
+				longitude *= -1;
+			return longitude;
 		}
+
 		internal static double StringToDouble(string value)
 		{
-			try
+			double result = double.NaN;
+			if(value != null && double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
 			{
-				double result = double.NaN;
-				if(double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
-				{
-					return result;
-				}
-				return double.NaN;
+				return result;
 			}
-			catch { return double.NaN; }
+			return double.NaN;
 		}
 	}
 }

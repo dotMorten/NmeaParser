@@ -33,32 +33,47 @@ namespace NmeaParser
 #else
 		string m_filename;
 #endif
-		int m_readSpeed;
+	
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
 		/// </summary>
-		/// <param name="filename"></param>
-		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
+		/// <param name="fileName"></param>
 #if NETFX_CORE
-		public NmeaFileDevice(Windows.Storage.IStorageFile filename, int readSpeed = 200) : base(readSpeed)
+		public NmeaFileDevice(Windows.Storage.IStorageFile fileName) : this(fileName, 200)
 #else
-		public NmeaFileDevice(string filename, int readSpeed = 200) : base(readSpeed)
+		public NmeaFileDevice(string fileName) : this(fileName, 200)
 #endif
 		{
-			m_filename = filename;
-			m_readSpeed = readSpeed;
+			m_filename = fileName;
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
+		/// </summary>
+		/// <param name="fileName"></param>
+		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
+#if NETFX_CORE
+		public NmeaFileDevice(Windows.Storage.IStorageFile fileName, int readSpeed)
+			: base(readSpeed)
+#else
+		public NmeaFileDevice(string fileName, int readSpeed) : base(readSpeed)
+#endif
+		{
+			m_filename = fileName;
+		}
+
 		/// <summary>
 		/// Gets the stream to perform buffer reads on.
 		/// </summary>
 		/// <returns></returns>
+#if !NETFX_CORE
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+#endif
 		protected override Task<Stream> GetStreamAsync()
 		{
 #if NETFX_CORE
 			return m_filename.OpenStreamForReadAsync();
 #else
-			var sr = System.IO.File.OpenRead(m_filename);
-			return Task.FromResult<Stream>(sr);
+			return Task.FromResult<Stream>(System.IO.File.OpenRead(m_filename));
 #endif
 		}
 	}

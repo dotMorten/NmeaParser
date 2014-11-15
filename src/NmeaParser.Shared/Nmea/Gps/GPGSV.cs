@@ -26,8 +26,10 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  GPS Satellites in view
 	/// </summary>
-	[NmeaMessageType(Type = "GPGSV")]
-	public sealed class Gpgsv : NmeaMessage, IMultiPartMessage<SatelitteVehicle>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgsv")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+	[NmeaMessageType("GPGSV")]
+	public sealed class Gpgsv : NmeaMessage, IMultiPartMessage<SatelliteVehicle>
 	{
 		/// <summary>
 		/// Called when the message is being loaded.
@@ -35,17 +37,20 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
-			TotalMessages = int.Parse(message[0]);
-			MessageNumber = int.Parse(message[1]);
-			SVsInView = int.Parse(message[2]);
+			if (message == null || message.Length < 3)
+				throw new ArgumentException("Invalid GPGSV", "message"); 
+			
+			TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
+			MessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
+			SVsInView = int.Parse(message[2], CultureInfo.InvariantCulture);
 
-			List<SatelitteVehicle> svs = new List<SatelitteVehicle>();
+			List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
 			for (int i = 3; i < message.Length - 4; i += 4)
 			{
 				if (message[i].Length == 0)
 					continue;
 				else
-					svs.Add(new SatelitteVehicle(message, i));
+					svs.Add(new SatelliteVehicle(message, i));
 			}
 			this.SVs = svs.ToArray();
 		}
@@ -68,13 +73,13 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Dilution of precision
 		/// </summary>
-		public SatelitteVehicle[] SVs { get; private set; }
+		public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
 
 		/// <summary>
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
-		/// <returns> A System.Collections.Generic.IEnumerator{SatelitteVehicle} that can be used to iterate through the collection.</returns>
-		public IEnumerator<SatelitteVehicle> GetEnumerator()
+		/// <returns> A System.Collections.Generic.IEnumerator{SatelliteVehicle} that can be used to iterate through the collection.</returns>
+		public IEnumerator<SatelliteVehicle> GetEnumerator()
 		{
 			foreach(var sv in SVs)
 				yield return sv;
@@ -93,11 +98,11 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	/// Satellite vehicle
 	/// </summary>
-	public sealed class SatelitteVehicle
+	public sealed class SatelliteVehicle
 	{
-		internal SatelitteVehicle(string[] message, int startIndex)
+		internal SatelliteVehicle(string[] message, int startIndex)
 		{
-			PrnNumber = int.Parse(message[startIndex]);
+			PrnNumber = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
 			Elevation = double.Parse(message[startIndex+1], CultureInfo.InvariantCulture);
 			Azimuth = double.Parse(message[startIndex + 2], CultureInfo.InvariantCulture);
 			int snr = -1;
@@ -155,10 +160,12 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// WAAS - Wide Area Augmentation System
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Waas")]
 		Waas,
 		/// <summary>
 		/// GLONASS - Globalnaya navigatsionnaya sputnikovaya sistema
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Glonass")]
 		Glonass
 	}
 }

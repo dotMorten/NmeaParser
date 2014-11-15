@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	/// <summary>
 	/// Altitude Information
 	/// </summary>
-	[NmeaMessageType(Type = "PGRMZ")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrmz")]
+	[NmeaMessageType("PGRMZ")]
 	public class Pgrmz : NmeaMessage
 	{
 		/// <summary>
@@ -67,6 +68,9 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 3)
+				throw new ArgumentException("Invalid PGRMZ", "message"); 
+			
 			if (message[0].Length > 0)
 				Altitude = double.Parse(message[0], CultureInfo.InvariantCulture);
 			else

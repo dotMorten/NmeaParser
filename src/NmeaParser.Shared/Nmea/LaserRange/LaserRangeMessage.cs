@@ -35,6 +35,9 @@ namespace NmeaParser.Nmea.LaserRange
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 9)
+				throw new ArgumentException("Invalid Laser Range Message", "message"); 
+			
 			HorizontalVector = message[0];
 			HorizontalDistance = double.Parse(message[1], CultureInfo.InvariantCulture);
 			HorizontalDistanceUnits = message[2][0];

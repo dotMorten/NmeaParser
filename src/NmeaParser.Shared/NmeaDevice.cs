@@ -58,6 +58,7 @@ namespace NmeaParser
 			MultiPartMessageCache.Clear();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
 		private void StartParser()
 		{
 			var token = m_cts.Token;
@@ -127,7 +128,7 @@ namespace NmeaParser
 			{
 				m_message += nmea;
 
-				var lineEnd = m_message.IndexOf("\n");
+				var lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
 				if (lineEnd > -1)
 				{
 					line = m_message.Substring(0, lineEnd).Trim();
@@ -138,6 +139,7 @@ namespace NmeaParser
 				ProcessMessage(line);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
 		private void ProcessMessage(string p)
 		{
 			try
@@ -152,10 +154,10 @@ namespace NmeaParser
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
 		{
 			var args = new NmeaMessageReceivedEventArgs(msg);
-			if (msg is IMultiPartMessage)
+			var multi = msg as IMultiPartMessage;
+			if (multi != null)
 			{
-				args.IsMultiPart = true;
-				var multi = (IMultiPartMessage)msg;
+				args.IsMultipart = true;
 				if (MultiPartMessageCache.ContainsKey(msg.MessageType))
 				{
 					var dic = MultiPartMessageCache[msg.MessageType];
@@ -202,12 +204,13 @@ namespace NmeaParser
 		public void Dispose()
 		{
 			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources.
 		/// </summary>
-		/// <param name="force"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-		protected virtual void Dispose(bool force)
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool disposing)
 		{
 			if (m_stream != null)
 			{
@@ -217,6 +220,8 @@ namespace NmeaParser
 					m_cts = null;
 				}
 				CloseStreamAsync(m_stream);
+				if (disposing && m_stream != null)
+					m_stream.Dispose();
 				m_stream = null;
 			}
 		}
@@ -251,13 +256,13 @@ namespace NmeaParser
 		/// <value>
 		/// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsMultiPart { get; internal set; }
+		public bool IsMultipart { get; internal set; }
 		/// <summary>
 		/// Gets the message parts if this is a multi-part message and all message parts has been received.
 		/// </summary>
 		/// <value>
 		/// The message parts.
 		/// </value>
-		public Nmea.NmeaMessage[] MessageParts { get; internal set; }
+		public IReadOnlyList<Nmea.NmeaMessage> MessageParts { get; internal set; }
 	}
 }

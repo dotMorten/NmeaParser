@@ -74,6 +74,8 @@ namespace NmeaParser
 		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
 			stream.Dispose();
 			m_socket.Dispose();
 			m_socket = null;

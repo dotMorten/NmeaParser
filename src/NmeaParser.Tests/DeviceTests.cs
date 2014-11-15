@@ -23,13 +23,13 @@ namespace NmeaParser.Tests
 				count++;
 				try
 				{
-					Assert.IsTrue(e.IsMultiPart, "IsMultiPart");
+					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
 					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gps.Gpgsv));
 					var msg = e.Message as NmeaParser.Nmea.Gps.Gpgsv;
 					if (msg.TotalMessages == msg.MessageNumber)
 					{
 						Assert.IsNotNull(e.MessageParts);
-						Assert.AreEqual(e.MessageParts.Length, 3, "MessageParts.Length");
+						Assert.AreEqual(e.MessageParts.Count, 3, "MessageParts.Length");
 						tcs.SetResult(true);
 					}
 					else
@@ -60,7 +60,7 @@ namespace NmeaParser.Tests
 				count++;
 				try
 				{
-					Assert.IsTrue(e.IsMultiPart, "IsMultiPart");
+					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
 					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gps.Gpgsv));
 					var msg = e.Message as NmeaParser.Nmea.Gps.Gpgsv;
 					Assert.IsNull(e.MessageParts);

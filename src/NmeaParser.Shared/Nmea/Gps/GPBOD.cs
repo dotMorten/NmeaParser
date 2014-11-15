@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	/// Bearing Origin to Destination
 	/// </summary>
-	[NmeaMessageType(Type = "GPBOD")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpbod")]
+	[NmeaMessageType("GPBOD")]
 	public class Gpbod : NmeaMessage
 	{
 		/// <summary>
@@ -35,6 +36,8 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 3)
+				throw new ArgumentException("Invalid GPBOD", "message");
 			if (message[0].Length > 0)
 				TrueBearing = double.Parse(message[0], CultureInfo.InvariantCulture);
 			else
@@ -44,9 +47,9 @@ namespace NmeaParser.Nmea.Gps
 			else
 				MagneticBearing = double.NaN;
 			if (message.Length > 4 && !string.IsNullOrEmpty(message[4]))
-				DestinationID = message[4];
+				DestinationId = message[4];
 			if (message.Length > 5 && !string.IsNullOrEmpty(message[5]))
-				OriginID = message[5];
+				OriginId = message[5];
 		}
 		/// <summary>
 		/// True Bearing from start to destination
@@ -61,11 +64,11 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Name of origin
 		/// </summary>
-		public string OriginID { get; set; }
+		public string OriginId { get; set; }
 
 		/// <summary>
 		/// Name of destination
 		/// </summary>
-		public string DestinationID { get; set; }
+		public string DestinationId { get; set; }
 	}
 }
