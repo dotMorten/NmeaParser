@@ -17,7 +17,7 @@ The API is easily extensible with more NMEA messages. Simply create a new class 
 
 Example:
 ```csharp
-[NmeaMessageType(Type = "GPRMC")]
+[NmeaMessageType("GPRMC")]
 public class Gprmc : NmeaMessage
 {
 	protected override void LoadMessage(string[] message)
