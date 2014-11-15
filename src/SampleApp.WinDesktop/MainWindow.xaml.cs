@@ -25,6 +25,13 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			// Use serial port:
+			//var comPort = System.IO.Ports.SerialPort.GetPortNames().First();
+			//var port = new System.IO.Ports.SerialPort(comPort, 4800);
+			//var device = new NmeaParser.SerialPortDevice(port);
+
+			//Use a log file for playing back logged data
 			var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
 			device.MessageReceived += device_MessageReceived;
 			var _ = device.OpenAsync();
@@ -45,6 +52,16 @@ namespace SampleApp.WinDesktop
 					if(args.IsMultipart && args.MessageParts != null)
 						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
 				}
+				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
+					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
+				else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
+					gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
+				else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
+					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
+				else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
+					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
+				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
+					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
 			});
 		}
 	}

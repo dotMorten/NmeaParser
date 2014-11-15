@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="SampleApp.WinDesktop.PgrmeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:SampleApp.WinDesktop"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Message}">
+		<Border Background="CornflowerBlue" Padding="10" Margin="-10,-10,-10,5">
+			<TextBlock Text="PGRME" FontSize="20" FontWeight="Bold" Foreground="White" />
+		</Border>
+		<local:KeyValuePairControl Header="Horizontal Error: ">
+			<local:KeyValuePairControl.Value>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{Binding HorizontalError}" />
+					<TextBlock Text="{Binding HorizontalErrorUnits}" />
+				</StackPanel>
+			</local:KeyValuePairControl.Value>
+		</local:KeyValuePairControl>
+		<local:KeyValuePairControl Header="Vertical Error: ">
+			<local:KeyValuePairControl.Value>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{Binding VerticalError}" />
+					<TextBlock Text="{Binding VerticalErrorUnits}" />
+				</StackPanel>
+			</local:KeyValuePairControl.Value>
+		</local:KeyValuePairControl>
+		<local:KeyValuePairControl Header="Spherical Error: ">
+			<local:KeyValuePairControl.Value>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{Binding SphericalError}" />
+					<TextBlock Text="{Binding SphericalErrorUnits}" />
+				</StackPanel>
+			</local:KeyValuePairControl.Value>
+		</local:KeyValuePairControl>
+	</StackPanel>
+</UserControl>

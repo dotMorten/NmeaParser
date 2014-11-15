@@ -137,11 +137,11 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Time since last DGPS update
 		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; set; }
+		public TimeSpan TimeSinceLastDgpsUpdate { get; private set; }
 
 		/// <summary>
 		/// DGPS Station ID Number
 		/// </summary>
-		public int DgpsStationId { get; set; }
+		public int DgpsStationId { get; private set; }
 	}
 }

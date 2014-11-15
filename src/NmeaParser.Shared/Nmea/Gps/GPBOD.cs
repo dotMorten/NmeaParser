@@ -64,11 +64,11 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Name of origin
 		/// </summary>
-		public string OriginId { get; set; }
+		public string OriginId { get; private set; }
 
 		/// <summary>
 		/// Name of destination
 		/// </summary>
-		public string DestinationId { get; set; }
+		public string DestinationId { get; private set; }
 	}
 }
