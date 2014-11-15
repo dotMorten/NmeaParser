@@ -51,9 +51,9 @@
 					<local:PolarPlacementItem
 						Azimuth="{Binding Azimuth}"
 						Elevation="{Binding Elevation}" >
-						<Canvas Width="5" Height="5">
-							<Ellipse Fill="Black"
-							Width="5" Height="5" >
+						<Canvas Width="8" Height="8">
+							<Ellipse Fill="CornflowerBlue"
+							Width="8" Height="8" >
 								<Ellipse.ToolTip>
 									<StackPanel>
 										<TextBlock Text="{Binding Azimuth, StringFormat=Azimuth: {0}}" />

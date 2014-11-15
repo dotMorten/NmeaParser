@@ -38,13 +38,14 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Border Height="{Binding SignalToNoiseRatio}"
-							Background="LightGray"
+							Background="CornflowerBlue"
 							BorderBrush="Black" 
 							Margin="0,0,10,0" Width="20"
 							BorderThickness="1"
 							ToolTip="{Binding SignalToNoiseRatio}"
 							VerticalAlignment="Bottom">
 						<TextBlock Text="{Binding PrnNumber}"
+								   Foreground="White" FontWeight="Bold"
 								   HorizontalAlignment="Center" />
 					</Border>
 				</DataTemplate>
