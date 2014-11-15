@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser.WinStore\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
 EndProject
@@ -39,6 +39,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		GlobalSuppressions.cs = GlobalSuppressions.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Android", "NmeaParser.Android\NmeaParser.Android.csproj", "{0DAA6E10-BC77-4B06-8356-BAEE9085D985}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.iOS", "NmeaParser.iOS\NmeaParser.iOS.csproj", "{507CFE3E-16C1-43EC-BC21-50F901EE223B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{df711ab9-f14e-4f1f-b8f2-b6ddc4691554}*SharedItemsImports = 4
@@ -46,7 +50,9 @@ Global
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
 		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{c4b3935b-7ed4-40cc-b1d2-bc2b854e319d}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{0daa6e10-bc77-4b06-8356-baee9085d985}*SharedItemsImports = 4
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{507cfe3e-16c1-43ec-bc21-50f901ee223b}*SharedItemsImports = 4
 		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{95e812e6-17c2-494f-a446-fde42d75331c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +94,14 @@ Global
 		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0DAA6E10-BC77-4B06-8356-BAEE9085D985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DAA6E10-BC77-4B06-8356-BAEE9085D985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DAA6E10-BC77-4B06-8356-BAEE9085D985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DAA6E10-BC77-4B06-8356-BAEE9085D985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{507CFE3E-16C1-43EC-BC21-50F901EE223B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{507CFE3E-16C1-43EC-BC21-50F901EE223B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{507CFE3E-16C1-43EC-BC21-50F901EE223B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{507CFE3E-16C1-43EC-BC21-50F901EE223B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +119,7 @@ Global
 		{9EE3EA1D-F28C-4CF2-B540-DB0415050D5F} = {71F04187-BE90-47DE-A7BD-4D6CED50D446}
 		{7ABA337E-6748-484E-A0F4-E1715E1C95F1} = {A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}
 		{28B8E327-C504-4E08-B2CE-09D1CBB8B904} = {CF767486-305D-40EE-8845-58EF76C16D85}
+		{0DAA6E10-BC77-4B06-8356-BAEE9085D985} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
+		{507CFE3E-16C1-43EC-BC21-50F901EE223B} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 	EndGlobalSection
 EndGlobal

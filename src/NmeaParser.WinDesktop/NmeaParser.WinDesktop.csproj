@@ -45,7 +45,6 @@
     </Compile>
     <Compile Include="SerialPortDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.Desktop.cs" />
-    <Compile Include="TypedEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
