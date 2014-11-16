@@ -8,6 +8,7 @@ namespace SampleApp
 		public event EventHandler<Esri.ArcGISRuntime.Location.LocationInfo> LocationChanged;
 		private NmeaParser.NmeaDevice device;
 		double m_Accuracy = double.NaN;
+		double m_altitude = double.NaN;
 
 		public NmeaLocationProvider(NmeaParser.NmeaDevice device)
 		{
@@ -22,6 +23,10 @@ namespace SampleApp
 			{
 				m_Accuracy = ((NmeaParser.Nmea.Gps.Garmin.Pgrme)message).HorizontalError;
 			}
+			else if (message is NmeaParser.Nmea.Gps.Gpgga)
+			{
+				m_altitude = ((NmeaParser.Nmea.Gps.Gpgga)message).Altitude;
+			}
 			else if (message is NmeaParser.Nmea.Gps.Gprmc)
 			{
 				var rmc = (NmeaParser.Nmea.Gps.Gprmc)message;
@@ -32,7 +37,7 @@ namespace SampleApp
 						Course = rmc.Course,
 						Speed = rmc.Speed,
 						HorizontalAccuracy = m_Accuracy,
-						Location = new Esri.ArcGISRuntime.Geometry.MapPoint(rmc.Longitude, rmc.Latitude, SpatialReferences.Wgs84)
+						Location = new Esri.ArcGISRuntime.Geometry.MapPoint(rmc.Longitude, rmc.Latitude, m_altitude, SpatialReferences.Wgs84)
 					});
 				}
 			}
