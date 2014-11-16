@@ -43,15 +43,74 @@
 				</Grid>
 			</TabItem>
 			<TabItem Header="Map">
-				<esri:MapView x:Name="mapView" Grid.Row="1">
-					<local:RestoreAutoPanMode.RestoreAutoPanSettings>
-						<local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
-					</local:RestoreAutoPanMode.RestoreAutoPanSettings>
-					<esri:Map>
-						<esri:ArcGISTiledMapServiceLayer
-							ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
-					</esri:Map>
-				</esri:MapView>
+				<Grid>
+					<!--Map-->
+					<esri:MapView x:Name="mapView" Grid.Row="1">
+						<local:RestoreAutoPanMode.RestoreAutoPanSettings>
+							<local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
+						</local:RestoreAutoPanMode.RestoreAutoPanSettings>
+						<esri:Map>
+							<esri:ArcGISTiledMapServiceLayer
+								ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
+						</esri:Map>
+					</esri:MapView>
+					
+					<!--North arrow-->
+					<Grid Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						  Margin="10" RenderTransformOrigin=".5,.5">
+						<Grid.Resources>
+							<local:ReverseConverter x:Key="conv" />
+						</Grid.Resources>
+						<Grid.Effect>
+							<DropShadowEffect Direction="0"  ShadowDepth="0"
+										  BlurRadius="10" Opacity=".75" />
+						</Grid.Effect>
+						<Grid.RenderTransform>
+							<RotateTransform Angle="{Binding ElementName=mapView, Path=Rotation, Converter={StaticResource conv}}" />
+						</Grid.RenderTransform>
+						<TextBlock Text="Ù" FontFamily="Wingdings" HorizontalAlignment="Center" VerticalAlignment="Center"
+								   FontSize="40" Foreground="White" />
+						<TextBlock Text="N" HorizontalAlignment="Center" VerticalAlignment="Top"
+								   FontSize="12" Margin="0,-5,0,0" RenderTransformOrigin=".5,.5" 
+								   Foreground="White" >
+							<TextBlock.RenderTransform>
+							<RotateTransform Angle="{Binding ElementName=mapView, Path=Rotation}" />
+						</TextBlock.RenderTransform>
+						</TextBlock>
+					</Grid>
+
+					<Grid HorizontalAlignment="Right" VerticalAlignment="Top"
+								Margin="10" Background="White" Width="150"
+						  DataContext="{Binding ElementName=mapView, Path=LocationDisplay.CurrentLocation}">
+						<Grid.Effect>
+							<DropShadowEffect Direction="0"  ShadowDepth="0"
+										  BlurRadius="10" Opacity=".75" />
+						</Grid.Effect>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition />
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<Border Background="CornflowerBlue" Grid.ColumnSpan="2" Padding="10">
+							<TextBlock Text="Details" FontSize="20" FontWeight="Bold" Foreground="White"  />
+						</Border>
+						<StackPanel Margin="10" Grid.Row="1">
+							<TextBlock Text="Speed:" FontWeight="Bold" />
+							<TextBlock Text="Course:" FontWeight="Bold" />
+							<TextBlock Text="Altitude:" FontWeight="Bold" />
+							<TextBlock Text="Accuracy:" FontWeight="Bold" />
+						</StackPanel>
+						<StackPanel Margin="0,10,10,10" Grid.Column="1" Grid.Row="1">
+							<TextBlock Text="{Binding Speed, StringFormat='{}{0} km/h'}" />
+							<TextBlock Text="{Binding Course, StringFormat='{}{0}°'}" />
+							<TextBlock Text="{Binding Location.Z, StringFormat='{}{0} m'}" />
+							<TextBlock Text="{Binding HorizontalAccuracy, StringFormat='{}{0} m'}" />
+						</StackPanel>
+					</Grid>
+				</Grid>
 			</TabItem>
 			<TabItem Header="Messages">
 				<TextBox x:Name="output"

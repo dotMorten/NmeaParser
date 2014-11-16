@@ -79,3 +79,18 @@ namespace SampleApp.WinDesktop
 		}
 	}
 }
+namespace SampleApp
+{
+	public class ReverseConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			return -(double)value;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			return -(double)value;
+		}
+	}
+}
