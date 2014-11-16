@@ -47,5 +47,5 @@ Screenshots from Desktop sample app:
 ![sampleapp3](https://cloud.githubusercontent.com/assets/1378165/5062461/123adfc2-6d77-11e4-8573-1fe95fa0325f.png)
 
 Map view using the [ArcGIS Runtime](http://developer.arcgis.com/net) (see [separate branch](https://github.com/dotMorten/NmeaParser/tree/ArcGISLocationProvider)):
-![sampleapp1](https://cloud.githubusercontent.com/assets/1378165/5062457/0e80e5f2-6d77-11e4-8013-75f94326ada7.jpg)
+![sampleapp1](https://cloud.githubusercontent.com/assets/1378165/5062617/3419eef4-6d7b-11e4-8c8b-a6c4eaa212f0.jpg)
 
