@@ -26,44 +26,66 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  Global Positioning System Fix Data
 	/// </summary>
-	[NmeaMessageType(Type = "GPGGA")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
+	[NmeaMessageType("GPGGA")]
 	public class Gpgga : NmeaMessage
 	{
+		/// <summary>
+		/// Fix quality
+		/// </summary>
 		public enum FixQuality : int
 		{
+			/// <summary>Invalid</summary>
 			Invalid = 0,
+			/// <summary>GPS</summary>
 			GpsFix = 1,
+			/// <summary>Differential GPS</summary>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dgps")]
 			DgpsFix = 2,
+			/// <summary>Precise Positioning Service</summary>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pps")]
 			PpsFix = 3,
+			/// <summary>Real Time Kinematic (Fixed)</summary>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
 			Rtk = 4,
+			/// <summary>Real Time Kinematic (Floating)</summary>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
 			FloatRtk = 5,
+			/// <summary>Estimated</summary>
 			Estimated = 6,
+			/// <summary>Manual input</summary>
 			ManualInput = 7,
+			/// <summary>Simulation</summary>
 			Simulation = 8
 		}
 
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
-			var time = message[0];
+			if (message == null || message.Length < 14)
+				throw new ArgumentException("Invalid GPGGA", "message"); 
 			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
 			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
 			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
 			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
-			Hdop = double.Parse(message[7], CultureInfo.InvariantCulture);
-			Altitude = double.Parse(message[8], CultureInfo.InvariantCulture);
+			Hdop = NmeaMessage.StringToDouble(message[7]);
+			Altitude = NmeaMessage.StringToDouble(message[8]);
 			AltitudeUnits = message[9];
-			HeightOfGeoid = double.Parse(message[10], CultureInfo.InvariantCulture);
+			HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
 			HeightOfGeoidUnits = message[11];
 			if (message[0].Length == 6)
 			{
-				TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2)),
-								   int.Parse(message[0].Substring(2, 2)),
-								   int.Parse(message[0].Substring(4, 2)));
+				TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
+								   int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
+								   int.Parse(message[0].Substring(4, 2), CultureInfo.InvariantCulture));
 			}
 			if (message[13].Length > 0)
-				DgpsStationID = int.Parse(message[13], CultureInfo.InvariantCulture);
+				DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
 			else
-				DgpsStationID = -1;
+				DgpsStationId = -1;
 		}
 
 		/// <summary>
@@ -89,6 +111,7 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Horizontal Dilution of Precision
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
 		public double Hdop { get; private set; }
 
 		/// <summary>
@@ -114,11 +137,11 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Time since last DGPS update
 		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; set; }
+		public TimeSpan TimeSinceLastDgpsUpdate { get; private set; }
 
 		/// <summary>
 		/// DGPS Station ID Number
 		/// </summary>
-		public int DgpsStationID { get; set; }
+		public int DgpsStationId { get; private set; }
 	}
 }

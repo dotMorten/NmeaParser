@@ -3,16 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:local="clr-namespace:SampleApp"
 		xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-        Title="Sample App" Height="450" Width="525">
+        Title="Sample App" Height="500" Width="625">
 	<Grid>
+		<Grid.Resources>
+			<Style TargetType="UserControl" x:Key="card">
+				<Setter Property="Margin" Value="10" />
+				<Setter Property="Padding" Value="10" />
+				<Setter Property="Background" Value="White" />
+				<Setter Property="Effect">
+					<Setter.Value>
+						<DropShadowEffect Direction="0"  ShadowDepth="0"
+										  BlurRadius="20" Opacity=".5" />
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</Grid.Resources>
 		<TabControl>
-			<TabItem Header="Messages">
-				<TextBox x:Name="output"
-				 AcceptsReturn="True"
-				 IsReadOnly="True"
-				 VerticalScrollBarVisibility="Auto"
-				 HorizontalScrollBarVisibility="Visible"
-				 />
+			<TabItem Header="GPS Info">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
+					<WrapPanel>
+						<local:GprmcControl x:Name="gprmcView" Style="{StaticResource card}" />
+						<local:GpggaControl x:Name="gpggaView" Style="{StaticResource card}" />
+						<local:GpgsaControl x:Name="gpgsaView" Style="{StaticResource card}" />
+						<local:GpgllControl x:Name="gpgllView" Style="{StaticResource card}" />
+						<local:PgrmeControl x:Name="pgrmeView" Style="{StaticResource card}" />
+					</WrapPanel>
+				</ScrollViewer>
 			</TabItem>
 			<TabItem Header="GPS Satellite view">
 				<Grid>
@@ -26,28 +42,31 @@
 						GpgsvMessages="{Binding GpgsvMessages, ElementName=satView}" />
 				</Grid>
 			</TabItem>
-
-		<TabItem Header="Map">
-			<esri:MapView x:Name="mapView" Grid.Row="1">
+			<TabItem Header="Map">
+				<esri:MapView x:Name="mapView" Grid.Row="1">
 					<local:RestoreAutoPanMode.RestoreAutoPanSettings>
 						<local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
 					</local:RestoreAutoPanMode.RestoreAutoPanSettings>
 					<esri:Map>
-					<esri:ArcGISTiledMapServiceLayer
-						ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
-				</esri:Map>
-			</esri:MapView>
-		</TabItem>
+						<esri:ArcGISTiledMapServiceLayer
+							ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
+					</esri:Map>
+				</esri:MapView>
+			</TabItem>
+			<TabItem Header="Messages">
+				<TextBox x:Name="output"
+				 AcceptsReturn="True"
+				 IsReadOnly="True"
+				 VerticalScrollBarVisibility="Auto"
+				 HorizontalScrollBarVisibility="Visible"
+				 />
+			</TabItem>
 		</TabControl>
 		
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
-		
-		
-		
-	
 		
 	</Grid>
 </Window>

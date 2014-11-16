@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="SampleApp.GpggaControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:SampleApp"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Message}">
+		<Border Background="CornflowerBlue" Padding="10" Margin="-10,-10,-10,5">
+			<TextBlock Text="GPGGA" FontSize="20" FontWeight="Bold" Foreground="White" />
+		</Border>
+		<TextBlock Text="Location:" FontWeight="Bold" />
+		<TextBlock Text="{Binding Latitude, Mode=OneTime}" />
+		<TextBlock Text="{Binding Longitude, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="Quality: " Value="{Binding Quality, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="Number of satellites: " Value="{Binding NumberOfSatellites, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="HDOP: " Value="{Binding Hdop, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="Altitude: " >
+			<local:KeyValuePairControl.Value>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{Binding Altitude}" />
+					<TextBlock Text="{Binding AltitudeUnits}" />
+				</StackPanel>
+			</local:KeyValuePairControl.Value>
+		</local:KeyValuePairControl>
+		<local:KeyValuePairControl Header="Height of Geoid: ">
+			<local:KeyValuePairControl.Value>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="{Binding HeightOfGeoid}" />
+					<TextBlock Text="{Binding HeightOfGeoidUnits}" />
+				</StackPanel>
+			</local:KeyValuePairControl.Value>
+		</local:KeyValuePairControl>
+		<local:KeyValuePairControl Header="Last DGPS update: " Value="{Binding TimeSinceLastDgpsUpdate, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="DGPS ID: " Value="{Binding DgpsStationId, Mode=OneTime}" />
+	</StackPanel>
+</UserControl>

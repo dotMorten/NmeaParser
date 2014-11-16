@@ -60,12 +60,54 @@
     <Compile Include="..\SampleApp.Store\SampleApp.Store.Shared\RestoreAutoPanMode.cs">
       <Link>RestoreAutoPanMode.cs</Link>
     </Compile>
+    <Compile Include="GpgsaControl.xaml.cs">
+      <DependentUpon>GpgsaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GpggaControl.xaml.cs">
+      <DependentUpon>GpggaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GpgllControl.xaml.cs">
+      <DependentUpon>GpgllControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="KeyValuePairControl.xaml.cs">
+      <DependentUpon>KeyValuePairControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PgrmeControl.xaml.cs">
+      <DependentUpon>PgrmeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GprmcControl.xaml.cs">
+      <DependentUpon>GprmcControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SatelliteSnr.xaml.cs">
       <DependentUpon>SatelliteSnr.xaml</DependentUpon>
     </Compile>
     <Compile Include="SatelliteView.xaml.cs">
       <DependentUpon>SatelliteView.xaml</DependentUpon>
     </Compile>
+    <Page Include="GpgsaControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GpggaControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GpgllControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="KeyValuePairControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PgrmeControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GprmcControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

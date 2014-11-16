@@ -24,6 +24,9 @@ using Windows.Foundation;
 
 namespace NmeaParser
 {
+	/// <summary>
+	/// A generic abstract NMEA device
+	/// </summary>
 	public abstract class NmeaDevice : IDisposable
 	{
 		private object m_lockObject = new object();
@@ -32,9 +35,16 @@ namespace NmeaParser
 		System.Threading.CancellationTokenSource m_cts;
 		TaskCompletionSource<bool> closeTask;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NmeaDevice"/> class.
+		/// </summary>
 		protected NmeaDevice()
 		{
 		}
+		/// <summary>
+		/// Opens the device connection.
+		/// </summary>
+		/// <returns></returns>
 		public async Task OpenAsync()
 		{
 			lock (m_lockObject)
@@ -48,6 +58,7 @@ namespace NmeaParser
 			MultiPartMessageCache.Clear();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
 		private void StartParser()
 		{
 			var token = m_cts.Token;
@@ -77,7 +88,15 @@ namespace NmeaParser
 			});
 		}
 
+		/// <summary>
+		/// Creates the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <returns></returns>
 		protected abstract Task<Stream> OpenStreamAsync();
+		/// <summary>
+		/// Closes the device.
+		/// </summary>
+		/// <returns></returns>
 		public async Task CloseAsync()
 		{
 			if (m_cts != null)
@@ -94,6 +113,11 @@ namespace NmeaParser
 			lock (m_lockObject)
 				IsOpen = false;
 		}
+		/// <summary>
+		/// Closes the stream the NmeaDevice is working on top off.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <returns></returns>
 		protected abstract Task CloseStreamAsync(Stream stream);
 
 		private void OnData(byte[] data)
@@ -104,7 +128,7 @@ namespace NmeaParser
 			{
 				m_message += nmea;
 
-				var lineEnd = m_message.IndexOf("\n");
+				var lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
 				if (lineEnd > -1)
 				{
 					line = m_message.Substring(0, lineEnd).Trim();
@@ -115,6 +139,7 @@ namespace NmeaParser
 				ProcessMessage(line);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
 		private void ProcessMessage(string p)
 		{
 			try
@@ -129,10 +154,10 @@ namespace NmeaParser
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
 		{
 			var args = new NmeaMessageReceivedEventArgs(msg);
-			if (msg is IMultiPartMessage)
+			var multi = msg as IMultiPartMessage;
+			if (multi != null)
 			{
-				args.IsMultiPart = true;
-				var multi = (IMultiPartMessage)msg;
+				args.IsMultipart = true;
 				if (MultiPartMessageCache.ContainsKey(msg.MessageType))
 				{
 					var dic = MultiPartMessageCache[msg.MessageType];
@@ -168,13 +193,24 @@ namespace NmeaParser
 		private Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache
 			= new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
 
+		/// <summary>
+		/// Occurs when an NMEA message is received.
+		/// </summary>
 		public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
 
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources.
+		/// </summary>
 		public void Dispose()
 		{
 			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
-		protected virtual void Dispose(bool force)
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources.
+		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool disposing)
 		{
 			if (m_stream != null)
 			{
@@ -184,20 +220,49 @@ namespace NmeaParser
 					m_cts = null;
 				}
 				CloseStreamAsync(m_stream);
+				if (disposing && m_stream != null)
+					m_stream.Dispose();
 				m_stream = null;
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this device is open.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is open; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsOpen { get; private set; }
 	}
 
+	/// <summary>
+	/// Event argument for the <see cref="NmeaDevice.MessageReceived" />
+	/// </summary>
 	public sealed class NmeaMessageReceivedEventArgs : EventArgs
 	{
 		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message) {
 			Message = message;
 		}
+		/// <summary>
+		/// Gets the nmea message.
+		/// </summary>
+		/// <value>
+		/// The nmea message.
+		/// </value>
 		public Nmea.NmeaMessage Message { get; private set; }
-		public bool IsMultiPart { get; internal set; }
-		public Nmea.NmeaMessage[] MessageParts { get; internal set; }
+		/// <summary>
+		/// Gets a value indicating whether this instance is a multi part message.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsMultipart { get; internal set; }
+		/// <summary>
+		/// Gets the message parts if this is a multi-part message and all message parts has been received.
+		/// </summary>
+		/// <value>
+		/// The message parts.
+		/// </value>
+		public IReadOnlyList<Nmea.NmeaMessage> MessageParts { get; internal set; }
 	}
 }

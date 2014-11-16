@@ -26,16 +26,24 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	/// <summary>
 	///  Recommended Minimum
 	/// </summary>
-	[NmeaMessageType(Type = "PGRME")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrme")]
+	[NmeaMessageType("PGRME")]
 	public class Pgrme : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
-			HorizontalError = double.Parse(message[0], CultureInfo.InvariantCulture);
+			if (message == null || message.Length < 6)
+				throw new ArgumentException("Invalid PGRME", "message"); 
+			
+			HorizontalError = NmeaMessage.StringToDouble(message[0]);
 			HorizontalErrorUnits = message[1];
-			VerticalError = double.Parse(message[2], CultureInfo.InvariantCulture);
+			VerticalError = NmeaMessage.StringToDouble(message[2]);
 			VerticalErrorUnits = message[3];
-			SphericalError = double.Parse(message[4], CultureInfo.InvariantCulture);
+			SphericalError = NmeaMessage.StringToDouble(message[4]);
 			SphericalErrorUnits = message[5];
 		}
 

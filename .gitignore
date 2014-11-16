@@ -108,3 +108,4 @@ Backup*/
 UpgradeLog*.XML
 Tools/Nuget/NmeaParser/lib/
 Tools/Nuget/*.nupkg
+src/NmeaParser.sln.ide/

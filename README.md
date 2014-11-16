@@ -1,7 +1,7 @@
 Nmea Parser
 =========
 
-Library for handling data NMEA streams coming in from Bluetooth devices in Windows Store and Windows Phone, and Serial ports in Windows Desktop apps. 
+Library for handling data NMEA streams coming in from Bluetooth devices in Windows Store and Windows Phone, and Serial ports in Windows Desktop apps. Stream and File support is available for Xamarin Android and iOS devices. 
 
 There's also generic support for NMEA files (for simulation/playback) and raw streams.
 
@@ -17,7 +17,7 @@ The API is easily extensible with more NMEA messages. Simply create a new class 
 
 Example:
 ```csharp
-[NmeaMessageType(Type = "GPRMC")]
+[NmeaMessageType("GPRMC")]
 public class Gprmc : NmeaMessage
 {
 	protected override void LoadMessage(string[] message)

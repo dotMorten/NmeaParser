@@ -1,0 +1,37 @@
+﻿<Dictionary>
+	<Words>
+		<Recognized>
+			<Word>Nmea</Word>
+		</Recognized>
+		<Recognized>
+			<Word>Gps</Word>
+		</Recognized>
+		<Recognized>
+			<Word>Dgps</Word>
+		</Recognized>
+		<!--
+		<Unrecognized>
+			<Word>Gps</Word>
+		</Unrecognized>
+		<Unrecognized>
+			<Word>Nmea</Word>
+		</Unrecognized>
+		<Deprecated>
+			<Term PreferredAlternate=""></Term>
+		</Deprecated>
+		<Compound>
+			<Term CompoundAlternate=""></Term>
+		</Compound>
+		<DiscreteExceptions>
+			<Term></Term>
+		</DiscreteExceptions>
+	-->
+	</Words>
+	<!--<Acronyms>
+		<CasingExceptions>
+			<Acronym>Gps</Acronym>
+			<Acronym>Nmea</Acronym>
+			<Acronym>Dgps</Acronym>
+		</CasingExceptions>
+	</Acronyms> -->
+</Dictionary>

@@ -26,7 +26,8 @@ namespace NmeaParser.Nmea.LaserRange.LaserTech
 	/// <summary>
 	/// Laser Range 
 	/// </summary>
-	[NmeaMessageType(Type = "PLTIT")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
+	[NmeaMessageType("PLTIT")]
 	public class Pltit : LaserRangeMessage
 	{
 	}

@@ -46,6 +46,8 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BufferedStringDevice.cs" />
+    <Compile Include="DeviceTests.cs" />
     <Compile Include="NmeaMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

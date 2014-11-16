@@ -26,24 +26,35 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  Recommended Minimum
 	/// </summary>
-	[NmeaMessageType(Type = "GPRMC")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
+	[NmeaMessageType("GPRMC")]
 	public class Gprmc : NmeaMessage
 	{
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
-			FixTime = new DateTime(int.Parse(message[8].Substring(4, 2)) + 2000,
-								   int.Parse(message[8].Substring(2, 2)),
-								   int.Parse(message[8].Substring(0, 2)),
-								   int.Parse(message[0].Substring(0, 2)),
-								   int.Parse(message[0].Substring(2, 2)),
-								   int.Parse(message[0].Substring(4, 2)), DateTimeKind.Utc);
+			if (message == null || message.Length < 11)
+				throw new ArgumentException("Invalid GPRMC", "message"); 
+			
+			if (message[8].Length == 6 && message[0].Length == 6)
+			{
+				FixTime = new DateTime(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
+									   int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture),
+									   int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture),
+									   int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
+									   int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
+									   int.Parse(message[0].Substring(4, 2), CultureInfo.InvariantCulture), DateTimeKind.Utc);
+			}
 			Active = (message[1] == "A");
 			Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
 			Longitude = NmeaMessage.StringToLongitude(message[4], message[5]);
-			Speed = double.Parse(message[6], CultureInfo.InvariantCulture);
-			Course = double.Parse(message[7], CultureInfo.InvariantCulture);
-			MagneticVariation = double.Parse(message[9], CultureInfo.InvariantCulture);
-			if (message[10] == "W")
+			Speed = NmeaMessage.StringToDouble(message[6]);
+			Course = NmeaMessage.StringToDouble(message[7]);
+			MagneticVariation = NmeaMessage.StringToDouble(message[9]);			
+			if (!double.IsNaN(MagneticVariation) && message[10] == "W")
 				MagneticVariation *= -1;
 		}
 

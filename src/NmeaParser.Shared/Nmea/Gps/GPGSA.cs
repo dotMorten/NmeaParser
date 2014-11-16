@@ -26,25 +26,55 @@ namespace NmeaParser.Nmea.Gps
 	/// <summary>
 	///  Global Positioning System Fix Data
 	/// </summary>
-	[NmeaMessageType(Type = "GPGSA")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgsa")]
+	[NmeaMessageType("GPGSA")]
 	public class Gpgsa : NmeaMessage
 	{
+		/// <summary>
+		/// Mode selection
+		/// </summary>
 		public enum ModeSelection
 		{
+			/// <summary>
+			/// Auto
+			/// </summary>
 			Auto,
+			/// <summary>
+			/// Manual mode
+			/// </summary>
 			Manual,
 		}
+		/// <summary>
+		/// Fix Mode
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Enum values matches NMEA spec")]
 		public enum Mode : int
 		{
+			/// <summary>
+			/// Not available
+			/// </summary>
 			NotAvailable = 1,
-			_2D = 2,
-			_3D = 3
+			/// <summary>
+			/// 2D Fix
+			/// </summary>
+			Fix2D = 2,
+			/// <summary>
+			/// 3D Fix
+			/// </summary>
+			Fix3D = 3
 		}
 
-		protected override void LoadMessage(string[] message)
+		/// <summary>
+		/// Called when the message is being loaded.
+		/// </summary>
+		/// <param name="message">The NMEA message values.</param>
+		protected override void OnLoadMessage(string[] message)
 		{
+			if (message == null || message.Length < 17)
+				throw new ArgumentException("Invalid GPGSA", "message"); 
+			
 			GpsMode = message[0] == "A" ? ModeSelection.Auto : ModeSelection.Manual;
-			FixMode = (Mode)int.Parse(message[1]);
+			FixMode = (Mode)int.Parse(message[1], CultureInfo.InvariantCulture);
 
 			List<int> svs = new List<int>();
 			for (int i = 2; i < 14; i++)
@@ -57,19 +87,19 @@ namespace NmeaParser.Nmea.Gps
 
 			double tmp;
 			if (double.TryParse(message[14], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				PDop = tmp;
+				Pdop = tmp;
 			else
-				PDop = double.NaN;
+				Pdop = double.NaN;
 
 			if (double.TryParse(message[15], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				HDop = tmp;
+				Hdop = tmp;
 			else
-				HDop = double.NaN;
+				Hdop = double.NaN;
 
 			if (double.TryParse(message[16], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				VDop = tmp;
+				Vdop = tmp;
 			else
-				VDop = double.NaN;
+				Vdop = double.NaN;
 		}
 
 		/// <summary>
@@ -85,21 +115,24 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// IDs of SVs used in position fix
 		/// </summary>
-		public int[] SVs { get; private set; }
+		public IReadOnlyList<int> SVs { get; private set; }
 
 		/// <summary>
 		/// Dilution of precision
 		/// </summary>
-		public double PDop { get; private set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdop")]
+		public double Pdop { get; private set; }
 
 		/// <summary>
 		/// Horizontal dilution of precision
 		/// </summary>
-		public double HDop { get; private set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
+		public double Hdop { get; private set; }
 
 		/// <summary>
 		/// Vertical dilution of precision
 		/// </summary>
-		public double VDop { get; private set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vdop")]
+		public double Vdop { get; private set; }
 	}
 }
