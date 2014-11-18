@@ -21,6 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Windows.Foundation;
+using System.Threading;
 
 namespace NmeaParser
 {
@@ -29,12 +30,12 @@ namespace NmeaParser
 		private object m_lockObject = new object();
 		private string m_message = "";
 		private Stream m_stream;
-		System.Threading.CancellationTokenSource m_cts;
-		TaskCompletionSource<bool> closeTask;
+		protected System.Threading.CancellationTokenSource m_cts;
+		protected TaskCompletionSource<bool> closeTask;
 
 		protected NmeaDevice()
-		{
-		}
+		{}
+
 		public async Task OpenAsync()
 		{
 			lock (m_lockObject)
@@ -48,7 +49,7 @@ namespace NmeaParser
 			MultiPartMessageCache.Clear();
 		}
 
-		private void StartParser()
+		protected virtual void StartParser()
 		{
 			var token = m_cts.Token;
 			System.Diagnostics.Debug.WriteLine("Parser started");
@@ -82,6 +83,10 @@ namespace NmeaParser
                             System.Diagnostics.Debug.WriteLine("Parse Task was canceled");
                             break;
                         }
+                        catch (Exception e)
+                        {
+                            throw;
+                        }
 				    }
                     if (closeTask != null)
                         closeTask.SetResult(true);
@@ -89,6 +94,7 @@ namespace NmeaParser
 		}
 
 		protected abstract Task<Stream> OpenStreamAsync();
+
 		public async Task CloseAsync()
 		{
 			if (m_cts != null)
@@ -98,7 +104,9 @@ namespace NmeaParser
 					m_cts.Cancel();
 				m_cts = null;
 			}
-			closeTask.Task.Wait();
+
+            if (closeTask != null)
+                closeTask.Task.Wait(500);
             System.Diagnostics.Debug.WriteLine("Parser stopped");
 
 			await CloseStreamAsync(m_stream);
@@ -107,9 +115,10 @@ namespace NmeaParser
 			lock (m_lockObject)
 				IsOpen = false;
 		}
+
 		protected abstract Task CloseStreamAsync(Stream stream);
 
-		private void OnData(byte[] data)
+		protected void OnData(byte[] data)
 		{
 			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
 			string line = null;
@@ -124,6 +133,7 @@ namespace NmeaParser
 					m_message = m_message.Substring(lineEnd + 1);
 				}
 			}
+
 			if (!string.IsNullOrEmpty(line))
 				ProcessMessage(line);
 		}
