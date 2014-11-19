@@ -32,8 +32,8 @@ namespace NmeaParser
 		private object m_lockObject = new object();
 		private string m_message = "";
 		private Stream m_stream;
-		System.Threading.CancellationTokenSource m_cts;
-		TaskCompletionSource<bool> closeTask;
+		private System.Threading.CancellationTokenSource m_cts;
+        protected TaskCompletionSource<bool> closeTask;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NmeaDevice"/> class.
@@ -59,34 +59,51 @@ namespace NmeaParser
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
-		private void StartParser()
-		{
-			var token = m_cts.Token;
-			System.Diagnostics.Debug.WriteLine("Starting parser...");
-			var _ = Task.Run(async () =>
-			{
-				var stream = m_stream;
-				byte[] buffer = new byte[1024];
-				while (!token.IsCancellationRequested)
-				{
-					int readCount = 0;
-					try
-					{
-						readCount = await stream.ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
-					}
-					catch { }
-					if (token.IsCancellationRequested)
-						break;
-					if (readCount > 0)
-					{
-						OnData(buffer.Take(readCount).ToArray());
-					}
-					await Task.Delay(10, token);
-				}
-				if (closeTask != null)
-					closeTask.SetResult(true);
-			});
-		}
+        protected virtual void StartParser()
+        {
+            var token = m_cts.Token;
+            closeTask = new TaskCompletionSource<bool>();
+            
+            System.Diagnostics.Debug.WriteLine("Parser started");
+            Task.Run(async () =>
+            {
+                var stream = m_stream;
+                byte[] buffer = new byte[1024];
+                while (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        int readCount = 0;
+                        try
+                        {
+                            readCount = await stream.ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
+                        }
+                        catch (Exception e)
+                        {
+                            if (e is TaskCanceledException)
+                                throw;
+                        }
+
+                        if (readCount > 0)
+                        {
+                            OnData(buffer.Take(readCount).ToArray());
+                        }
+                        await Task.Delay(10, token);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Parse Task was canceled");
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+                if (closeTask != null)
+                    closeTask.SetResult(true);
+            }, token);
+        }
 
 		/// <summary>
 		/// Creates the stream the NmeaDevice is working on top off.
@@ -101,11 +118,11 @@ namespace NmeaParser
 		{
 			if (m_cts != null)
 			{
-				closeTask = new TaskCompletionSource<bool>();
 				if (m_cts != null)
 					m_cts.Cancel();
 				m_cts = null;
 			}
+
 			await closeTask.Task;
 			await CloseStreamAsync(m_stream);
 			MultiPartMessageCache.Clear();
@@ -120,7 +137,7 @@ namespace NmeaParser
 		/// <returns></returns>
 		protected abstract Task CloseStreamAsync(Stream stream);
 
-		private void OnData(byte[] data)
+		protected void OnData(byte[] data)
 		{
 			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
 			string line = null;
