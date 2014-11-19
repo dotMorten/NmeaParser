@@ -21,6 +21,7 @@ namespace SampleApp.WinDesktop
 	public partial class MainWindow : Window
 	{
 		private Queue<string> messages = new Queue<string>(101);
+        private NmeaParser.Nmea.Gps.Gprmc _last;
 		
 		public MainWindow()
 		{
@@ -52,17 +53,29 @@ namespace SampleApp.WinDesktop
 					if(args.IsMultipart && args.MessageParts != null)
 						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
 				}
-				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
-					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
-					gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
-					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
-					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
-				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
-					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
+                if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
+                {
+                    var gprmc = args.Message as NmeaParser.Nmea.Gps.Gprmc;
+                    gprmcView.Message = _last = gprmc;
+                }
+                else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
+                    gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
+                else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
+                    gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
+                else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
+                    gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
+                else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
+                    pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
 			});
 		}
+        
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = sender as TabControl;
+            if (_last == null || item.SelectedIndex != 2)
+                return;
+       
+            Browser.Navigate(string.Format("http://www.openstreetmap.org/#map=10/{0}/{1}", _last.Latitude, _last.Longitude));
+        }
 	}
 }
