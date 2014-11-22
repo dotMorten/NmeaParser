@@ -60,6 +60,9 @@
     <Compile Include="..\SampleApp.Store\SampleApp.Store.Shared\RestoreAutoPanMode.cs">
       <Link>RestoreAutoPanMode.cs</Link>
     </Compile>
+    <Compile Include="AltitudeGraph.xaml.cs">
+      <DependentUpon>AltitudeGraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GpgsaControl.xaml.cs">
       <DependentUpon>GpgsaControl.xaml</DependentUpon>
     </Compile>
@@ -84,6 +87,10 @@
     <Compile Include="SatelliteView.xaml.cs">
       <DependentUpon>SatelliteView.xaml</DependentUpon>
     </Compile>
+    <Page Include="AltitudeGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GpgsaControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

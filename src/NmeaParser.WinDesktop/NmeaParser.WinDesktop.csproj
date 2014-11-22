@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\Bin\Release\NmeaParser.WinDesktop.xml</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

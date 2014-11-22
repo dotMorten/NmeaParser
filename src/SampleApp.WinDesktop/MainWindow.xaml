@@ -93,6 +93,7 @@
 						<Grid.RowDefinitions>
 							<RowDefinition />
 							<RowDefinition />
+							<RowDefinition />
 						</Grid.RowDefinitions>
 						<Border Background="CornflowerBlue" Grid.ColumnSpan="2" Padding="10">
 							<TextBlock Text="Details" FontSize="20" FontWeight="Bold" Foreground="White"  />
@@ -109,6 +110,7 @@
 							<TextBlock Text="{Binding Location.Z, StringFormat='{}{0} m'}" />
 							<TextBlock Text="{Binding HorizontalAccuracy, StringFormat='{}{0} m'}" />
 						</StackPanel>
+						<local:AltitudeGraph Grid.Row="2" Grid.ColumnSpan="2" Height="50" x:Name="altitude" Value="{Binding Location.Z}" />
 					</Grid>
 				</Grid>
 			</TabItem>
