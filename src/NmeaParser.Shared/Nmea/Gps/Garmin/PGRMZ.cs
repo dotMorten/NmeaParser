@@ -47,20 +47,24 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// <summary>
 		/// Position Fix Dimension
 		/// </summary>
-		public enum PositionFixDimension : int
+		public enum PositionFixType : int
 		{
+			/// <summary>
+			/// Unknown
+			/// </summary>
+			Unknown = 0,
 			/// <summary>
 			/// No fix
 			/// </summary>
-			None = 0,
+			NoFix = 1,
 			/// <summary>
 			/// 2D Fix
 			/// </summary>
-			UserAltitude = 2,
+			Fix2D = 2,
 			/// <summary>
 			/// 3D Fix
 			/// </summary>
-			GpsAltitude = 3
+			Fix3D = 3
 		}
 		/// <summary>
 		/// Called when the message is being loaded.
@@ -78,11 +82,14 @@ namespace NmeaParser.Nmea.Gps.Garmin
 			Unit = message[1] == "f" ? AltitudeUnit.Feet : AltitudeUnit.Unknown;
 			int dim = -1;
 			if (message[2].Length == 1 && int.TryParse(message[2], out dim))
-				FixDimension = (PositionFixDimension)dim;
+			{
+				if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
+					FixType = (PositionFixType)dim;
+			}
 		}
 
 		/// <summary>
-		/// Estimated horizontal position error in meters (HPE)
+		/// Current altitude
 		/// </summary>
 		public double Altitude { get; private set; }
 
@@ -92,8 +99,8 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		public AltitudeUnit Unit { get; private set; }
 
 		/// <summary>
-		/// Estimated vertical position error in meters (VPE)
+		/// Fix type
 		/// </summary>
-		public PositionFixDimension FixDimension { get; private set; }
+		public PositionFixType FixType { get; private set; }
 	}
 }
