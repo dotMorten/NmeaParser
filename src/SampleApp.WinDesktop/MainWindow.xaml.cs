@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,24 +19,34 @@ namespace SampleApp.WinDesktop
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
 		private Queue<string> messages = new Queue<string>(101);
-		
+        public NmeaParser.NmeaDevice device;
+
 		public MainWindow()
 		{
 			InitializeComponent();
+            DataContext = this;
 
-			// Use serial port:
-			//var comPort = System.IO.Ports.SerialPort.GetPortNames().First();
-			//var port = new System.IO.Ports.SerialPort(comPort, 4800);
-			//var device = new NmeaParser.SerialPortDevice(port);
-
-			//Use a log file for playing back logged data
-			var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
-			device.MessageReceived += device_MessageReceived;
-			var _ = device.OpenAsync();
+            InitializeDevice();
 		}
+
+        private async void InitializeDevice()
+        {
+            // Use serial port:
+            // comPort = System.IO.Ports.SerialPort.GetPortNames().First();
+            // port = new System.IO.Ports.SerialPort(comPort, 4800);
+            // device = new NmeaParser.SerialPortDevice(port);
+
+            // Use UDP:
+            // device = new NmeaParser.UdpDevice("192.168.10.100", 15000);
+
+            //Use a log file for playing back logged data
+            device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
+            device.MessageReceived += device_MessageReceived;
+            await device.OpenAsync();
+        }
 		
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
@@ -64,5 +75,27 @@ namespace SampleApp.WinDesktop
 					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
 			});
 		}
-	}
+
+        private async void UIButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (device.IsOpen)
+                await device.CloseAsync();
+            else
+                await device.OpenAsync();
+            OnPropertyChanged("UIButtonContent");
+        }
+
+        public string UIButtonContent
+        {
+            get { return string.Format("{0} device", !device.IsOpen ? "Start" : "Stop"); }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }
