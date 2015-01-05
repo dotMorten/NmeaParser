@@ -46,7 +46,6 @@ namespace NmeaParser
             }
             catch (Exception e)
             {
-                Console.WriteLine("udp --- > " + e.Message);
                 if (!(e is ObjectDisposedException))
                     throw;
             }
@@ -60,7 +59,6 @@ namespace NmeaParser
 
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
-            _client.Close();
             return TaskEx.FromResult(true); //do nothing
         }
 
