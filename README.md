@@ -33,6 +33,12 @@ If you add new messages, please fork, provide a simple unit test for the message
 ### NuGet
 You can get the library via [NuGet](http://www.nuget.org) if you have the extension installed for Visual Studio or via the PowerShell package manager.  This control is published via NuGet at [SharpGIS.NmeaParser](https://nuget.org/packages/SharpGIS.NmeaParser).
 
+<div style="box-shadow: 2px 2px 3px #6e6e6e; color:#e2e2e2; padding:15px;-moz-border-radius:5px;-webkit-border-radius:5px;background-color:#202020;border:4px solid silver;border-radius:5px;">
+        <p>
+            <code>PM&gt; Install-Package SharpGIS.NmeaParser
+            </code>
+        </p>
+</div>
 
 Usage
 =====================
