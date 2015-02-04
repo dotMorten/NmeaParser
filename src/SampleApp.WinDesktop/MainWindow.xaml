@@ -17,7 +17,7 @@
 				</Setter>
 			</Style>
 		</Grid.Resources>
-		<TabControl>
+        <TabControl SelectionChanged="TabControl_SelectionChanged">
 			<TabItem Header="GPS Info">
 				<ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
 					<WrapPanel>
@@ -41,6 +41,9 @@
 						GpgsvMessages="{Binding GpgsvMessages, ElementName=satView}" />
 				</Grid>
 			</TabItem>
+            <TabItem Header="Map" >
+                <WebBrowser Name="Browser" />
+            </TabItem>
 			<TabItem Header="Messages">
 				<TextBox x:Name="output"
 				 AcceptsReturn="True"
