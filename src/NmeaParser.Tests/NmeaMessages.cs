@@ -350,5 +350,18 @@ namespace NmeaParser.Tests
 			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
 			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
 		}
+
+        [TestMethod]
+        public void TestGpvtg()
+        {
+            string input = "$GPVTG,54.58,T,,M,17.122,N,31.711,K,A*03";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gpvtg));
+            var gpvtg = msg as Gpvtg;
+            Assert.AreEqual(gpvtg.TrueCourseOverGround, 54.58);
+            Assert.AreEqual(gpvtg.MagneticCourseOverGround, Double.NaN);
+            Assert.AreEqual(gpvtg.SpeedOverGroundKnots, 17.122);
+            Assert.AreEqual(gpvtg.SpeedOverGroundKph, 31.711);
+        }
 	}
 }
