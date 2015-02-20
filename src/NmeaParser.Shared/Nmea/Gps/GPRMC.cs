@@ -39,7 +39,7 @@ namespace NmeaParser.Nmea.Gps
 			if (message == null || message.Length < 11)
 				throw new ArgumentException("Invalid GPRMC", "message"); 
 			
-			if (message[8].Length == 6 && message[0].Length == 6)
+			if (message[8].Length == 6 && message[0].Length >= 6)
 			{
 				FixTime = new DateTime(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
 									   int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture),

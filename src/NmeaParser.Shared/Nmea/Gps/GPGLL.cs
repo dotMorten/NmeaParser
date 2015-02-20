@@ -40,7 +40,7 @@ namespace NmeaParser.Nmea.Gps
 				throw new ArgumentException("Invalid GPGLL", "message");
 			Latitude = NmeaMessage.StringToLatitude(message[0], message[1]);
 			Longitude = NmeaMessage.StringToLongitude(message[2], message[3]);
-			if (message.Length >= 5 && message[4].Length == 6) //Some older GPS doesn't broadcast fix time
+			if (message.Length >= 5 && message[4].Length >= 6) //Some older GPS doesn't broadcast fix time
 			{
 				FixTime = new TimeSpan(int.Parse(message[4].Substring(0, 2), CultureInfo.InvariantCulture),
 								   int.Parse(message[4].Substring(2, 2), CultureInfo.InvariantCulture),
