@@ -5,7 +5,7 @@
             Publisher="CN=mort5161"
             Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="872d7e68-e005-4963-b8dd-141db0b2ccc9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="872d7e68-e005-4963-b8dd-141db0b2ccc9" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
 
   <Properties>
     <DisplayName>SampleApp.Store.WindowsPhone</DisplayName>
@@ -19,7 +19,7 @@
   </Prerequisites>
   
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
 
   <Applications>
@@ -34,11 +34,17 @@
             ForegroundText="light"
             BackgroundColor="transparent">
             <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png"/>
-            <m3:SplashScreen Image="Assets\SplashScreen.png"/>
-        </m3:VisualElements>
+        <m3:SplashScreen Image="Assets\SplashScreen.png" />
+      </m3:VisualElements>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClientServer" />
+    <DeviceCapability Name="proximity" />
+     <m2:DeviceCapability Name="bluetooth.rfcomm">
+      <m2:Device Id="any">
+        <m2:Function Type="name:serialPort" />
+      </m2:Device>
+    </m2:DeviceCapability>
   </Capabilities>
 </Package>
