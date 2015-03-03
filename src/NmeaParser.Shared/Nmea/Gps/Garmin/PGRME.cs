@@ -50,6 +50,7 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// <summary>
 		/// Estimated horizontal position error in meters (HPE)
 		/// </summary>
+		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
 		public double HorizontalError { get; private set; }
 
 		/// <summary>
@@ -60,6 +61,7 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// <summary>
 		/// Estimated vertical position error in meters (VPE)
 		/// </summary>
+		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
 		public double VerticalError { get; private set; }
 
 		/// <summary>
@@ -68,8 +70,9 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		public string VerticalErrorUnits { get; private set; }
 
 		/// <summary>
-		/// Overall spherical equivalent position error
+		/// Overall spherical equivalent position error (EPE)
 		/// </summary>
+		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
 		public double SphericalError { get; private set; }
 
 		/// <summary>

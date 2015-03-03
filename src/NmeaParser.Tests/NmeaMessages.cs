@@ -318,7 +318,7 @@ namespace NmeaParser.Tests
 			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
 			Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
 			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.None, rmz.FixDimension, "FixDimension");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
 		}
 
 		[TestMethod]
@@ -330,7 +330,7 @@ namespace NmeaParser.Tests
 			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
 			Assert.AreEqual(93d, rmz.Altitude, "Altitude");
 			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixDimension.GpsAltitude, rmz.FixDimension, "FixDimension");
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
 		}
 
 		[TestMethod]
