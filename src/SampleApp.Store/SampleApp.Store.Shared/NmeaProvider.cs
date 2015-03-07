@@ -13,12 +13,16 @@ namespace SampleApp
 		public NmeaLocationProvider(NmeaParser.NmeaDevice device)
 		{
 			this.device = device;
-			device.MessageReceived += device_MessageReceived;
+			if(device != null)
+				device.MessageReceived += device_MessageReceived;
 		}
-
 		void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
 		{
 			var message = e.Message;
+			ParseMessage(message);
+		}
+		public void ParseMessage(NmeaParser.Nmea.NmeaMessage message)
+		{
 			if (message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
 			{
 				m_Accuracy = ((NmeaParser.Nmea.Gps.Garmin.Pgrme)message).HorizontalError;
@@ -45,13 +49,19 @@ namespace SampleApp
 
 		public System.Threading.Tasks.Task StartAsync()
 		{
-			return this.device.OpenAsync();
+			if (device != null)
+				return this.device.OpenAsync();
+			else
+				return System.Threading.Tasks.Task<bool>.FromResult(true);
 		}
 
 		public System.Threading.Tasks.Task StopAsync()
 		{
 			m_Accuracy = double.NaN;
-			return this.device.CloseAsync();
+			if(this.device != null)
+				return this.device.CloseAsync();
+			else
+				return System.Threading.Tasks.Task<bool>.FromResult(true);
 		}
 	}
 }

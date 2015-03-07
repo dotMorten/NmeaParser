@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace SampleApp
 {
@@ -58,13 +54,15 @@ namespace SampleApp
 				return;
 			}
 			var data = datapoints.ToArray();
-			List<PathSegment> segments = new List<PathSegment>();
+			PathSegmentCollection segments = new PathSegmentCollection();
 			for(int i=1;i<data.Length;i++)
 			{
-				segments.Add(new LineSegment(new Point(i, max - data[i]), true));
+				segments.Add(new LineSegment() { Point = new Point(i, max - data[i]) });
 			}
-			PathFigure pf = new PathFigure(new Point(0, max - data[0]), segments, false);
-			path.Data = new PathGeometry(new PathFigure[] { pf });
+			PathFigure pf = new PathFigure() { StartPoint = new Point(0, max - data[0]), Segments = segments, IsClosed = false };
+			PathFigureCollection coll = new PathFigureCollection();
+			coll.Add(pf);
+			path.Data = new PathGeometry() { Figures = coll};
 
 		}
 		public int MaxDatapoints { get; set; }

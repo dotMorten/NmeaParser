@@ -6,27 +6,181 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:loc="using:Esri.ArcGISRuntime.Location"
 	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:symb="using:Esri.ArcGISRuntime.Symbology"
     mc:Ignorable="d">
+	<Page.Resources>
+		<local:MainPageVM x:Key="vm"/>
+		<local:NullToCollapsedConverter x:Key="nullVizConv" />
+	</Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid DataContext="{StaticResource vm}"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200" />
+			<ColumnDefinition Width="300" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<TextBox x:Name="output"
-				 AcceptsReturn="True"
-				 />
 		
-		<esri:MapView x:Name="mapView" Grid.Column="1">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel>
+			<TextBlock Text="Available devices:"  Style="{StaticResource SubheaderTextBlockStyle}" />
+		<ItemsControl ItemsSource="{Binding BluetoothDevices}" Margin="0,20">
+				<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Grid Width="275">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<TextBlock Text="{Binding}" VerticalAlignment="Center" 
+								   Style="{StaticResource SubtitleTextBlockStyle}" />
+						<CheckBox Command="{Binding ConnectCommand, Source={StaticResource vm}}" 
+								CommandParameter="{Binding}" 
+								Grid.Column="1"								 
+								  />
+						</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		</StackPanel>
+		<ItemsControl ItemsSource="{Binding Messages}" Grid.Row="1"/>
+		<!--<TextBox x:Name="output" Grid.Row="1"
+				 AcceptsReturn="True"
+				 />-->
+		
+		<esri:MapView x:Name="mapView" 
+					  Grid.Column="1" Grid.RowSpan="2"
+					  LocationDisplay="{Binding LocationDisplay}"
+					  GraphicsOverlays="{Binding Overlays}"
+					  >
 			<local:RestoreAutoPanMode.RestoreAutoPanSettings>
 				<local:RestoreAutoPanMode DelayInSeconds="5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
 			</local:RestoreAutoPanMode.RestoreAutoPanSettings>
 			<esri:Map>
 				<layers:ArcGISTiledMapServiceLayer
 						ServiceUri="http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer" />
+				<layers:GraphicsLayer>
+					<layers:GraphicsLayer.Renderer>
+						<symb:SimpleRenderer>
+							<symb:SimpleMarkerSymbol Color="Red" Size="14">
+								<symb:SimpleMarkerSymbol.Outline>
+									<symb:SimpleLineSymbol Width="2" Color="White" />
+								</symb:SimpleMarkerSymbol.Outline>
+							</symb:SimpleMarkerSymbol>
+						</symb:SimpleRenderer>
+					</layers:GraphicsLayer.Renderer>
+				</layers:GraphicsLayer>
 			</esri:Map>
 		</esri:MapView>
 
+					<!--North arrow-->
+					<Grid Width="75" Height="75" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						  Margin="10" RenderTransformOrigin=".5,.5" Grid.Row="1" Grid.Column="1">
+						<Grid.Resources>
+							<local:ReverseConverter x:Key="conv" />
+						</Grid.Resources>
+						<Grid.RenderTransform>
+							<RotateTransform Angle="{Binding ElementName=mapView, Path=Rotation, Converter={StaticResource conv}}" />
+						</Grid.RenderTransform>
+						<TextBlock Text="Ù" FontFamily="Wingdings" HorizontalAlignment="Center" VerticalAlignment="Center"
+								   FontSize="60" Foreground="White" />
+						<TextBlock Text="N" HorizontalAlignment="Center" VerticalAlignment="Top"
+								   FontSize="16" Margin="0,-5,0,0" RenderTransformOrigin=".5,.5" 
+								   Foreground="White" >
+							<TextBlock.RenderTransform>
+							<RotateTransform Angle="{Binding ElementName=mapView, Path=Rotation}" />
+						</TextBlock.RenderTransform>
+						</TextBlock>
+					</Grid>
+
+
+		<!--Location details-->
+		<StackPanel HorizontalAlignment="Left" VerticalAlignment="Top"
+			  Grid.Column="1" Grid.RowSpan="2" Margin="10" Orientation="Horizontal">
+
+			<Grid RequestedTheme="Light" Background="White" HorizontalAlignment="Left"
+						  DataContext="{Binding LocationDisplay.CurrentLocation}">
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Border Background="CornflowerBlue" Padding="10">
+					<TextBlock Text="Auto Pan" FontSize="20" FontWeight="Bold" Foreground="White"  />
+				</Border>
+				<ComboBox x:Name="autoPanModeSelector" Width="180"
+						Margin="10" Grid.Row="1" HorizontalAlignment="Stretch"
+                        SelectedItem="{Binding ElementName=mapView, Path=LocationDisplay.AutoPanMode, Mode=TwoWay}" />
+			</Grid>
+		</StackPanel>
+
+		<!--Location details-->
+		<StackPanel HorizontalAlignment="Right" VerticalAlignment="Top"
+			  Grid.Column="1" Grid.RowSpan="2" Margin="10" Orientation="Horizontal">
+
+			<Grid RequestedTheme="Light" Background="White" Width="180"
+						  DataContext="{Binding LocationDisplay.CurrentLocation}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Border Background="CornflowerBlue" Grid.ColumnSpan="2" Padding="10">
+				<TextBlock Text="Location" FontSize="20" FontWeight="Bold" Foreground="White"  />
+			</Border>
+			<StackPanel Margin="10" Grid.Row="1">
+				<TextBlock Text="Speed:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="Course:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="Altitude:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="Accuracy:" FontWeight="Bold" FontSize="16" />
+			</StackPanel>
+			<StackPanel Margin="0,10,10,10" Grid.Column="1" Grid.Row="1">
+				<TextBlock Text="{Binding Speed}" FontSize="16" />
+				<TextBlock Text="{Binding Course}" FontSize="16" />
+				<TextBlock Text="{Binding Location.Z}" FontSize="16" />
+				<TextBlock Text="{Binding HorizontalAccuracy}" FontSize="16" />
+			</StackPanel>
+			<local:AltitudeGraph Grid.Row="2" Grid.ColumnSpan="2" Height="50" x:Name="altitude" Value="{Binding Location.Z}" />
+		</Grid>
+
+
+			<Grid RequestedTheme="Light" Visibility="{Binding RangeMessage, Converter={StaticResource nullVizConv}}"
+			Margin="10,0,0,0" Background="White">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Border Background="CornflowerBlue" Grid.ColumnSpan="2" Padding="10">
+				<TextBlock Text="Range" FontSize="20" FontWeight="Bold" Foreground="White"  />
+			</Border>
+			<StackPanel Margin="10" Grid.Row="1" >
+				<TextBlock Text="H Angle:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="H Distance:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="S Distance:" FontWeight="Bold" FontSize="16" />
+				<TextBlock Text="V Distance:" FontWeight="Bold" FontSize="16" />
+					<TextBlock Text="V Angle:" FontWeight="Bold" FontSize="16" />
+				</StackPanel>
+			<StackPanel Margin="0,10,10,10" Grid.Column="1" Grid.Row="1">
+					<TextBlock Text="{Binding RangeMessage.HorizontalAngle}" FontSize="16" />
+					<TextBlock Text="{Binding RangeMessage.HorizontalDistance}" FontSize="16" />
+					<TextBlock Text="{Binding RangeMessage.SlopeDistance}" FontSize="16" />
+					<TextBlock Text="{Binding RangeMessage.VerticalDistance}" FontSize="16" />
+					<TextBlock Text="{Binding RangeMessage.VerticalAngle}" FontSize="16" />
+			</StackPanel>
+		</Grid>
+
+		</StackPanel>
 	</Grid>
 </Page>
