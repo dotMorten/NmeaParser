@@ -50,36 +50,36 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Fix Time
 		/// </summary>
-		public DateTime FixTime { get; private set; }
+		public DateTime FixTime { get; set; }
 
 		/// <summary>
 		/// Gets a value whether the device is active
 		/// </summary>
-		public bool Active { get; private set; }
+		public bool Active { get; set; }
 
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; set; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; set; }
 
 		/// <summary>
 		/// Speed over the ground in knots
 		/// </summary>
-		public double Speed { get; private set; }
+		public double Speed { get; set; }
 
 		/// <summary>
 		/// Track angle in degrees True
 		/// </summary>
-		public double Course { get; private set; }
+		public double Course { get; set; }
 
 		/// <summary>
 		/// Magnetic Variation
 		/// </summary>
-		public double MagneticVariation { get; private set; }
+		public double MagneticVariation { get; set; }
 	}
 }

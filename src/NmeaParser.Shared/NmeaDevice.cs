@@ -185,10 +185,13 @@ namespace NmeaParser
                 }
             }
 
+            RaiseMessageReceived(this, args);
+        }
+
+        protected void RaiseMessageReceived(object sender, NmeaMessageReceivedEventArgs args)
+        {
             if (MessageReceived != null)
-            {
                 MessageReceived(this, args);
-            }
         }
 
         private Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache
@@ -219,12 +222,18 @@ namespace NmeaParser
 
     public sealed class NmeaMessageReceivedEventArgs : EventArgs
     {
-        internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
+        public NmeaMessageReceivedEventArgs()
+        {}
+
+        public NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
         {
             Message = message;
         }
-        public Nmea.NmeaMessage Message { get; private set; }
-        public bool IsMultiPart { get; internal set; }
-        public Nmea.NmeaMessage[] MessageParts { get; internal set; }
+
+        public Nmea.NmeaMessage Message { get; set; }
+
+        public bool IsMultiPart { get; set; }
+
+        public Nmea.NmeaMessage[] MessageParts { get; set; }
     }
 }

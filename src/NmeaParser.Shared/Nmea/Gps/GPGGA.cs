@@ -69,47 +69,47 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; set; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; set; }
 
 		/// <summary>
 		/// Fix Quality
 		/// </summary>
-		public FixQuality Quality { get; private set; }
+		public FixQuality Quality { get; set; }
 
 		/// <summary>
 		/// Number of satellites being tracked
 		/// </summary>
-		public int NumberOfSatellites { get; private set; }
+		public int NumberOfSatellites { get; set; }
 
 		/// <summary>
 		/// Horizontal Dilution of Precision
 		/// </summary>
-		public double Hdop { get; private set; }
+		public double Hdop { get; set; }
 
 		/// <summary>
 		/// Altitude
 		/// </summary>
-		public double Altitude { get; private set; }
+		public double Altitude { get; set; }
 
 		/// <summary>
 		/// Altitude units ('M' for Meters)
 		/// </summary>
-		public string AltitudeUnits { get; private set; }
+		public string AltitudeUnits { get; set; }
 	
 		/// <summary>
 		/// Height of geoid (mean sea level) above WGS84
 		/// </summary>
-		public double HeightOfGeoid { get; private set; }
+		public double HeightOfGeoid { get; set; }
 
 		/// <summary>
 		/// Altitude units ('M' for Meters)
 		/// </summary>
-		public string HeightOfGeoidUnits { get; private set; }
+		public string HeightOfGeoidUnits { get; set; }
 
 		/// <summary>
 		/// Time since last DGPS update
