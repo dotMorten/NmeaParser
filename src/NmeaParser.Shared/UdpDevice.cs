@@ -11,7 +11,7 @@ namespace NmeaParser
     /// </summary>
     public class UdpDevice : NmeaDevice
     {
-        private UdpClient _client;
+        private UdpClient _udp;
         private IPEndPoint _clientEndPoint;
         private IPEndPoint _receiveEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -24,10 +24,10 @@ namespace NmeaParser
         {
             _clientEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
-            _client = new UdpClient();
-            _client.ExclusiveAddressUse = false;
-            _client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _client.Client.Bind(_clientEndPoint);
+            _udp = new UdpClient();
+            _udp.ExclusiveAddressUse = false;
+            _udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udp.Client.Bind(_clientEndPoint);
         }
 
         /// <summary>
@@ -37,19 +37,19 @@ namespace NmeaParser
         private void AsyncCallback(IAsyncResult asyncResult)
         {
             // Return if client is disposed
-            if (_client == null)
+            if (_udp == null)
                 return;
 
             try
             {
                 // Read all bytes
-                byte[] receivedBytes = _client.EndReceive(asyncResult, ref _receiveEndPoint);
+                byte[] receivedBytes = _udp.EndReceive(asyncResult, ref _receiveEndPoint);
 
                 // Pass data to NMEA message parser
                 OnData(receivedBytes);
 
                 // Begin listening again
-                _client.BeginReceive(AsyncCallback, asyncResult.AsyncState);
+                _udp.BeginReceive(AsyncCallback, asyncResult.AsyncState);
             }
             catch (Exception e)
             {
@@ -66,16 +66,16 @@ namespace NmeaParser
         /// <returns></returns>
         protected override Task<Stream> OpenStreamAsync()
         {
-            _client.BeginReceive(AsyncCallback, _client);
+            _udp.BeginReceive(AsyncCallback, _udp);
             return TaskEx.FromResult<Stream>(null);
         }
 
         protected override Task CloseStreamAsync(Stream stream)
         {
-            if (_client.Client.IsBound)
+            if (_udp.Client.IsBound)
             {
-                _client.Client.Shutdown(SocketShutdown.Both);
-                _client.Client.Close();
+                _udp.Client.Shutdown(SocketShutdown.Both);
+                _udp.Client.Close();
             }
             
             return TaskEx.FromResult(true);
@@ -83,7 +83,7 @@ namespace NmeaParser
 
         protected override void Dispose(bool force)
         {
-            _client = null;
+            _udp = null;
         }
 
         protected override void StartParser()
