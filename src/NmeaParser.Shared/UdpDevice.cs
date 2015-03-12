@@ -16,7 +16,7 @@ namespace NmeaParser
         private IPEndPoint _receiveEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         /// <summary>
-        /// Constructor. Binds UDP client to given pp address and port.
+        /// Constructor. Binds UDP client to given ip address and port.
         /// </summary>
         /// <param name="ip">ip address</param>
         /// <param name="port">port</param>
