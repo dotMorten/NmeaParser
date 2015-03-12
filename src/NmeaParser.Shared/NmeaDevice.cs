@@ -107,7 +107,6 @@ namespace NmeaParser
 
             if (closeTask != null)
                 closeTask.Task.Wait(500);
-            System.Diagnostics.Debug.WriteLine("Parser stopped");
 
             await CloseStreamAsync(m_stream);
             MultiPartMessageCache.Clear();
@@ -148,7 +147,7 @@ namespace NmeaParser
             }
             catch
             {
-                System.Diagnostics.Debug.WriteLine("Trouble processing message");
+                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message");
             }
         }
 
