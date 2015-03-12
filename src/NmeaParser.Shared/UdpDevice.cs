@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NmeaParser
@@ -13,58 +11,79 @@ namespace NmeaParser
     /// </summary>
     public class UdpDevice : NmeaDevice
     {
-        UdpClient _client;
-        UdpState _state;
-        IPEndPoint _endPoint;
+        private UdpClient _udp;
+        private IPEndPoint _clientEndPoint;
+        private IPEndPoint _receiveEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
+        /// <summary>
+        /// Constructor. Binds UDP client to given ip address and port.
+        /// </summary>
+        /// <param name="ip">ip address</param>
+        /// <param name="port">port</param>
         public UdpDevice(string ip, int port)
         {
-            _endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-            _client = new UdpClient(_endPoint);
-            _state = new UdpState() { endPoint = _endPoint, udpClient = _client };
+            _clientEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+
+            _udp = new UdpClient();
+            _udp.ExclusiveAddressUse = false;
+            _udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udp.Client.Bind(_clientEndPoint);
         }
 
-        private void Begin(IAsyncResult ar)
+        /// <summary>
+        /// Datagram received
+        /// </summary>
+        /// <param name="asyncResult">Asynchronous operation result</param>
+        private void AsyncCallback(IAsyncResult asyncResult)
         {
+            // Return if client is disposed
+            if (_udp == null)
+                return;
+
             try
             {
-                UdpClient client = (UdpClient)((UdpState)ar.AsyncState).udpClient;
-                IPEndPoint wantedIpEndPoint = (IPEndPoint)((UdpState)(ar.AsyncState)).endPoint;
-                IPEndPoint receivedIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                // Read all bytes
+                byte[] receivedBytes = _udp.EndReceive(asyncResult, ref _receiveEndPoint);
 
-                byte[] receiveBytes = client.EndReceive(ar, ref receivedIpEndPoint);
+                // Pass data to NMEA message parser
+                OnData(receivedBytes);
 
-                // Check sender
-                //string receivedText = Encoding.ASCII.GetString(receiveBytes);
-                bool isRightHost = (wantedIpEndPoint.Address.Equals(receivedIpEndPoint.Address)
-                                   || wantedIpEndPoint.Address.Equals(IPAddress.Any));
-                bool isRightPort = (wantedIpEndPoint.Port == receivedIpEndPoint.Port)
-                                   || wantedIpEndPoint.Port == 0;
-
-                OnData(receiveBytes);
-                client.BeginReceive(Begin, ar.AsyncState);
+                // Begin listening again
+                _udp.BeginReceive(AsyncCallback, asyncResult.AsyncState);
             }
             catch (Exception e)
             {
+                // Spit out the exeption and throw, should be catched/logged by "other code"
+                System.Diagnostics.Debug.WriteLine(string.Format("AsyncCallback threw exception:", e.Message));
                 if (!(e is ObjectDisposedException))
                     throw;
             }
         }
 
+        /// <summary>
+        /// Begin receiving datagrams
+        /// </summary>
+        /// <returns></returns>
         protected override Task<Stream> OpenStreamAsync()
         {
-            _client.BeginReceive(Begin, _state);
-            return TaskEx.FromResult<Stream>(null); //do nothing
+            _udp.BeginReceive(AsyncCallback, _udp);
+            return TaskEx.FromResult<Stream>(null);
         }
 
-        protected override Task CloseStreamAsync(System.IO.Stream stream)
+        protected override Task CloseStreamAsync(Stream stream)
         {
-            return TaskEx.FromResult(true); //do nothing
+            if (_udp.Client.IsBound)
+            {
+                _udp.Client.Shutdown(SocketShutdown.Both);
+                _udp.Client.Close();
+            }
+            
+            return TaskEx.FromResult(true);
         }
 
         protected override void Dispose(bool force)
         {
-            _client = null;
+            _udp = null;
         }
 
         protected override void StartParser()
@@ -72,11 +91,5 @@ namespace NmeaParser
             if (closeTask != null)
                 closeTask.SetResult(true);
         }
-    }
-
-    public class UdpState
-    {
-        public IPEndPoint endPoint;
-        public UdpClient udpClient;
     }
 }
