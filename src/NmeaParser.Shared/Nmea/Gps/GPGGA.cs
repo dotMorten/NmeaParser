@@ -76,12 +76,7 @@ namespace NmeaParser.Nmea.Gps
 			AltitudeUnits = message[9];
 			HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
 			HeightOfGeoidUnits = message[11];
-			if (message[0].Length == 6)
-			{
-				TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
-								   int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
-								   int.Parse(message[0].Substring(4, 2), CultureInfo.InvariantCulture));
-			}
+			TimeSinceLastDgpsUpdate = StringToTimeSpan(message[0]);
 			if (message[13].Length > 0)
 				DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
 			else

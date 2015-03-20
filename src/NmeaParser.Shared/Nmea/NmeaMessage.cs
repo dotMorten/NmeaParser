@@ -213,5 +213,15 @@ namespace NmeaParser.Nmea
 			}
 			return double.NaN;
 		}
+		internal static TimeSpan StringToTimeSpan(string value)
+		{
+			if (value != null && value.Length >= 6)
+			{
+				return new TimeSpan(int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture),
+								   int.Parse(value.Substring(2, 2), CultureInfo.InvariantCulture), 0)
+								   .Add(TimeSpan.FromSeconds(double.Parse(value.Substring(4), CultureInfo.InvariantCulture)));
+			}
+			return TimeSpan.Zero;
+		}
 	}
 }
