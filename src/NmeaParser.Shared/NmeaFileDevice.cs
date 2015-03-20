@@ -61,6 +61,8 @@ namespace NmeaParser
 			m_filename = fileName;
 		}
 
+#if !NETFX_CORE
+
 		/// <summary>
 		/// Gets the name of the nmea file this device is using.
 		/// </summary>
@@ -68,6 +70,7 @@ namespace NmeaParser
 		{
 			get { return m_filename; }
 		}
+#endif
 
 		/// <summary>
 		/// Gets the stream to perform buffer reads on.
