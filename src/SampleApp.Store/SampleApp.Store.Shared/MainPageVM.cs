@@ -90,7 +90,7 @@ namespace SampleApp
 		public async Task<NmeaParser.NmeaDevice> LoadLocalGpsSimulationData()
 		{
 			var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
-			var device = new NmeaParser.NmeaFileDevice(file, 50);
+			var device = new NmeaParser.NmeaFileDevice(file);
 			return device;
 		}
 
