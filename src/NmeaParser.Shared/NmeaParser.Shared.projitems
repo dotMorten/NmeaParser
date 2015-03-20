@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGLL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPBOD.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGST.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRTE.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGSV.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGSA.cs" />

@@ -122,6 +122,41 @@
 				 HorizontalScrollBarVisibility="Visible"
 				 />
 			</TabItem>
+			<TabItem Header="Device">
+				<Grid>
+					<StackPanel Margin="10">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="Current device: " />
+							<TextBlock Text="None" x:Name="currentDeviceInfo" FontWeight="Bold" />
+						</StackPanel>
+						<Button Width="200" Content="Open NMEA Log..." Click="OpenNmeaLogButton_Click" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" />
+						<StackPanel Orientation="Horizontal">
+							<Button Width="200" Content="Auto-discover serial port"
+									HorizontalAlignment="Left" Padding="20,5" Margin="0,5" 
+									Click="AutoDiscoverButton_Click" />
+							<TextBlock x:Name="autoDiscoverStatus" VerticalAlignment="Center" />
+						</StackPanel>
+						<GroupBox Header="Open Serial device" Width="200" HorizontalAlignment="Left">
+							<StackPanel>
+								<TextBlock Text="Serial port:" />
+								<ComboBox x:Name="serialPorts" />
+								<TextBlock Text="Baud rate:" />
+								<ComboBox x:Name="baudRates" SelectedIndex="3">
+									<ComboBoxItem>1200</ComboBoxItem>
+									<ComboBoxItem>2400</ComboBoxItem>
+									<ComboBoxItem>4800</ComboBoxItem>
+									<ComboBoxItem>9600</ComboBoxItem>
+									<ComboBoxItem>19200</ComboBoxItem>
+									<ComboBoxItem>38400</ComboBoxItem>
+									<ComboBoxItem>57600</ComboBoxItem>
+									<ComboBoxItem>115200</ComboBoxItem>
+								</ComboBox>
+								<Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToSerialButton_Click" />
+							</StackPanel>
+						</GroupBox>
+					</StackPanel>
+				</Grid>
+			</TabItem>
 		</TabControl>
 		
 		<Grid.ColumnDefinitions>
