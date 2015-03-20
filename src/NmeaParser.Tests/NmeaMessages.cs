@@ -37,17 +37,17 @@ namespace NmeaParser.Tests
 			while(!reader.EndOfStream)
 			{
 				var line = reader.ReadLine();
-				if(line.StartsWith("$"))
+				if (line.StartsWith("$"))
 				{
-						var msg = NmeaMessage.Parse(line);
-						Assert.IsNotNull(msg);
+					var msg = NmeaMessage.Parse(line);
+					Assert.IsNotNull(msg);
 					var idx = line.IndexOf('*');
 					if (idx >= 0)
 					{
 						byte checksum = (byte)Convert.ToInt32(line.Substring(idx + 1), 16);
 						Assert.AreEqual(checksum, msg.Checksum);
 					}
-						Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+					Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
 				}
 			}
 		}
@@ -355,6 +355,24 @@ namespace NmeaParser.Tests
 			Assert.AreEqual("W3IWI", gsv.Waypoints[0]);
 			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
 			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
+		}
+
+
+		[TestMethod]
+		public void TestGpgst()
+		{
+			string input = "$GPGST,172814.0,0.006,0.023,0.020,273.6,0.023,0.020,0.031*6A";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgst));
+			Gpgst gst = (Gpgst)msg;
+			Assert.AreEqual(new TimeSpan(17, 28, 14), gst.FixTime);
+			Assert.AreEqual(0.006, gst.Rms);
+			Assert.AreEqual(0.023, gst.SemiMajorError);
+			Assert.AreEqual(0.02, gst.SemiMinorError);
+			Assert.AreEqual(273.6, gst.ErrorOrientation);
+			Assert.AreEqual(0.023, gst.SigmaLatitudeError);
+			Assert.AreEqual(0.020, gst.SigmaLongitudeError);
+			Assert.AreEqual(0.031, gst.SigmaHeightError);
 		}
 	}
 }
