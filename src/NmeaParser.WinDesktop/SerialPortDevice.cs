@@ -31,12 +31,26 @@ namespace NmeaParser
 		private System.IO.Ports.SerialPort m_port;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SerialPortDevice"/> class.
+		/// Initializes a new instance of the <see cref="SerialPortDevice" /> class.
 		/// </summary>
 		/// <param name="port">The serial port.</param>
+		/// <exception cref="System.ArgumentNullException">port</exception>
 		public SerialPortDevice(System.IO.Ports.SerialPort port)
 		{
+			if (port == null)
+				throw new ArgumentNullException("port");
 			m_port = port;
+		}
+
+		/// <summary>
+		/// Gets the active serial port.
+		/// </summary>
+		public System.IO.Ports.SerialPort Port
+		{
+			get
+			{
+				return m_port;
+			}
 		}
 
 		/// <summary>
