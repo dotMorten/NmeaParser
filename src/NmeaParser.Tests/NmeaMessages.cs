@@ -41,6 +41,12 @@ namespace NmeaParser.Tests
 				{
 						var msg = NmeaMessage.Parse(line);
 						Assert.IsNotNull(msg);
+					var idx = line.IndexOf('*');
+					if (idx >= 0)
+					{
+						byte checksum = (byte)Convert.ToInt32(line.Substring(idx + 1), 16);
+						Assert.AreEqual(checksum, msg.Checksum);
+					}
 						Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
 				}
 			}

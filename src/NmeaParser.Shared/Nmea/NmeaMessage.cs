@@ -77,7 +77,6 @@ namespace NmeaParser.Nmea
 				int checksumTest = 0;
 				for (int i = 1; i < message.Length; i++)
 				{
-					if (i == 0) continue;
 					checksumTest ^= Convert.ToByte(message[i]);
 				}
 				if (checksum != checksumTest)
@@ -160,7 +159,29 @@ namespace NmeaParser.Nmea
 		/// </returns>
 		public override string ToString()
 		{
-			return string.Format(CultureInfo.InvariantCulture, "${0},{1}", MessageType, string.Join(",", MessageParts));
+			return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);
+		}
+
+		/// <summary>
+		/// Gets the checksum value of the message.
+		/// </summary>
+		public byte Checksum
+		{
+			get
+			{
+				int checksumTest = 0;
+				for (int j = -1; j < MessageParts.Count; j++)
+				{
+					string message = j < 0 ? MessageType : MessageParts[j];
+					if (j >= 0)
+						checksumTest ^= 0x2C; //Comma separator
+					for (int i = 0; i < message.Length; i++)
+					{
+						checksumTest ^= Convert.ToByte(message[i]);
+					}
+				}
+				return Convert.ToByte(checksumTest);
+			}
 		}
 
 		internal static double StringToLatitude(string value, string ns)
