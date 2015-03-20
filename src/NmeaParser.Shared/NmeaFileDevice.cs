@@ -66,7 +66,7 @@ namespace NmeaParser
 		/// <summary>
 		/// Gets the name of the nmea file this device is using.
 		/// </summary>
-		public string Filename
+		public string FileName
 		{
 			get { return m_filename; }
 		}

@@ -61,6 +61,7 @@ namespace NmeaParser.Nmea.Gps
 		/// <summary>
 		/// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rms")]
 		public double Rms { get; private set; }
 
 		/// <summary>

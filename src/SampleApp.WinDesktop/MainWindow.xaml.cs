@@ -72,7 +72,7 @@ namespace SampleApp.WinDesktop
 			currentDevice.MessageReceived += device_MessageReceived;
 			var _ = currentDevice.OpenAsync();
 			if (device is NmeaParser.NmeaFileDevice)
-				currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).Filename);
+				currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
 			else if (device is NmeaParser.SerialPortDevice)
 			{
 				currentDeviceInfo.Text = string.Format("SerialPortDevice( port={0}, baud={1} )",
@@ -197,7 +197,6 @@ namespace SampleApp.WinDesktop
 						}
 						if (success)
 						{
-							port.Dispose();
 							return new System.IO.Ports.SerialPort(portName, baud);
 						}
 					}
