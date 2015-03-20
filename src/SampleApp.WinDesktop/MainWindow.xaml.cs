@@ -215,7 +215,6 @@ namespace SampleApp.WinDesktop
 						}
 						if (success)
 						{
-							port.Dispose();
 							return new System.IO.Ports.SerialPort(portName, baud);
 						}
 					}
