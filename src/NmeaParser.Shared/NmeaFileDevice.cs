@@ -62,6 +62,14 @@ namespace NmeaParser
 		}
 
 		/// <summary>
+		/// Gets the name of the nmea file this device is using.
+		/// </summary>
+		public string Filename
+		{
+			get { return m_filename; }
+		}
+
+		/// <summary>
 		/// Gets the stream to perform buffer reads on.
 		/// </summary>
 		/// <returns></returns>
