@@ -39,9 +39,9 @@ namespace NmeaParser
 		/// </summary>
 		/// <param name="fileName"></param>
 #if NETFX_CORE
-		public NmeaFileDevice(Windows.Storage.IStorageFile fileName) : this(fileName, 200)
+		public NmeaFileDevice(Windows.Storage.IStorageFile fileName) : this(fileName, 1000)
 #else
-		public NmeaFileDevice(string fileName) : this(fileName, 200)
+		public NmeaFileDevice(string fileName) : this(fileName, 1000)
 #endif
 		{
 			m_filename = fileName;
@@ -50,7 +50,7 @@ namespace NmeaParser
 		/// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
 		/// </summary>
 		/// <param name="fileName"></param>
-		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
+		/// <param name="readSpeed">The time to wait between each group of lines being read in milliseconds</param>
 #if NETFX_CORE
 		public NmeaFileDevice(Windows.Storage.IStorageFile fileName, int readSpeed)
 			: base(readSpeed)
@@ -62,7 +62,6 @@ namespace NmeaParser
 		}
 
 #if !NETFX_CORE
-
 		/// <summary>
 		/// Gets the name of the nmea file this device is using.
 		/// </summary>

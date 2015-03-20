@@ -34,13 +34,13 @@ namespace NmeaParser
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferedStreamDevice"/> class.
 		/// </summary>
-		protected BufferedStreamDevice() : this(200)
+		protected BufferedStreamDevice() : this(1000)
 		{
 		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferedStreamDevice"/> class.
 		/// </summary>
-		/// <param name="readSpeed">The time to wait between each line being read in milliseconds</param>
+		/// <param name="readSpeed">The time to wait between each group of lines being read in milliseconds</param>
 		protected BufferedStreamDevice(int readSpeed)
 		{
 			m_readSpeed = readSpeed;
@@ -77,30 +77,50 @@ namespace NmeaParser
 		}
 
 		// stream that slowly populates a buffer from a StreamReader to simulate nmea messages coming
-		// in line by line at a steady stream
+		// in lastLineRead by lastLineRead at a steady stream
 		private class BufferedStream : Stream
 		{
-			StreamReader m_sr;
-			byte[] m_buffer = new byte[0];
-			System.Threading.Timer m_timer;
-			object lockObj = new object();
+			private StreamReader m_sr;
+			private byte[] m_buffer = new byte[0];
+			private System.Threading.Timer m_timer;
+			private object lockObj = new object();
+			private string groupToken = null;
+			private string lastLineRead = null;
 			/// <summary>
 			/// Initializes a new instance of the <see cref="BufferedStream"/> class.
 			/// </summary>
 			/// <param name="stream">The stream.</param>
-			/// <param name="readSpeed">The read speed.</param>
+			/// <param name="readSpeed">The read speed in milliseconds.</param>
 			public BufferedStream(StreamReader stream, int readSpeed)
 			{
 				m_sr = stream;
-				m_timer = new System.Threading.Timer(OnRead, null, 0, readSpeed); //add a new line to buffer every 100 ms
+				m_timer = new System.Threading.Timer(OnRead, null, 0, readSpeed); //read a group of lines every 'readSpeed' milliseconds
 			}
 			private void OnRead(object state)
 			{
-				if (m_sr.EndOfStream)
-					m_sr.BaseStream.Seek(0, SeekOrigin.Begin); //start over
-
-				//populate the buffer with a line
-				string line = m_sr.ReadLine() + '\n';
+				if (lastLineRead != null)
+					AppendToBuffer(lastLineRead);
+				//Get the group token if we don't have one
+				while (groupToken == null && (lastLineRead == null || !lastLineRead.StartsWith("$", StringComparison.Ordinal)))
+				{
+					lastLineRead = ReadLine(); //seek forward to first nmea token
+					AppendToBuffer(lastLineRead);
+				}
+				if(groupToken == null)
+				{
+					var values = lastLineRead.Trim().Split(new char[] { ',' });
+					if (values.Length > 0)
+						groupToken = values[0];
+				}
+				lastLineRead = ReadLine();
+				while (!lastLineRead.StartsWith(groupToken, StringComparison.Ordinal)) //keep reading until messages start repeating again
+				{
+					AppendToBuffer(lastLineRead);
+					lastLineRead = ReadLine();
+				}				
+			}
+			private void AppendToBuffer(string line)
+			{
 				var bytes = Encoding.UTF8.GetBytes(line);
 				lock (lockObj)
 				{
@@ -109,6 +129,12 @@ namespace NmeaParser
 					bytes.CopyTo(newBuffer, m_buffer.Length);
 					m_buffer = newBuffer;
 				}
+			}
+			private string ReadLine()
+			{
+				if (m_sr.EndOfStream)
+					m_sr.BaseStream.Seek(0, SeekOrigin.Begin); //start over
+				return m_sr.ReadLine() + '\n';
 			}
 			/// <summary>
 			/// Gets a value indicating whether this instance can read.

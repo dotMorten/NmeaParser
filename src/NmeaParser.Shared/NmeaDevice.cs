@@ -81,7 +81,7 @@ namespace NmeaParser
 					{
 						OnData(buffer.Take(readCount).ToArray());
 					}
-					await Task.Delay(10, token);
+					await Task.Delay(50, token);
 				}
 				if (closeTask != null)
 					closeTask.SetResult(true);
@@ -123,19 +123,22 @@ namespace NmeaParser
 		private void OnData(byte[] data)
 		{
 			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-			string line = null;
+			List<string> lines = new List<string>();
 			lock (m_lockObject)
 			{
 				m_message += nmea;
 
 				var lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
-				if (lineEnd > -1)
+				while (lineEnd > -1)
 				{
-					line = m_message.Substring(0, lineEnd).Trim();
+					string line = m_message.Substring(0, lineEnd).Trim();
 					m_message = m_message.Substring(lineEnd + 1);
+					if (!string.IsNullOrEmpty(line))
+						lines.Add(line);
+					lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
 				}
 			}
-			if (!string.IsNullOrEmpty(line))
+			foreach(var line in lines)
 				ProcessMessage(line);
 		}
 
