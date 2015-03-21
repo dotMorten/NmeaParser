@@ -250,14 +250,14 @@ namespace NmeaParser.Tests
 		[TestMethod]
 		public void TestGpgll()
 		{
-			string input = "$GPGLL,4916.45,N,12311.12,W,225444,A,*1D";
+			string input = "$GPGLL,4916.45,N,12311.12,W,225444.12,A,*30";
 			var msg = NmeaMessage.Parse(input);
 			Assert.IsInstanceOfType(msg, typeof(Gpgll));
 			Gpgll gll = (Gpgll)msg;
 			Assert.IsTrue(gll.DataActive);
 			Assert.AreEqual(49.2741666666666666667, gll.Latitude);
 			Assert.AreEqual(-123.18533333333333333, gll.Longitude);
-			Assert.AreEqual(new TimeSpan(22,54,44), gll.FixTime);
+			Assert.AreEqual(new TimeSpan(0,22,54,44,120), gll.FixTime);
 		}
 
 		[TestMethod]

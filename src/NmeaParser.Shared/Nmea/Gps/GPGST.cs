@@ -38,12 +38,7 @@ namespace NmeaParser.Nmea.Gps
 		{
 			if (message == null || message.Length < 8)
 				throw new ArgumentException("Invalid GPGST", "message");
-			if (message[0].Length >= 6)
-			{
-				FixTime = new TimeSpan(int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
-								   int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture), 0)
-								   .Add(TimeSpan.FromSeconds(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture)));
-			}
+			FixTime = StringToTimeSpan(message[0]);
 			Rms = NmeaMessage.StringToDouble(message[1]);
 			SemiMajorError = NmeaMessage.StringToDouble(message[2]);
 			SemiMinorError = NmeaMessage.StringToDouble(message[3]);
