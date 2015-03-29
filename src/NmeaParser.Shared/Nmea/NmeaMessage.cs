@@ -111,26 +111,45 @@ namespace NmeaParser.Nmea
 			var typeinfo = typeof(NmeaMessage).GetTypeInfo();
 			foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
 			{
-				var attr = subclass.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
-				if (attr != null)
-				{
-					if (!subclass.IsAbstract)
-					{
-						foreach (var c in subclass.DeclaredConstructors)
-						{
-							var pinfo = c.GetParameters();
-							if (pinfo.Length == 0)
-							{
-								messageTypes.Add(attr.NmeaType, c);
-								break;
-							}
-						}
-					}
-				}
+			    RegisterNmeaMessage(subclass);
 			}
 		}
 
-		private static Dictionary<string, ConstructorInfo> messageTypes;
+        /// <summary>
+        /// Registers the specified type as a parse 'target'. The type needs to declare the NmeaMessageTypeAttribute.
+        /// </summary>
+        /// <param name="typeInfo">typeInfo of the type to register</param>
+        /// <example>
+        /// <code>
+        /// NmeaMessage.RegisterNmeaMessage(typeof(Oprpm).GetTypeInfo());
+        /// </code>
+        /// </example>
+	    public static void RegisterNmeaMessage(TypeInfo typeInfo)
+	    {
+            if (messageTypes == null)
+            {
+                LoadResponseTypes();
+            }
+
+	        var attr = typeInfo.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
+	        if (attr != null)
+	        {
+	            if (!typeInfo.IsAbstract)
+	            {
+	                foreach (var c in typeInfo.DeclaredConstructors)
+	                {
+	                    var pinfo = c.GetParameters();
+	                    if (pinfo.Length == 0)
+	                    {
+	                        messageTypes.Add(attr.NmeaType, c);
+	                        break;
+	                    }
+	                }
+	            }
+	        }
+	    }
+
+	    private static Dictionary<string, ConstructorInfo> messageTypes;
 
 		/// <summary>
 		/// Gets the NMEA message parts.
