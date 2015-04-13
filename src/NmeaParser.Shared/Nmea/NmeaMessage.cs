@@ -109,11 +109,21 @@ namespace NmeaParser.Nmea
 		{
 			messageTypes = new Dictionary<string, ConstructorInfo>();
 			var typeinfo = typeof(NmeaMessage).GetTypeInfo();
-			foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
-			{
-			    RegisterNmeaMessage(subclass);
-			}
+			RegisterNmeaMessages(typeinfo.Assembly);
 		}
+
+        /// <summary>
+        /// Finds all defined types in the provided assembly that declare the NmeaMessageTypeAttribute and registers
+        /// them as a parse 'target'.
+        /// </summary>
+        /// <param name="assembly">assembly containing types that declare the NmeaMessageTypeAttribute</param>
+	    public static void RegisterNmeaMessages(Assembly assembly)
+	    {
+            foreach (var subclass in assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
+            {
+                RegisterNmeaMessage(subclass);
+            }
+	    }
 
         /// <summary>
         /// Registers the specified type as a parse 'target'. The type needs to declare the NmeaMessageTypeAttribute.
