@@ -27,7 +27,7 @@ namespace NmeaParser.Nmea.Gps
 	///  GPS Satellites in view
 	/// </summary>
 	[NmeaMessageType(Type = "GPGSV")]
-	public sealed class Gpgsv : NmeaMessage, IMultiPartMessage<SatelitteVehicle>
+	public class Gpgsv : NmeaMessage, IMultiPartMessage<SatelitteVehicle>
 	{
 		protected override void LoadMessage(string[] message)
 		{
