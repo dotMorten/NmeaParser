@@ -26,7 +26,7 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
-			device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
+			device = new NmeaParser.NmeaFileDevice("gps.txt");
 			device.MessageReceived += device_MessageReceived;
 		}
 		
@@ -34,7 +34,7 @@ namespace SampleApp.WinDesktop
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				messages.Enqueue(args.Message.MessageType + ": " + args.Message.ToString());
+				messages.Enqueue(args.Message.ToString());
 				if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom

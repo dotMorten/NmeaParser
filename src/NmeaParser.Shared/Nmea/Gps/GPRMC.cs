@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Gps
@@ -31,20 +32,20 @@ namespace NmeaParser.Nmea.Gps
 	{
 		protected override void LoadMessage(string[] message)
 		{
-			FixTime = new DateTime(int.Parse(message[8].Substring(4, 2)) + 2000,
-								   int.Parse(message[8].Substring(2, 2)),
-								   int.Parse(message[8].Substring(0, 2)),
-								   int.Parse(message[0].Substring(0, 2)),
-								   int.Parse(message[0].Substring(2, 2)),
-								   int.Parse(message[0].Substring(4, 2)), DateTimeKind.Utc);
-			Active = (message[1] == "A");
-			Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
-			Longitude = NmeaMessage.StringToLongitude(message[4], message[5]);
-			Speed = double.Parse(message[6], CultureInfo.InvariantCulture);
-			Course = double.Parse(message[7], CultureInfo.InvariantCulture);
-			MagneticVariation = double.Parse(message[9], CultureInfo.InvariantCulture);
-			if (message[10] == "W")
-				MagneticVariation *= -1;
+            FixTime = new DateTime(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
+                                    int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture),
+                                    int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture),
+                                    int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
+                                    int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
+                                    int.Parse(message[0].Substring(4, 2), CultureInfo.InvariantCulture), DateTimeKind.Utc);
+            Active = (message[1] == "A");
+            Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
+            Longitude = NmeaMessage.StringToLongitude(message[4], message[5]);
+            Speed = !string.IsNullOrWhiteSpace(message[6]) ? double.Parse(message[6], CultureInfo.InvariantCulture) : double.NaN;
+            Course = !string.IsNullOrWhiteSpace(message[7]) ? double.Parse(message[7], CultureInfo.InvariantCulture) : double.NaN;
+            MagneticVariation = !string.IsNullOrWhiteSpace(message[9]) ? double.Parse(message[9], CultureInfo.InvariantCulture) : double.NaN;
+            if (message[10] == "W")
+                MagneticVariation *= -1;
 		}
 
 		/// <summary>
