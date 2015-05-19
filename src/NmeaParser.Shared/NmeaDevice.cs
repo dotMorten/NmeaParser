@@ -147,7 +147,7 @@ namespace NmeaParser
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message, {0}", e.Message);
+                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message");
             }
         }
 
