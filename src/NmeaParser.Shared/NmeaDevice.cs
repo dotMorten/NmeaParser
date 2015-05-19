@@ -83,10 +83,6 @@ namespace NmeaParser
                         System.Diagnostics.Debug.WriteLine("Parse Task was canceled");
                         break;
                     }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
                 }
                 if (closeTask != null)
                     closeTask.SetResult(true);
@@ -147,7 +143,7 @@ namespace NmeaParser
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message");
+                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message, {0}", e);
             }
         }
 

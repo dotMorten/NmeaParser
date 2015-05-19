@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using NLog;
 
 namespace NmeaParser
 {
@@ -11,32 +12,44 @@ namespace NmeaParser
     /// </summary>
     public class UdpDevice : NmeaDevice
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private const int VistaVersion = 6;
+        private readonly int? _osVersion;
         private UdpClient _udp;
-        private IPEndPoint _clientEndPoint;
         private IPEndPoint _receiveEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         /// <summary>
-        /// Constructor. Binds UDP client to given ip address and port.
+        /// Bind UDP client to given ip address and port.
         /// </summary>
         /// <param name="ip">ip address</param>
         /// <param name="port">port</param>
         public UdpDevice(string ip, int port)
         {
-            _clientEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+            try
+            {
+                Logger.Info("New UDP device instantiated, binding to {0}:{1}", ip, port);
+                _osVersion = Environment.OSVersion.Version.Major;
+                var clientEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
-            _udp = new UdpClient();
-            _udp.ExclusiveAddressUse = false;
-            _udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _udp.Client.Bind(_clientEndPoint);
+                _udp = new UdpClient();
+                _udp.ExclusiveAddressUse = false;
+                _udp.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udp.Client.Bind(clientEndPoint);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                throw;
+            }
         }
 
         /// <summary>
-        /// Datagram received
+        /// Datagram received callback
         /// </summary>
-        /// <param name="asyncResult">Asynchronous operation result</param>
+        /// <param name="asyncResult">Async operation result</param>
         private void AsyncCallback(IAsyncResult asyncResult)
         {
-            // Return if client is disposed
             if (_udp == null)
                 return;
 
@@ -49,15 +62,32 @@ namespace NmeaParser
                 OnData(receivedBytes);
 
                 // Begin listening again
-                _udp.BeginReceive(AsyncCallback, asyncResult.AsyncState);
+                BeginReceiveAsync(asyncResult.AsyncState);
             }
             catch (Exception e)
             {
-                // Spit out the exeption and throw, should be catched/logged by "other code"
-                System.Diagnostics.Debug.WriteLine(string.Format("AsyncCallback threw exception:", e.Message));
                 if (!(e is ObjectDisposedException))
+                {
+                    Logger.Error(e);
                     throw;
+                }
+                Logger.Warn(e);
             }
+        }
+
+        /// <summary>
+        /// Receive datagram from remote host asynchronously. 
+        /// </summary>
+        /// <remarks>
+        /// Separate logic for pre- and post Windows Vista operating systems
+        /// </remarks>
+        /// <param name="state">Async state</param>
+        private void BeginReceiveAsync(object state)
+        {
+            if (_osVersion <= VistaVersion)
+                TaskEx.Run(() => _udp.BeginReceive(AsyncCallback, state)).ConfigureAwait(false);
+            else
+                _udp.BeginReceive(AsyncCallback, state);
         }
 
         /// <summary>
@@ -66,23 +96,41 @@ namespace NmeaParser
         /// <returns></returns>
         protected override Task<Stream> OpenStreamAsync()
         {
-            _udp.BeginReceive(AsyncCallback, _udp);
-            return TaskEx.FromResult<Stream>(null);
+            try
+            {
+                Logger.Info("Open UDP device");
+                BeginReceiveAsync(_udp);
+                return TaskEx.FromResult<Stream>(null);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                throw;
+            }
         }
 
         protected override Task CloseStreamAsync(Stream stream)
         {
-            if (_udp.Client.IsBound)
+            try
             {
-                _udp.Client.Shutdown(SocketShutdown.Both);
-                _udp.Client.Close();
+                Logger.Info("Close UDP device");
+                if (_udp.Client.IsBound)
+                {
+                    _udp.Client.Shutdown(SocketShutdown.Both);
+                    _udp.Client.Close();
+                }
+                return TaskEx.FromResult(true);
             }
-            
-            return TaskEx.FromResult(true);
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                throw;
+            }
         }
 
         protected override void Dispose(bool force)
         {
+            Logger.Info("Dispose UDP device");
             _udp = null;
         }
 
