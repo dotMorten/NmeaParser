@@ -16,21 +16,25 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Windows.Foundation;
 using System.Threading;
+using System.Threading.Tasks;
+using NLog;
+using NmeaParser.Nmea;
 
 namespace NmeaParser
 {
     public abstract class NmeaDevice : IDisposable
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private object m_lockObject = new object();
         private string m_message = "";
         private Stream m_stream;
-        private System.Threading.CancellationTokenSource m_cts;
+        private CancellationTokenSource m_cts;
         protected TaskCompletionSource<bool> closeTask;
 
         protected NmeaDevice()
@@ -43,7 +47,7 @@ namespace NmeaParser
                 if (IsOpen) return;
                 IsOpen = true;
             }
-            m_cts = new System.Threading.CancellationTokenSource();
+            m_cts = new CancellationTokenSource();
             m_stream = await OpenStreamAsync();
             StartParser();
             MultiPartMessageCache.Clear();
@@ -52,7 +56,7 @@ namespace NmeaParser
         protected virtual void StartParser()
         {
             var token = m_cts.Token;
-            System.Diagnostics.Debug.WriteLine("Parser started");
+            Debug.WriteLine("Parser started");
             TaskEx.Run(async () =>
             {
                 var stream = m_stream;
@@ -70,6 +74,7 @@ namespace NmeaParser
                         {
                             if (e is TaskCanceledException)
                                 throw;
+                            Logger.Warn(e);
                         }
 
                         if (readCount > 0)
@@ -80,7 +85,7 @@ namespace NmeaParser
                     }
                     catch (TaskCanceledException)
                     {
-                        System.Diagnostics.Debug.WriteLine("Parse Task was canceled");
+                        Debug.WriteLine("Parse Task was canceled");
                         break;
                     }
                 }
@@ -115,7 +120,7 @@ namespace NmeaParser
 
         protected void OnData(byte[] data)
         {
-            var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+            var nmea = Encoding.UTF8.GetString(data, 0, data.Length);
             string line = null;
             lock (m_lockObject)
             {
@@ -137,17 +142,17 @@ namespace NmeaParser
         {
             try
             {
-                var msg = NmeaParser.Nmea.NmeaMessage.Parse(p);
+                var msg = NmeaMessage.Parse(p);
                 if (msg != null)
                     OnMessageReceived(msg);
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Trouble processing NMEA message, {0}", e);
+                Debug.WriteLine("Trouble processing NMEA message, {0}", e);
             }
         }
 
-        private void OnMessageReceived(Nmea.NmeaMessage msg)
+        private void OnMessageReceived(NmeaMessage msg)
         {
             var args = new NmeaMessageReceivedEventArgs(msg);
             if (msg is IMultiPartMessage)
@@ -166,7 +171,7 @@ namespace NmeaParser
                 }
                 else if (multi.MessageNumber == 1)
                 {
-                    MultiPartMessageCache[msg.MessageType] = new Dictionary<int, Nmea.NmeaMessage>(multi.TotalMessages);
+                    MultiPartMessageCache[msg.MessageType] = new Dictionary<int, NmeaMessage>(multi.TotalMessages);
                     MultiPartMessageCache[msg.MessageType][1] = msg;
                 }
                 if (MultiPartMessageCache.ContainsKey(msg.MessageType))
@@ -189,8 +194,8 @@ namespace NmeaParser
                 MessageReceived(this, args);
         }
 
-        private Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache
-            = new Dictionary<string, Dictionary<int, Nmea.NmeaMessage>>();
+        private Dictionary<string, Dictionary<int, NmeaMessage>> MultiPartMessageCache
+            = new Dictionary<string, Dictionary<int, NmeaMessage>>();
 
         public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
 
@@ -220,15 +225,15 @@ namespace NmeaParser
         public NmeaMessageReceivedEventArgs()
         {}
 
-        public NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
+        public NmeaMessageReceivedEventArgs(NmeaMessage message)
         {
             Message = message;
         }
 
-        public Nmea.NmeaMessage Message { get; set; }
+        public NmeaMessage Message { get; set; }
 
         public bool IsMultiPart { get; set; }
 
-        public Nmea.NmeaMessage[] MessageParts { get; set; }
+        public NmeaMessage[] MessageParts { get; set; }
     }
 }
