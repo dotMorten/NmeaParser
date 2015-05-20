@@ -44,33 +44,27 @@ namespace NmeaParser.Nmea.Gps
 
 		protected override void LoadMessage(string[] message)
 		{
-            try
+            Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
+            Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
+            Quality = !string.IsNullOrWhiteSpace(message[5]) ? (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture) : FixQuality.Invalid;
+            NumberOfSatellites = !string.IsNullOrWhiteSpace(message[6]) ? int.Parse(message[6], CultureInfo.InvariantCulture) : 0;
+            Hdop = !string.IsNullOrWhiteSpace(message[7]) ? double.Parse(message[7], CultureInfo.InvariantCulture) : double.NaN;
+            Altitude = !string.IsNullOrWhiteSpace(message[8]) ? double.Parse(message[8], CultureInfo.InvariantCulture) : double.NaN;
+            AltitudeUnits = message[9];
+            HeightOfGeoid = !string.IsNullOrWhiteSpace(message[10]) ? double.Parse(message[10], CultureInfo.InvariantCulture) : double.NaN;
+            HeightOfGeoidUnits = message[11];
+
+            var time = message[0];
+            if (time.Length == 6)
             {
-                var time = message[0];
-                Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
-                Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-                Quality = !string.IsNullOrWhiteSpace(message[5]) ? (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture) : FixQuality.Invalid;
-                NumberOfSatellites = !string.IsNullOrWhiteSpace(message[6]) ? int.Parse(message[6], CultureInfo.InvariantCulture) : 0;
-                Hdop = !string.IsNullOrWhiteSpace(message[7]) ? double.Parse(message[7], CultureInfo.InvariantCulture) : double.NaN;
-                Altitude = !string.IsNullOrWhiteSpace(message[8]) ? double.Parse(message[8], CultureInfo.InvariantCulture) : double.NaN;
-                AltitudeUnits = message[9];
-                HeightOfGeoid = !string.IsNullOrWhiteSpace(message[10]) ? double.Parse(message[10], CultureInfo.InvariantCulture) : double.NaN;
-                HeightOfGeoidUnits = message[11];
-                if (message[0].Length == 6)
-                {
-                    TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(message[0].Substring(0, 2)),
-                                       int.Parse(message[0].Substring(2, 2)),
-                                       int.Parse(message[0].Substring(4, 2))); //TimeSpan.FromSeconds(1);
-                }
-                if (message[13].Length > 0)
-                    DgpsStationID = !string.IsNullOrWhiteSpace(message[13]) ? int.Parse(message[13], CultureInfo.InvariantCulture) : 0;
-                else
-                    DgpsStationID = -1;
+                TimeSinceLastDgpsUpdate = new TimeSpan(int.Parse(time.Substring(0, 2)),
+                                    int.Parse(time.Substring(2, 2)),
+                                    int.Parse(time.Substring(4, 2)));
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            if (message[13].Length > 0)
+                DgpsStationID = !string.IsNullOrWhiteSpace(message[13]) ? int.Parse(message[13], CultureInfo.InvariantCulture) : 0;
+            else
+                DgpsStationID = -1;
 		}
 
 		/// <summary>

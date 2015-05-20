@@ -16,6 +16,7 @@ namespace NmeaParser
 
         private const int VistaVersion = 6;
         private readonly int? _osVersion;
+        private volatile object _threadLock = new object();
         private UdpClient _udp;
         private IPEndPoint _receiveEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -50,28 +51,31 @@ namespace NmeaParser
         /// <param name="asyncResult">Async operation result</param>
         private void AsyncCallback(IAsyncResult asyncResult)
         {
-            if (_udp == null)
-                return;
-
-            try
+            lock (_threadLock)
             {
-                // Read all bytes
-                byte[] receivedBytes = _udp.EndReceive(asyncResult, ref _receiveEndPoint);
+                if (_udp == null)
+                    return;
 
-                // Pass data to NMEA message parser
-                OnData(receivedBytes);
-
-                // Begin listening again
-                BeginReceiveAsync(asyncResult.AsyncState);
-            }
-            catch (Exception e)
-            {
-                if (!(e is ObjectDisposedException))
+                try
                 {
-                    Logger.Error(e);
-                    throw;
+                    // Read all bytes
+                    byte[] receivedBytes = _udp.EndReceive(asyncResult, ref _receiveEndPoint);
+                    
+                    // Begin listening again
+                    BeginReceiveAsync();
+
+                    // Pass received data to NMEA message parser
+                    OnData(receivedBytes);
                 }
-                Logger.Warn(e);
+                catch (Exception e)
+                {
+                    if (!(e is ObjectDisposedException) && !(e is SocketException))
+                    {
+                        Logger.Error(e);
+                        throw;
+                    }
+                    Logger.Warn(e);
+                }
             }
         }
 
@@ -81,13 +85,12 @@ namespace NmeaParser
         /// <remarks>
         /// Separate logic for pre- and post Windows Vista operating systems
         /// </remarks>
-        /// <param name="state">Async state</param>
-        private void BeginReceiveAsync(object state)
+        private void BeginReceiveAsync()
         {
             if (_osVersion <= VistaVersion)
-                TaskEx.Run(() => _udp.BeginReceive(AsyncCallback, state)).ConfigureAwait(false);
+                TaskEx.Run(() => _udp.BeginReceive(AsyncCallback, null)).ConfigureAwait(false);
             else
-                _udp.BeginReceive(AsyncCallback, state);
+                _udp.BeginReceive(AsyncCallback, null);
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace NmeaParser
             try
             {
                 Logger.Info("Open UDP device");
-                BeginReceiveAsync(_udp);
+                BeginReceiveAsync();
                 return TaskEx.FromResult<Stream>(null);
             }
             catch (Exception e)
