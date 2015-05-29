@@ -1,13 +1,13 @@
 Nmea Parser
 =========
 
-Library for reading and parsing data NMEA message streams.
-It makes it easy to connect and listen for NMEA messages from coming from various devices in Windows Store, Windows Phone, Windows Desktop./NET, Windows Universal apps as well as Xamarin for iOS and Android.
+Library for reading and parsing NMEA data message streams.
+It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Store, Windows Phone, Windows Desktop/.NET and Windows Universal apps as well as Xamarin for iOS and Android.
 
 The following inputs are supported:
 - System.IO.Stream (all platforms)
 - Emulation from NMEA log file (all platforms)
-- BlueTooth: Windows Store, Windows Phone, Windows Universal. Desktop is supported using the bluetooth device via the SerialPortDevice.
+- Bluetooth: Windows Store, Windows Phone, Windows Universal. Desktop is supported using the bluetooth device via the SerialPortDevice.
 - Serial Device: Windows Desktop and Windows Universal.
 
 
