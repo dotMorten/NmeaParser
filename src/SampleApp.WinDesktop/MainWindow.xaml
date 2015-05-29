@@ -5,6 +5,7 @@
         Title="Sample App" Height="500" Width="625">
 	<Grid>
 		<Grid.Resources>
+			<local:NullToCollapsedConverter x:Key="nullConv" />
 			<Style TargetType="UserControl" x:Key="card">
 				<Setter Property="Margin" Value="10" />
 				<Setter Property="Padding" Value="10" />
@@ -21,11 +22,11 @@
 			<TabItem Header="GPS Info">
 				<ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
 					<WrapPanel>
-						<local:GprmcControl x:Name="gprmcView" Style="{StaticResource card}" />
-						<local:GpggaControl x:Name="gpggaView" Style="{StaticResource card}" />
-						<local:GpgsaControl x:Name="gpgsaView" Style="{StaticResource card}" />
-						<local:GpgllControl x:Name="gpgllView" Style="{StaticResource card}" />
-						<local:PgrmeControl x:Name="pgrmeView" Style="{StaticResource card}" />
+						<local:GprmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
+						<local:GpggaControl x:Name="gpggaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
+						<local:GpgsaControl x:Name="gpgsaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
+						<local:GpgllControl x:Name="gpgllView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
+						<local:PgrmeControl x:Name="pgrmeView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=pgrmeView, Converter={StaticResource nullConv}}" />
 					</WrapPanel>
 				</ScrollViewer>
 			</TabItem>
