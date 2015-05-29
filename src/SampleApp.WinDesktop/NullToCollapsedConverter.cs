@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SampleApp.WinDesktop
+namespace SampleApp
 {
 	public sealed class NullToCollapsedConverter : IValueConverter
 	{

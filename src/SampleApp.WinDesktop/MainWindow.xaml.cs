@@ -71,7 +71,7 @@ namespace SampleApp.WinDesktop
 				currentDevice.MessageReceived -= device_MessageReceived;
 				currentDevice.Dispose();
 				mapView.LocationDisplay.LocationProvider.LocationChanged -= LocationProvider_LocationChanged;
-				mapView.LocationDisplay.LocationProvider = null;
+				mapView.LocationDisplay.LocationProvider = new Esri.ArcGISRuntime.Location.SystemLocationProvider();
 			}
 			output.Text = "";
 			messages.Clear();
