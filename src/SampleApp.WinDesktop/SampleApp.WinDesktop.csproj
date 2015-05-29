@@ -75,6 +75,7 @@
     <Compile Include="KeyValuePairControl.xaml.cs">
       <DependentUpon>KeyValuePairControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NullToCollapsedConverter.cs" />
     <Compile Include="PgrmeControl.xaml.cs">
       <DependentUpon>PgrmeControl.xaml</DependentUpon>
     </Compile>
