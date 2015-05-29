@@ -1,11 +1,15 @@
 Nmea Parser
 =========
 
-Library for handling data NMEA streams coming in from Bluetooth devices in Windows Store and Windows Phone, and Serial ports in Windows Desktop apps. Stream and File support is available for Xamarin Android and iOS devices. 
+Library for reading and parsing data NMEA message streams.
+It makes it easy to connect and listen for NMEA messages from coming from various devices in Windows Store, Windows Phone, Windows Desktop./NET, Windows Universal apps as well as Xamarin for iOS and Android.
 
-There's also generic support for NMEA files (for simulation/playback) and raw streams.
+The following inputs are supported:
+- System.IO.Stream (all platforms)
+- Emulation from NMEA log file (all platforms)
+- BlueTooth: Windows Store, Windows Phone, Windows Universal. Desktop is supported using the bluetooth device via the SerialPortDevice.
+- Serial Device: Windows Desktop and Windows Universal.
 
-This library makes it easy to connect and listen for NMEA messages from various  Devices in Windows Store, Windows Phone and Windows Desktop apps.
 
 Currently supported NMEA messages:
 - Generic GPS NMEA (GPRMC, GPGGA, GPGLL, GPGSA, GPGSCV, GPRMB, GPRMC, GPBOD, GPRTE, GPGST)
