@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Windows.Foundation;
@@ -146,15 +145,17 @@ namespace NmeaParser
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
-		private void ProcessMessage(string p)
+		private void ProcessMessage(string rawMsg)
 		{
 			try
 			{
-				if (RawMessageReceived != null)
+				var handler = RawMessageReceived;
+				if (handler != null)
 				{
-					RawMessageReceived(this, new RawMessageReceivedEventArgs(p));
+					handler(this, new RawMessageReceivedEventArgs(rawMsg));
 				}
-				var msg = Nmea.NmeaMessage.Parse(p);
+
+				var msg = Nmea.NmeaMessage.Parse(rawMsg);
 				if (msg != null)
 					OnMessageReceived(msg);
 			}
@@ -194,9 +195,10 @@ namespace NmeaParser
 				}
 			}
 
-			if (MessageReceived != null)
+			var handler = MessageReceived;
+			if (handler != null)
 			{
-				MessageReceived(this, args);
+				handler(this, args);
 			}
 		}
 
