@@ -13,10 +13,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)IMultiPartMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Combined\GNGNS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Glonass\GLGNS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\GNS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRMZ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGLL.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPBOD.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGNS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGST.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRTE.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGSV.cs" />

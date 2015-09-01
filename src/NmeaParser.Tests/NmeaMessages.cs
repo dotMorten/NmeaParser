@@ -21,6 +21,8 @@ using System.Text;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using NmeaParser.Nmea;
 using NmeaParser.Nmea.Gps;
+using NmeaParser.Nmea.Glonass;
+using NmeaParser.Nmea.Combined;
 using System.Threading.Tasks;
 using System.IO;
 
@@ -373,6 +375,69 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(0.023, gst.SigmaLatitudeError);
 			Assert.AreEqual(0.020, gst.SigmaLongitudeError);
 			Assert.AreEqual(0.031, gst.SigmaHeightError);
+		}
+		
+		[TestMethod]
+		public void TestGpgns()
+		{
+			string input = "$GPGNS,073137.00,,,,,,05,,,,00.4,0000*7D";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gpgns));
+			Gpgns gns = (Gpgns)msg;
+			Assert.AreEqual(Gns.TalkerId.GP, gns.Talker);
+			Assert.AreEqual(new TimeSpan(7, 31, 37), gns.FixTime);
+			Assert.AreEqual(double.NaN, gns.Latitude);
+			Assert.AreEqual(double.NaN, gns.Longitude);
+			Assert.AreEqual(Gns.ModeIndicator.NoFix, gns.GpsMode);
+			Assert.AreEqual(Gns.ModeIndicator.NoFix, gns.GlonassMode);
+			Assert.AreEqual(5, gns.SVsInUse);
+			Assert.AreEqual(double.NaN, gns.Hdop);
+			Assert.AreEqual(double.NaN, gns.HeightOfGeoid);
+			Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
+			Assert.AreEqual(TimeSpan.FromSeconds(0.4), gns.TimeSinceLastDiffDataUpdate);
+			Assert.AreEqual(0, gns.DiffStationId);
+		}
+		
+		[TestMethod]
+		public void TestGlgns()
+		{
+			string input = "$GLGNS,073137.00,,,,,,03,,,,00.4,0000*67";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Glgns));
+			Glgns gns = (Glgns)msg;
+			Assert.AreEqual(Gns.TalkerId.GL, gns.Talker);
+			Assert.AreEqual(new TimeSpan(7, 31, 37), gns.FixTime);
+			Assert.AreEqual(double.NaN, gns.Latitude);
+			Assert.AreEqual(double.NaN, gns.Longitude);
+			Assert.AreEqual(Gns.ModeIndicator.NoFix, gns.GpsMode);
+			Assert.AreEqual(Gns.ModeIndicator.NoFix, gns.GlonassMode);
+			Assert.AreEqual(3, gns.SVsInUse);
+			Assert.AreEqual(double.NaN, gns.Hdop);
+			Assert.AreEqual(double.NaN, gns.HeightOfGeoid);
+			Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
+			Assert.AreEqual(TimeSpan.FromSeconds(0.4), gns.TimeSinceLastDiffDataUpdate);
+			Assert.AreEqual(0, gns.DiffStationId);
+		}
+		
+		[TestMethod]
+		public void TestGngns()
+		{
+			string input = "$GNGNS,073137.00,5544.7043,N,03743.7390,E,DD,08,1.7,00176.5,0014.2,,*5B";
+			var msg = NmeaMessage.Parse(input);
+			Assert.IsInstanceOfType(msg, typeof(Gngns));
+			Gngns gns = (Gngns)msg;
+			Assert.AreEqual(Gns.TalkerId.GN, gns.Talker);
+			Assert.AreEqual(new TimeSpan(7, 31, 37), gns.FixTime);
+			Assert.AreEqual(55.74507, gns.Latitude, 0.00001);
+			Assert.AreEqual(37.72898, gns.Longitude, 0.00001);
+			Assert.AreEqual(Gns.ModeIndicator.Differential, gns.GpsMode);
+			Assert.AreEqual(Gns.ModeIndicator.Differential, gns.GlonassMode);
+			Assert.AreEqual(8, gns.SVsInUse);
+			Assert.AreEqual(1.7, gns.Hdop);
+			Assert.AreEqual(176.5, gns.HeightOfGeoid);
+			Assert.AreEqual(14.2, gns.GeoidalSeparation);
+			Assert.AreEqual(TimeSpan.Zero, gns.TimeSinceLastDiffDataUpdate);
+			Assert.AreEqual(-1, gns.DiffStationId);
 		}
 	}
 }
