@@ -30,25 +30,6 @@ namespace NmeaParser.Nmea
     public abstract class Gns : NmeaMessage
     {
         /// <summary>
-        /// Device ID that issued NmeaMessage. More will come in future, e.g. GA for Galileo.
-        /// </summary>
-        public enum TalkerId
-        {
-            /// <summary>
-            /// GPS
-            /// </summary>
-            GP,
-            /// <summary>
-            /// GLONASS
-            /// </summary>
-            GL,
-            /// <summary>
-            /// Mixed GPS and GLONASS data, according to IEIC 61162-1
-            /// </summary>
-            GN
-        }
-
-        /// <summary>
         /// Mode indicator
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Enum values matches NMEA spec")]
@@ -71,10 +52,10 @@ namespace NmeaParser.Nmea
             FloatRtk = 'F',
             /// <summary>Estimated</summary>
             Estimated = 'E',
-			/// <summary>Manual input</summary>
-			ManualInput = 'M',
-			/// <summary>Simulation</summary>
-			Simulation = 'S'
+            /// <summary>Manual input</summary>
+            ManualInput = 'M',
+            /// <summary>Simulation</summary>
+            Simulation = 'S'
         }
 
         /// <summary>

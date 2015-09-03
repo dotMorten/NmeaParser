@@ -21,14 +21,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea.Combined
 {
     /// <summary>
-    ///  GPS GNSS fix data
+    ///  GLONASS DOP and Active Satellites
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgns")]
-    [NmeaMessageType("GPGNS")]
-    public class Gpgns : Gns
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
+    [NmeaMessageType("GNGSA")]
+    public class Gngsa : Gsa
     {
         /// <summary>
         /// Called when the message is being loaded.
@@ -37,7 +37,7 @@ namespace NmeaParser.Nmea.Gps
         protected override void OnLoadMessage(string[] message)
         {
             base.OnLoadMessage(message);
-            Talker = TalkerId.GP;
+            Talker = TalkerId.GN;
         }
     }
 }

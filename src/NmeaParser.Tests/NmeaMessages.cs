@@ -181,6 +181,7 @@ namespace NmeaParser.Tests
 			var msg = NmeaMessage.Parse(input);
 			Assert.IsInstanceOfType(msg, typeof(Gpgsa));
 			Gpgsa gsa = (Gpgsa)msg;
+			Assert.AreEqual(NmeaMessage.TalkerId.GP, gsa.Talker);
 			Assert.AreEqual(Gpgsa.ModeSelection.Manual, gsa.GpsMode);
 			Assert.AreEqual(Gpgsa.Mode.Fix2D, gsa.FixMode);
 			Assert.AreEqual(12, gsa.SVs.Count);
@@ -200,6 +201,45 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(1.0, gsa.Hdop);
 			Assert.AreEqual(1.3, gsa.Vdop);
 		}
+
+        [TestMethod]
+        public void TestGlgsa()
+        {
+            string input = "$GLGSA,A,3,,,,,,,,,,,45,54,1.4,0.9,1.1*22";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Glgsa));
+            Glgsa gsa = (Glgsa)msg;
+            Assert.AreEqual(NmeaMessage.TalkerId.GL, gsa.Talker);
+            Assert.AreEqual(Gpgsa.ModeSelection.Auto, gsa.OperationMode);
+            Assert.AreEqual(Gpgsa.Mode.Fix3D, gsa.FixMode);
+            Assert.AreEqual(2, gsa.SVs.Count);
+            Assert.AreEqual(45, gsa.SVs[0]);
+            Assert.AreEqual(54, gsa.SVs[1]);
+            Assert.AreEqual(1.4, gsa.Pdop);
+            Assert.AreEqual(0.9, gsa.Hdop);
+            Assert.AreEqual(1.1, gsa.Vdop);
+        }
+
+        [TestMethod]
+        public void TestGngsa()
+        {
+            string input = "$GNGSA,A,3,19,20,22,31,17,,,,,,,,2.9,1.7,2.4*29";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gngsa));
+            Gngsa gsa = (Gngsa)msg;
+            Assert.AreEqual(NmeaMessage.TalkerId.GN, gsa.Talker);
+            Assert.AreEqual(Gpgsa.ModeSelection.Auto, gsa.OperationMode);
+            Assert.AreEqual(Gpgsa.Mode.Fix3D, gsa.FixMode);
+            Assert.AreEqual(5, gsa.SVs.Count);
+            Assert.AreEqual(19, gsa.SVs[0]);
+            Assert.AreEqual(20, gsa.SVs[1]);
+            Assert.AreEqual(22, gsa.SVs[2]);
+            Assert.AreEqual(31, gsa.SVs[3]);
+            Assert.AreEqual(17, gsa.SVs[4]);
+            Assert.AreEqual(2.9, gsa.Pdop);
+            Assert.AreEqual(1.7, gsa.Hdop);
+            Assert.AreEqual(2.4, gsa.Vdop);
+        }
 
 		[TestMethod]
 		public void TestGpgsv()
