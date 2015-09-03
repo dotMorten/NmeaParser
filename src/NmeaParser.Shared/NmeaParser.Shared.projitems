@@ -14,7 +14,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Combined\GNGNS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Combined\GNGSA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Glonass\GLGNS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Glonass\GLGSA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\GNS.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRMZ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />
@@ -28,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\GSA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserRangeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserTech\PLTIT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\Trimble\PTNLA.cs" />
