@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Nmea.Base
 {
     /// <summary>
     /// GNSS DOP and Active Satellites
@@ -43,6 +43,7 @@ namespace NmeaParser.Nmea
             /// </summary>
             Manual,
         }
+
         /// <summary>
         /// Fix Mode
         /// </summary>
@@ -70,7 +71,7 @@ namespace NmeaParser.Nmea
         protected override void OnLoadMessage(string[] message)
         {
             if (message == null || message.Length < 17)
-                throw new ArgumentException("Invalid GPGSA", "message");
+                throw new ArgumentException("Invalid GSA", "message");
 
             OperationMode = message[0] == "A" ? ModeSelection.Auto : ModeSelection.Manual;
             FixMode = (Mode)int.Parse(message[1], CultureInfo.InvariantCulture);

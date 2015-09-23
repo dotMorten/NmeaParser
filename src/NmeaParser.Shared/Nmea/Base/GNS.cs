@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Nmea.Base
 {
     /// <summary>
     ///  GNSS (Global Navigation Satellite System) fix data
