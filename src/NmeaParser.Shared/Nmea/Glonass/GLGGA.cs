@@ -1,4 +1,4 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2015 Grzegorz Blok
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
@@ -16,14 +16,14 @@
 
 using NmeaParser.Nmea.Base;
 
-namespace NmeaParser.Nmea.Combined
+namespace NmeaParser.Nmea.Glonass
 {
     /// <summary>
-    ///  GLONASS DOP and Active Satellites
+    ///  Combined Systems Fix Data
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
-    [NmeaMessageType("GNGSA")]
-    public class Gngsa : Gsa
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Glgga")]
+    [NmeaMessageType("GLGGA")]
+    public class Glgga : Gga
     {
         /// <summary>
         /// Called when the message is being loaded.
@@ -32,7 +32,7 @@ namespace NmeaParser.Nmea.Combined
         protected override void OnLoadMessage(string[] message)
         {
             base.OnLoadMessage(message);
-            Talker = TalkerId.GN;
+            Talker = TalkerId.GL;
         }
     }
 }

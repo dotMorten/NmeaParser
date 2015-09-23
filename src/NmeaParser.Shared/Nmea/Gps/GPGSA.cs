@@ -14,12 +14,7 @@
 // limitations under the License.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NmeaParser.Nmea.Base;
 
 namespace NmeaParser.Nmea.Gps
 {
@@ -36,16 +31,16 @@ namespace NmeaParser.Nmea.Gps
 		/// <param name="message">The NMEA message values.</param>
 		protected override void OnLoadMessage(string[] message)
 		{
-            base.OnLoadMessage(message);
-            Talker = TalkerId.GP;
+			base.OnLoadMessage(message);
+			Talker = TalkerId.GP;
 		}
 
-        /// <summary>
-        /// Operation mode. Redirecting to OperationMode for backward compatibility.
-        /// </summary>
-        public ModeSelection GpsMode 
-        { 
-            get { return OperationMode; } 
-        }
+		/// <summary>
+		/// Operation mode. Redirecting to OperationMode for backward compatibility.
+		/// </summary>
+		public ModeSelection GpsMode 
+		{ 
+			get { return OperationMode; } 
+		}
 	}
 }

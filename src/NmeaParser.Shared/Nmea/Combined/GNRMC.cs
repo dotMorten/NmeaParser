@@ -1,4 +1,4 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2015 Grzegorz Blok
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
@@ -19,11 +19,11 @@ using NmeaParser.Nmea.Base;
 namespace NmeaParser.Nmea.Combined
 {
     /// <summary>
-    ///  GLONASS DOP and Active Satellites
+    ///  Recommended Minimum
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
-    [NmeaMessageType("GNGSA")]
-    public class Gngsa : Gsa
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gnrmc")]
+    [NmeaMessageType("GNRMC")]
+    public class Gnrmc : Rmc
     {
         /// <summary>
         /// Called when the message is being loaded.
