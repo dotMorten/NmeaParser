@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.WinStore", "NmeaParser.WinStore\NmeaParser.WinStore.csproj", "{62A55887-10F5-40D2-9352-96246D1B11D3}"
 EndProject
@@ -57,7 +57,9 @@ Global
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{62a55887-10f5-40d2-9352-96246d1b11d3}*SharedItemsImports = 4
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{e15edbd9-0356-422b-8c29-18833787356e}*SharedItemsImports = 13
 		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{c4b3935b-7ed4-40cc-b1d2-bc2b854e319d}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{0daa6e10-bc77-4b06-8356-baee9085d985}*SharedItemsImports = 4
 		NmeaParser.Shared\NmeaParser.Shared.projitems*{ea42a713-bc6e-4914-b54b-47c0891b7421}*SharedItemsImports = 4
+		NmeaParser.Shared\NmeaParser.Shared.projitems*{507cfe3e-16c1-43ec-bc21-50f901ee223b}*SharedItemsImports = 4
 		SampleApp.Store\SampleApp.Store.Shared\SampleApp.Store.Shared.projitems*{95e812e6-17c2-494f-a446-fde42d75331c}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

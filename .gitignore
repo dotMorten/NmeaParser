@@ -109,3 +109,4 @@ UpgradeLog*.XML
 Tools/Nuget/NmeaParser/lib/
 Tools/Nuget/*.nupkg
 src/NmeaParser.sln.ide/
+project.lock.json
