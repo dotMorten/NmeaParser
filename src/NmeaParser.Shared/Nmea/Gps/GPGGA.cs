@@ -66,11 +66,15 @@ namespace NmeaParser.Nmea.Gps
 		protected override void OnLoadMessage(string[] message)
 		{
 			if (message == null || message.Length < 14)
-				throw new ArgumentException("Invalid GPGGA", "message"); 
+				throw new ArgumentException("Invalid GPGGA", "message");
+
+			int fixQuality;
+			int numberOfSatellites;
+
 			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
 			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
-			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
+			Quality = int.TryParse(message[5], NumberStyles.Integer, CultureInfo.InvariantCulture, out fixQuality) ? (FixQuality)fixQuality : FixQuality.Invalid;
+            NumberOfSatellites = int.TryParse(message[6], NumberStyles.Integer, CultureInfo.InvariantCulture, out numberOfSatellites) ? numberOfSatellites : 0;
 			Hdop = NmeaMessage.StringToDouble(message[7]);
 			Altitude = NmeaMessage.StringToDouble(message[8]);
 			AltitudeUnits = message[9];
