@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IMultiPartMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\AltitudeUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRMZ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGLL.cs" />
@@ -24,6 +25,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Interfaces\IAltitude.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Interfaces\IHdop.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Interfaces\ILatLng.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Interfaces\ITrueBearing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserRangeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserTech\PLTIT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\Trimble\PTNLA.cs" />

@@ -1,5 +1,8 @@
-﻿﻿//
-// Copyright (c) 2014 Morten Nielsen
+﻿//
+// Copyright (c) 2016 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +31,7 @@ namespace NmeaParser.Nmea.Gps
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
 	[NmeaMessageType("GPRMC")]
-	public class Gprmc : NmeaMessage
+	public class Gprmc : NmeaMessage, ILatLng
 	{
 		/// <summary>
 		/// Called when the message is being loaded.
