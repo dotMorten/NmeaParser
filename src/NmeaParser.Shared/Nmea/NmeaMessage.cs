@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -142,14 +145,19 @@ namespace NmeaParser.Nmea
 		/// </summary>
 		public string MessageType { get; private set; }
 
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		/// <remarks>
-		/// Implement this method to create a custom NMEA message.
-		/// </remarks>
-		protected virtual void OnLoadMessage(string[] message) { MessageParts = message; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public abstract NmeaMessageClassType NmeaMessageClassType { get; }
+
+	    /// <summary>
+        /// Called when the message is being loaded.
+        /// </summary>
+        /// <param name="message">The NMEA message values.</param>
+        /// <remarks>
+        /// Implement this method to create a custom NMEA message.
+        /// </remarks>
+        protected virtual void OnLoadMessage(string[] message) { MessageParts = message; }
 
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that represents this instance.

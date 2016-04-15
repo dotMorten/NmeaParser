@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,11 +34,17 @@ namespace NmeaParser.Nmea
 		/// Gets the nmea value array.
 		/// </summary>
 		public IReadOnlyList<string> Values { get { return base.MessageParts; } }
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
+
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.UnknownMessage; } }
+
+        /// <summary>
+        /// Called when the message is being loaded.
+        /// </summary>
+        /// <param name="message">The NMEA message values.</param>
+        protected override void OnLoadMessage(string[] message)
 		{
 		}
 	}
