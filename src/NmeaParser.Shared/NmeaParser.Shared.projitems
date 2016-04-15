@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IMultiPartMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NmeaFileDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NmeaMessageClassType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\AltitudeUnit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRMZ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\Garmin\PGRME.cs" />

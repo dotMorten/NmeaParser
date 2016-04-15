@@ -1,4 +1,6 @@
 ﻿//
+// Copyright (c) 2014 Morten Nielsen
+//
 // Copyright (c) 2016 Morten Nielsen
 //
 // Contributors:
@@ -59,12 +61,17 @@ namespace NmeaParser.Nmea.Gps
 			MagneticVariation = NmeaMessage.StringToDouble(message[9]);			
 			if (!double.IsNaN(MagneticVariation) && message[10] == "W")
 				MagneticVariation *= -1;
-		}
+        }
 
-		/// <summary>
-		/// Fix Time
-		/// </summary>
-		public DateTime FixTime { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gprmc; } }
+
+        /// <summary>
+        /// Fix Time
+        /// </summary>
+        public DateTime FixTime { get; private set; }
 
 		/// <summary>
 		/// Gets a value whether the device is active

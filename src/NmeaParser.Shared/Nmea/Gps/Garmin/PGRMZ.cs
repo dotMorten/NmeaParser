@@ -75,12 +75,17 @@ namespace NmeaParser.Nmea.Gps.Garmin
 				if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
 					FixType = (PositionFixType)dim;
 			}
-		}
+        }
 
-		/// <summary>
-		/// Current altitude
-		/// </summary>
-		public double Altitude { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Pgrmz; } }
+
+        /// <summary>
+        /// Current altitude
+        /// </summary>
+        public double Altitude { get; private set; }
 
 		/// <summary>
 		/// Altitude unit

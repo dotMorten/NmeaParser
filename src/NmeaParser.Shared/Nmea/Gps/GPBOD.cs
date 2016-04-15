@@ -53,12 +53,17 @@ namespace NmeaParser.Nmea.Gps
 				DestinationId = message[4];
 			if (message.Length > 5 && !string.IsNullOrEmpty(message[5]))
 				OriginId = message[5];
-		}
+	}
 
-		/// <summary>
-		/// True Bearing from start to destination
-		/// </summary>
-		public double TrueBearing { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpbod; } }
+
+        /// <summary>
+        /// True Bearing from start to destination
+        /// </summary>
+        public double TrueBearing { get; private set; }
 
 		/// <summary>
 		/// Magnetic Bearing from start to destination

@@ -103,12 +103,17 @@ namespace NmeaParser.Nmea.Gps
 				Vdop = tmp;
 			else
 				Vdop = double.NaN;
-		}
+        }
 
-		/// <summary>
-		/// Mode
-		/// </summary>
-		public ModeSelection GpsMode { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpgsa; } }
+
+        /// <summary>
+        /// Mode
+        /// </summary>
+        public ModeSelection GpsMode { get; private set; }
 
 		/// <summary>
 		/// Mode

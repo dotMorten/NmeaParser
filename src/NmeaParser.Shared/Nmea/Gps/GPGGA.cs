@@ -99,10 +99,15 @@ namespace NmeaParser.Nmea.Gps
 		    }
 		}
 
-		/// <summary>
-		/// Latitude
-		/// </summary>
-		public double Latitude { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpgga; } }
+
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        public double Latitude { get; private set; }
 
 		/// <summary>
 		/// Longitude
