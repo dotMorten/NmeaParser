@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NmeaParser.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>NmeaParseriOS</AssemblyName>
+    <AssemblyName>NmeaParser.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +23,7 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DocumentationFile>..\Bin\Debug\NmeaParseriOS.xml</DocumentationFile>
+    <DocumentationFile>..\Bin\Debug\NmeaParser.iOS.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DocumentationFile>..\Bin\Release\NmeaParseriOS.xml</DocumentationFile>
+    <DocumentationFile>..\Bin\Release\NmeaParser.iOS.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

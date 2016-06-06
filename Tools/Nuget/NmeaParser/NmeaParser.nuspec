@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <authors>Morten Nielsen</authors>
     <owners>Morten Nielsen</owners>
     <licenseUrl>http://opensource.org/licenses/ms-pl.html</licenseUrl>
@@ -11,16 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</description>
     <language>en-US</language>
-    <tags>nmea winrt wpf win8 win8.1 wp8.1 gps serialport bluetooth</tags>
+    <tags>nmea winrt wpf win8 win8.1 wp8.1 uwp xamarin gps serialport bluetooth</tags>
 	<releaseNotes>
 	</releaseNotes>
   </metadata>
-  <files>
-    <file src="lib\netcore45\NmeaParser.WinStore.dll"      target="lib\netcore45\NmeaParser.WinStore.dll" />
-	<file src="lib\netcore45\NmeaParser.WinStore.xml"      target="lib\netcore45\NmeaParser.WinStore.xml" />
-    <file src="lib\wpa\NmeaParser.WinPhone.dll"            target="lib\wpa\NmeaParser.WinPhone.dll" />
-    <file src="lib\wpa\NmeaParser.WinPhone.xml"            target="lib\wpa\NmeaParser.WinPhone.xml" />
-    <file src="lib\net40-client\NmeaParser.WinDesktop.dll" target="lib\net40-client\NmeaParser.WinDesktop.dll" />
-    <file src="lib\net40-client\NmeaParser.WinDesktop.xml" target="lib\net40-client\NmeaParser.WinDesktop.xml" />
-  </files>
 </package>
