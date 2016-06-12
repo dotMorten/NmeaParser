@@ -149,7 +149,7 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(new TimeSpan(23, 52, 36), gga.TimeSinceLastDgpsUpdate);
 			Assert.AreEqual(39.432465, gga.Latitude);
 			Assert.AreEqual(-119.7653516666666667, gga.Longitude, 0.0000000001);
-			Assert.AreEqual(Gga.FixQuality.GpsFix, gga.Quality);
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Gpgga.FixQuality.GpsFix, gga.Quality);
 			Assert.AreEqual(10, gga.NumberOfSatellites);
 			Assert.AreEqual(.8, gga.Hdop);
 			Assert.AreEqual(1378, gga.Altitude);
@@ -170,7 +170,7 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(new TimeSpan(11, 57, 12), gga.TimeSinceLastDgpsUpdate);
 			Assert.AreEqual(59.943461, gga.Latitude, 0.00001);
 			Assert.AreEqual(10.857568, gga.Longitude, 0.00001);
-			Assert.AreEqual(Gga.FixQuality.GpsFix, gga.Quality);
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Gpgga.FixQuality.GpsFix, gga.Quality);
 			Assert.AreEqual(18, gga.NumberOfSatellites);
 			Assert.AreEqual(0.6, gga.Hdop);
 			Assert.AreEqual(179.565, gga.Altitude);
@@ -191,7 +191,7 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(new TimeSpan(12, 58, 13), gga.TimeSinceLastDgpsUpdate);
 			Assert.AreEqual(59.943461, gga.Latitude, 0.00001);
 			Assert.AreEqual(10.857568, gga.Longitude, 0.00001);
-			Assert.AreEqual(Gga.FixQuality.GpsFix, gga.Quality);
+			Assert.AreEqual(NmeaParser.Nmea.Gps.Gpgga.FixQuality.GpsFix, gga.Quality);
 			Assert.AreEqual(18, gga.NumberOfSatellites);
 			Assert.AreEqual(0.6, gga.Hdop);
 			Assert.AreEqual(179.565, gga.Altitude);
