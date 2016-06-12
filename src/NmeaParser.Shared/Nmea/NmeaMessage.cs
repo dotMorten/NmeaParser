@@ -49,6 +49,25 @@ namespace NmeaParser.Nmea
 	/// </summary>
 	public abstract class NmeaMessage
 	{
+        /// <summary>
+        /// Device ID that issued NmeaMessage. More will come in future, e.g. GA for Galileo.
+        /// </summary>
+        public enum TalkerId
+        {
+            /// <summary>
+            /// GPS
+            /// </summary>
+            GP,
+            /// <summary>
+            /// GLONASS
+            /// </summary>
+            GL,
+            /// <summary>
+            /// Mixed GPS and GLONASS data, according to IEIC 61162-1
+            /// </summary>
+            GN
+        }
+
 		/// <summary>
 		/// Parses the specified NMEA message.
 		/// </summary>
