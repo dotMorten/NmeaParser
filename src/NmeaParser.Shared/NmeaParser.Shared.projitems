@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPGGA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPRMC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Nmea\Gps\GPVTG.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserRangeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\LaserTech\PLTIT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Nmea\LaserRange\Trimble\PTNLA.cs" />
