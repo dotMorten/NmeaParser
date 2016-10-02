@@ -374,5 +374,18 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(0.020, gst.SigmaLongitudeError);
 			Assert.AreEqual(0.031, gst.SigmaHeightError);
 		}
-	}
+
+        [TestMethod]
+        public void TestGpvtg()
+        {
+            string input = "$GPVTG,331.21,T,,M,0.28,N,0.51,K,A*31";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gpvtg));
+            Gpvtg vtg = (Gpvtg)msg;
+            Assert.AreEqual(331.21, vtg.TrueTrackMadeGood);
+            Assert.IsFalse(vtg.MageticTrackMadeGood.HasValue);
+            Assert.AreEqual(0.28, vtg.SpeedInKnots);
+            Assert.AreEqual(0.51, vtg.SpeedInKmPerHour);
+        }
+    }
 }
