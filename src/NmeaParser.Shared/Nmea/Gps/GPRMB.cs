@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -84,12 +87,17 @@ namespace NmeaParser.Nmea.Gps
 			else
 				Velocity = double.NaN;
 			Arrived = message[12] == "A";
-		}
-		
-		/// <summary>
-		/// Data Status
-		/// </summary>
-		public DataStatus Status { get; private set; }
+        }
+
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gprmb; } }
+
+        /// <summary>
+        /// Data Status
+        /// </summary>
+        public DataStatus Status { get; private set; }
 
 		/// <summary>
 		/// Cross-track error (steer left when negative, right when positive)

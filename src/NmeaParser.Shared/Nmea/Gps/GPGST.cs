@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,13 +48,18 @@ namespace NmeaParser.Nmea.Gps
 			ErrorOrientation = NmeaMessage.StringToDouble(message[4]);
 			SigmaLatitudeError = NmeaMessage.StringToDouble(message[5]);
 			SigmaLongitudeError = NmeaMessage.StringToDouble(message[6]);
-			SigmaHeightError = NmeaMessage.StringToDouble(message[7]);			
-		}
+			SigmaHeightError = NmeaMessage.StringToDouble(message[7]);
+        }
 
-		/// <summary>
-		/// UTC of position fix
-		/// </summary>
-		public TimeSpan FixTime { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpgst; } }
+
+        /// <summary>
+        /// UTC of position fix
+        /// </summary>
+        public TimeSpan FixTime { get; private set; }
 
 		/// <summary>
 		/// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NmeaParser.Nmea;
 
 namespace SampleApp.WinDesktop
 {
@@ -90,22 +91,28 @@ namespace SampleApp.WinDesktop
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
-				{
-					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
-					if(args.IsMultipart && args.MessageParts != null)
-						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
-				}
-				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
-					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
-					gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
-					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
-					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
-				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
-					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
+			    switch (args.Message.NmeaMessageClassType)
+			    {
+			        case NmeaMessageClassType.Gpgsv:
+			            if (args.IsMultipart && args.MessageParts != null)
+			                satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
+			            break;
+			        case NmeaMessageClassType.Gprmc:
+			            gprmcView.Message = (NmeaParser.Nmea.Gps.Gprmc)args.Message;
+			            break;
+			        case NmeaMessageClassType.Gpgga:
+			            gpggaView.Message = (NmeaParser.Nmea.Gps.Gpgga)args.Message;
+			            break;
+			        case NmeaMessageClassType.Gpgsa:
+			            gpgsaView.Message = (NmeaParser.Nmea.Gps.Gpgsa)args.Message;
+			            break;
+			        case NmeaMessageClassType.Gpgll:
+			            gpgllView.Message = (NmeaParser.Nmea.Gps.Gpgll)args.Message;
+			            break;
+			        case NmeaMessageClassType.Pgrme:
+			            pgrmeView.Message = (NmeaParser.Nmea.Gps.Garmin.Pgrme)args.Message;
+			            break;
+			    }
 			});
 		}
 

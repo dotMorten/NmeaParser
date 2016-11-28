@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,12 +48,17 @@ namespace NmeaParser.Nmea.Gps
 				FixTime = StringToTimeSpan(message[4]);
 			}
 			DataActive = (message.Length < 6 || message[5] == "A");
-		}
+        }
 
-		/// <summary>
-		/// Latitude
-		/// </summary>
-		public double Latitude { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpgll; } }
+
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        public double Latitude { get; private set; }
 
 		/// <summary>
 		/// Longitude

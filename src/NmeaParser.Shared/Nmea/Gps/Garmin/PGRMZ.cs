@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -86,12 +89,17 @@ namespace NmeaParser.Nmea.Gps.Garmin
 				if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
 					FixType = (PositionFixType)dim;
 			}
-		}
+        }
 
-		/// <summary>
-		/// Current altitude
-		/// </summary>
-		public double Altitude { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Pgrmz; } }
+
+        /// <summary>
+        /// Current altitude
+        /// </summary>
+        public double Altitude { get; private set; }
 
 		/// <summary>
 		/// Horizontal Error unit ('M' for Meters)
