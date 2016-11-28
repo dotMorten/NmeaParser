@@ -1,5 +1,8 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,13 +48,18 @@ namespace NmeaParser.Nmea.Gps.Garmin
 			VerticalErrorUnits = message[3];
 			SphericalError = NmeaMessage.StringToDouble(message[4]);
 			SphericalErrorUnits = message[5];
-		}
+        }
 
-		/// <summary>
-		/// Estimated horizontal position error in meters (HPE)
-		/// </summary>
-		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double HorizontalError { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Pgrme; } }
+
+        /// <summary>
+        /// Estimated horizontal position error in meters (HPE)
+        /// </summary>
+        /// <remarks>Range: 0.0 to 999.9 meters</remarks>
+        public double HorizontalError { get; private set; }
 
 		/// <summary>
 		/// Horizontal Error unit ('M' for Meters)

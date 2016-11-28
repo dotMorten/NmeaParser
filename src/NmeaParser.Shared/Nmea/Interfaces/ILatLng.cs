@@ -1,5 +1,5 @@
 ﻿//
-// Copyright (c) 2014 Morten Nielsen
+// Copyright (c) 2016 Morten Nielsen
 //
 // Contributors:
 // Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
@@ -17,26 +17,18 @@
 // limitations under the License.
 //
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NmeaParser.Nmea.LaserRange.LaserTech
+namespace NmeaParser.Nmea
 {
-	/// <summary>
-	/// Laser Range 
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
-	[NmeaMessageType("PLTIT")]
-	public class Pltit : LaserRangeMessage
+    public interface ILatLng
     {
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        double Latitude { get; }
 
         /// <summary>
-        /// Gets an enumeration value representing the type for this message
+        /// Longitude
         /// </summary>
-	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Pltit; } }
+        double Longitude { get; }
     }
 }

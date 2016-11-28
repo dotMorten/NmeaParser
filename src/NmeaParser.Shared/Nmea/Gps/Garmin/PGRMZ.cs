@@ -1,5 +1,8 @@
-﻿﻿//
-// Copyright (c) 2014 Morten Nielsen
+﻿//
+// Copyright (c) 2016 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,22 +31,8 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrmz")]
 	[NmeaMessageType("PGRMZ")]
-	public class Pgrmz : NmeaMessage
-	{
-		/// <summary>
-		/// Altitude unit
-		/// </summary>
-		public enum AltitudeUnit
-		{
-			/// <summary>
-			/// Unknown
-			/// </summary>
-			Unknown,
-			/// <summary>
-			/// Feet
-			/// </summary>
-			Feet
-		}
+	public class Pgrmz : NmeaMessage, IAltitude
+    {
 		/// <summary>
 		/// Position Fix Dimension
 		/// </summary>
@@ -86,21 +75,31 @@ namespace NmeaParser.Nmea.Gps.Garmin
 				if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
 					FixType = (PositionFixType)dim;
 			}
-		}
+        }
+
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Pgrmz; } }
+
+        /// <summary>
+        /// Current altitude
+        /// </summary>
+        public double Altitude { get; private set; }
 
 		/// <summary>
-		/// Current altitude
-		/// </summary>
-		public double Altitude { get; private set; }
-
-		/// <summary>
-		/// Horizontal Error unit ('M' for Meters)
+		/// Altitude unit
 		/// </summary>
 		public AltitudeUnit Unit { get; private set; }
 
-		/// <summary>
-		/// Fix type
-		/// </summary>
-		public PositionFixType FixType { get; private set; }
+        /// <summary>
+        /// Altitude unit
+        /// </summary>
+        AltitudeUnit IAltitude.AltitudeUnit { get { return Unit; } }
+
+        /// <summary>
+        /// Fix type
+        /// </summary>
+        public PositionFixType FixType { get; private set; }
 	}
 }

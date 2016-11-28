@@ -1,5 +1,8 @@
-﻿﻿//
-// Copyright (c) 2014 Morten Nielsen
+﻿//
+// Copyright (c) 2016 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,8 +31,8 @@ namespace NmeaParser.Nmea.Gps
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
 	[NmeaMessageType("GPGGA")]
-	public class Gpgga : NmeaMessage
-	{
+	public class Gpgga : NmeaMessage, IAltitude, ILatLng, IHdop
+    {
 		/// <summary>
 		/// Fix quality
 		/// </summary>
@@ -81,12 +84,30 @@ namespace NmeaParser.Nmea.Gps
 				DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
 			else
 				DgpsStationId = -1;
+
+		    switch (AltitudeUnits.ToLowerInvariant())
+		    {
+		        case "m":
+		            AltitudeUnit = AltitudeUnit.Metres;
+		            break;
+		        case "f":
+		            AltitudeUnit = AltitudeUnit.Feet;
+		            break;
+		        default:
+                    AltitudeUnit = AltitudeUnit.Unknown;
+		            break;
+		    }
 		}
 
-		/// <summary>
-		/// Latitude
-		/// </summary>
-		public double Latitude { get; private set; }
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpgga; } }
+
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        public double Latitude { get; private set; }
 
 		/// <summary>
 		/// Longitude
@@ -114,10 +135,15 @@ namespace NmeaParser.Nmea.Gps
 		/// </summary>
 		public double Altitude { get; private set; }
 
-		/// <summary>
-		/// Altitude units ('M' for Meters)
-		/// </summary>
-		public string AltitudeUnits { get; private set; }
+        /// <summary>
+        /// Altitude unit
+        /// </summary>
+        public AltitudeUnit AltitudeUnit { get; private set; }
+
+        /// <summary>
+        /// Altitude units ('M' for Meters)
+        /// </summary>
+        public string AltitudeUnits { get; private set; }
 	
 		/// <summary>
 		/// Height of geoid (mean sea level) above WGS84

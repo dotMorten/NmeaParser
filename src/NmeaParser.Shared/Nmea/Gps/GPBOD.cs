@@ -1,5 +1,8 @@
-﻿﻿//
-// Copyright (c) 2014 Morten Nielsen
+﻿//
+// Copyright (c) 2016 Morten Nielsen
+//
+// Contributors:
+// Stephen Kennedy, Copyright (c) 2016 Gloucester Software Ltd.
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,8 +31,8 @@ namespace NmeaParser.Nmea.Gps
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpbod")]
 	[NmeaMessageType("GPBOD")]
-	public class Gpbod : NmeaMessage
-	{
+	public class Gpbod : NmeaMessage, ITrueBearing
+    {
 		/// <summary>
 		/// Called when the message is being loaded.
 		/// </summary>
@@ -50,11 +53,17 @@ namespace NmeaParser.Nmea.Gps
 				DestinationId = message[4];
 			if (message.Length > 5 && !string.IsNullOrEmpty(message[5]))
 				OriginId = message[5];
-		}
-		/// <summary>
-		/// True Bearing from start to destination
-		/// </summary>
-		public double TrueBearing { get; private set; }
+	}
+
+        /// <summary>
+        /// Gets an enumeration value representing the type for this message
+        /// </summary>
+	    public override NmeaMessageClassType NmeaMessageClassType { get { return NmeaMessageClassType.Gpbod; } }
+
+        /// <summary>
+        /// True Bearing from start to destination
+        /// </summary>
+        public double TrueBearing { get; private set; }
 
 		/// <summary>
 		/// Magnetic Bearing from start to destination
