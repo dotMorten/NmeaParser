@@ -60,7 +60,7 @@ namespace NmeaParser
 		/// <returns></returns>
 		protected override Task<System.IO.Stream> OpenStreamAsync()
 		{
-			return Task.FromResult<System.IO.Stream>(m_port.InputStream.AsStreamForRead());
+			return Task.FromResult<System.IO.Stream>(m_port.InputStream.AsStreamForRead(0));
 		}
 
 		/// <summary>
