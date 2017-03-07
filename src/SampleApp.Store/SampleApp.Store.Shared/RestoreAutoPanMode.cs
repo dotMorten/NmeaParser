@@ -1,9 +1,10 @@
-﻿using Esri.ArcGISRuntime.Controls;
+﻿using Esri.ArcGISRuntime.UI.Controls;
 using Esri.ArcGISRuntime.Location;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.ComponentModel;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 #else
@@ -66,7 +67,7 @@ namespace SampleApp
 			if (m_mapView != null && m_mapView.LocationDisplay != null)
 			{
 				if (!double.IsNaN(RestoreScale))
-					m_mapView.ZoomToScaleAsync(RestoreScale);
+					m_mapView.SetViewpointScaleAsync(RestoreScale);
 				m_mapView.LocationDisplay.AutoPanMode = this.PanMode;
 			}
 		}
@@ -77,16 +78,14 @@ namespace SampleApp
 			if (m_mapView != null && m_mapView != mv)
 				throw new InvalidOperationException("RestoreAutoPanMode can only be assigned to one mapview");
 			m_mapView = mv;
-			m_mapView.PropertyChanged += m_mapView_PropertyChanged;
+			(m_mapView as INotifyPropertyChanged).PropertyChanged += m_mapView_PropertyChanged;
 		}
-
 
 		internal void DetachFromMapView(MapView mv)
 		{
-			m_mapView.PropertyChanged -= m_mapView_PropertyChanged;
+            (m_mapView as INotifyPropertyChanged).PropertyChanged -= m_mapView_PropertyChanged;
 			m_mapView = null;
 		}
-
 
 		private void m_mapView_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -105,14 +104,11 @@ namespace SampleApp
 			}
 		}
 
-
 		public bool IsEnabled { get; set; }
-
 
 		public double DelayInSeconds { get; set; }
 
-
-		public AutoPanMode PanMode { get; set; }
+		public Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode PanMode { get; set; }
 
 		public double RestoreScale { get; set; }
 

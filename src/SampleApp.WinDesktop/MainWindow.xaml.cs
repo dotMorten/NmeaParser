@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
+            mapView.Map = new Map(Basemap.CreateNavigationVector());
 
 			//Get list of serial ports for device tab
 			var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s=>s);
@@ -48,30 +50,18 @@ namespace SampleApp.WinDesktop
 			StartDevice(device);
 		}
 
-		private void LocationProvider_LocationChanged(object sender, Esri.ArcGISRuntime.Location.LocationInfo e)
-		{
-			Dispatcher.BeginInvoke((Action)delegate()
-			{
-				//Zoom in on first location fix
-				mapView.LocationDisplay.LocationProvider.LocationChanged -= LocationProvider_LocationChanged;
-				mapView.SetView(e.Location, 5000);
-				mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.Location.AutoPanMode.Navigation;
-			});
-		}
-
-		/// <summary>
-		/// Unloads the current device, and opens the next device
-		/// </summary>
-		/// <param name="device"></param>
-		private void StartDevice(NmeaParser.NmeaDevice device)
+        /// <summary>
+        /// Unloads the current device, and opens the next device
+        /// </summary>
+        /// <param name="device"></param>
+        private void StartDevice(NmeaParser.NmeaDevice device)
 		{
 			//Clean up old device
 			if (currentDevice != null)
 			{
 				currentDevice.MessageReceived -= device_MessageReceived;
 				currentDevice.Dispose();
-				mapView.LocationDisplay.LocationProvider.LocationChanged -= LocationProvider_LocationChanged;
-				mapView.LocationDisplay.LocationProvider = new Esri.ArcGISRuntime.Location.SystemLocationProvider();
+				mapView.LocationDisplay.DataSource = new Esri.ArcGISRuntime.Location.SystemLocationDataSource();
 			}
 			output.Text = "";
 			messages.Clear();
@@ -84,12 +74,13 @@ namespace SampleApp.WinDesktop
 			//Start new device
 			currentDevice = device;
 			currentDevice.MessageReceived += device_MessageReceived;
-			mapView.LocationDisplay.LocationProvider = new NmeaLocationProvider(device);
+			mapView.LocationDisplay.DataSource = new NmeaLocationProvider(device);
 			mapView.LocationDisplay.IsEnabled = true;
-			mapView.LocationDisplay.LocationProvider.LocationChanged += LocationProvider_LocationChanged;
+            mapView.LocationDisplay.InitialZoomScale = 5000;
+            mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Navigation;
 
-			//var _ = currentDevice.OpenAsync();
-			if (device is NmeaParser.NmeaFileDevice)
+            //var _ = currentDevice.OpenAsync();
+            if (device is NmeaParser.NmeaFileDevice)
 				currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
 			else if (device is NmeaParser.SerialPortDevice)
 			{
