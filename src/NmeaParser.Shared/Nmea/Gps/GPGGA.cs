@@ -67,6 +67,7 @@ namespace NmeaParser.Nmea.Gps
 		{
 			if (message == null || message.Length < 14)
 				throw new ArgumentException("Invalid GPGGA", "message"); 
+			FixTime = StringToTimeSpan(message[0]);
 			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
 			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
 			Quality =  (FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
@@ -75,14 +76,23 @@ namespace NmeaParser.Nmea.Gps
 			Altitude = NmeaMessage.StringToDouble(message[8]);
 			AltitudeUnits = message[9];
 			HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
-			HeightOfGeoidUnits = message[11];
-			TimeSinceLastDgpsUpdate = StringToTimeSpan(message[0]);
+			HeightOfGeoidUnits = message[11];			
+			var timeInSeconds = StringToDouble(message[12]);
+			if (!double.IsNaN(timeInSeconds))
+				TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
+			else
+				TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
 			if (message[13].Length > 0)
 				DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
 			else
 				DgpsStationId = -1;
 		}
 
+		/// <summary>
+		/// Time of day fix was taken
+		/// </summary>
+		public TimeSpan FixTime { get; private set; }
+		
 		/// <summary>
 		/// Latitude
 		/// </summary>

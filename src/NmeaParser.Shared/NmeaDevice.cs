@@ -81,7 +81,7 @@ namespace NmeaParser
 					{
 						OnData(buffer.Take(readCount).ToArray());
 					}
-					await Task.Delay(50, token);
+					await Task.Delay(50);
 				}
 				if (closeTask != null)
 					closeTask.SetResult(true);
