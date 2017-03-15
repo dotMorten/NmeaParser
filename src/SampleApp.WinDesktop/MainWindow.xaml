@@ -3,25 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:local="clr-namespace:SampleApp.WinDesktop"
         Title="Sample App" Height="500" Width="625">
-	<Grid>
-		<Grid.Resources>
-			<local:NullToCollapsedConverter x:Key="nullConv" />
-			<Style TargetType="UserControl" x:Key="card">
-				<Setter Property="Margin" Value="10" />
-				<Setter Property="Padding" Value="10" />
-				<Setter Property="Background" Value="White" />
-				<Setter Property="Effect">
-					<Setter.Value>
-						<DropShadowEffect Direction="0"  ShadowDepth="0"
+    <Window.Resources>
+        <local:NullToCollapsedConverter x:Key="nullConv" />
+        <Style TargetType="UserControl" x:Key="card">
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Direction="0"  ShadowDepth="0"
 										  BlurRadius="20" Opacity=".5" />
-					</Setter.Value>
-				</Setter>
-			</Style>
-		</Grid.Resources>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
 		<TabControl>
 			<TabItem Header="GPS Info">
 				<ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
-					<WrapPanel>
+					<WrapPanel x:Name="MessagePanel">
 						<local:GprmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
 						<local:GpggaControl x:Name="gpggaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
 						<local:GpgsaControl x:Name="gpgsaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />

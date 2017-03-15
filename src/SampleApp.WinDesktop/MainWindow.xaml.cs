@@ -106,6 +106,23 @@ namespace SampleApp.WinDesktop
 					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
 				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
 					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
+                else if (args.Message is NmeaParser.Nmea.UnknownMessage)
+                {
+                    var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
+                    if(ctrl == null)
+                    {
+                        ctrl = new UnknownMessageControl()
+                        {
+                            Style = this.Resources["card"] as Style
+                        };
+                        MessagePanel.Children.Add(ctrl);
+                    }
+                    ctrl.Message = args.Message as NmeaParser.Nmea.UnknownMessage;
+                }
+                else
+                {
+                    //
+                }
 			});
 		}
 
