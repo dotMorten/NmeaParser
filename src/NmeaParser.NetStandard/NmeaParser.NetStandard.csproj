@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <RootNamespace>NmeaParser</RootNamespace>
+    <PackageId>NmeaParser.NetStandard</PackageId>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <Company></Company>
+    <Product>NmeaParser</Product>
+    <Authors>Morten Nielsen</Authors>
+    <Copyright>Copyright © Morten Nielsen 2015-2017</Copyright>
+    <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/dotMorten/NmeaParser/blob/master/LICENCE.TXT</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>..\Bin\Debug\netstandard1.4\NmeaParser.NetStandard.xml</DocumentationFile>
+    <OutputPath>..\Bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\Bin\Release\</OutputPath>
+    <DocumentationFile>..\Bin\Release\netstandard1.4\NmeaParser.NetStandard.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <Import Project="..\NmeaParser.Shared\NmeaParser.Shared.projitems" Label="Shared" />
+
+</Project>

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Morten Nielsen")]
 [assembly: AssemblyProduct("NmeaParser")]
-[assembly: AssemblyCopyright("Copyright © Morten Nielsen 2015")]
+[assembly: AssemblyCopyright("Copyright © Morten Nielsen 2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
