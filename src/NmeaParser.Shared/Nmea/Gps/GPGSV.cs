@@ -45,7 +45,7 @@ namespace NmeaParser.Nmea.Gps
 			SVsInView = int.Parse(message[2], CultureInfo.InvariantCulture);
 
 			List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
-			for (int i = 3; i < message.Length - 4; i += 4)
+			for (int i = 3; i < message.Length - 3; i += 4)
 			{
 				if (message[i].Length == 0)
 					continue;
