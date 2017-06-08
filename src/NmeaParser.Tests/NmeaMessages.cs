@@ -1,4 +1,4 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
@@ -23,6 +23,7 @@ using NmeaParser.Nmea;
 using NmeaParser.Nmea.Gps;
 using System.Threading.Tasks;
 using System.IO;
+using NmeaParser.Nmea.Gnss;
 
 namespace NmeaParser.Tests
 {
@@ -374,5 +375,22 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(0.020, gst.SigmaLongitudeError);
 			Assert.AreEqual(0.031, gst.SigmaHeightError);
 		}
-	}
+
+        [TestMethod]
+        public void TestGngst()
+        {
+            string input = "$GNGST,172814.0,0.006,0.023,0.020,273.6,0.023,0.020,0.031*74";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gngst));
+            Gngst gst = (Gngst)msg;
+            Assert.AreEqual(new TimeSpan(17, 28, 14), gst.FixTime);
+            Assert.AreEqual(0.006, gst.Rms);
+            Assert.AreEqual(0.023, gst.SemiMajorError);
+            Assert.AreEqual(0.02, gst.SemiMinorError);
+            Assert.AreEqual(273.6, gst.ErrorOrientation);
+            Assert.AreEqual(0.023, gst.SigmaLatitudeError);
+            Assert.AreEqual(0.020, gst.SigmaLongitudeError);
+            Assert.AreEqual(0.031, gst.SigmaHeightError);
+        }
+    }
 }
