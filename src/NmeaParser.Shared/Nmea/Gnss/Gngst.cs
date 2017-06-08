@@ -28,9 +28,9 @@ namespace NmeaParser.Nmea.Gnss
         }
 
         /// <summary>
-		/// UTC of position fix
-		/// </summary>
-		public TimeSpan FixTime { get; private set; }
+	/// UTC of position fix
+	/// </summary>
+	public TimeSpan FixTime { get; private set; }
 
         /// <summary>
         /// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing
