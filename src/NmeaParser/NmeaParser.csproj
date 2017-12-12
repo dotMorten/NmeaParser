@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.4;net451;monoandroid50;xamarinios10;uap10.0;win81</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Authors>Morten Nielsen</Authors>
+    <Company>Morten Nielsen</Company>
+    <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
+    <PackageTags>nmea winrt wpf win8 win8.1 wp8.1 uwp xamarin gps serialport bluetooth</PackageTags>
+    <PackageId>SharpGIS.NmeaParser</PackageId>
+    <Version>1.7.0</Version>
+    <PackageLicenseUrl>http://opensource.org/licenses/ms-pl.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Copyright>Copyright © Morten Nielsen 2015-2017</Copyright>
+	<OutDir>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutDir>
+	<PackageOutputPath>$(OutDir)</PackageOutputPath>    
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <Product>NMEA Parser - .NET Standard 1.4</Product>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net451'">
+    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
+    <Product>NMEA Parser - .NET Framework 4.5.1</Product>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
+    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Product>NMEA Parser - Android</Product>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
+    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Product>NMEA Parser - iOS</Product>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
+    <Product>NMEA Parser - UWP</Product>
+  </PropertyGroup>  
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'win81'">
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+	<DefineConstants>$(DefineConstants);WINDOWS_STORE</DefineConstants>
+    <Product>NMEA Parser - WinStore</Product>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.1.0" />
+	<PackageReference Include="System.Numerics.Vectors" Version="4.1.0" />
+	<EmbeddedResource Include="**\*.rd.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+</Project>
