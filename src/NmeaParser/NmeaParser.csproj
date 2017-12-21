@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net451;monoandroid50;xamarinios10;uap10.0;win81</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net451;monoandroid50;xamarinios10;uap10.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -48,12 +48,6 @@
     <Product>NMEA Parser - UWP</Product>
   </PropertyGroup>  
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'win81'">
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
-	<DefineConstants>$(DefineConstants);WINDOWS_STORE</DefineConstants>
-    <Product>NMEA Parser - WinStore</Product>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.1.0" />
 	<PackageReference Include="System.Numerics.Vectors" Version="4.1.0" />
