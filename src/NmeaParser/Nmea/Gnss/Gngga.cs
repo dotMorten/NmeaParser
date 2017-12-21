@@ -21,14 +21,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea.Gnss
 {
 	/// <summary>
-	///  Recommended Minimum
+	///  Global Positioning System Fix Data
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
-	[NmeaMessageType("GPRMC")]
-	public class Gprmc : Rmc
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
+	[NmeaMessageType("GNGGA")]
+	public class Gngga : Gga
 	{
 	}
 }

@@ -103,7 +103,24 @@ namespace NmeaParser.Tests
 			Assert.AreEqual(-11.516666666666667, rmc.Longitude, 0.0000000001);
         }
 
-		[TestMethod]
+        [TestMethod]
+        public void TestGnrmc()
+        {
+            string input = "$GNRMC,231011.00,A,3403.47163804,N,11711.80926595,W,0.019,11.218,201217,12.0187,E,D*01";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gnrmc));
+            Gnrmc rmc = (Gnrmc)msg;
+            Assert.AreEqual("GNRMC", rmc.MessageType);
+            Assert.AreEqual(new DateTime(2017, 12, 20, 23, 10, 11, DateTimeKind.Utc), rmc.FixTime);
+            Assert.AreEqual(34.057860634, rmc.Latitude, 0.0000000001);
+            Assert.AreEqual(-117.19682109916667, rmc.Longitude, 0.0000000001);
+            Assert.AreEqual(true, rmc.Active);
+            Assert.AreEqual(11.218, rmc.Course);
+            Assert.AreEqual(12.0187, rmc.MagneticVariation);
+            Assert.AreEqual(0.019, rmc.Speed);
+        }
+
+        [TestMethod]
 		public void TestGpgga()
 		{
 			string input = "$GPGGA,235236,3925.9479,N,11945.9211,W,1,10,0.8,1378.0,M,-22.1,M,,*46";
@@ -124,7 +141,28 @@ namespace NmeaParser.Tests
             Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
         }
 
-		[TestMethod]
+        [TestMethod]
+        public void TestGngga()
+        {
+            string input = "$GNGGA,231011.00,3403.47163804,N,11711.80926595,W,5,13,0.9,403.641,M,-32.133,M,1.0,0000*6D";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gngga));
+            Gngga gga = (Gngga)msg;
+            Assert.AreEqual(new TimeSpan(23, 10, 11), gga.FixTime);
+            Assert.AreEqual(34.057860634, gga.Latitude);
+            Assert.AreEqual(-117.19682109916667, gga.Longitude, 0.0000000001);
+            Assert.AreEqual(NmeaParser.Nmea.Gps.Gpgga.FixQuality.FloatRtk, gga.Quality);
+            Assert.AreEqual(13, gga.NumberOfSatellites);
+            Assert.AreEqual(.9, gga.Hdop);
+            Assert.AreEqual(403.641, gga.Altitude);
+            Assert.AreEqual("M", gga.AltitudeUnits);
+            Assert.AreEqual(-32.133, gga.HeightOfGeoid);
+            Assert.AreEqual("M", gga.HeightOfGeoidUnits);
+            Assert.AreEqual(0, gga.DgpsStationId);
+            Assert.AreEqual(TimeSpan.FromSeconds(1), gga.TimeSinceLastDgpsUpdate);
+        }
+
+        [TestMethod]
 		public void TestPtlna()
 		{
 			string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
@@ -358,7 +396,6 @@ namespace NmeaParser.Tests
 			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
 			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
 		}
-
 
 		[TestMethod]
 		public void TestGpgst()
