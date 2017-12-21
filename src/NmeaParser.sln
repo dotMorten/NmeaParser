@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NmeaParser", "NmeaParser", "{1701F3BA-A09C-4706-A612-24FD9340FC18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CF767486-305D-40EE-8845-58EF76C16D85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.WinDesktop", "SampleApp.WinDesktop\SampleApp.WinDesktop.csproj", "{5DB6C7C7-A19C-4BE3-AFE6-26E3061DA01F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1ADC3666-1DDB-48C4-9811-1E58B6D09A7C} = {1ADC3666-1DDB-48C4-9811-1E58B6D09A7C}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{7ABA337E-6748-484E-A0F4-E1715E1C95F1}"
 EndProject
@@ -31,8 +34,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests.UWP", "Uni
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Tests", "UnitTests\NmeaParser.Tests\NmeaParser.Tests.shproj", "{979AE182-EB59-4181-9D45-3FD6E4817F11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests.NET45", "UnitTests\NmeaParser.Tests.NET45\NmeaParser.Tests.NET45.csproj", "{170EE734-37F0-425F-822B-B865348ECEC6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1ADC3666-1DDB-48C4-9811-1E58B6D09A7C} = {1ADC3666-1DDB-48C4-9811-1E58B6D09A7C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{170ee734-37f0-425f-822b-b865348ecec6}*SharedItemsImports = 4
 		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{92cad93b-6c3b-45a0-a723-be046de50fec}*SharedItemsImports = 4
 		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{979ae182-eb59-4181-9d45-3fd6e4817f11}*SharedItemsImports = 13
 	EndGlobalSection
@@ -125,6 +134,22 @@ Global
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.ActiveCfg = Release|x86
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.Build.0 = Release|x86
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.Deploy.0 = Release|x86
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|ARM.Build.0 = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|x64.Build.0 = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Debug|x86.Build.0 = Debug|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|ARM.ActiveCfg = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|ARM.Build.0 = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|x64.ActiveCfg = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|x64.Build.0 = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|x86.ActiveCfg = Release|Any CPU
+		{170EE734-37F0-425F-822B-B865348ECEC6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +163,7 @@ Global
 		{1ADC3666-1DDB-48C4-9811-1E58B6D09A7C} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
 		{979AE182-EB59-4181-9D45-3FD6E4817F11} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
+		{170EE734-37F0-425F-822B-B865348ECEC6} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03788B53-C0BF-485B-AA19-A9EAB0E9AF7B}

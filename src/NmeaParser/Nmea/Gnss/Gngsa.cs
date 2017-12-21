@@ -21,14 +21,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea.Gnss
 {
 	/// <summary>
-	///  Geographic position, latitude / longitude
+	///  Global Positioning System Fix Data
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgll")]
-	[NmeaMessageType("GPGLL")]
-	public class Gpgll : Gll
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
+	[NmeaMessageType("GNGSA")]
+	public class Gngsa : Gsa
 	{
 	}
 }

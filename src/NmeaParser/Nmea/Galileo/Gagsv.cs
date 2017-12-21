@@ -21,14 +21,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea.Galileo
 {
 	/// <summary>
-	///  Geographic position, latitude / longitude
+	///  GALILEO Satellites in view
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgll")]
-	[NmeaMessageType("GPGLL")]
-	public class Gpgll : Gll
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gagsv")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+	[NmeaMessageType("GAGSV")]
+	public sealed class Gagsv : Gsv
 	{
 	}
 }

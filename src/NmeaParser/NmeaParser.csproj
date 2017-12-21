@@ -9,16 +9,19 @@
     <Authors>Morten Nielsen</Authors>
     <Company>Morten Nielsen</Company>
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
-    <PackageTags>nmea winrt wpf win8 win8.1 wp8.1 uwp xamarin gps serialport bluetooth</PackageTags>
+    <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>1.8.0</Version>
+    <Version>1.9.0</Version>
     <PackageLicenseUrl>http://opensource.org/licenses/ms-pl.html</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Copyright>Copyright © Morten Nielsen 2015-2017</Copyright>
-	<OutDir>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutDir>
-	<PackageOutputPath>$(OutDir)</PackageOutputPath>    
+    <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
+    <PackageOutputPath>$(OutDir)</PackageOutputPath>
+    <AssemblyVersion>1.9.0.0</AssemblyVersion>
+    <FileVersion>1.9.0.0</FileVersion>
+    <PackageReleaseNotes>Added new GLONASS and GALILEO. Moved more GPS message to abstract base classes for better handling of multiple satelitte constellations.</PackageReleaseNotes>    
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
@@ -50,8 +53,8 @@
   
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.1.0" />
-	<PackageReference Include="System.Numerics.Vectors" Version="4.1.0" />
-	<EmbeddedResource Include="**\*.rd.xml" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.1.0" />
+    <EmbeddedResource Include="**\*.rd.xml" />
   </ItemGroup>
 
   <ItemGroup>

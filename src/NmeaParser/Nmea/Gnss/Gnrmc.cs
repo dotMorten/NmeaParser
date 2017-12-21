@@ -26,7 +26,7 @@ namespace NmeaParser.Nmea.Gnss
 	/// <summary>
 	///  Recommended Minimum
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gnrmc")]
 	[NmeaMessageType("GNRMC")]
 	public class Gnrmc : Rmc
 	{

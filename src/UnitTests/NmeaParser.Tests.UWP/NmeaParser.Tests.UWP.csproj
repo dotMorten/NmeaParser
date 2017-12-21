@@ -116,6 +116,9 @@
     <Content Include="..\..\NmeaSampleData.txt">
       <Link>NmeaSampleData.txt</Link>
     </Content>
+    <Content Include="..\..\TrimbleR2SampleData.txt">
+      <Link>TrimbleR2SampleData.txt</Link>
+    </Content>
     <Content Include="Properties\UnitTestApp.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

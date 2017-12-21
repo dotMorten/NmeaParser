@@ -26,7 +26,7 @@ namespace NmeaParser.Nmea.Gnss
 	/// <summary>
 	///  Global Positioning System Fix Data
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngga")]
 	[NmeaMessageType("GNGGA")]
 	public class Gngga : Gga
 	{
