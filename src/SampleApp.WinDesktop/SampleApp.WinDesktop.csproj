@@ -59,9 +59,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\SampleApp.Store\SampleApp.Store.Shared\NmeaProvider.cs">
-      <Link>NmeaProvider.cs</Link>
-    </Compile>
     <Compile Include="..\SampleApp.Store\SampleApp.Store.Shared\RestoreAutoPanMode.cs">
       <Link>RestoreAutoPanMode.cs</Link>
     </Compile>
@@ -80,6 +77,7 @@
     <Compile Include="KeyValuePairControl.xaml.cs">
       <DependentUpon>KeyValuePairControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NmeaProvider.cs" />
     <Compile Include="NullToCollapsedConverter.cs" />
     <Compile Include="UnknownMessageControl.xaml.cs">
       <DependentUpon>UnknownMessageControl.xaml</DependentUpon>
