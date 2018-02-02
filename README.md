@@ -7,12 +7,15 @@ It makes it easy to connect and listen for NMEA messages coming from various dev
 The following inputs are supported:
 - System.IO.Stream (all platforms)
 - Emulation from NMEA log file (all platforms)
-- Bluetooth: Windows Store, Windows Phone, Windows Universal. Desktop is supported using the bluetooth device via the SerialPortDevice.
+- Bluetooth: Windows Universal. Desktop is supported using the bluetooth device via the SerialPortDevice.
 - Serial Device: Windows Desktop and Windows Universal.
 
 
 Currently supported NMEA messages:
-- Generic GPS NMEA (GPRMC, GPGGA, GPGLL, GPGSA, GPGSCV, GPRMB, GPRMC, GPBOD, GPRTE, GPGST)
+- GPS: GPBOD, GPGGA, GPGLL, GPGNS, GPGSA, GPGST, GPGSV, GPRMB, GPRMC, GPRTE
+- GLONASS: GLGNS, GLGSV
+- GALILEO: GAGSV
+- Generic GNSS: GNGGA, GNGLL, GNGNS, GNGSA, GNGST, GNRMC
 - Garmin GPS NMEA (PGRME, PGRMZ)
 - Trimble Laser Range Finder (PTNLA, PTNLB)
 - TruePulse Laser Range Finder (PLTIT)
