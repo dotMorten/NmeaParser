@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net451;monoandroid50;xamarinios10;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -35,7 +35,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
+    <Product>NMEA Parser - Android</Product>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
+    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
     <Product>NMEA Parser - Android</Product>
   </PropertyGroup>
   
