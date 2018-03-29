@@ -94,7 +94,7 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		public double Altitude { get; private set; }
 
 		/// <summary>
-		/// Horizontal Error unit ('M' for Meters)
+		/// Horizontal Error unit ('f' for Meters)
 		/// </summary>
 		public AltitudeUnit Unit { get; private set; }
 
