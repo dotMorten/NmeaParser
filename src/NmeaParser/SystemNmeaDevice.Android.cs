@@ -51,6 +51,7 @@ namespace NmeaParser
         /// <inheritdoc />
         protected override Task CloseStreamAsync(Stream stream)
         {
+            manager.RemoveUpdates(listener);
             manager.RemoveNmeaListener(listener);
             listener.Dispose();
             listener = null;
