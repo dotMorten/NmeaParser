@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2017</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-2018</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
     <AssemblyVersion>1.9.0.0</AssemblyVersion>

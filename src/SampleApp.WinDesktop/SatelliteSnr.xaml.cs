@@ -25,8 +25,6 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 		}
 
-
-
 		public IEnumerable<NmeaParser.Nmea.Gps.Gpgsv> GpgsvMessages
 		{
 			get { return (IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>)GetValue(GpgsvMessagesProperty); }

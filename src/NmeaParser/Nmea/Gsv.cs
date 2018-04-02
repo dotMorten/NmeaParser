@@ -71,15 +71,15 @@ namespace NmeaParser.Nmea
 		public int SVsInView { get; private set; }
 
 		/// <summary>
-		/// Dilution of precision
+		/// Satellite vehicles in this message part.
 		/// </summary>
 		public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
-
-		/// <summary>
-		/// Returns an enumerator that iterates through the collection.
-		/// </summary>
-		/// <returns> A System.Collections.Generic.IEnumerator{SatelliteVehicle} that can be used to iterate through the collection.</returns>
-		public IEnumerator<SatelliteVehicle> GetEnumerator()
+        
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns> A System.Collections.Generic.IEnumerator{SatelliteVehicle} that can be used to iterate through the collection.</returns>
+        public IEnumerator<SatelliteVehicle> GetEnumerator()
 		{
 			foreach(var sv in SVs)
 				yield return sv;
@@ -93,5 +93,5 @@ namespace NmeaParser.Nmea
 		{
 			return GetEnumerator();
 		}
-	}
+    }
 }
