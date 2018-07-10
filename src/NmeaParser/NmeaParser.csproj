@@ -11,7 +11,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>1.10.0</Version>
+    <Version>1.10.1</Version>
     <PackageLicenseUrl>http://opensource.org/licenses/ms-pl.html</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
@@ -19,9 +19,10 @@
     <Copyright>Copyright © Morten Nielsen 2015-2018</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
-    <AssemblyVersion>1.9.0.0</AssemblyVersion>
-    <FileVersion>1.9.0.0</FileVersion>
-    <PackageReleaseNotes>Added SystemNmeaDevice to the Android library, which uses the NMEA stream from the system's location provider.</PackageReleaseNotes>    
+    <AssemblyVersion>1.10.1.0</AssemblyVersion>
+    <FileVersion>1.10.1.0</FileVersion>
+    <PackageReleaseNotes>Fixed missing shutdown of Android location device.
+Exposed non-NMEA based Accuracy estimate on Android location device.</PackageReleaseNotes>    
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">

@@ -23,12 +23,22 @@ namespace NmeaParser
         private LocationManager manager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemNmeaListener"/> class.
+        /// Initializes a new instance of the <see cref="SystemNmeaDevice"/> class.
         /// </summary>
         public SystemNmeaDevice()
         {
             manager = Application.Context.GetSystemService(Context.LocationService) as LocationManager;
         }
+
+        /// <summary>
+        /// Gets the estimated accuracy of this location, in meters as reported by the system location provider (not NMEA based).
+        /// Returns NaN if no estimate is available or the active location provider isn't GPS (ie IP/WiFi/Network Provider)
+        /// </summary>
+        /// <remarks>
+        /// Normally the **GST messages will provide the estimated accuracy, but this is not always exposed as NMEA
+        /// on Android devices, so this serves as a useful fallback.
+        /// </remarks>
+        public float Accuracy => listener == null ? float.NaN : listener.Accuracy;
 
         /// <inheritdoc />
         [Android.Runtime.RequiresPermission("android.permission.ACCESS_FINE_LOCATION")]
@@ -43,8 +53,7 @@ namespace NmeaParser
             listener = new Listener();
             listener.NmeaMessage += (s, e) => stream?.Append(e);
             bool success = manager.AddNmeaListener(listener);
-            manager.RequestLocationUpdates(LocationManager.GpsProvider, 100, .1f, listener );
-
+            manager.RequestLocationUpdates(LocationManager.GpsProvider, 0, 0f, listener );
             return Task.FromResult<Stream>(stream);
         }
 
@@ -81,10 +90,17 @@ namespace NmeaParser
 
             public event EventHandler<string> NmeaMessage;
 
+            public float Accuracy = float.NaN;
+
             void ILocationListener.OnLocationChanged(Location location)
             {
+                if (location.Provider != LocationManager.GpsProvider)
+                {
+                    Accuracy = float.NaN;
+                    return;
+                }
+                Accuracy = location.HasAccuracy ? location.Accuracy : float.NaN;
                 if (_isNmeaSupported) return;
-                if (location.Provider != LocationManager.GpsProvider) return;
                 // Not all Android devices support reporting NMEA, so we'll fallback to just generating
                 // simple RMC and GGA message so the provider continues to work across multiple devices
                 // $GPRMC:

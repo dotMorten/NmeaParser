@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NmeaParser;
 
 namespace SampleApp.WinDesktop
 {
@@ -66,7 +67,7 @@ namespace SampleApp.WinDesktop
 			gpgsaView.Message = null;
 			gpgllView.Message = null;
 			pgrmeView.Message = null;
-			satView.GpgsvMessages = null;
+			satView.GsvMessages = null;
 			//Start new device
 			currentDevice = device;
 			currentDevice.MessageReceived += device_MessageReceived;
@@ -79,8 +80,9 @@ namespace SampleApp.WinDesktop
 					((NmeaParser.SerialPortDevice)device).Port.PortName,
 					((NmeaParser.SerialPortDevice)device).Port.BaudRate);
 			}
-		}
-		
+        }
+        Dictionary<string, List<NmeaParser.Nmea.Gsv>> gsvMessages = new Dictionary<string, List<NmeaParser.Nmea.Gsv>>();
+
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
@@ -90,11 +92,13 @@ namespace SampleApp.WinDesktop
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
+				if(args.Message is NmeaParser.Nmea.Gsv gpgsv)
 				{
-					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
-					if(args.IsMultipart && args.MessageParts != null)
-						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
+                    if (args.IsMultipart && args.MessageParts != null)
+                    {
+                        gsvMessages[args.Message.MessageType] = args.MessageParts.OfType<NmeaParser.Nmea.Gsv>().ToList();
+                        satView.GsvMessages = gsvMessages.SelectMany(m=>m.Value);
+                    }
 				}
 				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
 					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
