@@ -168,8 +168,8 @@ namespace SampleApp.Droid
                 status.Text = string.Join("\n", messages.Reverse().Select(n=>n.ToString()));
                 if(message is Rmc rmc)
                 {
-                    FindViewById<TextView>(Resource.Id.latitude).Text = "Latitude = " + rmc.Latitude.ToString();
-                    FindViewById<TextView>(Resource.Id.longitude).Text = "Longitude = " + rmc.Longitude.ToString();
+                    FindViewById<TextView>(Resource.Id.latitude).Text = "Latitude = " + rmc.Latitude.ToString("0.0000000");
+                    FindViewById<TextView>(Resource.Id.longitude).Text = "Longitude = " + rmc.Longitude.ToString("0.0000000");
                 }
                 else if (message is Gga gga)
                 {
