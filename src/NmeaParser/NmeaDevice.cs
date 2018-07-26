@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
 
 namespace NmeaParser
 {
@@ -40,6 +41,8 @@ namespace NmeaParser
 		protected NmeaDevice()
 		{
 		}
+
+        bool isOpening;
 		/// <summary>
 		/// Opens the device connection.
 		/// </summary>
@@ -48,13 +51,18 @@ namespace NmeaParser
 		{
 			lock (m_lockObject)
 			{
-				if (IsOpen) return;
-				IsOpen = true;
+				if (IsOpen || isOpening) return;
+                isOpening = true;
 			}
 			m_cts = new System.Threading.CancellationTokenSource();
 			m_stream = await OpenStreamAsync();
 			StartParser();
 			MultiPartMessageCache.Clear();
+            lock (m_lockObject)
+            {
+                IsOpen = true;
+                isOpening = false;
+            }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
@@ -64,14 +72,13 @@ namespace NmeaParser
 			System.Diagnostics.Debug.WriteLine("Starting parser...");
 			var _ = Task.Run(async () =>
 			{
-				var stream = m_stream;
 				byte[] buffer = new byte[1024];
 				while (!token.IsCancellationRequested)
 				{
 					int readCount = 0;
 					try
 					{
-						readCount = await stream.ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
+						readCount = await ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
 					}
 					catch { }
 					if (token.IsCancellationRequested)
@@ -87,11 +94,33 @@ namespace NmeaParser
 			});
 		}
 
+        /// <summary>
+        /// Performs a read operation of the stream
+        /// </summary>
+        /// <param name="buffer">The buffer to write the data into.</param>
+        /// <param name="offset">The byte offset in buffer at which to begin writing data from the stream.</param>
+        /// <param name="count">The maximum number of bytes to read.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is System.Threading.CancellationToken.None.</param>
+        /// <returns>
+        /// A task that represents the asynchronous read operation. The value of the TResult
+        /// parameter contains the total number of bytes read into the buffer. The result
+        /// value can be less than the number of bytes requested if the number of bytes currently
+        /// available is less than the requested number, or it can be 0 (zero) if the end
+        /// of the stream has been reached.
+        /// </returns>
+        protected virtual Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            if (m_stream == null)
+                return Task.FromResult(0);
+            return m_stream.ReadAsync(buffer, 0, 1024, cancellationToken);
+        }
+
 		/// <summary>
 		/// Creates the stream the NmeaDevice is working on top off.
 		/// </summary>
 		/// <returns></returns>
 		protected abstract Task<Stream> OpenStreamAsync();
+
 		/// <summary>
 		/// Closes the device.
 		/// </summary>
@@ -110,7 +139,10 @@ namespace NmeaParser
 			MultiPartMessageCache.Clear();
 			m_stream = null;
 			lock (m_lockObject)
+            {
+                isOpening = false;
 				IsOpen = false;
+            }
 		}
 		/// <summary>
 		/// Closes the stream the NmeaDevice is working on top off.
@@ -235,6 +267,27 @@ namespace NmeaParser
 		///   <c>true</c> if this instance is open; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsOpen { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this device supports writing
+        /// </summary>
+        /// <seealso cref="WriteAsync(byte[], int, int)"/>
+        public virtual bool CanWrite { get => false; }
+
+        /// <summary>
+        /// Writes to the device stream. Useful for transmitting RTCM corrections to the device
+        /// Check the <see cref="CanWrite"/> property before calling this method.
+        /// </summary>
+		/// <param name="buffer">The byte array that contains the data to write to the port.</param>
+		/// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
+		/// bytes to the port.</param>
+		/// <param name="length">The number of bytes to write.</param>
+        /// <returns>Task</returns>
+        /// <seealso cref="CanWrite"/>
+        public virtual Task WriteAsync(byte[] buffer, int offset, int length)
+        {
+            throw new NotSupportedException();
+        }
 	}
 
 	/// <summary>

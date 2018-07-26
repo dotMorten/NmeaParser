@@ -21,6 +21,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Devices.SerialCommunication;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace NmeaParser
 {
@@ -80,10 +81,23 @@ namespace NmeaParser
 		/// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
 		/// bytes to the port.</param>
 		/// <param name="count">The number of bytes to write.</param>
+        [Obsolete("Use WriteAsync")]
 		public void Write(byte[] buffer, int offset, int count)
 		{
 			m_port.OutputStream.AsStreamForWrite().Write(buffer, offset, count);
 		}
-	}
+
+        /// <inheritdoc />
+        public override bool CanWrite => true;
+
+        /// <inheritdoc />
+        public override Task WriteAsync(byte[] buffer, int offset, int length)
+        {
+            if (m_port == null)
+                throw new InvalidOperationException("Device not open");
+
+            return m_port.OutputStream.WriteAsync(buffer.AsBuffer(offset, length)).AsTask();
+        }
+    }
 }
 #endif

@@ -81,10 +81,24 @@ namespace NmeaParser
 		/// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
 		/// bytes to the port.</param>
 		/// <param name="count">The number of bytes to write.</param>
+        [Obsolete("Use WriteAsync")]
 		public void Write(byte[] buffer, int offset, int count)
 		{
 			m_port.Write(buffer, offset, count);
-		}
-	}
+        }
+
+        /// <inheritdoc />
+        public override bool CanWrite => true;
+
+        /// <inheritdoc />
+        public override Task WriteAsync(byte[] buffer, int offset, int length)
+        {
+            if (!m_port.IsOpen)
+                throw new InvalidOperationException("Device not open");
+
+            m_port.Write(buffer, offset, length);
+            return Task.FromResult<object>(null);
+        }
+    }
 }
 #endif

@@ -67,5 +67,17 @@ namespace NmeaParser
 				m_stream.Dispose();
 			m_stream = null;
 		}
+
+
+        /// <inheritdoc />
+        public override bool CanWrite => m_stream?.CanWrite == true;
+
+        /// <inheritdoc />
+        public override Task WriteAsync(byte[] buffer, int offset, int length)
+        {
+            if (m_stream == null)
+                throw new InvalidOperationException("Device not open");
+            return m_stream.WriteAsync(buffer, offset, length);
+        }
     }
 }
