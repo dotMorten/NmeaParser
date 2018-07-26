@@ -33,17 +33,17 @@ namespace NmeaParser
 		private string m_message = "";
 		private Stream m_stream;
 		private System.Threading.CancellationTokenSource m_cts;
-		private TaskCompletionSource<bool> closeTask;
+		private TaskCompletionSource<bool> m_closeTask;
+        private bool m_isOpening;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NmeaDevice"/> class.
-		/// </summary>
-		protected NmeaDevice()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaDevice"/> class.
+        /// </summary>
+        protected NmeaDevice()
 		{
 		}
 
-        bool isOpening;
-		/// <summary>
+        /// <summary>
 		/// Opens the device connection.
 		/// </summary>
 		/// <returns></returns>
@@ -51,8 +51,8 @@ namespace NmeaParser
 		{
 			lock (m_lockObject)
 			{
-				if (IsOpen || isOpening) return;
-                isOpening = true;
+				if (IsOpen || m_isOpening) return;
+                m_isOpening = true;
 			}
 			m_cts = new System.Threading.CancellationTokenSource();
 			m_stream = await OpenStreamAsync();
@@ -61,11 +61,11 @@ namespace NmeaParser
             lock (m_lockObject)
             {
                 IsOpen = true;
-                isOpening = false;
+                m_isOpening = false;
             }
-		}
+        }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
 		private void StartParser()
 		{
 			var token = m_cts.Token;
@@ -89,8 +89,8 @@ namespace NmeaParser
 					}
 					await Task.Delay(50);
 				}
-				if (closeTask != null)
-					closeTask.SetResult(true);
+				if (m_closeTask != null)
+					m_closeTask.SetResult(true);
 			});
 		}
 
@@ -115,11 +115,11 @@ namespace NmeaParser
             return m_stream.ReadAsync(buffer, 0, 1024, cancellationToken);
         }
 
-		/// <summary>
-		/// Creates the stream the NmeaDevice is working on top off.
-		/// </summary>
-		/// <returns></returns>
-		protected abstract Task<Stream> OpenStreamAsync();
+        /// <summary>
+        /// Creates the stream the NmeaDevice is working on top off.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Task<Stream> OpenStreamAsync();
 
 		/// <summary>
 		/// Closes the device.
@@ -129,19 +129,19 @@ namespace NmeaParser
 		{
 			if (m_cts != null)
 			{
-				closeTask = new TaskCompletionSource<bool>();
+				m_closeTask = new TaskCompletionSource<bool>();
 				if (m_cts != null)
 					m_cts.Cancel();
 				m_cts = null;
 			}
-			await closeTask.Task;
+			await m_closeTask.Task;
 			await CloseStreamAsync(m_stream);
 			MultiPartMessageCache.Clear();
 			m_stream = null;
-			lock (m_lockObject)
+            lock (m_lockObject)
             {
-                isOpening = false;
-				IsOpen = false;
+                m_isOpening = false;
+                IsOpen = false;
             }
 		}
 		/// <summary>
@@ -188,8 +188,7 @@ namespace NmeaParser
 		private void OnMessageReceived(Nmea.NmeaMessage msg)
 		{
 			var args = new NmeaMessageReceivedEventArgs(msg);
-			var multi = msg as IMultiPartMessage;
-			if (multi != null)
+			if (msg is IMultiPartMessage multi)
 			{
 				args.IsMultipart = true;
 				if (MultiPartMessageCache.ContainsKey(msg.MessageType))
@@ -214,8 +213,8 @@ namespace NmeaParser
 					{
 						MultiPartMessageCache.Remove(msg.MessageType);
 						args.MessageParts = dic.Values.ToArray();
-					}
-				}
+                    }
+                }
 			}
 
 			if (MessageReceived != null)
@@ -240,6 +239,7 @@ namespace NmeaParser
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources.
 		/// </summary>
