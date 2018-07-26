@@ -71,7 +71,8 @@ namespace NmeaParser
 		/// <returns></returns>
 		protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
-			return Task.FromResult(true);
+            stream.Dispose();
+			return Task.CompletedTask;
 		}
 
 		/// <summary>

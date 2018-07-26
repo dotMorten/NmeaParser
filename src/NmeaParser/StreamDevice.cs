@@ -68,7 +68,6 @@ namespace NmeaParser
 			m_stream = null;
 		}
 
-
         /// <inheritdoc />
         public override bool CanWrite => m_stream?.CanWrite == true;
 
