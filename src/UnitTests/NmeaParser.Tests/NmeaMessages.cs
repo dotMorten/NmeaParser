@@ -588,5 +588,31 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0.020, gst.SigmaLongitudeError);
             Assert.AreEqual(0.031, gst.SigmaHeightError);
         }
+
+        [TestMethod]
+        public void TestGpvtg()
+        {
+            string input = "$GPVTG,103.85,T,92.79,M,0.14,N,0.25,K,D*1E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gpvtg));
+            Gpvtg vtg = (Gpvtg)msg;
+            Assert.AreEqual(103.85, vtg.TrueCourseOverGround);
+            Assert.AreEqual(92.79, vtg.MagneticCourseOverGround);
+            Assert.AreEqual(0.14, vtg.SpeedInKnots);
+            Assert.AreEqual(0.25, vtg.SpeedInKph);
+        }
+
+        [TestMethod]
+        public void TestGpvtg_Empty()
+        {
+            string input = "$GPVTG,,T,,M,0.00,N,0.00,K*4E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gpvtg));
+            Gpvtg vtg = (Gpvtg)msg;
+            Assert.IsTrue(double.IsNaN(vtg.TrueCourseOverGround));
+            Assert.IsTrue(double.IsNaN(vtg.MagneticCourseOverGround));
+            Assert.AreEqual(0.0, vtg.SpeedInKnots);
+            Assert.AreEqual(0.0, vtg.SpeedInKph);
+        }
     }
 }
