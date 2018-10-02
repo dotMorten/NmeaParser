@@ -614,5 +614,35 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0.0, vtg.SpeedInKnots);
             Assert.AreEqual(0.0, vtg.SpeedInKph);
         }
+
+        [TestMethod]
+        public void TestGnzda()
+        {
+            var input = "$GNZDA,075451.00,02,10,2018,00,00*72";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gnzda));
+            var zda = (Gnzda)msg;
+            Assert.AreEqual(new DateTime(2018, 10, 02, 07, 54, 51, 00, DateTimeKind.Utc), zda.FixDateTime);
+        }
+
+        [TestMethod]
+        public void TestGpzda()
+        {
+            var input = "$GPZDA,143042.00,25,08,2005,,*6E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gpzda));
+            var zda = (Gpzda)msg;
+            Assert.AreEqual(new DateTime(2005, 08, 25, 14, 30, 42, 00, DateTimeKind.Utc), zda.FixDateTime);
+        }
+
+        [TestMethod]
+        public void TestGlzda()
+        {
+            var input = "$GLZDA,225627.00,21,09,2015,00,00*70";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Glzda));
+            var zda = (Glzda)msg;
+            Assert.AreEqual(new DateTime(2015, 09, 21, 22, 56, 27, 00, DateTimeKind.Utc), zda.FixDateTime);
+        }
     }
 }
