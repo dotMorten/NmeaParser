@@ -207,6 +207,7 @@ namespace SampleApp.WinDesktop
 							{
 								continue;
 							}
+							success = true;
 						}
 						catch
 						{
