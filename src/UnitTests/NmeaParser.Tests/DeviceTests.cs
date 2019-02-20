@@ -47,7 +47,52 @@ namespace NmeaParser.Tests
 			var _ = dev.CloseAsync();
 		}
 
-		[TestMethod]
+        [TestMethod]
+        [TestCategory("Device")]
+        public async Task TestMixedGsvGroupMessage()
+        {
+            // A group message can have multiple diffent GSV types. 
+            string message = @"$GPGSV,4,1,14,26,33,050,43,9,40,314,47,3,55,187,49,23,68,354,48*76
+$GPGSV,4,2,14,16,56,082,50,7,28,256,40,6,8,295,34*7E
+$GLGSV,4,3,14,73,52,022,47,74,62,248,47,72,44,331,42,71,78,111,49*6A
+$GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
+            NmeaDevice dev = new BufferedStringDevice(message);
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            int count = 0;
+            dev.MessageReceived += (s, e) =>
+            {
+                count++;
+                try
+                {
+                    Assert.IsTrue(e.IsMultipart, "IsMultiPart");
+                    Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
+                    var msg = e.Message as NmeaParser.Nmea.Gsv;
+                    if (msg.TotalMessages == msg.MessageNumber)
+                    {
+                        Assert.IsNotNull(e.MessageParts);
+                        Assert.AreEqual(e.MessageParts.Count, 4, "MessageParts.Length");
+                        Assert.IsInstanceOfType(e.MessageParts[0], typeof(NmeaParser.Nmea.Gps.Gpgsv));
+                        Assert.IsInstanceOfType(e.MessageParts[1], typeof(NmeaParser.Nmea.Gps.Gpgsv));
+                        Assert.IsInstanceOfType(e.MessageParts[2], typeof(NmeaParser.Nmea.Glonass.Glgsv));
+                        Assert.IsInstanceOfType(e.MessageParts[3], typeof(NmeaParser.Nmea.Galileo.Gagsv));
+                        tcs.SetResult(true);
+                    }
+                    else
+                        Assert.IsNull(e.MessageParts);
+                    if (count > 3)
+                        Assert.Fail();
+                }
+                catch (System.Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            };
+            await dev.OpenAsync();
+            await tcs.Task;
+            var _ = dev.CloseAsync();
+        }
+
+        [TestMethod]
 		[TestCategory("Device")]
 		public async Task TestInvalidGpgsvGroupMessage()
 		{
