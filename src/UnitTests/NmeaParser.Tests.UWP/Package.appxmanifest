@@ -6,14 +6,14 @@
   IgnorableNamespaces="uap mp">
 
   <Identity Name="e832a0b9-61f6-4611-9e12-8b9ca6dae591"
-            Publisher="CN=mort5161"
+            Publisher="CN=Morten Nielsen"
             Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="e832a0b9-61f6-4611-9e12-8b9ca6dae591" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>NmeaParser.Tests.UWP</DisplayName>
-    <PublisherDisplayName>mort5161</PublisherDisplayName>
+    <PublisherDisplayName>Morten Nielsen</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
