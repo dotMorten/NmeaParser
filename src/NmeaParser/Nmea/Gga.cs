@@ -27,13 +27,14 @@ namespace NmeaParser.Nmea
 	///  Global Positioning System Fix Data
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
-	public class Gga : NmeaMessage
+	public abstract class Gga : NmeaMessage
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gga"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected Gga(string type, string[] message) : base(type, message)
 		{
 			if (message == null || message.Length < 14)
 				throw new ArgumentException("Invalid GPGGA", "message"); 
@@ -61,62 +62,62 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Time of day fix was taken
 		/// </summary>
-		public TimeSpan FixTime { get; private set; }
+		public TimeSpan FixTime { get; }
 		
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; }
 
 		/// <summary>
 		/// Fix Quality
 		/// </summary>
-		public Gps.Gpgga.FixQuality Quality { get; private set; }
+		public Gps.Gpgga.FixQuality Quality { get; }
 
 		/// <summary>
 		/// Number of satellites being tracked
 		/// </summary>
-		public int NumberOfSatellites { get; private set; }
+		public int NumberOfSatellites { get; }
 
 		/// <summary>
 		/// Horizontal Dilution of Precision
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; private set; }
+		public double Hdop { get; }
 
 		/// <summary>
 		/// Altitude
 		/// </summary>
-		public double Altitude { get; private set; }
+		public double Altitude { get; }
 
 		/// <summary>
 		/// Altitude units ('M' for Meters)
 		/// </summary>
-		public string AltitudeUnits { get; private set; }
+		public string AltitudeUnits { get; }
 	
 		/// <summary>
 		/// Height of geoid (mean sea level) above WGS84
 		/// </summary>
-		public double HeightOfGeoid { get; private set; }
+		public double HeightOfGeoid { get; }
 
 		/// <summary>
 		/// Altitude units ('M' for Meters)
 		/// </summary>
-		public string HeightOfGeoidUnits { get; private set; }
+		public string HeightOfGeoidUnits { get; }
 
 		/// <summary>
 		/// Time since last DGPS update
 		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; private set; }
+		public TimeSpan TimeSinceLastDgpsUpdate { get; }
 
 		/// <summary>
 		/// DGPS Station ID Number
 		/// </summary>
-		public int DgpsStationId { get; private set; }
+		public int DgpsStationId { get; }
 	}
 }

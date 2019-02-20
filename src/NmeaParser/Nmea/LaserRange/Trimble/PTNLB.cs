@@ -23,61 +23,63 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.LaserRange.Trimble
 {
-	/// <summary>
-	/// Tree Measurement
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnlb")]
-	[NmeaMessageType("PTNLB")]
-	public class Ptnlb : NmeaMessage
-	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 6)
-				throw new ArgumentException("Invalid PTNLB", "message"); 
-			
-			TreeHeight = message[0];
-			MeasuredTreeHeight = double.Parse(message[1], CultureInfo.InvariantCulture);
-			MeasuredTreeHeightUnits = message[2][0];
-			TreeDiameter = message[3];
-			MeasuredTreeDiameter = double.Parse(message[4], CultureInfo.InvariantCulture);
-			MeasuredTreeDiameterUnits = message[5][0];
-		}
+    /// <summary>
+    /// Tree Measurement
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnlb")]
+    [NmeaMessageType("PTNLB")]
+    public class Ptnlb : NmeaMessage
+    {
 
-		/// <summary>
-		/// Gets the height of the tree.
-		/// </summary>
-		public string TreeHeight { get; private set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ptnlb"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Ptnlb(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 6)
+                throw new ArgumentException("Invalid PTNLB", "message");
 
-		/// <summary>
-		/// Gets the message height of the tree.
-		/// </summary>
-		public double MeasuredTreeHeight { get; private set; }
+            TreeHeight = message[0];
+            MeasuredTreeHeight = double.Parse(message[1], CultureInfo.InvariantCulture);
+            MeasuredTreeHeightUnits = message[2][0];
+            TreeDiameter = message[3];
+            MeasuredTreeDiameter = double.Parse(message[4], CultureInfo.InvariantCulture);
+            MeasuredTreeDiameterUnits = message[5][0];
+        }
 
-		/// <summary>
-		/// Gets the units of the <see cref="MeasuredTreeHeight"/> value.
-		/// </summary>
-		public char MeasuredTreeHeightUnits { get; private set; }
+        /// <summary>
+        /// Gets the height of the tree.
+        /// </summary>
+        public string TreeHeight { get; }
 
-		/// <summary>
-		/// Gets the tree diameter.
-		/// </summary>
-		public string TreeDiameter { get; private set; }
+        /// <summary>
+        /// Gets the message height of the tree.
+        /// </summary>
+        public double MeasuredTreeHeight { get; }
 
-		/// <summary>
-		/// Gets the measured tree diameter.
-		/// </summary>
-		public double MeasuredTreeDiameter { get; private set; }
+        /// <summary>
+        /// Gets the units of the <see cref="MeasuredTreeHeight"/> value.
+        /// </summary>
+        public char MeasuredTreeHeightUnits { get; }
 
-		/// <summary>
-		/// Gets the units of the <see cref="MeasuredTreeDiameter"/> value.
-		/// </summary>
-		public char MeasuredTreeDiameterUnits { get; private set; }
+        /// <summary>
+        /// Gets the tree diameter.
+        /// </summary>
+        public string TreeDiameter { get; }
 
-		//more to do...
-	
-	}
+        /// <summary>
+        /// Gets the measured tree diameter.
+        /// </summary>
+        public double MeasuredTreeDiameter { get; }
+
+        /// <summary>
+        /// Gets the units of the <see cref="MeasuredTreeDiameter"/> value.
+        /// </summary>
+        public char MeasuredTreeDiameterUnits { get; }
+
+        //more to do...
+
+    }
 }

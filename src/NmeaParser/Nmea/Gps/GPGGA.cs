@@ -58,5 +58,12 @@ namespace NmeaParser.Nmea.Gps
 			/// <summary>Simulation</summary>
 			Simulation = 8
 		}
-	}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgga"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgga(string type, string[] message) : base(type, message) { }
+    }
 }

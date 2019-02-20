@@ -29,6 +29,12 @@ namespace NmeaParser.Nmea.LaserRange.Trimble
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnla")]
 	[NmeaMessageType("PTNLA")]
 	public class Ptnla : LaserRangeMessage
-	{
-	}
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ptnla"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Ptnla(string type, string[] message) : base(type, message) { }
+    }
 }

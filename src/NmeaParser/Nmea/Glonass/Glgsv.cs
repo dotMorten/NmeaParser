@@ -23,13 +23,19 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Glonass
 {
-	/// <summary>
-	///  GLONASS Satellites in view
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Glgsv")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-	[NmeaMessageType("GLGSV")]
-	public sealed class Glgsv : Gsv
-	{
-	}
+    /// <summary>
+    ///  GLONASS Satellites in view
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Glgsv")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [NmeaMessageType("GLGSV")]
+    public sealed class Glgsv : Gsv
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Glgsv"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Glgsv(string type, string[] message) : base(type, message) { }
+    }
 }

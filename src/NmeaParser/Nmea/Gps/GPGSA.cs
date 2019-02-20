@@ -63,5 +63,12 @@ namespace NmeaParser.Nmea.Gps
 			/// </summary>
 			Fix3D = 3
 		}
-	}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgsa"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgsa(string type, string[] message) : base(type, message) { }
+    }
 }

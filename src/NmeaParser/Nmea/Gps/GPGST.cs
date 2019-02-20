@@ -29,6 +29,12 @@ namespace NmeaParser.Nmea.Gps
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgst")]
 	[NmeaMessageType("GPGST")]
 	public class Gpgst : Gst
-	{
-	}
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgst"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgst(string type, string[] message) : base(type, message) { }
+    }
 }

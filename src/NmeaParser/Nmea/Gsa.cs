@@ -29,13 +29,14 @@ namespace NmeaParser.Nmea
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsa")]
 	public abstract class Gsa : NmeaMessage
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 17)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gsa"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected Gsa(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 17)
 				throw new ArgumentException("Invalid GPGSA", "message"); 
 			
 			GpsMode = message[0] == "A" ? Gps.Gpgsa.ModeSelection.Auto : Gps.Gpgsa.ModeSelection.Manual;
@@ -70,34 +71,34 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Mode
 		/// </summary>
-		public Gps.Gpgsa.ModeSelection GpsMode { get; private set; }
+		public Gps.Gpgsa.ModeSelection GpsMode { get; }
 
 		/// <summary>
 		/// Mode
 		/// </summary>
-		public Gps.Gpgsa.Mode FixMode { get; private set; }
+		public Gps.Gpgsa.Mode FixMode { get; }
 
 		/// <summary>
 		/// IDs of SVs used in position fix
 		/// </summary>
-		public IReadOnlyList<int> SVs { get; private set; }
+		public IReadOnlyList<int> SVs { get; }
 
 		/// <summary>
 		/// Dilution of precision
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdop")]
-		public double Pdop { get; private set; }
+		public double Pdop { get; }
 
 		/// <summary>
 		/// Horizontal dilution of precision
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; private set; }
+		public double Hdop { get; }
 
 		/// <summary>
 		/// Vertical dilution of precision
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vdop")]
-		public double Vdop { get; private set; }
+		public double Vdop { get; }
 	}
 }

@@ -10,14 +10,15 @@ namespace NmeaParser.Nmea
     public abstract class Zda : NmeaMessage
     {
         /// <summary>
-        /// Called when the message is being loaded.
+        /// Initializes a new instance of the <see cref="Zda"/> class.
         /// </summary>
+        /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected override void OnLoadMessage(string[] message)
+        protected Zda(string type, string[] message) : base(type, message)
         {
             if (message?.Length != 6)
             {
-                throw new ArgumentException("Invalid GNGST", nameof(message));
+                throw new ArgumentException("Invalid ZDA", nameof(message));
             }
 
             var time = StringToTimeSpan(message[0]);
@@ -33,6 +34,9 @@ namespace NmeaParser.Nmea
             // specify this, so we're just ignoring it.
         }
 
-        public DateTime FixDateTime { get; private set; }
+        /// <summary>
+        /// Gets the time of fix
+        /// </summary>
+        public DateTime FixDateTime { get; }
     }
 }

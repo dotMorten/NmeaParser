@@ -298,13 +298,15 @@ namespace NmeaParser
 		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message) {
 			Message = message;
 		}
+
 		/// <summary>
 		/// Gets the nmea message.
 		/// </summary>
 		/// <value>
 		/// The nmea message.
 		/// </value>
-		public Nmea.NmeaMessage Message { get; private set; }
+		public Nmea.NmeaMessage Message { get; }
+
 		/// <summary>
 		/// Gets a value indicating whether this instance is a multi part message.
 		/// </summary>
@@ -312,6 +314,7 @@ namespace NmeaParser
 		/// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsMultipart { get; internal set; }
+
 		/// <summary>
 		/// Gets the message parts if this is a multi-part message and all message parts has been received.
 		/// </summary>

@@ -11,5 +11,11 @@ namespace NmeaParser.Nmea.Gps
     [NmeaMessageType("GPGNS")]
     public class Gpgns : Gns
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgns"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgns(string type, string[] message) : base(type, message) { }
     }
 }

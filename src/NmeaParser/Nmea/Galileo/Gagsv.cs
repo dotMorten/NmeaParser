@@ -31,5 +31,11 @@ namespace NmeaParser.Nmea.Galileo
 	[NmeaMessageType("GAGSV")]
 	public sealed class Gagsv : Gsv
 	{
-	}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gagsv"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gagsv(string type, string[] message) : base(type, message) { }
+    }
 }

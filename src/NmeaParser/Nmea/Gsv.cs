@@ -31,13 +31,14 @@ namespace NmeaParser.Nmea
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
 	public abstract class Gsv : NmeaMessage, IMultiPartMessage<SatelliteVehicle>
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 3)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gsv"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected Gsv(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 3)
 				throw new ArgumentException("Invalid GSV", "message"); 
 			
 			TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
@@ -58,22 +59,22 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Total number of messages of this type in this cycle
 		/// </summary>
-		public int TotalMessages { get; private set; }
+		public int TotalMessages { get; }
 
 		/// <summary>
 		/// Message number
 		/// </summary>
-		public int MessageNumber { get; private set; }
+		public int MessageNumber { get; }
 
 		/// <summary>
 		/// Total number of SVs in view
 		/// </summary>
-		public int SVsInView { get; private set; }
+		public int SVsInView { get; }
 
 		/// <summary>
 		/// Satellite vehicles in this message part.
 		/// </summary>
-		public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
+		public IReadOnlyList<SatelliteVehicle> SVs { get; }
         
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

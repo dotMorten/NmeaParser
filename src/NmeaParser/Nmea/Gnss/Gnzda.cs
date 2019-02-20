@@ -4,5 +4,11 @@
     [NmeaMessageType("GNZDA")]
     public class Gnzda : Zda
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gnzda"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gnzda(string type, string[] message) : base(type, message) { }
     }
 }

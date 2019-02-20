@@ -29,13 +29,14 @@ namespace NmeaParser.Nmea
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
 	public abstract class Gll : NmeaMessage
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 4)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gll"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected Gll(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 4)
 				throw new ArgumentException("Invalid GPGLL", "message");
 			Latitude = NmeaMessage.StringToLatitude(message[0], message[1]);
 			Longitude = NmeaMessage.StringToLongitude(message[2], message[3]);
@@ -49,17 +50,17 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; }
 
 		/// <summary>
 		/// Time since last DGPS update
 		/// </summary>
-		public TimeSpan FixTime { get; private set; }
+		public TimeSpan FixTime { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether data is active.
@@ -67,7 +68,7 @@ namespace NmeaParser.Nmea
 		/// <value>
 		///   <c>true</c> if data is active; otherwise, <c>false</c>.
 		/// </value>
-		public bool DataActive { get; private set; }
+		public bool DataActive { get; }
 
 	}
 }

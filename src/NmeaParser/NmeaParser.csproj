@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0</TargetFrameworks>
@@ -12,17 +12,18 @@
     <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
     <Version>1.11</Version>
-    <PackageLicenseUrl>http://opensource.org/licenses/ms-pl.html</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2018</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-2019</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
-    <AssemblyVersion>1.10.1.0</AssemblyVersion>
-    <FileVersion>1.10.1.0</FileVersion>
-    <PackageReleaseNotes>Fixed missing shutdown of Android location device.
-Exposed non-NMEA based Accuracy estimate on Android location device.</PackageReleaseNotes>    
+    <PackageReleaseNotes>Lots of API cleanup to avoid null-references. Simplify object model for creation (semi-breaking). Updated license to Apache 2.0</PackageReleaseNotes>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
@@ -64,6 +65,7 @@ Exposed non-NMEA based Accuracy estimate on Android location device.</PackageRel
 
   <ItemGroup>
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

@@ -30,10 +30,11 @@ namespace NmeaParser.Nmea
     public abstract class Gst : NmeaMessage
     {
         /// <summary>
-        /// Called when the message is being loaded.
+        /// Initializes a new instance of the <see cref="Gst"/> class.
         /// </summary>
+        /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected override void OnLoadMessage(string[] message)
+        protected Gst(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 8)
                 throw new ArgumentException("Invalid GPGST", "message");
@@ -50,28 +51,28 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// UTC of position fix
         /// </summary>
-        public TimeSpan FixTime { get; private set; }
+        public TimeSpan FixTime { get; }
 
         /// <summary>
         /// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rms")]
-        public double Rms { get; private set; }
+        public double Rms { get; }
 
         /// <summary>
         /// Error ellipse semi-major axis 1 sigma error, in meters
         /// </summary>
-        public double SemiMajorError { get; private set; }
+        public double SemiMajorError { get; }
 
         /// <summary>
         /// Error ellipse semi-minor axis 1 sigma error, in meters
         /// </summary>
-        public double SemiMinorError { get; private set; }
+        public double SemiMinorError { get; }
 
         /// <summary>
         /// Error ellipse orientation, degrees from true north
         /// </summary>
-        public double ErrorOrientation { get; private set; }
+        public double ErrorOrientation { get; }
 
         /// <summary>
         /// Latitude 1 sigma error, in meters
@@ -79,7 +80,7 @@ namespace NmeaParser.Nmea
         /// <remarks>
         /// The error expressed as one standard deviation.
         /// </remarks>
-        public double SigmaLatitudeError { get; private set; }
+        public double SigmaLatitudeError { get; }
 
         /// <summary >
         /// Longitude 1 sigma error, in meters
@@ -87,7 +88,7 @@ namespace NmeaParser.Nmea
         /// <remarks>
         /// The error expressed as one standard deviation.
         /// </remarks>
-        public double SigmaLongitudeError { get; private set; }
+        public double SigmaLongitudeError { get; }
 
         /// <summary >
         /// Height 1 sigma error, in meters
@@ -95,6 +96,6 @@ namespace NmeaParser.Nmea
         /// <remarks>
         /// The error expressed as one standard deviation.
         /// </remarks>
-        public double SigmaHeightError { get; private set; }
+        public double SigmaHeightError { get; }
     }
 }

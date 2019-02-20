@@ -29,13 +29,14 @@ namespace NmeaParser.Nmea
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
 	public abstract class Rmc : NmeaMessage
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 11)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rmc"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected Rmc(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 11)
 				throw new ArgumentException("Invalid GPRMC", "message"); 
 			
 			if (message[8].Length == 6 && message[0].Length >= 6)
@@ -60,36 +61,36 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Fix Time
 		/// </summary>
-		public DateTime FixTime { get; private set; }
+		public DateTime FixTime { get; }
 
 		/// <summary>
 		/// Gets a value whether the device is active
 		/// </summary>
-		public bool Active { get; private set; }
+		public bool Active { get; }
 
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; }
 
 		/// <summary>
 		/// Speed over the ground in knots
 		/// </summary>
-		public double Speed { get; private set; }
+		public double Speed { get; }
 
 		/// <summary>
 		/// Track angle in degrees True
 		/// </summary>
-		public double Course { get; private set; }
+		public double Course { get; }
 
 		/// <summary>
 		/// Magnetic Variation
 		/// </summary>
-		public double MagneticVariation { get; private set; }
+		public double MagneticVariation { get; }
 	}
 }

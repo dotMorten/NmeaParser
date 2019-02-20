@@ -1,4 +1,4 @@
-﻿﻿//
+﻿//
 // Copyright (c) 2014 Morten Nielsen
 //
 // Licensed under the Microsoft Public License (Ms-PL) (the "License");
@@ -49,6 +49,44 @@ namespace NmeaParser.Nmea
 	/// </summary>
 	public abstract class NmeaMessage
 	{
+        private static Dictionary<string, ConstructorInfo> messageTypes;
+
+        /// <summary>
+        /// Initializes an instance of the NMEA message
+        /// </summary>
+        /// <param name="messageType">Type</param>
+        /// <param name="messageParts">Message values</param>
+        protected NmeaMessage(string messageType, string[] messageParts)
+        {
+            MessageType = messageType;
+            MessageParts = messageParts;
+        }
+
+        static NmeaMessage()
+        {
+            messageTypes = new Dictionary<string, ConstructorInfo>();
+            var typeinfo = typeof(NmeaMessage).GetTypeInfo();
+            foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
+            {
+                var attr = subclass.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
+                if (attr != null)
+                {
+                    if (!subclass.IsAbstract)
+                    {
+                        foreach (var c in subclass.DeclaredConstructors)
+                        {
+                            var pinfo = c.GetParameters();
+                            if (pinfo.Length == 2 && pinfo[0].ParameterType == typeof(string) && pinfo[1].ParameterType == typeof(string[]))
+                            {
+                                messageTypes.Add(attr.NmeaType, c);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 		/// <summary>
 		/// Parses the specified NMEA message.
 		/// </summary>
@@ -86,70 +124,25 @@ namespace NmeaParser.Nmea
 			string[] parts = message.Split(new char[] { ',' });
 			string MessageType = parts[0].Substring(1);
 			string[] MessageParts = parts.Skip(1).ToArray();
-			if(messageTypes == null)
-			{
-				LoadResponseTypes();
-			}
-			NmeaMessage msg = null;
 			if (messageTypes.ContainsKey(MessageType))
 			{
-				msg = (NmeaMessage)messageTypes[MessageType].Invoke(new object[] { });
+				return (NmeaMessage)messageTypes[MessageType].Invoke(new object[] { MessageType, MessageParts });
 			}
 			else
 			{
-				msg = new UnknownMessage();
-			}
-			msg.MessageType = MessageType;
-			msg.MessageParts = MessageParts;
-			msg.OnLoadMessage(MessageParts);
-			return msg;
-		}
-
-		private static void LoadResponseTypes()
-		{
-			messageTypes = new Dictionary<string, ConstructorInfo>();
-			var typeinfo = typeof(NmeaMessage).GetTypeInfo();
-			foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
-			{
-				var attr = subclass.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
-				if (attr != null)
-				{
-					if (!subclass.IsAbstract)
-					{
-						foreach (var c in subclass.DeclaredConstructors)
-						{
-							var pinfo = c.GetParameters();
-							if (pinfo.Length == 0)
-							{
-								messageTypes.Add(attr.NmeaType, c);
-								break;
-							}
-						}
-					}
-				}
+                return new UnknownMessage(MessageType, MessageParts);
 			}
 		}
-
-		private static Dictionary<string, ConstructorInfo> messageTypes;
 
 		/// <summary>
 		/// Gets the NMEA message parts.
 		/// </summary>
-		protected IReadOnlyList<string> MessageParts { get; private set; }
+		protected IReadOnlyList<string> MessageParts { get; }
 
 		/// <summary>
 		/// Gets the NMEA type id for the message.
 		/// </summary>
-		public string MessageType { get; private set; }
-
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		/// <remarks>
-		/// Implement this method to create a custom NMEA message.
-		/// </remarks>
-		protected virtual void OnLoadMessage(string[] message) { MessageParts = message; }
+		public string MessageType { get; }
 
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that represents this instance.

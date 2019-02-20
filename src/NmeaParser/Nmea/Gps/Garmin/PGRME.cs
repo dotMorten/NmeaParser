@@ -30,13 +30,14 @@ namespace NmeaParser.Nmea.Gps.Garmin
 	[NmeaMessageType("PGRME")]
 	public class Pgrme : NmeaMessage
 	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 6)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pgrme"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Pgrme(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 6)
 				throw new ArgumentException("Invalid PGRME", "message"); 
 			
 			HorizontalError = NmeaMessage.StringToDouble(message[0]);
@@ -51,33 +52,33 @@ namespace NmeaParser.Nmea.Gps.Garmin
 		/// Estimated horizontal position error in meters (HPE)
 		/// </summary>
 		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double HorizontalError { get; private set; }
+		public double HorizontalError{ get; }
 
 		/// <summary>
 		/// Horizontal Error unit ('M' for Meters)
 		/// </summary>
-		public string HorizontalErrorUnits { get; private set; }
+		public string HorizontalErrorUnits{ get; }
 
 		/// <summary>
 		/// Estimated vertical position error in meters (VPE)
 		/// </summary>
 		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double VerticalError { get; private set; }
+		public double VerticalError{ get; }
 
 		/// <summary>
 		/// Vertical Error unit ('M' for Meters)
 		/// </summary>
-		public string VerticalErrorUnits { get; private set; }
+		public string VerticalErrorUnits{ get; }
 
 		/// <summary>
 		/// Overall spherical equivalent position error (EPE)
 		/// </summary>
 		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double SphericalError { get; private set; }
+		public double SphericalError{ get; }
 
 		/// <summary>
 		/// Spherical Error unit ('M' for Meters)
 		/// </summary>
-		public string SphericalErrorUnits { get; private set; }
+		public string SphericalErrorUnits{ get; }
 	}
 }

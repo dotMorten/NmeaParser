@@ -23,12 +23,18 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Gnss
 {
-	/// <summary>
-	///  Global Positioning System Fix Data
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
-	[NmeaMessageType("GNGSA")]
-	public class Gngsa : Gsa
-	{
-	}
+    /// <summary>
+    ///  Global Positioning System Fix Data
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngsa")]
+    [NmeaMessageType("GNGSA")]
+    public class Gngsa : Gsa
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gngsa"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gngsa(string type, string[] message) : base(type, message) { }
+    }
 }

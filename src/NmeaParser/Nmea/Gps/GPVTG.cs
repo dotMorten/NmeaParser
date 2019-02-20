@@ -28,10 +28,11 @@ namespace NmeaParser.Nmea.Gps
     public class Gpvtg : NmeaMessage
     {
         /// <summary>
-        /// Called when the message is being loaded.
+        /// Initializes a new instance of the <see cref="Gpvtg"/> class.
         /// </summary>
+        /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected override void OnLoadMessage(string[] message)
+        public Gpvtg(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 7)
                 throw new ArgumentException("Invalid Gpvtg", "message");
@@ -44,21 +45,21 @@ namespace NmeaParser.Nmea.Gps
         /// <summary>
         ///  Course over ground relative to true north
         /// </summary>
-        public double TrueCourseOverGround { get; private set; } = double.NaN;
+        public double TrueCourseOverGround { get; }
 
         /// <summary>
         ///  Course over ground relative to magnetic north
         /// </summary>
-        public double MagneticCourseOverGround { get; private set; } = double.NaN;
+        public double MagneticCourseOverGround { get; }
 
         /// <summary>
         /// Speed over ground in knots
         /// </summary>
-        public double SpeedInKnots { get; private set; } = double.NaN;
+        public double SpeedInKnots { get; }
 
         /// <summary>
         /// Speed over ground in kilometers/hour
         /// </summary>
-        public double SpeedInKph { get; private set; } = double.NaN;
+        public double SpeedInKph { get; }
     }
 }

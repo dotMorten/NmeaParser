@@ -23,12 +23,18 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Gnss
 {
-	/// <summary>
-	///  Geographic position, latitude / longitude
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngll")]
-	[NmeaMessageType("GNGLL")]
-	public class Gngll : Gll
-	{
-	}
+    /// <summary>
+    ///  Geographic position, latitude / longitude
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gngll")]
+    [NmeaMessageType("GNGLL")]
+    public class Gngll : Gll
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gngll"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gngll(string type, string[] message) : base(type, message) { }
+    }
 }

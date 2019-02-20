@@ -23,12 +23,18 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Gnss
 {
-	/// <summary>
-	///  Recommended Minimum
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gnrmc")]
-	[NmeaMessageType("GNRMC")]
-	public class Gnrmc : Rmc
-	{
-	}
+    /// <summary>
+    ///  Recommended Minimum
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gnrmc")]
+    [NmeaMessageType("GNRMC")]
+    public class Gnrmc : Rmc
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gnrmc"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gnrmc(string type, string[] message) : base(type, message) { }
+    }
 }

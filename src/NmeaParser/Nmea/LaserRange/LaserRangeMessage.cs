@@ -28,14 +28,15 @@ namespace NmeaParser.Nmea.LaserRange
 	/// Laser Range Measurement
 	/// </summary>
 	public abstract class LaserRangeMessage : NmeaMessage
-	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 9)
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LaserRangeMessage"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        protected LaserRangeMessage(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 9)
 				throw new ArgumentException("Invalid Laser Range Message", "message"); 
 			
 			HorizontalVector = message[0];
@@ -52,46 +53,46 @@ namespace NmeaParser.Nmea.LaserRange
 		/// <summary>
 		/// Gets the horizontal vector.
 		/// </summary>
-		public string HorizontalVector { get; private set; }
+		public string HorizontalVector { get; }
 
 		/// <summary>
 		/// Gets the horizontal distance.
 		/// </summary>
-		public double HorizontalDistance { get; private set; }
+		public double HorizontalDistance { get; }
 
 		/// <summary>
 		/// Gets the units of the <see cref="HorizontalDistance"/> value.
 		/// </summary>
-		public char HorizontalDistanceUnits { get; private set; }
+		public char HorizontalDistanceUnits { get; }
 
 		/// <summary>
 		/// Gets the horizontal angle.
 		/// </summary>
-		public double HorizontalAngle { get; private set; }
+		public double HorizontalAngle { get; }
 
 		/// <summary>
 		/// Gets the units of the <see cref="HorizontalAngle"/> value.
 		/// </summary>
-		public char HorizontalAngleUnits { get; private set; }
+		public char HorizontalAngleUnits { get; }
 
 		/// <summary>
 		/// Gets the vertical angle.
 		/// </summary>
-		public double VerticalAngle { get; private set; }
+		public double VerticalAngle { get; }
 
 		/// <summary>
 		/// Gets the units of the <see cref="VerticalAngle"/> value.
 		/// </summary>
-		public char VerticalAngleUnits { get; private set; }
+		public char VerticalAngleUnits { get; }
 
 		/// <summary>
 		/// Gets the slope distance.
 		/// </summary>
-		public double SlopeDistance { get; private set; }
+		public double SlopeDistance { get; }
 
 		/// <summary>
 		/// Gets the units of the <see cref="SlopeDistance"/> value.
 		/// </summary>
-		public char SlopeDistanceUnits { get; private set; }
+		public char SlopeDistanceUnits { get; }
 	}
 }

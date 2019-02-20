@@ -120,10 +120,11 @@ namespace NmeaParser.Nmea
         }
 
         /// <summary>
-        /// Called when the message is being loaded.
-        /// </summary>
-        /// <param name="message">The NMEA message values.</param>
-        protected override void OnLoadMessage(string[] message)
+		/// Initializes a new instance of the <see cref="Gns"/> class.
+		/// </summary>
+        /// <param name="type">The message type</param>
+		/// <param name="message">The NMEA message values.</param>
+		protected Gns(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 12)
                 throw new ArgumentException("Invalid GNS", "message");
@@ -168,74 +169,74 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Time of day fix was taken
 		/// </summary>
-		public TimeSpan FixTime { get; private set; }
+		public TimeSpan FixTime { get; }
 		
 		/// <summary>
 		/// Latitude
 		/// </summary>
-		public double Latitude { get; private set; }
+		public double Latitude { get; }
 
 		/// <summary>
 		/// Longitude
 		/// </summary>
-		public double Longitude { get; private set; }
+		public double Longitude { get; }
 
         /// <summary>
         /// Mode indicator for GPS
         /// </summary>
         /// <seealso cref="GlonassModeIndicator"/>
         /// <see cref="FutureModeIndicator"/>
-        public Mode GpsModeIndicator { get; private set; }
+        public Mode GpsModeIndicator { get; }
 
         /// <summary>
         /// Mode indicator for GLONASS
         /// </summary>
         /// <seealso cref="GpsModeIndicator"/>
         /// <see cref="FutureModeIndicator"/>
-        public Mode GlonassModeIndicator { get; private set; }
+        public Mode GlonassModeIndicator { get; }
 
         /// <summary>
         /// Mode indicator for future constallations
         /// </summary>
         /// <seealso cref="GlonassModeIndicator"/>
         /// <seealso cref="GpsModeIndicator"/>
-        public Mode[] FutureModeIndicator { get; private set; }
+        public Mode[] FutureModeIndicator { get; }
 
         /// <summary>
         /// Number of satellites (SVs) in use
         /// </summary>
-        public int NumberOfSatellites { get; private set; }
+        public int NumberOfSatellites { get; }
 
         /// <summary>
         /// Horizontal Dilution of Precision (HDOP), calculated using all the satellites (GPS, GLONASS, and any future satellites) used in computing the solution reported in each GNS sentence.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; private set; }
+		public double Hdop { get; }
 
         /// <summary>
         /// Orthometric height in meters (MSL reference)
         /// </summary>
-        public double OrhometricHeight { get; private set; }
+        public double OrhometricHeight { get; }
 
         /// <summary>
         /// Geoidal separation in meters - the difference between the earth ellipsoid surface and mean-sea-level (geoid) surface defined by the reference datum used in the position solution<br/>
         /// '-' = mean-sea-level surface below ellipsoid.
         /// </summary>
-        public double GeoidalSeparation { get; private set; }
+        public double GeoidalSeparation { get; }
 
         /// <summary>
         ///  Age of differential data - <see cref="TimeSpan.MaxValue"/> if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data
 		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; private set; }
+		public TimeSpan TimeSinceLastDgpsUpdate { get; }
 
 		/// <summary>
 		/// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
         /// </summary>
-        public string DgpsStationId { get; private set; }
+        public string DgpsStationId { get; }
 
         /// <summary>
         /// Navigational status
         /// </summary>
-        public NavigationalStatus Status { get; private set; }
+        public NavigationalStatus Status { get; }
 	}
 }

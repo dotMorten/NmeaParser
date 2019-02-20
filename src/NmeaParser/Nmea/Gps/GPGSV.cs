@@ -31,6 +31,12 @@ namespace NmeaParser.Nmea.Gps
     [NmeaMessageType("GPGSV")]
     public sealed class Gpgsv : Gsv
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgst"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgsv(string type, string[] message) : base(type, message) { }
     }
 
     /// <summary>
@@ -50,19 +56,19 @@ namespace NmeaParser.Nmea.Gps
         /// <summary>
         /// SV PRN number
         /// </summary>
-        public int PrnNumber { get; set; }
+        public int PrnNumber { get; }
         /// <summary>
         /// Elevation in degrees, 90 maximum
         /// </summary>
-        public double Elevation { get; private set; }
+        public double Elevation{ get; }
         /// <summary>
         /// Azimuth, degrees from true north, 000 to 359
         /// </summary>
-        public double Azimuth { get; private set; }
+        public double Azimuth{ get; }
         /// <summary>
         /// Signal-to-Noise ratio, 0-99 dB (-1 when not tracking) 
         /// </summary>
-        public int SignalToNoiseRatio { get; private set; }
+        public int SignalToNoiseRatio{ get; }
 
         /// <summary>
         /// Satellite system

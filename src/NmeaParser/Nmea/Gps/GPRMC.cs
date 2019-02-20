@@ -29,6 +29,12 @@ namespace NmeaParser.Nmea.Gps
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
 	[NmeaMessageType("GPRMC")]
 	public class Gprmc : Rmc
-	{
-	}
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gprmc"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gprmc(string type, string[] message) : base(type, message) { }
+    }
 }

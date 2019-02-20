@@ -29,6 +29,12 @@ namespace NmeaParser.Nmea.Gps
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgll")]
 	[NmeaMessageType("GPGLL")]
 	public class Gpgll : Gll
-	{
-	}
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gpgll"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gpgll(string type, string[] message) : base(type, message) { }
+    }
 }

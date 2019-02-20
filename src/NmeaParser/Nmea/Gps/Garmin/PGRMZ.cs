@@ -23,84 +23,86 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Gps.Garmin
 {
-	/// <summary>
-	/// Altitude Information
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrmz")]
-	[NmeaMessageType("PGRMZ")]
-	public class Pgrmz : NmeaMessage
-	{
-		/// <summary>
-		/// Altitude unit
-		/// </summary>
-		public enum AltitudeUnit
-		{
-			/// <summary>
-			/// Unknown
-			/// </summary>
-			Unknown,
-			/// <summary>
-			/// Feet
-			/// </summary>
-			Feet
-		}
-		/// <summary>
-		/// Position Fix Dimension
-		/// </summary>
-		public enum PositionFixType : int
-		{
-			/// <summary>
-			/// Unknown
-			/// </summary>
-			Unknown = 0,
-			/// <summary>
-			/// No fix
-			/// </summary>
-			NoFix = 1,
-			/// <summary>
-			/// 2D Fix
-			/// </summary>
-			Fix2D = 2,
-			/// <summary>
-			/// 3D Fix
-			/// </summary>
-			Fix3D = 3
-		}
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 3)
-				throw new ArgumentException("Invalid PGRMZ", "message"); 
-			
-			if (message[0].Length > 0)
-				Altitude = double.Parse(message[0], CultureInfo.InvariantCulture);
-			else
-				Altitude = double.NaN;
-			Unit = message[1] == "f" ? AltitudeUnit.Feet : AltitudeUnit.Unknown;
-			int dim = -1;
-			if (message[2].Length == 1 && int.TryParse(message[2], out dim))
-			{
-				if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
-					FixType = (PositionFixType)dim;
-			}
-		}
+    /// <summary>
+    /// Altitude Information
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrmz")]
+    [NmeaMessageType("PGRMZ")]
+    public class Pgrmz : NmeaMessage
+    {
+        /// <summary>
+        /// Altitude unit
+        /// </summary>
+        public enum AltitudeUnit
+        {
+            /// <summary>
+            /// Unknown
+            /// </summary>
+            Unknown,
+            /// <summary>
+            /// Feet
+            /// </summary>
+            Feet
+        }
+        /// <summary>
+        /// Position Fix Dimension
+        /// </summary>
+        public enum PositionFixType : int
+        {
+            /// <summary>
+            /// Unknown
+            /// </summary>
+            Unknown = 0,
+            /// <summary>
+            /// No fix
+            /// </summary>
+            NoFix = 1,
+            /// <summary>
+            /// 2D Fix
+            /// </summary>
+            Fix2D = 2,
+            /// <summary>
+            /// 3D Fix
+            /// </summary>
+            Fix3D = 3
+        }
 
-		/// <summary>
-		/// Current altitude
-		/// </summary>
-		public double Altitude { get; private set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pgrmz"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Pgrmz(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 3)
+                throw new ArgumentException("Invalid PGRMZ", "message");
 
-		/// <summary>
-		/// Horizontal Error unit ('f' for Meters)
-		/// </summary>
-		public AltitudeUnit Unit { get; private set; }
+            if (message[0].Length > 0)
+                Altitude = double.Parse(message[0], CultureInfo.InvariantCulture);
+            else
+                Altitude = double.NaN;
+            Unit = message[1] == "f" ? AltitudeUnit.Feet : AltitudeUnit.Unknown;
+            int dim = -1;
+            if (message[2].Length == 1 && int.TryParse(message[2], out dim))
+            {
+                if (dim >= (int)PositionFixType.NoFix && dim <= (int)PositionFixType.Fix3D)
+                    FixType = (PositionFixType)dim;
+            }
+        }
 
-		/// <summary>
-		/// Fix type
-		/// </summary>
-		public PositionFixType FixType { get; private set; }
-	}
+        /// <summary>
+        /// Current altitude
+        /// </summary>
+        public double Altitude { get; }
+
+        /// <summary>
+        /// Horizontal Error unit ('f' for Meters)
+        /// </summary>
+        public AltitudeUnit Unit { get; }
+
+        /// <summary>
+        /// Fix type
+        /// </summary>
+        public PositionFixType FixType { get; }
+    }
 }
