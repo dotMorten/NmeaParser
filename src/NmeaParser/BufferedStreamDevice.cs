@@ -106,7 +106,7 @@ namespace NmeaParser
 					lastLineRead = ReadLine(); //seek forward to first nmea token
 					AppendToBuffer(lastLineRead);
 				}
-				if(groupToken == null)
+				if(groupToken == null && lastLineRead != null)
 				{
 					var values = lastLineRead.Trim().Split(new char[] { ',' });
 					if (values.Length > 0)
