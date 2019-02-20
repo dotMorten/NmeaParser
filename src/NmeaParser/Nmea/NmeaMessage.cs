@@ -49,7 +49,7 @@ namespace NmeaParser.Nmea
 	/// </summary>
 	public abstract class NmeaMessage
 	{
-        private static Dictionary<string, ConstructorInfo> messageTypes;
+        private readonly static Dictionary<string, ConstructorInfo> messageTypes;
 
         /// <summary>
         /// Initializes an instance of the NMEA message
@@ -199,8 +199,7 @@ namespace NmeaParser.Nmea
 
 		internal static double StringToDouble(string value)
 		{
-			double result = double.NaN;
-			if(value != null && double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+			if(value != null && double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
 			{
 				return result;
 			}

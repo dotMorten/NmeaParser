@@ -29,8 +29,9 @@ namespace NmeaParser
 	/// </summary>
 	public abstract class BufferedStreamDevice : NmeaDevice
 	{
-		BufferedStream m_stream;
-		int m_readSpeed;
+		private BufferedStream m_stream;
+		private readonly int m_readSpeed;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BufferedStreamDevice"/> class.
 		/// </summary>
@@ -80,10 +81,10 @@ namespace NmeaParser
 		// in lastLineRead by lastLineRead at a steady stream
 		private class BufferedStream : Stream
 		{
-			private StreamReader m_sr;
+			private readonly StreamReader m_sr;
 			private byte[] m_buffer = new byte[0];
-			private System.Threading.Timer m_timer;
-			private object lockObj = new object();
+			private readonly System.Threading.Timer m_timer;
+			private readonly object lockObj = new object();
 			private string groupToken = null;
 			private string lastLineRead = null;
 			/// <summary>

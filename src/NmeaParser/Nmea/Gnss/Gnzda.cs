@@ -1,5 +1,8 @@
 ﻿namespace NmeaParser.Nmea.Gnss
 {
+    /// <summary>
+    /// Date and time of fix
+    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gnzda")]
     [NmeaMessageType("GNZDA")]
     public class Gnzda : Zda

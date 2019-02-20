@@ -29,7 +29,7 @@ namespace NmeaParser
 	/// </summary>
 	public abstract class NmeaDevice : IDisposable
 	{
-		private object m_lockObject = new object();
+		private readonly object m_lockObject = new object();
 		private string m_message = "";
 		private Stream m_stream;
 		private CancellationTokenSource m_cts;

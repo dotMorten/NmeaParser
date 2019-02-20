@@ -1,5 +1,8 @@
 ﻿namespace NmeaParser.Nmea.Gps
 {
+    /// <summary>
+    /// Date and time of fix
+    /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpzda")]
     [NmeaMessageType("GPZDA")]
     public class Gpzda : Zda

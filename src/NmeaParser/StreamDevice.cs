@@ -27,7 +27,8 @@ namespace NmeaParser
 	/// </summary>
     public class StreamDevice : NmeaDevice
     {
-		System.IO.Stream m_stream;
+		private Stream m_stream;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StreamDevice"/> class.
 		/// </summary>
