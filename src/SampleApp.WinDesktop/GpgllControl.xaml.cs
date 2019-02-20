@@ -1,4 +1,4 @@
-﻿using NmeaParser.Nmea.Gps;
+﻿using NmeaParser.Nmea;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,13 +26,13 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 		}
 
-		public Gpgll Message
+		public Gll Message
 		{
-			get { return (Gpgll)GetValue(MessageProperty); }
+			get { return (Gll)GetValue(MessageProperty); }
 			set { SetValue(MessageProperty, value); }
 		}
 
 		public static readonly DependencyProperty MessageProperty =
-			DependencyProperty.Register("Message", typeof(Gpgll), typeof(GpgllControl), new PropertyMetadata(null));	
+			DependencyProperty.Register("Message", typeof(Gll), typeof(GpgllControl), new PropertyMetadata(null));	
 	}
 }

@@ -52,12 +52,14 @@ namespace SampleApp.WinDesktop
 		/// Unloads the current device, and opens the next device
 		/// </summary>
 		/// <param name="device"></param>
-		private void StartDevice(NmeaParser.NmeaDevice device)
+		private async void StartDevice(NmeaParser.NmeaDevice device)
 		{
 			//Clean up old device
 			if (currentDevice != null)
 			{
 				currentDevice.MessageReceived -= device_MessageReceived;
+                if(currentDevice.IsOpen)
+                    await currentDevice.CloseAsync();
 				currentDevice.Dispose();
 			}
 			output.Text = "";
@@ -100,17 +102,17 @@ namespace SampleApp.WinDesktop
                         satView.GsvMessages = gsvMessages.SelectMany(m=>m.Value);
                     }
 				}
-				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
-					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
-					gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
-					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
-					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
+				else if (args.Message is NmeaParser.Nmea.Rmc)
+					gprmcView.Message = args.Message as NmeaParser.Nmea.Rmc;
+				else if (args.Message is NmeaParser.Nmea.Gga)
+					gpggaView.Message = args.Message as NmeaParser.Nmea.Gga;
+				else if (args.Message is NmeaParser.Nmea.Gsa)
+					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gsa;
+				else if (args.Message is NmeaParser.Nmea.Gll)
+					gpgllView.Message = args.Message as NmeaParser.Nmea.Gll;
 				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
 					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
-                else if (args.Message is NmeaParser.Nmea.UnknownMessage)
+                else
                 {
                     var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
                     if(ctrl == null)
@@ -121,11 +123,7 @@ namespace SampleApp.WinDesktop
                         };
                         MessagePanel.Children.Add(ctrl);
                     }
-                    ctrl.Message = args.Message as NmeaParser.Nmea.UnknownMessage;
-                }
-                else
-                {
-                    //
+                    ctrl.Message = args.Message;
                 }
 			});
 		}
@@ -145,10 +143,17 @@ namespace SampleApp.WinDesktop
 		//Creates a serial port device from the selected settings
 		private void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
 		{
-			var portName = serialPorts.Text as string;
-			var baudRate = int.Parse(baudRates.Text);
-			var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
-			StartDevice(device);
+            try
+            {
+                var portName = serialPorts.Text as string;
+                var baudRate = int.Parse(baudRates.Text);
+                var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
+                StartDevice(device);
+            }
+            catch(System.Exception ex)
+            {
+                MessageBox.Show("Error connecting: " + ex.Message);
+            }
 		}
 
 		//Attempts to perform an auto discovery of serial ports

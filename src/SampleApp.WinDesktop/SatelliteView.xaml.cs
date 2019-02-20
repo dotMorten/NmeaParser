@@ -25,8 +25,6 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 		}
 
-
-
 		public IEnumerable<NmeaParser.Nmea.Gsv> GsvMessages
 		{
 			get { return (IEnumerable<NmeaParser.Nmea.Gsv>)GetValue(GsvMessagesProperty); }

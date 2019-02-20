@@ -7,10 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Message}">
-		<Border Background="LightGray" Padding="10" Margin="-10,-10,-10,5">
+		<Border Background="LightGray" Padding="10" Margin="-10,-10,-10,5" x:Name="HeaderPanel">
             <TextBlock Text="{Binding MessageType}" x:Name="typeName" FontSize="20" FontWeight="Bold" Foreground="White" />
         </Border>
-        <ItemsControl x:Name="Values" ItemsSource="{Binding Values}">
+        <ItemsControl x:Name="Values">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
