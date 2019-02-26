@@ -368,6 +368,20 @@ namespace NmeaParser.Tests
             Assert.AreEqual(-117.196813151667, gll.Longitude, .000000000001);
             Assert.AreEqual(new TimeSpan(0, 23, 57, 15, 0), gll.FixTime);
         }
+        [TestMethod]
+        public void TestLcgll()
+        {
+            string input = "$LCGLL,4728.31,N,12254.25,W,091342,A,A*4C";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gll));
+            Gll gll = (Gll)msg;
+            Assert.AreEqual(Talker.LoranC, gll.TalkerId);
+            Assert.IsTrue(gll.DataActive);
+            Assert.AreEqual(47.471833333333336, gll.Latitude);
+            Assert.AreEqual(-122.90416666666667, gll.Longitude);
+            Assert.AreEqual(new TimeSpan(0, 9, 13, 42, 0), gll.FixTime);
+            Assert.AreEqual(Gll.Mode.Autonomous, gll.ModeIndicator);
+        }
 
 
 

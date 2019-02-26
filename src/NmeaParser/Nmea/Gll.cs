@@ -44,7 +44,20 @@ namespace NmeaParser.Nmea
 				FixTime = StringToTimeSpan(message[4]);
 			}
 			DataActive = (message.Length < 6 || message[5] == "A");
-		}
+            ModeIndicator = DataActive ? Mode.Autonomous : Mode.DataNotValid;
+            if (message.Length > 6)
+            {
+                switch (message[6])
+                {
+                    case "A": ModeIndicator = Mode.Autonomous; break;
+                    case "D": ModeIndicator = Mode.DataNotValid; break;
+                    case "E": ModeIndicator = Mode.EstimatedDeadReckoning; break;
+                    case "M": ModeIndicator = Mode.Manual; break;
+                    case "S": ModeIndicator = Mode.Simulator; break;
+                    case "N": ModeIndicator = Mode.DataNotValid; break;
+                }
+            }
+        }
 
 		/// <summary>
 		/// Latitude
@@ -69,5 +82,16 @@ namespace NmeaParser.Nmea
 		/// </value>
 		public bool DataActive { get; }
 
+        public Mode ModeIndicator { get; }
+
+        public enum Mode
+        {
+            Autonomous,
+            Differential,
+            EstimatedDeadReckoning,
+            Manual,
+            Simulator,
+            DataNotValid
+        }
 	}
 }
