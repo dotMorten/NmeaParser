@@ -27,21 +27,22 @@ namespace NmeaParser.Nmea
 	///  Global Positioning System Fix Data
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
-	public abstract class Gga : NmeaMessage
+    [NmeaMessageType("--GGA")]
+    public class Gga : NmeaMessage
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="Gga"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected Gga(string type, string[] message) : base(type, message)
+        public Gga(string type, string[] message) : base(type, message)
 		{
 			if (message == null || message.Length < 14)
 				throw new ArgumentException("Invalid GPGGA", "message"); 
 			FixTime = StringToTimeSpan(message[0]);
 			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
 			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-			Quality =  (Gps.Gpgga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
+			Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
 			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
 			Hdop = NmeaMessage.StringToDouble(message[7]);
 			Altitude = NmeaMessage.StringToDouble(message[8]);
@@ -77,7 +78,7 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Fix Quality
 		/// </summary>
-		public Gps.Gpgga.FixQuality Quality { get; }
+		public Gga.FixQuality Quality { get; }
 
 		/// <summary>
 		/// Number of satellites being tracked
@@ -119,5 +120,34 @@ namespace NmeaParser.Nmea
 		/// DGPS Station ID Number
 		/// </summary>
 		public int DgpsStationId { get; }
-	}
+
+        /// <summary>
+        /// Fix quality
+        /// </summary>
+        public enum FixQuality : int
+        {
+            /// <summary>Invalid</summary>
+            Invalid = 0,
+            /// <summary>GPS</summary>
+            GpsFix = 1,
+            /// <summary>Differential GPS</summary>
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dgps")]
+            DgpsFix = 2,
+            /// <summary>Precise Positioning Service</summary>
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pps")]
+            PpsFix = 3,
+            /// <summary>Real Time Kinematic (Fixed)</summary>
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
+            Rtk = 4,
+            /// <summary>Real Time Kinematic (Floating)</summary>
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
+            FloatRtk = 5,
+            /// <summary>Estimated</summary>
+            Estimated = 6,
+            /// <summary>Manual input</summary>
+            ManualInput = 7,
+            /// <summary>Simulation</summary>
+            Simulation = 8
+        }
+    }
 }

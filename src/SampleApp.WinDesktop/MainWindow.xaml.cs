@@ -110,8 +110,8 @@ namespace SampleApp.WinDesktop
 					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gsa;
 				else if (args.Message is NmeaParser.Nmea.Gll)
 					gpgllView.Message = args.Message as NmeaParser.Nmea.Gll;
-				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
-					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
+				else if (args.Message is NmeaParser.Nmea.Garmin.Pgrme)
+					pgrmeView.Message = args.Message as NmeaParser.Nmea.Garmin.Pgrme;
                 else
                 {
                     var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();

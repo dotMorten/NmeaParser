@@ -23,82 +23,117 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	///  Global Positioning System Fix Data
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsa")]
-	public abstract class Gsa : NmeaMessage
-	{
+    /// <summary>
+    ///  Global Positioning System Fix Data
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsa")]
+    [NmeaMessageType("--GSA")]
+    public class Gsa : NmeaMessage
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gsa"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected Gsa(string type, string[] message) : base(type, message)
+        public Gsa(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 17)
-				throw new ArgumentException("Invalid GPGSA", "message"); 
-			
-			GpsMode = message[0] == "A" ? Gps.Gpgsa.ModeSelection.Auto : Gps.Gpgsa.ModeSelection.Manual;
-			FixMode = (Gps.Gpgsa.Mode)int.Parse(message[1], CultureInfo.InvariantCulture);
+                throw new ArgumentException("Invalid GPGSA", "message");
 
-			List<int> svs = new List<int>();
-			for (int i = 2; i < 14; i++)
-			{
-				int id = -1;
-				if (message[i].Length > 0 && int.TryParse(message[i], out id))
-					svs.Add(id);
-			}
-			SVs = svs.ToArray();
+            GpsMode = message[0] == "A" ? Gsa.ModeSelection.Auto : Gsa.ModeSelection.Manual;
+            FixMode = (Gsa.Mode)int.Parse(message[1], CultureInfo.InvariantCulture);
 
-			double tmp;
-			if (double.TryParse(message[14], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				Pdop = tmp;
-			else
-				Pdop = double.NaN;
+            List<int> svs = new List<int>();
+            for (int i = 2; i < 14; i++)
+            {
+                int id = -1;
+                if (message[i].Length > 0 && int.TryParse(message[i], out id))
+                    svs.Add(id);
+            }
+            SVs = svs.ToArray();
 
-			if (double.TryParse(message[15], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				Hdop = tmp;
-			else
-				Hdop = double.NaN;
+            double tmp;
+            if (double.TryParse(message[14], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
+                Pdop = tmp;
+            else
+                Pdop = double.NaN;
 
-			if (double.TryParse(message[16], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
-				Vdop = tmp;
-			else
-				Vdop = double.NaN;
-		}
+            if (double.TryParse(message[15], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
+                Hdop = tmp;
+            else
+                Hdop = double.NaN;
 
-		/// <summary>
-		/// Mode
-		/// </summary>
-		public Gps.Gpgsa.ModeSelection GpsMode { get; }
+            if (double.TryParse(message[16], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
+                Vdop = tmp;
+            else
+                Vdop = double.NaN;
+        }
 
-		/// <summary>
-		/// Mode
-		/// </summary>
-		public Gps.Gpgsa.Mode FixMode { get; }
+        /// <summary>
+        /// Mode
+        /// </summary>
+        public ModeSelection GpsMode { get; }
 
-		/// <summary>
-		/// IDs of SVs used in position fix
-		/// </summary>
-		public IReadOnlyList<int> SVs { get; }
+        /// <summary>
+        /// Mode
+        /// </summary>
+        public Mode FixMode { get; }
 
-		/// <summary>
-		/// Dilution of precision
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdop")]
-		public double Pdop { get; }
+        /// <summary>
+        /// IDs of SVs used in position fix
+        /// </summary>
+        public IReadOnlyList<int> SVs { get; }
 
-		/// <summary>
-		/// Horizontal dilution of precision
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; }
+        /// <summary>
+        /// Dilution of precision
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdop")]
+        public double Pdop { get; }
 
-		/// <summary>
-		/// Vertical dilution of precision
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vdop")]
-		public double Vdop { get; }
-	}
+        /// <summary>
+        /// Horizontal dilution of precision
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
+        public double Hdop { get; }
+
+        /// <summary>
+        /// Vertical dilution of precision
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vdop")]
+        public double Vdop { get; }
+
+        /// <summary>
+        /// Mode selection
+        /// </summary>
+        public enum ModeSelection
+        {
+            /// <summary>
+            /// Auto
+            /// </summary>
+            Auto,
+            /// <summary>
+            /// Manual mode
+            /// </summary>
+            Manual,
+        }
+        /// <summary>
+        /// Fix Mode
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Enum values matches NMEA spec")]
+        public enum Mode : int
+        {
+            /// <summary>
+            /// Not available
+            /// </summary>
+            NotAvailable = 1,
+            /// <summary>
+            /// 2D Fix
+            /// </summary>
+            Fix2D = 2,
+            /// <summary>
+            /// 3D Fix
+            /// </summary>
+            Fix3D = 3
+        }
+    }
 }

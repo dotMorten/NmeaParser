@@ -27,14 +27,15 @@ namespace NmeaParser.Nmea
     /// Position error statistics
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgst")]
-    public abstract class Gst : NmeaMessage
+    [NmeaMessageType("--GST")]
+    public class Gst : NmeaMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gst"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected Gst(string type, string[] message) : base(type, message)
+        public Gst(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 8)
                 throw new ArgumentException("Invalid GPGST", "message");

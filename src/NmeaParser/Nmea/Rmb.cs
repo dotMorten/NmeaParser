@@ -27,8 +27,8 @@ namespace NmeaParser.Nmea.Gps
     /// Recommended minimum navigation information
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmb")]
-    [NmeaMessageType("GPRMB")]
-    public class Gprmb : NmeaMessage
+    [NmeaMessageType("--RMB")]
+    public class Rmb : NmeaMessage
     {
         /// <summary>
         /// Data status
@@ -46,16 +46,16 @@ namespace NmeaParser.Nmea.Gps
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gprmb"/> class.
+        /// Initializes a new instance of the <see cref="Rmb"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        public Gprmb(string type, string[] message) : base(type, message)
+        public Rmb(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 13)
                 throw new ArgumentException("Invalid GPRMB", "message");
 
-            Status = message[0] == "A" ? DataStatus.Ok : Gprmb.DataStatus.Warning;
+            Status = message[0] == "A" ? DataStatus.Ok : Rmb.DataStatus.Warning;
             double tmp;
             if (double.TryParse(message[1], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
             {

@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps.Garmin
+namespace NmeaParser.Nmea.Garmin
 {
 	/// <summary>
 	///  Recommended Minimum

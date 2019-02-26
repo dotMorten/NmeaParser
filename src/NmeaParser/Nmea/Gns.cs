@@ -27,7 +27,8 @@ namespace NmeaParser.Nmea
     /// Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gns")]
-	public abstract class Gns : NmeaMessage
+    [NmeaMessageType("--GNS")]
+    public class Gns : NmeaMessage
 	{
         /*
          * Example of GNS messages:
@@ -124,7 +125,7 @@ namespace NmeaParser.Nmea
 		/// </summary>
         /// <param name="type">The message type</param>
 		/// <param name="message">The NMEA message values.</param>
-		protected Gns(string type, string[] message) : base(type, message)
+		public Gns(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 12)
                 throw new ArgumentException("Invalid GNS", "message");

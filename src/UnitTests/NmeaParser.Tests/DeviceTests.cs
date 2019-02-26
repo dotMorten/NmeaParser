@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NmeaParser.Nmea;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace NmeaParser.Tests
 				try
 				{
 					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
-					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gps.Gpgsv));
-					var msg = e.Message as NmeaParser.Nmea.Gps.Gpgsv;
+					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
+					var msg = e.Message as NmeaParser.Nmea.Gsv;
 					if (msg.TotalMessages == msg.MessageNumber)
 					{
 						Assert.IsNotNull(e.MessageParts);
@@ -71,10 +72,15 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
                     {
                         Assert.IsNotNull(e.MessageParts);
                         Assert.AreEqual(e.MessageParts.Count, 4, "MessageParts.Length");
-                        Assert.IsInstanceOfType(e.MessageParts[0], typeof(NmeaParser.Nmea.Gps.Gpgsv));
-                        Assert.IsInstanceOfType(e.MessageParts[1], typeof(NmeaParser.Nmea.Gps.Gpgsv));
-                        Assert.IsInstanceOfType(e.MessageParts[2], typeof(NmeaParser.Nmea.Glonass.Glgsv));
-                        Assert.IsInstanceOfType(e.MessageParts[3], typeof(NmeaParser.Nmea.Galileo.Gagsv));
+                        Assert.IsInstanceOfType(e.MessageParts[0], typeof(NmeaParser.Nmea.Gsv));
+                        Assert.IsInstanceOfType(e.MessageParts[1], typeof(NmeaParser.Nmea.Gsv));
+                        Assert.IsInstanceOfType(e.MessageParts[2], typeof(NmeaParser.Nmea.Gsv));
+                        Assert.IsInstanceOfType(e.MessageParts[3], typeof(NmeaParser.Nmea.Gsv));
+                        Assert.AreEqual(Talker.GlobalPositioningSystem, e.MessageParts[0].TalkerId);
+                        Assert.AreEqual(Talker.GlobalPositioningSystem, e.MessageParts[1].TalkerId);
+                        Assert.AreEqual(Talker.GlonassReceiver, e.MessageParts[2].TalkerId);
+                        Assert.AreEqual(Talker.GalileoPositioningSystem, e.MessageParts[3].TalkerId);
+
                         tcs.SetResult(true);
                     }
                     else
@@ -106,8 +112,8 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
 				try
 				{
 					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
-					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gps.Gpgsv));
-					var msg = e.Message as NmeaParser.Nmea.Gps.Gpgsv;
+					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
+					var msg = e.Message as NmeaParser.Nmea.Gsv;
 					Assert.IsNull(e.MessageParts);
 					if (count > 6)
 						tcs.SetResult(true);

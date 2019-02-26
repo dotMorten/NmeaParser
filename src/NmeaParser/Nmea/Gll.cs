@@ -27,14 +27,15 @@ namespace NmeaParser.Nmea
 	///  Geographic position, latitude / longitude
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
-	public abstract class Gll : NmeaMessage
+    [NmeaMessageType("--GLL")]
+    public class Gll : NmeaMessage
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="Gll"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected Gll(string type, string[] message) : base(type, message)
+        public Gll(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 4)
 				throw new ArgumentException("Invalid GPGLL", "message");

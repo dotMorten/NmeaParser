@@ -23,16 +23,19 @@ namespace NmeaParser.Nmea.Gps
     /// <summary>
 	///  Course over ground and ground speed
 	/// </summary>
+    /// <remarks>
+    /// The actual course and speed relative to the ground.
+    /// </remarks>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "GPVTG")]
-    [NmeaMessageType("GPVTG")]
-    public class Gpvtg : NmeaMessage
+    [NmeaMessageType("--VTG")]
+    public class Vtg : NmeaMessage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gpvtg"/> class.
+        /// Initializes a new instance of the <see cref="Vtg"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        public Gpvtg(string type, string[] message) : base(type, message)
+        public Vtg(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 7)
                 throw new ArgumentException("Invalid Gpvtg", "message");

@@ -44,11 +44,11 @@ namespace NmeaParser.Nmea
 		public string NmeaType { get; private set; }
 	}
 
-	/// <summary>
-	/// NMEA Message base class.
-	/// </summary>
-	public abstract class NmeaMessage
-	{
+    /// <summary>
+    /// NMEA Message base class.
+    /// </summary>
+    public abstract class NmeaMessage
+    {
         private readonly static Dictionary<string, ConstructorInfo> messageTypes;
 
         /// <summary>
@@ -87,70 +87,84 @@ namespace NmeaParser.Nmea
             }
         }
 
-		/// <summary>
-		/// Parses the specified NMEA message.
-		/// </summary>
-		/// <param name="message">The NMEA message string.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentException">
-		/// Invalid nmea message: Missing starting character '$'
-		/// or checksum failure
-		/// </exception>
-		public static NmeaMessage Parse(string message)
-		{
-			if (string.IsNullOrEmpty(message))
-				throw new ArgumentNullException("message"); 
-			
-			int checksum = -1;
-			if (message[0] != '$')
-				throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
-			var idx = message.IndexOf('*');
-			if (idx >= 0)
-			{
-				checksum = Convert.ToInt32(message.Substring(idx + 1), 16);
-				message = message.Substring(0, message.IndexOf('*'));
-			}
-			if (checksum > -1)
-			{
-				int checksumTest = 0;
-				for (int i = 1; i < message.Length; i++)
-				{
-					checksumTest ^= Convert.ToByte(message[i]);
-				}
-				if (checksum != checksumTest)
-					throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
-			}
+        /// <summary>
+        /// Parses the specified NMEA message.
+        /// </summary>
+        /// <param name="message">The NMEA message string.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// Invalid nmea message: Missing starting character '$'
+        /// or checksum failure
+        /// </exception>
+        public static NmeaMessage Parse(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentNullException("message");
 
-			string[] parts = message.Split(new char[] { ',' });
-			string MessageType = parts[0].Substring(1);
-			string[] MessageParts = parts.Skip(1).ToArray();
-			if (messageTypes.ContainsKey(MessageType))
-			{
-				return (NmeaMessage)messageTypes[MessageType].Invoke(new object[] { MessageType, MessageParts });
-			}
-			else
-			{
+            int checksum = -1;
+            if (message[0] != '$')
+                throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
+            var idx = message.IndexOf('*');
+            if (idx >= 0)
+            {
+                checksum = Convert.ToInt32(message.Substring(idx + 1), 16);
+                message = message.Substring(0, message.IndexOf('*'));
+            }
+            if (checksum > -1)
+            {
+                int checksumTest = 0;
+                for (int i = 1; i < message.Length; i++)
+                {
+                    checksumTest ^= Convert.ToByte(message[i]);
+                }
+                if (checksum != checksumTest)
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
+            }
+
+            string[] parts = message.Split(new char[] { ',' });
+            string MessageType = parts[0].Substring(1);
+            string[] MessageParts = parts.Skip(1).ToArray();
+            if (messageTypes.ContainsKey(MessageType))
+            {
+                return (NmeaMessage)messageTypes[MessageType].Invoke(new object[] { MessageType, MessageParts });
+            }
+            else if (messageTypes.ContainsKey("--" + MessageType.Substring(2)))
+            {
+                return (NmeaMessage)messageTypes["--" + MessageType.Substring(2)].Invoke(new object[] { MessageType, MessageParts });
+            }
+            else
+            {
                 return new UnknownMessage(MessageType, MessageParts);
-			}
-		}
+            }
+        }
 
-		/// <summary>
-		/// Gets the NMEA message parts.
-		/// </summary>
-		protected IReadOnlyList<string> MessageParts { get; }
+        /// <summary>
+        /// Gets the NMEA message parts.
+        /// </summary>
+        protected IReadOnlyList<string> MessageParts { get; }
 
-		/// <summary>
-		/// Gets the NMEA type id for the message.
-		/// </summary>
-		public string MessageType { get; }
+        /// <summary>
+        /// Gets the NMEA type id for the message.
+        /// </summary>
+        public string MessageType { get; }
 
-		/// <summary>
-		/// Returns a <see cref="System.String" /> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String" /> that represents this instance.
-		/// </returns>
-		public override string ToString()
+        /// <summary>
+        /// Gets the talker ID for this message (
+        /// </summary>
+        public Talker TalkerId => TalkerHelper.GetTalker(MessageType);
+
+        /// <summary>
+        /// Gets a value indicating whether this message type is proprietary
+        /// </summary>
+        public bool IsProprietary => MessageType[0] == 'P'; //Appendix B
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
 		{
 			return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);
 		}

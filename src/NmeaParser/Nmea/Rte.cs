@@ -24,12 +24,19 @@ using System.Threading.Tasks;
 namespace NmeaParser.Nmea.Gps
 {
     /// <summary>
-    ///  Routes
+    /// Routes
     /// </summary>
+    /// <remarks>
+    /// Waypoint identifiers, listed in order with starting waypoint first, for the identified route. Two modes of
+    /// transmission are provided: 'c' indicates that the complete list of waypoints in the route are being
+    /// transmitted; 'w' indicates a working route where the first listed waypoint is always the last waypoint
+    /// that had been reached (FROM), while the second listed waypoint is always the waypoint that the vessel is
+    /// currently heading for (TO), the remaining list of waypoints represents the remainder of the route. 
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprte")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    [NmeaMessageType("GPRTE")]
-    public sealed class Gprte : NmeaMessage, IMultiPartMessage<string>
+    [NmeaMessageType("--RTE")]
+    public sealed class Rte : NmeaMessage, IMultiPartMessage<string>
     {
         /// <summary>
         /// Waypoint tpe
@@ -51,7 +58,7 @@ namespace NmeaParser.Nmea.Gps
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        public Gprte(string type, string[] message) : base(type, message)
+        public Rte(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 4)
                 throw new ArgumentException("Invalid GPRTE", "message");

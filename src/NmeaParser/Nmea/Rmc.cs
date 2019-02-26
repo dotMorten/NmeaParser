@@ -27,14 +27,15 @@ namespace NmeaParser.Nmea
 	///  Recommended Minimum
 	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
-	public abstract class Rmc : NmeaMessage
+    [NmeaMessageType("--RMC")]
+    public class Rmc : NmeaMessage
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="Rmc"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected Rmc(string type, string[] message) : base(type, message)
+        public Rmc(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 11)
 				throw new ArgumentException("Invalid GPRMC", "message"); 

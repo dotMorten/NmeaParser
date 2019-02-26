@@ -21,21 +21,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea
 {
     /// <summary>
     /// Bearing Origin to Destination
     /// </summary>
+    /// <remarks>
+    /// Bearing angle of the line, calculated at the origin waypoint, extending to the destination waypoint from 
+    /// the origin waypoint for the active navigation leg of the journey
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpbod")]
-    [NmeaMessageType("GPBOD")]
-    public class Gpbod : NmeaMessage
+    [NmeaMessageType("--BOD")]
+    public class Bod : NmeaMessage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gpbod"/> class.
+        /// Initializes a new instance of the <see cref="Bod"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        public Gpbod(string type, string[] message) : base(type, message)
+        public Bod(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 3)
                 throw new ArgumentException("Invalid GPBOD", "message");

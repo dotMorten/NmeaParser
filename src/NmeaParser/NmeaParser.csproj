@@ -11,7 +11,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>1.11</Version>
+    <Version>2.0-beta1</Version>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
@@ -19,7 +19,10 @@
     <Copyright>Copyright © Morten Nielsen 2015-2019</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
-    <PackageReleaseNotes>Lots of API cleanup to avoid null-references. Simplify object model for creation (semi-breaking). Updated license to Apache 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Lots of API cleanup to avoid null-references.
+Revamped talker-specific message to use same class, instead of having talker-specific types (breaking).
+Simplify object model for creation (semi-breaking).
+Updated license to Apache 2.0</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
