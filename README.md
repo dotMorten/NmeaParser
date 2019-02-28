@@ -1,6 +1,10 @@
 Nmea Parser
 =========
 
+_NOTE: The documentation below matches the v1.x releases. I'm currently working on a big revamp of the API to make it simpler and cover more scenarios learned over time, which will include some breaking changes. So the doc below does not currently match what you see in the master-branch_
+
+=========
+
 Library for reading and parsing NMEA data message streams.
 It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Store, Windows Phone, Windows Desktop/.NET and Windows Universal apps as well as Xamarin for iOS and Android.
 
