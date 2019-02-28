@@ -22,15 +22,46 @@ Currently supported NMEA messages:
 
 The API is easily extensible with more NMEA messages. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
 
-Example:
+### Examples:
+
+**Add a new data type**
 ```csharp
 [NmeaMessageType("GPRMC")]
 public class Gprmc : NmeaMessage
 {
-	protected override void LoadMessage(string[] message)
-	{
-		//TODO: Process message parts
-	}
+    public Gprmc(string type, string[] message) : base(type, message)
+    {
+        //TODO: Process message parts
+    }
+}
+```
+
+**Connect to a serial gps gevice on COM1**
+```csharp
+static void Main(string[] args)
+{
+    using (var device = new NmeaParser.SerialPortDevice(new SerialPort("COM1")))
+    {
+        device.MessageReceived += Device_MessageReceived;
+        device.OpenAsync().GetAwaiter().GetResult();
+        Console.ReadLine();
+        device.MessageReceived -= Device_MessageReceived;
+    }
+}
+
+static void ProcessMessage(NmeaMessage message)
+{
+    var messageType = message.GetType();
+    if (messageType == typeof(NmeaParser.Nmea.Gnss.Gngll))
+    {
+        var gngll = message as NmeaParser.Nmea.Gnss.Gngll;
+        Console.WriteLine($"Gngll - {gngll.Latitude} {gngll.Longitude}");
+    }
+    else if (messageType == typeof(NmeaParser.Nmea.Gnss.Gngga))
+    {
+        var gngga = message as NmeaParser.Nmea.Gnss.Gngga;
+        Console.WriteLine($"Gngga - {gngga.Latitude} {gngga.Longitude}");
+    }
 }
 ```
 
