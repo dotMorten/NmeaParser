@@ -12,20 +12,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-using NmeaParser.Nmea;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.LaserRange
 {
-	/// <summary>
-	/// Laser Range Measurement
-	/// </summary>
-	public abstract class LaserRangeMessage : NmeaMessage
+    /// <summary>
+    /// Laser Range Measurement
+    /// </summary>
+    public abstract class LaserRangeMessage : NmeaMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LaserRangeMessage"/> class.

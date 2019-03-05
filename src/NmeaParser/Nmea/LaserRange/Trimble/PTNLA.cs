@@ -12,19 +12,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NmeaParser.Nmea.LaserRange.Trimble
 {
-	/// <summary>
-	/// Burden finder
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnla")]
+    /// <summary>
+    /// Burden finder
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnla")]
 	[NmeaMessageType("PTNLA")]
 	public class Ptnla : LaserRangeMessage
     {

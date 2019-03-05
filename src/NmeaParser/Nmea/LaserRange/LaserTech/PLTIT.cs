@@ -12,19 +12,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NmeaParser.Nmea.LaserRange.LaserTech
 {
-	/// <summary>
-	/// Laser Range 
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
+    /// <summary>
+    /// Laser Range 
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
 	[NmeaMessageType("PLTIT")]
 	public class Pltit : LaserRangeMessage
     {

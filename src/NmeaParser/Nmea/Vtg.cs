@@ -13,10 +13,8 @@
 //  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace NmeaParser.Nmea.Gps
+namespace NmeaParser.Nmea
 {
     /// <summary>
 	///  Course over ground and ground speed
