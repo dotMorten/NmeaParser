@@ -13,18 +13,14 @@
 //  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	///  Global Positioning System Fix Data
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
+    /// <summary>
+    ///  Global Positioning System Fix Data
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]
     public class Gga : NmeaMessage
 	{

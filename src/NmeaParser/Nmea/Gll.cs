@@ -13,18 +13,13 @@
 //  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	///  Geographic position, latitude / longitude
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
+    /// <summary>
+    ///  Geographic position, latitude / longitude
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
     [NmeaMessageType("--GLL")]
     public class Gll : NmeaMessage
 	{

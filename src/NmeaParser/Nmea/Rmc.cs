@@ -13,18 +13,14 @@
 //  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	///  Recommended Minimum
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
+    /// <summary>
+    ///  Recommended Minimum
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
     [NmeaMessageType("--RMC")]
     public class Rmc : NmeaMessage
 	{

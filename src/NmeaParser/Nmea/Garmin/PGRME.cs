@@ -13,18 +13,13 @@
 //  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea.Garmin
 {
-	/// <summary>
-	///  Recommended Minimum
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrme")]
+    /// <summary>
+    ///  Recommended Minimum
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrme")]
 	[NmeaMessageType("PGRME")]
 	public class Pgrme : NmeaMessage
 	{

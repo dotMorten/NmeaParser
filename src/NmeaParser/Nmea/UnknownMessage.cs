@@ -12,18 +12,14 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	/// Represents an unknown message type
-	/// </summary>
-	public class UnknownMessage : NmeaMessage
+    /// <summary>
+    /// Represents an unknown message type
+    /// </summary>
+    public class UnknownMessage : NmeaMessage
 	{
         internal UnknownMessage(string type, string[] messageParts) : base(type, messageParts) { }
 
