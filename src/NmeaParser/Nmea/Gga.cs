@@ -18,7 +18,7 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    ///  Global Positioning System Fix Data
+    /// Global Positioning System Fix Data
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]

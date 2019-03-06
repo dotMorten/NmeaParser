@@ -17,7 +17,7 @@ using System;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-	///  Course over ground and ground speed
+	/// Course over ground and ground speed
 	/// </summary>
     /// <remarks>
     /// The actual course and speed relative to the ground.

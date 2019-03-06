@@ -17,7 +17,7 @@ using System;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    ///  Geographic position, latitude / longitude
+    /// Geographic position, latitude / longitude
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
     [NmeaMessageType("--GLL")]

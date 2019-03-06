@@ -19,7 +19,7 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    ///  GPS Satellites in view
+    /// GPS Satellites in view
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]

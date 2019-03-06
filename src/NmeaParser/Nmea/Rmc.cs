@@ -18,7 +18,7 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    ///  Recommended Minimum
+    /// Recommended Minimum
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
     [NmeaMessageType("--RMC")]
