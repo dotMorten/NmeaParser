@@ -343,6 +343,26 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gsv.SVs.Count);
         }
 
+
+        [TestMethod]
+        [WorkItem(53)]
+        public void TestGpgsv_MissingElevationAndAzimuth()
+        {
+            string msgstr = "$GPGSV,3,1,12,02,06,225,16,04,,,40,05,65,251,27,07,40,057,43,0*51";
+            var msg = NmeaMessage.Parse(msgstr);
+            Assert.IsInstanceOfType(msg, typeof(Gsv));
+            Gsv gsv = (Gsv)msg;
+            Assert.AreEqual(3, gsv.TotalMessages);
+            Assert.AreEqual(1, gsv.MessageNumber);
+            Assert.AreEqual(12, gsv.SVsInView);
+            Assert.IsNotNull(gsv.SVs);
+            Assert.AreEqual(4, gsv.SVs.Count);
+            Assert.AreEqual(4, gsv.SVs[1].PrnNumber);
+            Assert.IsTrue(double.IsNaN(gsv.SVs[1].Elevation));
+            Assert.IsTrue(double.IsNaN(gsv.SVs[1].Azimuth));
+            Assert.AreEqual(40, gsv.SVs[1].SignalToNoiseRatio);
+        }
+
         [TestMethod]
         public void TestGpgll()
         {

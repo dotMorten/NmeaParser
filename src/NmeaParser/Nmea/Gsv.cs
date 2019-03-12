@@ -98,8 +98,10 @@ namespace NmeaParser.Nmea
         internal SatelliteVehicle(string[] message, int startIndex)
         {
             PrnNumber = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
-            Elevation = double.Parse(message[startIndex + 1], CultureInfo.InvariantCulture);
-            Azimuth = double.Parse(message[startIndex + 2], CultureInfo.InvariantCulture);
+            if (double.TryParse(message[startIndex + 1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double e))
+                Elevation = e;
+            if (double.TryParse(message[startIndex + 2], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double a))
+                Azimuth = a;
             int snr = -1;
             if (int.TryParse(message[startIndex + 3], out snr))
                 SignalToNoiseRatio = snr;
@@ -111,15 +113,15 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Elevation in degrees, 90 maximum
         /// </summary>
-        public double Elevation { get; }
+        public double Elevation { get; } = double.NaN;
         /// <summary>
         /// Azimuth, degrees from true north, 000 to 359
         /// </summary>
-        public double Azimuth { get; }
+        public double Azimuth { get; } = double.NaN;
         /// <summary>
         /// Signal-to-Noise ratio, 0-99 dB (-1 when not tracking) 
         /// </summary>
-        public int SignalToNoiseRatio { get; }
+        public int SignalToNoiseRatio { get; } = -1;
 
         /// <summary>
         /// Satellite system
