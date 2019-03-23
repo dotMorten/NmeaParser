@@ -110,6 +110,9 @@
     <Content Include="..\NmeaSampleData.txt">
       <Link>NmeaSampleData.txt</Link>
     </Content>
+    <Content Include="Assets\SmallLogo.scale-200.png" />
+    <Content Include="Assets\SmallLogo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
