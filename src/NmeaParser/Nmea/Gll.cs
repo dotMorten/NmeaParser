@@ -77,15 +77,40 @@ namespace NmeaParser.Nmea
 		/// </value>
 		public bool DataActive { get; }
 
+        /// <summary>
+        /// Positioning system Mode Indicator
+        /// </summary>
         public Mode ModeIndicator { get; }
 
+        /// <summary>
+        /// Positioning system Mode Indicator
+        /// </summary>
+        /// <seealso cref="Gll.ModeIndicator"/>
         public enum Mode
         {
+            /// <summary>
+            /// Autonomous mode
+            /// </summary>
             Autonomous,
+            /// <summary>
+            ///  Differential mode
+            /// </summary>
             Differential,
+            /// <summary>
+            ///  Estimated (dead reckoning) mode
+            /// </summary>
             EstimatedDeadReckoning,
+            /// <summary>
+            /// Manual input mode
+            /// </summary>
             Manual,
+            /// <summary>
+            /// Simulator mode
+            /// </summary>
             Simulator,
+            /// <summary>
+            /// Data not valid
+            /// </summary>
             DataNotValid
         }
 	}
