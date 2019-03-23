@@ -31,3 +31,8 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'nuget'
+    targetPath: 'src\Bin\Release\'
