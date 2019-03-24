@@ -91,7 +91,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Rmb));
             Rmb rmb = (Rmb)msg;
-            Assert.AreEqual(true, rmb.Arrived);
+            Assert.AreEqual(false, rmb.Arrived);
             Assert.AreEqual(double.NaN, rmb.CrossTrackError);
             Assert.AreEqual(double.NaN, rmb.DestinationLatitude);
             Assert.AreEqual(double.NaN, rmb.DestinationLongitude);
