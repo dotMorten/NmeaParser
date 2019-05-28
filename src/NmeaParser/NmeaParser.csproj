@@ -43,10 +43,12 @@ Updated license to Apache 2.0</PackageReleaseNotes>
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
     <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
+    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
     <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
+    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
