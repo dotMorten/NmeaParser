@@ -134,6 +134,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\NmeaParser\NmeaParser.csproj">
       <Project>{1adc3666-1ddb-48c4-9811-1e58b6d09a7c}</Project>
       <Name>NmeaParser</Name>

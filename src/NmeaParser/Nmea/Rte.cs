@@ -50,7 +50,7 @@ namespace NmeaParser.Nmea
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Gprte"/> class.
+        /// Initializes a new instance of the <see cref="Rte"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
