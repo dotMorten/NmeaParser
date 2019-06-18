@@ -38,6 +38,7 @@ namespace NmeaParser
 			m_socket = socket;
 		}
 
+        /// <inheritdoc />
         protected override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             if (m_socket == null)
@@ -78,6 +79,7 @@ namespace NmeaParser
             return Task.FromResult(m_socket.Send(buffer, offset, length, SocketFlags.None));
         }
 
+        /// <inheritdoc />
         protected override Task<Stream> OpenStreamAsync()
         {
             return Task.FromResult<Stream>(null);
