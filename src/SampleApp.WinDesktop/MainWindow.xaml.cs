@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -82,6 +83,10 @@ namespace SampleApp.WinDesktop
 					((NmeaParser.SerialPortDevice)device).Port.PortName,
 					((NmeaParser.SerialPortDevice)device).Port.BaudRate);
 			}
+            else if(device is EthernetDevice)
+            {
+                currentDeviceInfo.Text = "Ethernet device";
+            }
         }
         Dictionary<string, List<NmeaParser.Nmea.Gsv>> gsvMessages = new Dictionary<string, List<NmeaParser.Nmea.Gsv>>();
 
@@ -231,5 +236,31 @@ namespace SampleApp.WinDesktop
 			}
 			return null;
 		}
-	}
+
+        private void ConnectToEthernetButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var ip = ipAddress.Text as string;
+                var port = int.Parse(txtPort.Text);
+
+                NmeaDevice device;
+                if(ethernetUDP.IsChecked == true)
+                {
+                    var client = new UdpClient(ip, port);
+                    device = new NmeaParser.EthernetDevice(client.Client);
+                }
+                else
+                {
+                    var client = new TcpClient(ip, port);
+                    device = new NmeaParser.EthernetDevice(client.Client);
+                }
+                StartDevice(device);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Error connecting: " + ex.Message);
+            }
+        }
+    }
 }

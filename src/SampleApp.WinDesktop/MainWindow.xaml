@@ -82,10 +82,39 @@
 								<Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToSerialButton_Click" />
 							</StackPanel>
 						</GroupBox>
-					</StackPanel>
+                        <GroupBox Header="Open Ethernet device" Width="200" HorizontalAlignment="Left" Height="174">
+                            <StackPanel>
+                                <RadioButton x:Name="ethernetUDP" GroupName="EthernetOption" Content="UDP" IsChecked="True"/>
+                                <RadioButton x:Name="ethernetTCP" GroupName="EthernetOption" Content="TCP"/>
+                                <TextBlock Text="IP Address:" />
+                                <TextBox x:Name="ipAddress" />
+                                <TextBlock Text="Port:" />
+                                <TextBox x:Name="txtPort" />
+                                <Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToEthernetButton_Click" Height="28" />
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
 				</Grid>
 			</TabItem>
-		</TabControl>
+            <GroupBox Header="Open Serial device" Width="200" HorizontalAlignment="Left">
+                <StackPanel>
+                    <TextBlock Text="Serial port:" />
+                    <ComboBox x:Name="serialPorts1" />
+                    <TextBlock Text="Baud rate:" />
+                    <ComboBox x:Name="baudRates1" SelectedIndex="3">
+                        <ComboBoxItem Content="1200"/>
+                        <ComboBoxItem Content="2400"/>
+                        <ComboBoxItem Content="4800"/>
+                        <ComboBoxItem Content="9600"/>
+                        <ComboBoxItem Content="19200"/>
+                        <ComboBoxItem Content="38400"/>
+                        <ComboBoxItem Content="57600"/>
+                        <ComboBoxItem Content="115200"/>
+                    </ComboBox>
+                    <Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToSerialButton_Click" />
+                </StackPanel>
+            </GroupBox>
+        </TabControl>
 		
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
