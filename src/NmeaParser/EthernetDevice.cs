@@ -23,16 +23,16 @@ using System.Threading.Tasks;
 namespace NmeaParser
 {
 	/// <summary>
-	/// Generic stream device
+	/// Ethernet device
 	/// </summary>
     public class EthernetDevice : NmeaDevice
     {
 		private Socket m_socket;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StreamDevice"/> class.
+		/// Initializes a new instance of the <see cref="EthernetDevice"/> class.
 		/// </summary>
-		/// <param name="socket">The stream.</param>
+		/// <param name="socket">Socket (use TcpClient.Client for TCP or UdpClient.Client for UDP)</param>
 		public EthernetDevice(Socket socket) : base()
 		{
 			m_socket = socket;
