@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -37,6 +38,11 @@ namespace NmeaParser
 		{
 			m_socket = socket;
 		}
+
+        /// <summary>
+        /// IP Address and Port we are connected to.
+        /// </summary>
+        public IPEndPoint RemoteEndPoint { get { return m_socket?.RemoteEndPoint as IPEndPoint; } }
 
         /// <inheritdoc />
         protected override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)

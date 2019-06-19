@@ -85,7 +85,7 @@ namespace SampleApp.WinDesktop
 			}
             else if(device is EthernetDevice)
             {
-                currentDeviceInfo.Text = "Ethernet device";
+                currentDeviceInfo.Text = $"Ethernet device ( IP={((EthernetDevice)device).RemoteEndPoint.Address}, Port={((EthernetDevice)device).RemoteEndPoint.Port})";
             }
         }
         Dictionary<string, List<NmeaParser.Nmea.Gsv>> gsvMessages = new Dictionary<string, List<NmeaParser.Nmea.Gsv>>();
