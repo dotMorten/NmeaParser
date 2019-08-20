@@ -16,7 +16,7 @@ jobs:
     
     steps:
     - name: Clone NmeaParser
-    - uses: actions/checkout@v1
+      uses: actions/checkout@v1
     
     - name: Build
       run: |
