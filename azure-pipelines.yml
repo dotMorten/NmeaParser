@@ -26,6 +26,8 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    msbuildArchitecture: 'x64'
+    msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME_8_X64)"'
 
 - task: VSTest@2
   inputs:
