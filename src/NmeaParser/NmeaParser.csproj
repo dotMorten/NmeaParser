@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0.14393</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0.16299</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -59,10 +59,10 @@ Updated license to Apache 2.0</PackageReleaseNotes>
     <NoWarn>$(NoWarn);VSX1000</NoWarn>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.14393'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.14393'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
     <EmbeddedResource Include="**\*.rd.xml" />
   </ItemGroup>
 
