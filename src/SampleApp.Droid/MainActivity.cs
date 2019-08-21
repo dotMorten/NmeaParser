@@ -96,7 +96,7 @@ namespace SampleApp.Droid
                     return;
 
                 launched = true;
-                listener = new NmeaParser.SystemNmeaDevice();
+                listener = new NmeaParser.SystemNmeaDevice(ApplicationContext);
             }
             else //Bluetooth
             {

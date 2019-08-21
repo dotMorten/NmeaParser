@@ -29,10 +29,10 @@ namespace NmeaParser
 	{
 		private readonly object m_lockObject = new object();
 		private string m_message = "";
-		private Stream m_stream;
-		private CancellationTokenSource m_cts;
+		private Stream? m_stream;
+		private CancellationTokenSource? m_cts;
 		private bool m_isOpening;
-        private Task m_ParserTask;
+        private Task? m_ParserTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaDevice"/> class.
@@ -183,7 +183,9 @@ namespace NmeaParser
 
         private void OnMessageReceived(Nmea.NmeaMessage msg)
         {
-            Nmea.NmeaMessage[] messageParts = null;
+            if (msg == null)
+                return;
+            Nmea.NmeaMessage[]? messageParts = null;
             if (msg is IMultiPartMessage multi)
             {
                 string messageType = msg.MessageType.Substring(2); //We don't care about the two first characters. Ie GPGSV, GLGSV, GAGSV etc are all part of the same multi-part message
@@ -212,8 +214,8 @@ namespace NmeaParser
                     }
                 }
             }
-
-            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
+            if (messageParts != null)
+                MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
         }
 
 		private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();

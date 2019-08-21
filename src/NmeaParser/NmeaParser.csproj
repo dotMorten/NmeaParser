@@ -27,9 +27,10 @@ Updated license to Apache 2.0</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</CodeAnalysisTreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
@@ -41,11 +42,13 @@ Updated license to Apache 2.0</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
     <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
     <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
     <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
     <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>

@@ -33,7 +33,7 @@ namespace NmeaParser
 		/// <param name="stream">The stream.</param>
 		public StreamDevice(Stream stream) : base()
 		{
-			m_stream = stream;
+			m_stream = stream ?? throw new ArgumentNullException(nameof(stream));
 		}
 
 		/// <summary>
@@ -64,7 +64,6 @@ namespace NmeaParser
 			base.Dispose(disposing);
 			if (m_stream != null)
 				m_stream.Dispose();
-			m_stream = null;
 		}
 
         /// <inheritdoc />

@@ -64,7 +64,7 @@ namespace NmeaParser
 		{
             if (Port.IsOpen)
                 Port.Close();
-			return Task.FromResult<object>(null);
+			return Task.FromResult<object?>(null);
 		}
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace NmeaParser
                 throw new InvalidOperationException("Device not open");
 
             Port.Write(buffer, offset, length);
-            return Task.FromResult<object>(null);
+            return Task.FromResult<object?>(null);
         }
     }
 }

@@ -33,9 +33,9 @@ namespace NmeaParser
 	/// </summary>
 	public class BluetoothDevice : NmeaDevice
 	{
-		private Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService m_deviceService;
-        private Windows.Networking.Proximity.PeerInformation m_devicePeer;
-        private StreamSocket m_socket;
+		private Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService? m_deviceService;
+        private Windows.Networking.Proximity.PeerInformation? m_devicePeer;
+        private StreamSocket? m_socket;
         private bool m_disposeService;
         private SemaphoreSlim m_semaphoreSlim = new SemaphoreSlim(1, 1);
 
@@ -60,7 +60,7 @@ namespace NmeaParser
         /// <param name="disposeService">Whether this devicee should also dispose the RfcommDeviceService provided when this device disposes.</param>
         public BluetoothDevice(RfcommDeviceService service, bool disposeService = false)
 		{
-			m_deviceService = service;
+			m_deviceService = service ?? throw new ArgumentNullException(nameof(service));
             m_disposeService = disposeService;
         }
 
@@ -70,7 +70,7 @@ namespace NmeaParser
         /// <param name="peer">The peer information device.</param>
         public BluetoothDevice(Windows.Networking.Proximity.PeerInformation peer)
         {
-            m_devicePeer = peer;
+            m_devicePeer = peer ?? throw new ArgumentNullException(nameof(peer));
         }
 
         /// <inheritdoc />
@@ -95,20 +95,37 @@ namespace NmeaParser
             {
                 await socket.ConnectAsync(m_devicePeer.HostName, "1");
             }
-            else
+            else if (m_deviceService != null)
             {
                 await socket.ConnectAsync(m_deviceService.ConnectionHostName, m_deviceService.ConnectionServiceName);
             }
+            else
+                throw new InvalidOperationException();
 			m_socket = socket;
-            return null; //We're going to use WinRT buffers instead and will handle read/write, so no reason to return a stream. This is mainly done to avoid locking issues reading and writing at the same time
+            
+            return new DummyStream(); //We're going to use WinRT buffers instead and will handle read/write, so no reason to return a real stream. This is mainly done to avoid locking issues reading and writing at the same time
 		}
 
-		/// <summary>
-		/// Closes the stream the NmeaDevice is working on top off.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <returns></returns>
-		protected override Task CloseStreamAsync(System.IO.Stream stream)
+        private class DummyStream : Stream
+        {
+            public override bool CanRead => false;
+            public override bool CanSeek => false;
+            public override bool CanWrite => false;
+            public override long Length => throw new NotSupportedException();
+            public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+            public override void Flush() => throw new NotSupportedException();
+            public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+            public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+            public override void SetLength(long value) => throw new NotSupportedException();
+            public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Closes the stream the NmeaDevice is working on top off.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        protected override Task CloseStreamAsync(System.IO.Stream stream)
 		{
             if(m_socket == null)
                 throw new InvalidOperationException("No connection to close");
@@ -124,6 +141,8 @@ namespace NmeaParser
             // Reading and writing to the Bluetooth serial connection at the same time seems very unstable in UWP,
             // so we use a semaphore to ensure we don't read and write at the same time
             await m_semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            if (m_socket == null)
+                throw new InvalidOperationException("Socket not initialized");
             try
             {
                 var r = await m_socket.InputStream.ReadAsync(buffer.AsBuffer(), (uint)count, Windows.Storage.Streams.InputStreamOptions.None);

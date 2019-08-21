@@ -63,11 +63,11 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Name of origin
         /// </summary>
-        public string OriginId { get; }
+        public string? OriginId { get; }
 
         /// <summary>
         /// Name of destination
         /// </summary>
-        public string DestinationId { get; }
+        public string? DestinationId { get; }
     }
 }
