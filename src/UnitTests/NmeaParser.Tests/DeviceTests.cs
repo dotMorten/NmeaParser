@@ -26,7 +26,7 @@ namespace NmeaParser.Tests
 				{
 					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
 					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
-					var msg = e.Message as NmeaParser.Nmea.Gsv;
+					var msg = (NmeaParser.Nmea.Gsv)e.Message;
 					if (msg.TotalMessages == msg.MessageNumber)
 					{
 						Assert.IsNotNull(e.MessageParts);
@@ -67,7 +67,7 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
                 {
                     Assert.IsTrue(e.IsMultipart, "IsMultiPart");
                     Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
-                    var msg = e.Message as NmeaParser.Nmea.Gsv;
+                    var msg = (NmeaParser.Nmea.Gsv)e.Message;
                     if (msg.TotalMessages == msg.MessageNumber)
                     {
                         Assert.IsNotNull(e.MessageParts);
