@@ -26,8 +26,6 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArchitecture: 'x64'
-    msbuildArguments: '/p:JavaSdkDirectory=C:\Program Files\Android\jdk\microsoft_dist_openjdk_1.8.0.25'
 
 - task: VSTest@2
   inputs:
