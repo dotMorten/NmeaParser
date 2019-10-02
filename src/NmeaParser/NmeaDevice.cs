@@ -223,7 +223,7 @@ namespace NmeaParser
 		/// <summary>
 		/// Occurs when an NMEA message is received.
 		/// </summary>
-		public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
+		public event EventHandler<NmeaMessageReceivedEventArgs>? MessageReceived;
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources.

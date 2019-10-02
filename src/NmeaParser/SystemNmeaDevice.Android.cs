@@ -104,7 +104,7 @@ namespace NmeaParser
                 NmeaMessage?.Invoke(this, message);
             }
 
-            public event EventHandler<string> NmeaMessage;
+            public event EventHandler<string>? NmeaMessage;
 
             public float Accuracy = float.NaN;
 
