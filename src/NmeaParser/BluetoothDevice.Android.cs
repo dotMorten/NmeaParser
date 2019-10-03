@@ -29,7 +29,7 @@ namespace NmeaParser
 	{
         private static Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
         private Android.Bluetooth.BluetoothDevice m_device;
-        private BluetoothSocket m_socket;
+        private BluetoothSocket? m_socket;
 
         /// <summary>
         /// Gets a list of bluetooth devices that supports serial communication
@@ -51,7 +51,7 @@ namespace NmeaParser
 		/// <param name="device">The Android Bluetooth Device.</param>
 		public BluetoothDevice(Android.Bluetooth.BluetoothDevice device)
 		{
-            m_device = device;
+            m_device = device ?? throw new ArgumentNullException(nameof(device));
 		}
         
         /// <summary>
@@ -80,7 +80,7 @@ namespace NmeaParser
 			if (stream == null)
 				throw new ArgumentNullException("stream");
 			stream.Dispose();
-			m_socket.Dispose();
+			m_socket?.Dispose();
 			m_socket = null;
 			return Task.FromResult(true);
 		}

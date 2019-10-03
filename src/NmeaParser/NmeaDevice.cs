@@ -29,10 +29,10 @@ namespace NmeaParser
 	{
 		private readonly object m_lockObject = new object();
 		private string m_message = "";
-		private Stream m_stream;
-		private CancellationTokenSource m_cts;
+		private Stream? m_stream;
+		private CancellationTokenSource? m_cts;
 		private bool m_isOpening;
-        private Task m_ParserTask;
+        private Task? m_ParserTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaDevice"/> class.
@@ -183,7 +183,9 @@ namespace NmeaParser
 
         private void OnMessageReceived(Nmea.NmeaMessage msg)
         {
-            Nmea.NmeaMessage[] messageParts = null;
+            if (msg == null)
+                return;
+            Nmea.NmeaMessage[]? messageParts = null;
             if (msg is IMultiPartMessage multi)
             {
                 string messageType = msg.MessageType.Substring(2); //We don't care about the two first characters. Ie GPGSV, GLGSV, GAGSV etc are all part of the same multi-part message
@@ -221,7 +223,7 @@ namespace NmeaParser
 		/// <summary>
 		/// Occurs when an NMEA message is received.
 		/// </summary>
-		public event EventHandler<NmeaMessageReceivedEventArgs> MessageReceived;
+		public event EventHandler<NmeaMessageReceivedEventArgs>? MessageReceived;
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources.
@@ -287,7 +289,7 @@ namespace NmeaParser
 	/// </summary>
 	public sealed class NmeaMessageReceivedEventArgs : EventArgs
 	{
-		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage> messageParts)
+		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage>? messageParts)
         {
 			Message = message;
             MessageParts = messageParts;
@@ -315,6 +317,6 @@ namespace NmeaParser
         /// <value>
         /// The message parts.
         /// </value>
-        public IReadOnlyList<Nmea.NmeaMessage> MessageParts { get; }
+        public IReadOnlyList<Nmea.NmeaMessage>? MessageParts { get; }
 	}
 }

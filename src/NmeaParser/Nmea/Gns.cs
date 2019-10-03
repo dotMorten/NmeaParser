@@ -228,7 +228,7 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
         /// </summary>
-        public string DgpsStationId { get; }
+        public string? DgpsStationId { get; }
 
         /// <summary>
         /// Navigational status

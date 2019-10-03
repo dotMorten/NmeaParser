@@ -27,7 +27,7 @@ namespace NmeaParser
 	public class NmeaFileDevice : BufferedStreamDevice
 	{
 #if NETFX_CORE
-		private Windows.Storage.IStorageFile m_storageFile;
+		private Windows.Storage.IStorageFile? m_storageFile;
 #endif
         private string m_filename;
 
@@ -44,8 +44,8 @@ namespace NmeaParser
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
-        /// <param name="fileName"></param>
-        public NmeaFileDevice(Windows.Storage.IStorageFile fileName) : this(fileName, 1000)
+        /// <param name="storageFile"></param>
+        public NmeaFileDevice(Windows.Storage.IStorageFile storageFile) : this(storageFile, 1000)
 		{
 		}
 #endif
@@ -63,12 +63,13 @@ namespace NmeaParser
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="storageFile"></param>
         /// <param name="readSpeed">The time to wait between each group of lines being read in milliseconds</param>
-        public NmeaFileDevice(Windows.Storage.IStorageFile fileName, int readSpeed)
+        public NmeaFileDevice(Windows.Storage.IStorageFile storageFile, int readSpeed)
             : base(readSpeed)
         {
-            m_storageFile = fileName;
+            m_storageFile = storageFile ?? throw new ArgumentNullException(nameof(storageFile));
+            m_filename = storageFile.Path;
         }
 #endif
 
@@ -79,10 +80,6 @@ namespace NmeaParser
 		{
 			get
             {
-#if NETFX_CORE
-                if (m_storageFile != null)
-                    return m_storageFile.Path;
-#endif
                 return m_filename;
             }
 		}

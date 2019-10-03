@@ -32,16 +32,18 @@ namespace NmeaParser
     /// </summary>
     public class SystemNmeaDevice : NmeaDevice
     {
-        private StringStream stream;
-        private Listener listener;
+        private StringStream? stream;
+        private Listener? listener;
         private LocationManager manager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemNmeaDevice"/> class.
         /// </summary>
-        public SystemNmeaDevice()
+        public SystemNmeaDevice(Context context)
         {
-            manager = Application.Context.GetSystemService(Context.LocationService) as LocationManager;
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            manager = context.GetSystemService(Context.LocationService) as LocationManager ?? throw new InvalidOperationException("Cannot acces the Location Service");
         }
 
         /// <summary>
@@ -76,10 +78,10 @@ namespace NmeaParser
         {
             manager.RemoveUpdates(listener);
             manager.RemoveNmeaListener(listener);
-            listener.Dispose();
+            listener?.Dispose();
             listener = null;
             stream.Dispose();
-            return Task.FromResult<object>(null);
+            return Task.CompletedTask;
         }
 
         private class Listener : Java.Lang.Object,
@@ -102,7 +104,7 @@ namespace NmeaParser
                 NmeaMessage?.Invoke(this, message);
             }
 
-            public event EventHandler<string> NmeaMessage;
+            public event EventHandler<string>? NmeaMessage;
 
             public float Accuracy = float.NaN;
 

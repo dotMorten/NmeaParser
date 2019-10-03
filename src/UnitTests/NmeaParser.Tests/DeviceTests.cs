@@ -13,6 +13,7 @@ namespace NmeaParser.Tests
 	{
 		[TestMethod]
 		[TestCategory("Device")]
+        [Timeout(2000)]
 		public async Task TestGpgsvGroupMessage()
 		{
 			var message = "$GPGSV,3,1,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4C\n$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F\n$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
@@ -26,7 +27,7 @@ namespace NmeaParser.Tests
 				{
 					Assert.IsTrue(e.IsMultipart, "IsMultiPart");
 					Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
-					var msg = e.Message as NmeaParser.Nmea.Gsv;
+					var msg = (NmeaParser.Nmea.Gsv)e.Message;
 					if (msg.TotalMessages == msg.MessageNumber)
 					{
 						Assert.IsNotNull(e.MessageParts);
@@ -50,6 +51,7 @@ namespace NmeaParser.Tests
 
         [TestMethod]
         [TestCategory("Device")]
+        [Timeout(2000)]
         public async Task TestMixedGsvGroupMessage()
         {
             // A group message can have multiple diffent GSV types. 
@@ -67,7 +69,7 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
                 {
                     Assert.IsTrue(e.IsMultipart, "IsMultiPart");
                     Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
-                    var msg = e.Message as NmeaParser.Nmea.Gsv;
+                    var msg = (NmeaParser.Nmea.Gsv)e.Message;
                     if (msg.TotalMessages == msg.MessageNumber)
                     {
                         Assert.IsNotNull(e.MessageParts);
@@ -100,7 +102,8 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
 
         [TestMethod]
 		[TestCategory("Device")]
-		public async Task TestInvalidGpgsvGroupMessage()
+        [Timeout(2000)]
+        public async Task TestInvalidGpgsvGroupMessage()
 		{
 			var message = "$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4D\n$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F\n$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
 			NmeaDevice dev = new BufferedStringDevice(message);

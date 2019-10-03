@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio 16
+VisualStudioVersion = 16.0.0.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NmeaParser", "NmeaParser", "{1701F3BA-A09C-4706-A612-24FD9340FC18}"
 EndProject
