@@ -214,8 +214,8 @@ namespace NmeaParser
                     }
                 }
             }
-            if (messageParts != null)
-                MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
+
+            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
         }
 
 		private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
@@ -289,7 +289,7 @@ namespace NmeaParser
 	/// </summary>
 	public sealed class NmeaMessageReceivedEventArgs : EventArgs
 	{
-		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage> messageParts)
+		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage>? messageParts)
         {
 			Message = message;
             MessageParts = messageParts;
@@ -317,6 +317,6 @@ namespace NmeaParser
         /// <value>
         /// The message parts.
         /// </value>
-        public IReadOnlyList<Nmea.NmeaMessage> MessageParts { get; }
+        public IReadOnlyList<Nmea.NmeaMessage>? MessageParts { get; }
 	}
 }
