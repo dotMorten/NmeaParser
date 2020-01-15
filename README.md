@@ -8,6 +8,13 @@ _NOTE: The documentation below matches the v1.x releases. I'm currently working 
 Library for reading and parsing NMEA data message streams.
 It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Store, Windows Phone, Windows Desktop/.NET and Windows Universal apps as well as Xamarin for iOS and Android.
 
+## Sponsoring
+
+If you like this library and use it a lot, consider sponsoring me. Anything helps and encourages me to keep going.
+
+See here for details: https://github.com/sponsors/dotMorten
+
+### Features
 The following inputs are supported:
 - System.IO.Stream (all platforms)
 - Emulation from NMEA log file (all platforms)
