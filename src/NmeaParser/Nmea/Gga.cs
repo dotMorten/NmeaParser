@@ -23,97 +23,97 @@ namespace NmeaParser.Nmea
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]
     public class Gga : NmeaMessage
-	{
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gga"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
         public Gga(string type, string[] message) : base(type, message)
-		{
-			if (message == null || message.Length < 14)
-				throw new ArgumentException("Invalid GPGGA", "message"); 
-			FixTime = StringToTimeSpan(message[0]);
-			Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
-			Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-			Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
-			NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
-			Hdop = NmeaMessage.StringToDouble(message[7]);
-			Altitude = NmeaMessage.StringToDouble(message[8]);
-			AltitudeUnits = message[9];
-			HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
-			HeightOfGeoidUnits = message[11];			
-			var timeInSeconds = StringToDouble(message[12]);
-			if (!double.IsNaN(timeInSeconds))
-				TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
-			else
-				TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
-			if (message[13].Length > 0)
-				DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
-			else
-				DgpsStationId = -1;
-		}
+        {
+            if (message == null || message.Length < 14)
+                throw new ArgumentException("Invalid GPGGA", "message"); 
+            FixTime = StringToTimeSpan(message[0]);
+            Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
+            Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
+            Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
+            NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
+            Hdop = NmeaMessage.StringToDouble(message[7]);
+            Altitude = NmeaMessage.StringToDouble(message[8]);
+            AltitudeUnits = message[9];
+            HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
+            HeightOfGeoidUnits = message[11];            
+            var timeInSeconds = StringToDouble(message[12]);
+            if (!double.IsNaN(timeInSeconds))
+                TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
+            else
+                TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
+            if (message[13].Length > 0)
+                DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
+            else
+                DgpsStationId = -1;
+        }
 
-		/// <summary>
-		/// Time of day fix was taken
-		/// </summary>
-		public TimeSpan FixTime { get; }
-		
-		/// <summary>
-		/// Latitude
-		/// </summary>
-		public double Latitude { get; }
+        /// <summary>
+        /// Time of day fix was taken
+        /// </summary>
+        public TimeSpan FixTime { get; }
+        
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        public double Latitude { get; }
 
-		/// <summary>
-		/// Longitude
-		/// </summary>
-		public double Longitude { get; }
+        /// <summary>
+        /// Longitude
+        /// </summary>
+        public double Longitude { get; }
 
-		/// <summary>
-		/// Fix Quality
-		/// </summary>
-		public Gga.FixQuality Quality { get; }
+        /// <summary>
+        /// Fix Quality
+        /// </summary>
+        public Gga.FixQuality Quality { get; }
 
-		/// <summary>
-		/// Number of satellites being tracked
-		/// </summary>
-		public int NumberOfSatellites { get; }
+        /// <summary>
+        /// Number of satellites being tracked
+        /// </summary>
+        public int NumberOfSatellites { get; }
 
-		/// <summary>
-		/// Horizontal Dilution of Precision
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; }
+        /// <summary>
+        /// Horizontal Dilution of Precision
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
+        public double Hdop { get; }
 
-		/// <summary>
-		/// Altitude
-		/// </summary>
-		public double Altitude { get; }
+        /// <summary>
+        /// Altitude
+        /// </summary>
+        public double Altitude { get; }
 
-		/// <summary>
-		/// Altitude units ('M' for Meters)
-		/// </summary>
-		public string AltitudeUnits { get; }
-	
-		/// <summary>
-		/// Height of geoid (mean sea level) above WGS84
-		/// </summary>
-		public double HeightOfGeoid { get; }
+        /// <summary>
+        /// Altitude units ('M' for Meters)
+        /// </summary>
+        public string AltitudeUnits { get; }
+    
+        /// <summary>
+        /// Height of geoid (mean sea level) above WGS84
+        /// </summary>
+        public double HeightOfGeoid { get; }
 
-		/// <summary>
-		/// Altitude units ('M' for Meters)
-		/// </summary>
-		public string HeightOfGeoidUnits { get; }
+        /// <summary>
+        /// Altitude units ('M' for Meters)
+        /// </summary>
+        public string HeightOfGeoidUnits { get; }
 
-		/// <summary>
-		/// Time since last DGPS update
-		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; }
+        /// <summary>
+        /// Time since last DGPS update
+        /// </summary>
+        public TimeSpan TimeSinceLastDgpsUpdate { get; }
 
-		/// <summary>
-		/// DGPS Station ID Number
-		/// </summary>
-		public int DgpsStationId { get; }
+        /// <summary>
+        /// DGPS Station ID Number
+        /// </summary>
+        public int DgpsStationId { get; }
 
         /// <summary>
         /// Fix quality

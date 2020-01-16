@@ -21,13 +21,13 @@ using System.Threading.Tasks;
 
 namespace NmeaParser
 {
-	/// <summary>
-	/// A file-based NMEA device reading from a NMEA log file.
-	/// </summary>
-	public class NmeaFileDevice : BufferedStreamDevice
-	{
+    /// <summary>
+    /// A file-based NMEA device reading from a NMEA log file.
+    /// </summary>
+    public class NmeaFileDevice : BufferedStreamDevice
+    {
 #if NETFX_CORE
-		private Windows.Storage.IStorageFile? m_storageFile;
+        private Windows.Storage.IStorageFile? m_storageFile;
 #endif
         private string m_filename;
 
@@ -36,7 +36,7 @@ namespace NmeaParser
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
         /// <param name="fileName"></param>
-		public NmeaFileDevice(string fileName) : this(fileName, 1000)
+        public NmeaFileDevice(string fileName) : this(fileName, 1000)
         {
         }
 
@@ -46,18 +46,18 @@ namespace NmeaParser
         /// </summary>
         /// <param name="storageFile"></param>
         public NmeaFileDevice(Windows.Storage.IStorageFile storageFile) : this(storageFile, 1000)
-		{
-		}
+        {
+        }
 #endif
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="readSpeed">The time to wait between each group of lines being read in milliseconds</param>
-		public NmeaFileDevice(string fileName, int readSpeed) : base(readSpeed)
-		{
-			m_filename = fileName;
-		}
+        public NmeaFileDevice(string fileName, int readSpeed) : base(readSpeed)
+        {
+            m_filename = fileName;
+        }
 
 #if NETFX_CORE
         /// <summary>
@@ -73,24 +73,24 @@ namespace NmeaParser
         }
 #endif
 
-		/// <summary>
-		/// Gets the name of the nmea file this device is using.
-		/// </summary>
-		public string FileName
-		{
-			get
+        /// <summary>
+        /// Gets the name of the nmea file this device is using.
+        /// </summary>
+        public string FileName
+        {
+            get
             {
                 return m_filename;
             }
-		}
+        }
 
         /// <summary>
         /// Gets the stream to perform buffer reads on.
         /// </summary>
         /// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         protected override Task<Stream> GetStreamAsync()
-		{
+        {
 
 #if NETFX_CORE
             if (m_storageFile != null)
@@ -102,5 +102,5 @@ namespace NmeaParser
             return Task.FromResult<Stream>(System.IO.File.OpenRead(m_filename));
 #endif
         }
-	}
+    }
 }

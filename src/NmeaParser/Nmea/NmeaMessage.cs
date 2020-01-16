@@ -24,21 +24,21 @@ namespace NmeaParser.Nmea
     /// Nmea message attribute type used on concrete <see cref="NmeaMessage"/> implementations.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public sealed class NmeaMessageTypeAttribute : Attribute
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NmeaMessageTypeAttribute"/> class.
-		/// </summary>
-		/// <param name="nmeaType">The type.</param>
-		public NmeaMessageTypeAttribute(string nmeaType)
-		{
-			NmeaType = nmeaType;
-		}
-		/// <summary>
-		/// Gets or sets the NMEA message type.
-		/// </summary>
-		public string NmeaType { get; private set; }
-	}
+    public sealed class NmeaMessageTypeAttribute : Attribute
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaMessageTypeAttribute"/> class.
+        /// </summary>
+        /// <param name="nmeaType">The type.</param>
+        public NmeaMessageTypeAttribute(string nmeaType)
+        {
+            NmeaType = nmeaType;
+        }
+        /// <summary>
+        /// Gets or sets the NMEA message type.
+        /// </summary>
+        public string NmeaType { get; private set; }
+    }
 
     /// <summary>
     /// NMEA Message base class.
@@ -169,14 +169,14 @@ namespace NmeaParser.Nmea
         /// A <see cref="System.String" /> that represents this instance.
         /// </returns>
         public override string ToString()
-		{
-			return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);
-		}
+        {
+            return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);
+        }
 
-		/// <summary>
-		/// Gets the checksum value of the message.
-		/// </summary>
-		public byte Checksum => GetChecksum(MessageType, MessageParts);
+        /// <summary>
+        /// Gets the checksum value of the message.
+        /// </summary>
+        public byte Checksum => GetChecksum(MessageType, MessageParts);
 
         internal static byte GetChecksum(string messageType, IReadOnlyList<string> messageParts)
         {
@@ -194,43 +194,43 @@ namespace NmeaParser.Nmea
             return Convert.ToByte(checksumTest);
         }
 
-		internal static double StringToLatitude(string value, string ns)
-		{
-			if (value == null || value.Length < 3)
-				return double.NaN;
-			double latitude = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(value.Substring(2), CultureInfo.InvariantCulture) / 60;
-			if (ns == "S")
-				latitude *= -1;
-			return latitude;
-		}
+        internal static double StringToLatitude(string value, string ns)
+        {
+            if (value == null || value.Length < 3)
+                return double.NaN;
+            double latitude = int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture) + double.Parse(value.Substring(2), CultureInfo.InvariantCulture) / 60;
+            if (ns == "S")
+                latitude *= -1;
+            return latitude;
+        }
 
-		internal static double StringToLongitude(string value, string ew)
-		{
-			if (value == null || value.Length < 4)
-				return double.NaN;
-			double longitude = int.Parse(value.Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(value.Substring(3), CultureInfo.InvariantCulture) / 60;
-			if (ew == "W")
-				longitude *= -1;
-			return longitude;
-		}
+        internal static double StringToLongitude(string value, string ew)
+        {
+            if (value == null || value.Length < 4)
+                return double.NaN;
+            double longitude = int.Parse(value.Substring(0, 3), CultureInfo.InvariantCulture) + double.Parse(value.Substring(3), CultureInfo.InvariantCulture) / 60;
+            if (ew == "W")
+                longitude *= -1;
+            return longitude;
+        }
 
-		internal static double StringToDouble(string value)
-		{
-			if(value != null && double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
-			{
-				return result;
-			}
-			return double.NaN;
-		}
-		internal static TimeSpan StringToTimeSpan(string value)
-		{
-			if (value != null && value.Length >= 6)
-			{
-				return new TimeSpan(int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture),
-								   int.Parse(value.Substring(2, 2), CultureInfo.InvariantCulture), 0)
-								   .Add(TimeSpan.FromSeconds(double.Parse(value.Substring(4), CultureInfo.InvariantCulture)));
-			}
-			return TimeSpan.Zero;
-		}
-	}
+        internal static double StringToDouble(string value)
+        {
+            if(value != null && double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+            {
+                return result;
+            }
+            return double.NaN;
+        }
+        internal static TimeSpan StringToTimeSpan(string value)
+        {
+            if (value != null && value.Length >= 6)
+            {
+                return new TimeSpan(int.Parse(value.Substring(0, 2), CultureInfo.InvariantCulture),
+                                   int.Parse(value.Substring(2, 2), CultureInfo.InvariantCulture), 0)
+                                   .Add(TimeSpan.FromSeconds(double.Parse(value.Substring(4), CultureInfo.InvariantCulture)));
+            }
+            return TimeSpan.Zero;
+        }
+    }
 }

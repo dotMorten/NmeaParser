@@ -18,8 +18,8 @@ namespace NmeaParser.Nmea.LaserRange.Trimble
     /// Burden finder
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnla")]
-	[NmeaMessageType("PTNLA")]
-	public class Ptnla : LaserRangeMessage
+    [NmeaMessageType("PTNLA")]
+    public class Ptnla : LaserRangeMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Ptnla"/> class.

@@ -18,25 +18,25 @@ using System.Text;
 
 namespace NmeaParser
 {
-	/// <summary>
-	/// Interface used for NMEA messages that span multiple sentences
-	/// </summary>
-	public interface IMultiSentenceMessage
-	{
-		/// <summary>
-		/// Attempts to append one message to an existing one
-		/// </summary>
-		/// <remarks>
-		/// This method should return false if the message being appended isn't the next message in line, and various indicators show this is a different message than the previous one. It should also return false if you append to a message that didn't start with the first message.
-		/// </remarks>
-		/// <param name="messageType"></param>
-		/// <param name="values"></param>
-		/// <returns><c>True</c> is the message was successfully appended, <c>False</c> is the message couldn't be appended.</returns>
-		bool TryAppend(string messageType, string[] values);
+    /// <summary>
+    /// Interface used for NMEA messages that span multiple sentences
+    /// </summary>
+    public interface IMultiSentenceMessage
+    {
+        /// <summary>
+        /// Attempts to append one message to an existing one
+        /// </summary>
+        /// <remarks>
+        /// This method should return false if the message being appended isn't the next message in line, and various indicators show this is a different message than the previous one. It should also return false if you append to a message that didn't start with the first message.
+        /// </remarks>
+        /// <param name="messageType"></param>
+        /// <param name="values"></param>
+        /// <returns><c>True</c> is the message was successfully appended, <c>False</c> is the message couldn't be appended.</returns>
+        bool TryAppend(string messageType, string[] values);
 
-		/// <summary>
-		/// Gets a value indicating whether this message is fully loaded from all its sentences
-		/// </summary>
-		bool IsComplete { get; }
-	}
+        /// <summary>
+        /// Gets a value indicating whether this message is fully loaded from all its sentences
+        /// </summary>
+        bool IsComplete { get; }
+    }
 }
