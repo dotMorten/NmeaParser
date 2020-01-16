@@ -17,12 +17,12 @@ using System;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-	/// Course over ground and ground speed
-	/// </summary>
+    /// Course over ground and ground speed
+    /// </summary>
     /// <remarks>
     /// The actual course and speed relative to the ground.
     /// </remarks>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "GPVTG")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "GPVTG")]
     [NmeaMessageType("--VTG")]
     public class Vtg : NmeaMessage
     {

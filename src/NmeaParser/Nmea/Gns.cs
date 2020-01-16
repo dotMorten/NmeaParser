@@ -24,7 +24,7 @@ namespace NmeaParser.Nmea
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gns")]
     [NmeaMessageType("--GNS")]
     public class Gns : NmeaMessage
-	{
+    {
         /*
          * Example of GNS messages:
          * $GNGNS,014035.00,4332.69262,S,17235.48549,E,RR,13,0.9,25.63,11.24,,*70   //GLONASS
@@ -116,11 +116,11 @@ namespace NmeaParser.Nmea
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="Gns"/> class.
-		/// </summary>
+        /// Initializes a new instance of the <see cref="Gns"/> class.
+        /// </summary>
         /// <param name="type">The message type</param>
-		/// <param name="message">The NMEA message values.</param>
-		public Gns(string type, string[] message) : base(type, message)
+        /// <param name="message">The NMEA message values.</param>
+        public Gns(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 12)
                 throw new ArgumentException("Invalid GNS", "message");
@@ -162,20 +162,20 @@ namespace NmeaParser.Nmea
             }
         }
 
-		/// <summary>
-		/// Time of day fix was taken
-		/// </summary>
-		public TimeSpan FixTime { get; }
-		
-		/// <summary>
-		/// Latitude
-		/// </summary>
-		public double Latitude { get; }
+        /// <summary>
+        /// Time of day fix was taken
+        /// </summary>
+        public TimeSpan FixTime { get; }
+        
+        /// <summary>
+        /// Latitude
+        /// </summary>
+        public double Latitude { get; }
 
-		/// <summary>
-		/// Longitude
-		/// </summary>
-		public double Longitude { get; }
+        /// <summary>
+        /// Longitude
+        /// </summary>
+        public double Longitude { get; }
 
         /// <summary>
         /// Mode indicator for GPS
@@ -207,7 +207,7 @@ namespace NmeaParser.Nmea
         /// Horizontal Dilution of Precision (HDOP), calculated using all the satellites (GPS, GLONASS, and any future satellites) used in computing the solution reported in each GNS sentence.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hdop")]
-		public double Hdop { get; }
+        public double Hdop { get; }
 
         /// <summary>
         /// Orthometric height in meters (MSL reference)
@@ -222,11 +222,11 @@ namespace NmeaParser.Nmea
 
         /// <summary>
         ///  Age of differential data - <see cref="TimeSpan.MaxValue"/> if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data
-		/// </summary>
-		public TimeSpan TimeSinceLastDgpsUpdate { get; }
+        /// </summary>
+        public TimeSpan TimeSinceLastDgpsUpdate { get; }
 
-		/// <summary>
-		/// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
+        /// <summary>
+        /// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
         /// </summary>
         public string? DgpsStationId { get; }
 
@@ -234,5 +234,5 @@ namespace NmeaParser.Nmea
         /// Navigational status
         /// </summary>
         public NavigationalStatus Status { get; }
-	}
+    }
 }

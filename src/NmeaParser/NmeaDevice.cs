@@ -22,40 +22,40 @@ using System.Threading;
 
 namespace NmeaParser
 {
-	/// <summary>
-	/// A generic abstract NMEA device
-	/// </summary>
-	public abstract class NmeaDevice : IDisposable
-	{
-		private readonly object m_lockObject = new object();
-		private string m_message = "";
-		private Stream? m_stream;
-		private CancellationTokenSource? m_cts;
-		private bool m_isOpening;
+    /// <summary>
+    /// A generic abstract NMEA device
+    /// </summary>
+    public abstract class NmeaDevice : IDisposable
+    {
+        private readonly object m_lockObject = new object();
+        private string m_message = "";
+        private Stream? m_stream;
+        private CancellationTokenSource? m_cts;
+        private bool m_isOpening;
         private Task? m_ParserTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaDevice"/> class.
         /// </summary>
         protected NmeaDevice()
-		{
-		}
+        {
+        }
 
         /// <summary>
-		/// Opens the device connection.
-		/// </summary>
-		/// <returns></returns>
-		public async Task OpenAsync()
-		{
-			lock (m_lockObject)
-			{
-				if (IsOpen || m_isOpening) return;
+        /// Opens the device connection.
+        /// </summary>
+        /// <returns></returns>
+        public async Task OpenAsync()
+        {
+            lock (m_lockObject)
+            {
+                if (IsOpen || m_isOpening) return;
                 m_isOpening = true;
-			}
-			m_cts = new CancellationTokenSource();
-			m_stream = await OpenStreamAsync();
-			StartParser(m_cts.Token);
-			MultiPartMessageCache.Clear();
+            }
+            m_cts = new CancellationTokenSource();
+            m_stream = await OpenStreamAsync();
+            StartParser(m_cts.Token);
+            _lastMultiMessage = null;
             lock (m_lockObject)
             {
                 IsOpen = true;
@@ -64,30 +64,30 @@ namespace NmeaParser
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "_")]
-		private void StartParser(CancellationToken token)
-		{
-			System.Diagnostics.Debug.WriteLine("Starting parser...");
+        private void StartParser(CancellationToken token)
+        {
+            System.Diagnostics.Debug.WriteLine("Starting parser...");
             m_ParserTask = Task.Run(async () =>
-			{
-				byte[] buffer = new byte[1024];
-				while (!token.IsCancellationRequested)
-				{
-					int readCount = 0;
-					try
-					{
-						readCount = await ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
-					}
-					catch { }
-					if (token.IsCancellationRequested)
-						break;
-					if (readCount > 0)
-					{
-						OnData(buffer.Take(readCount).ToArray());
-					}
-					await Task.Delay(50);
-				}
-			});
-		}
+            {
+                byte[] buffer = new byte[1024];
+                while (!token.IsCancellationRequested)
+                {
+                    int readCount = 0;
+                    try
+                    {
+                        readCount = await ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
+                    }
+                    catch { }
+                    if (token.IsCancellationRequested)
+                        break;
+                    if (readCount > 0)
+                    {
+                        OnData(buffer.Take(readCount).ToArray());
+                    }
+                    await Task.Delay(50);
+                }
+            });
+        }
 
         /// <summary>
         /// Performs a read operation of the stream
@@ -116,151 +116,134 @@ namespace NmeaParser
         /// <returns></returns>
         protected abstract Task<Stream> OpenStreamAsync();
 
-		/// <summary>
-		/// Closes the device.
-		/// </summary>
-		/// <returns></returns>
-		public async Task CloseAsync()
-		{
-			if (m_cts != null)
-			{
-				if (m_cts != null)
-					m_cts.Cancel();
-				m_cts = null;
-			}
+        /// <summary>
+        /// Closes the device.
+        /// </summary>
+        /// <returns></returns>
+        public async Task CloseAsync()
+        {
+            if (m_cts != null)
+            {
+                if (m_cts != null)
+                    m_cts.Cancel();
+                m_cts = null;
+            }
             if (m_ParserTask != null)
                 await m_ParserTask;
             if (m_stream != null)
                 await CloseStreamAsync(m_stream);
-			MultiPartMessageCache.Clear();
-			m_stream = null;
+            _lastMultiMessage = null;
+            m_stream = null;
             lock (m_lockObject)
             {
                 m_isOpening = false;
                 IsOpen = false;
             }
-		}
-		/// <summary>
-		/// Closes the stream the NmeaDevice is working on top off.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <returns></returns>
-		protected abstract Task CloseStreamAsync(Stream stream);
+        }
+        /// <summary>
+        /// Closes the stream the NmeaDevice is working on top off.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        protected abstract Task CloseStreamAsync(Stream stream);
 
-		private void OnData(byte[] data)
-		{
-			var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
-			List<string> lines = new List<string>();
-			lock (m_lockObject)
-			{
-				m_message += nmea;
+        private void OnData(byte[] data)
+        {
+            var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+            List<string> lines = new List<string>();
+            lock (m_lockObject)
+            {
+                m_message += nmea;
 
-				var lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
-				while (lineEnd > -1)
-				{
-					string line = m_message.Substring(0, lineEnd).Trim();
-					m_message = m_message.Substring(lineEnd + 1);
-					if (!string.IsNullOrEmpty(line))
-						lines.Add(line);
-					lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
-				}
-			}
-			foreach(var line in lines)
-				ProcessMessage(line);
-		}
+                var lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
+                while (lineEnd > -1)
+                {
+                    string line = m_message.Substring(0, lineEnd).Trim();
+                    m_message = m_message.Substring(lineEnd + 1);
+                    if (!string.IsNullOrEmpty(line))
+                        lines.Add(line);
+                    lineEnd = m_message.IndexOf("\n", StringComparison.Ordinal);
+                }
+            }
+            foreach(var line in lines)
+                ProcessMessage(line);
+        }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
-		private void ProcessMessage(string p)
-		{
-			try
-			{
-				var msg = NmeaParser.Nmea.NmeaMessage.Parse(p);
-				if (msg != null)
-					OnMessageReceived(msg);
-			}
-			catch { }
-		}
+
+        private IMultiSentenceMessage? _lastMultiMessage;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
+        private void ProcessMessage(string p)
+        {
+            try
+            {
+                var msg = NmeaParser.Nmea.NmeaMessage.Parse(p, _lastMultiMessage);
+                if(msg is IMultiSentenceMessage multi)
+                {
+                    if (!multi.IsComplete)
+                    {
+                        _lastMultiMessage = multi; //Keep it around until next time
+                        return;
+                    }
+                }
+                _lastMultiMessage = null;
+                if (msg != null)
+                    OnMessageReceived(msg);
+            }
+            catch { }
+        }
 
         private void OnMessageReceived(Nmea.NmeaMessage msg)
         {
             if (msg == null)
                 return;
-            Nmea.NmeaMessage[]? messageParts = null;
-            if (msg is IMultiPartMessage multi)
-            {
-                string messageType = msg.MessageType.Substring(2); //We don't care about the two first characters. Ie GPGSV, GLGSV, GAGSV etc are all part of the same multi-part message
-                if (MultiPartMessageCache.ContainsKey(messageType))
-                {
-                    var dic = MultiPartMessageCache[messageType];
-                    if (dic.ContainsKey(multi.MessageNumber - 1) && !dic.ContainsKey(multi.MessageNumber))
-                    {
-                        dic[multi.MessageNumber] = msg;
-                    }
-                    else //Something is out of order. Clear cache
-                        MultiPartMessageCache.Remove(messageType);
-                }
-                else if (multi.MessageNumber == 1)
-                {
-                    MultiPartMessageCache[messageType] = new Dictionary<int, Nmea.NmeaMessage>(multi.TotalMessages);
-                    MultiPartMessageCache[messageType][1] = msg;
-                }
-                if (MultiPartMessageCache.ContainsKey(messageType))
-                {
-                    var dic = MultiPartMessageCache[messageType];
-                    if (dic.Count == multi.TotalMessages) //We have a full list
-                    {
-                        MultiPartMessageCache.Remove(messageType);
-                        messageParts = dic.Values.ToArray();
-                    }
-                }
-            }
-
-            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
+            
+            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg));
         }
 
-		private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
+        //private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
 
-		/// <summary>
-		/// Occurs when an NMEA message is received.
-		/// </summary>
-		public event EventHandler<NmeaMessageReceivedEventArgs>? MessageReceived;
+        /// <summary>
+        /// Occurs when an NMEA message is received.
+        /// </summary>
+        public event EventHandler<NmeaMessageReceivedEventArgs>? MessageReceived;
 
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources.
-		/// </summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources.
-		/// </summary>
-		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (m_stream != null)
-			{
-				if (m_cts != null)
-				{
-					m_cts.Cancel();
-					m_cts = null;
-				}
-				CloseStreamAsync(m_stream);
-				if (disposing && m_stream != null)
-					m_stream.Dispose();
-				m_stream = null;
-			}
-		}
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (m_stream != null)
+            {
+                if (m_cts != null)
+                {
+                    m_cts.Cancel();
+                    m_cts = null;
+                }
+                CloseStreamAsync(m_stream);
+                if (disposing && m_stream != null)
+                    m_stream.Dispose();
+                m_stream = null;
+            }
+        }
 
-		/// <summary>
-		/// Gets a value indicating whether this device is open.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance is open; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsOpen { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this device is open.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is open; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsOpen { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this device supports writing
@@ -272,51 +255,34 @@ namespace NmeaParser
         /// Writes to the device stream. Useful for transmitting RTCM corrections to the device
         /// Check the <see cref="CanWrite"/> property before calling this method.
         /// </summary>
-		/// <param name="buffer">The byte array that contains the data to write to the port.</param>
-		/// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
-		/// bytes to the port.</param>
-		/// <param name="length">The number of bytes to write.</param>
+        /// <param name="buffer">The byte array that contains the data to write to the port.</param>
+        /// <param name="offset">The zero-based byte offset in the buffer parameter at which to begin copying 
+        /// bytes to the port.</param>
+        /// <param name="length">The number of bytes to write.</param>
         /// <returns>Task</returns>
         /// <seealso cref="CanWrite"/>
         public virtual Task WriteAsync(byte[] buffer, int offset, int length)
         {
             throw new NotSupportedException();
         }
-	}
+    }
 
-	/// <summary>
-	/// Event argument for the <see cref="NmeaDevice.MessageReceived" />
-	/// </summary>
-	public sealed class NmeaMessageReceivedEventArgs : EventArgs
-	{
-		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage>? messageParts)
+    /// <summary>
+    /// Event argument for the <see cref="NmeaDevice.MessageReceived" />
+    /// </summary>
+    public sealed class NmeaMessageReceivedEventArgs : EventArgs
+    {
+        internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
         {
-			Message = message;
-            MessageParts = messageParts;
-		}
-
-		/// <summary>
-		/// Gets the nmea message.
-		/// </summary>
-		/// <value>
-		/// The nmea message.
-		/// </value>
-		public Nmea.NmeaMessage Message { get; }
+            Message = message;
+        }
 
         /// <summary>
-        /// Gets a value indicating whether this instance is a multi part message.
+        /// Gets the nmea message.
         /// </summary>
         /// <value>
-        /// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
+        /// The nmea message.
         /// </value>
-        public bool IsMultipart => Message is IMultiPartMessage;
-
-        /// <summary>
-        /// Gets the message parts if this is a multi-part message and all message parts has been received.
-        /// </summary>
-        /// <value>
-        /// The message parts.
-        /// </value>
-        public IReadOnlyList<Nmea.NmeaMessage>? MessageParts { get; }
-	}
+        public Nmea.NmeaMessage Message { get; }
+    }
 }

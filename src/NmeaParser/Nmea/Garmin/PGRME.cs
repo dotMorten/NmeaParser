@@ -20,9 +20,9 @@ namespace NmeaParser.Nmea.Garmin
     ///  Recommended Minimum
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pgrme")]
-	[NmeaMessageType("PGRME")]
-	public class Pgrme : NmeaMessage
-	{
+    [NmeaMessageType("PGRME")]
+    public class Pgrme : NmeaMessage
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="Pgrme"/> class.
         /// </summary>
@@ -31,47 +31,47 @@ namespace NmeaParser.Nmea.Garmin
         public Pgrme(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 6)
-				throw new ArgumentException("Invalid PGRME", "message"); 
-			
-			HorizontalError = NmeaMessage.StringToDouble(message[0]);
-			HorizontalErrorUnits = message[1];
-			VerticalError = NmeaMessage.StringToDouble(message[2]);
-			VerticalErrorUnits = message[3];
-			SphericalError = NmeaMessage.StringToDouble(message[4]);
-			SphericalErrorUnits = message[5];
-		}
+                throw new ArgumentException("Invalid PGRME", "message"); 
+            
+            HorizontalError = NmeaMessage.StringToDouble(message[0]);
+            HorizontalErrorUnits = message[1];
+            VerticalError = NmeaMessage.StringToDouble(message[2]);
+            VerticalErrorUnits = message[3];
+            SphericalError = NmeaMessage.StringToDouble(message[4]);
+            SphericalErrorUnits = message[5];
+        }
 
-		/// <summary>
-		/// Estimated horizontal position error in meters (HPE)
-		/// </summary>
-		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double HorizontalError{ get; }
+        /// <summary>
+        /// Estimated horizontal position error in meters (HPE)
+        /// </summary>
+        /// <remarks>Range: 0.0 to 999.9 meters</remarks>
+        public double HorizontalError{ get; }
 
-		/// <summary>
-		/// Horizontal Error unit ('M' for Meters)
-		/// </summary>
-		public string HorizontalErrorUnits{ get; }
+        /// <summary>
+        /// Horizontal Error unit ('M' for Meters)
+        /// </summary>
+        public string HorizontalErrorUnits{ get; }
 
-		/// <summary>
-		/// Estimated vertical position error in meters (VPE)
-		/// </summary>
-		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double VerticalError{ get; }
+        /// <summary>
+        /// Estimated vertical position error in meters (VPE)
+        /// </summary>
+        /// <remarks>Range: 0.0 to 999.9 meters</remarks>
+        public double VerticalError{ get; }
 
-		/// <summary>
-		/// Vertical Error unit ('M' for Meters)
-		/// </summary>
-		public string VerticalErrorUnits{ get; }
+        /// <summary>
+        /// Vertical Error unit ('M' for Meters)
+        /// </summary>
+        public string VerticalErrorUnits{ get; }
 
-		/// <summary>
-		/// Overall spherical equivalent position error (EPE)
-		/// </summary>
-		/// <remarks>Range: 0.0 to 999.9 meters</remarks>
-		public double SphericalError{ get; }
+        /// <summary>
+        /// Overall spherical equivalent position error (EPE)
+        /// </summary>
+        /// <remarks>Range: 0.0 to 999.9 meters</remarks>
+        public double SphericalError{ get; }
 
-		/// <summary>
-		/// Spherical Error unit ('M' for Meters)
-		/// </summary>
-		public string SphericalErrorUnits{ get; }
-	}
+        /// <summary>
+        /// Spherical Error unit ('M' for Meters)
+        /// </summary>
+        public string SphericalErrorUnits{ get; }
+    }
 }

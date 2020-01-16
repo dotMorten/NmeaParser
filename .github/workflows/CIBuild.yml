@@ -18,8 +18,13 @@ jobs:
     - name: Clone NmeaParser
       uses: actions/checkout@v1
     
+    - name: Setup Visual Studio Command Prompt
+      uses: warrenbuckley/Setup-MSBuild@v1
+      
     - name: Build
       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
-        msbuild /restore /t:Build src/NmeaParser.sln /p:Configuration=Release /p:JavaSdkDirectory="$(JAVA_HOME_8_X64)"
+        msbuild /restore /t:Build src/NmeaParser.sln /p:Configuration=Release
       
+    - name: Tests
+      run: |
+        dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/netcoreapp3.1/NmeaParser.Tests.Net.dll -v normal

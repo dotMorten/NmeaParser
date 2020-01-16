@@ -18,8 +18,8 @@ namespace NmeaParser.Nmea.LaserRange.LaserTech
     /// Laser Range 
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
-	[NmeaMessageType("PLTIT")]
-	public class Pltit : LaserRangeMessage
+    [NmeaMessageType("PLTIT")]
+    public class Pltit : LaserRangeMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Pltit"/> class.

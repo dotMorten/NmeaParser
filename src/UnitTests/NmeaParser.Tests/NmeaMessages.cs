@@ -30,7 +30,13 @@ namespace NmeaParser.Tests
     public class NmeaMessages
     {
         [TestMethod]
-        public async Task ParseNmeaFile()
+        public
+#if NETFX_CORE
+            async Task
+#else
+            void
+#endif
+            ParseNmeaFile()
         {
 #if NETFX_CORE
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
@@ -38,12 +44,13 @@ namespace NmeaParser.Tests
 #else
             System.IO.StreamReader reader = new System.IO.StreamReader("NmeaSampleData.txt");
 #endif
+            NmeaMessage previousMessage = null;
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 if (line.StartsWith("$"))
                 {
-                    var msg = NmeaMessage.Parse(line);
+                    var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
@@ -56,7 +63,13 @@ namespace NmeaParser.Tests
             }
         }
         [TestMethod]
-        public async Task ParseTrimbleR2NmeaFile()
+        public
+#if NETFX_CORE
+            async Task
+#else
+            void
+#endif
+            ParseTrimbleR2NmeaFile()
         {
 #if NETFX_CORE
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///TrimbleR2SampleData.txt"));
@@ -64,12 +77,13 @@ namespace NmeaParser.Tests
 #else
             System.IO.StreamReader reader = new System.IO.StreamReader("TrimbleR2SampleData.txt");
 #endif
+            NmeaMessage previousMessage = null;
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 if (line.StartsWith("$"))
                 {
-                    var msg = NmeaMessage.Parse(line);
+                    var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
@@ -302,8 +316,8 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(3, gsv.TotalMessages);
-            Assert.AreEqual(3, gsv.MessageNumber);
+            Assert.IsInstanceOfType(msg, typeof(IMultiSentenceMessage));
+            Assert.IsFalse(((IMultiSentenceMessage)msg).IsComplete);
             Assert.AreEqual(11, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(3, gsv.SVs.Count);
@@ -336,13 +350,75 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(1, gsv.TotalMessages);
-            Assert.AreEqual(1, gsv.MessageNumber);
+            Assert.IsTrue(((IMultiSentenceMessage)gsv).IsComplete);
             Assert.AreEqual(0, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(0, gsv.SVs.Count);
         }
 
+        [TestMethod]
+        public void TestGpgsv_Multi()
+        {
+            var input1 = "$GPGSV,3,1,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4C";
+            var input2 = "$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F";
+            var input3 = "$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
+            var msg1 = NmeaMessage.Parse(input1);
+            Assert.IsFalse(((IMultiSentenceMessage)msg1).IsComplete);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            var msg3 = NmeaMessage.Parse(input3, msg2 as IMultiSentenceMessage);
+            Assert.IsTrue(((IMultiSentenceMessage)msg3).IsComplete);
+            Assert.IsInstanceOfType(msg1, typeof(Gsv));
+            Assert.AreSame(msg1, msg2);
+            Assert.AreSame(msg1, msg3);
+            Gsv gsv = (Gsv)msg1;
+            Assert.AreEqual(9, gsv.SVsInView);
+            Assert.IsNotNull(gsv.SVs);
+            Assert.AreEqual(9, gsv.SVs.Count);
+        }
+
+        [TestMethod]
+        public void TestGpgsv_MultiMissing()
+        {
+            var input1 = "$GPGSV,2,1,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4D";
+            var input2 = "$GPGSV,2,2,8,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F"; //Satellite count doesn't match, so append will fail
+            var msg1 = NmeaMessage.Parse(input1);
+            Assert.IsFalse(((IMultiSentenceMessage)msg1).IsComplete);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            Assert.IsInstanceOfType(msg2, typeof(Gsv));
+            Assert.AreNotSame(msg1, msg2);
+            Gsv gsv1 = (Gsv)msg1;
+            Assert.AreEqual(9, gsv1.SVsInView);
+            Assert.IsNotNull(gsv1.SVs);
+            Assert.AreEqual(4, gsv1.SVs.Count);
+            Gsv gsv2 = (Gsv)msg2;
+            Assert.AreEqual(8, gsv2.SVsInView);
+            Assert.IsNotNull(gsv2.SVs);
+            Assert.AreEqual(4, gsv2.SVs.Count);
+        }
+
+
+        [TestMethod]
+        public void TestGpgsv_MultiNotMatching()
+        {
+            var input2 = "$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F";
+            var input3 = "$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
+            var msg2 = NmeaMessage.Parse(input2);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            var msg3 = NmeaMessage.Parse(input3, msg2 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg3).IsComplete);
+            Assert.IsInstanceOfType(msg2, typeof(Gsv));
+            Assert.AreNotSame(msg2, msg3);
+            Gsv gsv2 = (Gsv)msg2;
+            Assert.AreEqual(9, gsv2.SVsInView);
+            Assert.IsNotNull(gsv2.SVs);
+            Assert.AreEqual(4, gsv2.SVs.Count);
+            Gsv gsv3 = (Gsv)msg3;
+            Assert.AreEqual(9, gsv3.SVsInView);
+            Assert.IsNotNull(gsv3.SVs);
+            Assert.AreEqual(1, gsv3.SVs.Count);
+        }
 
         [TestMethod]
         [WorkItem(53)]
@@ -352,8 +428,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(msgstr);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(3, gsv.TotalMessages);
-            Assert.AreEqual(1, gsv.MessageNumber);
+            Assert.IsFalse(((IMultiSentenceMessage)gsv).IsComplete);
             Assert.AreEqual(12, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(4, gsv.SVs.Count);
@@ -497,118 +572,117 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
-		public void TestGpgll_NoFixTime_OrActiveIndicator()
-		{
-			string input = "$GPGLL,3751.65,S,14507.36,E*77";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Gll));
-			Gll gll = (Gll)msg;
-			Assert.IsTrue(gll.DataActive);
-			Assert.AreEqual(-37.860833333333333333, gll.Latitude);
-			Assert.AreEqual(145.1226666666666666667, gll.Longitude);
-			Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
-		}
+        public void TestGpgll_NoFixTime_OrActiveIndicator()
+        {
+            string input = "$GPGLL,3751.65,S,14507.36,E*77";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gll));
+            Gll gll = (Gll)msg;
+            Assert.IsTrue(gll.DataActive);
+            Assert.AreEqual(-37.860833333333333333, gll.Latitude);
+            Assert.AreEqual(145.1226666666666666667, gll.Longitude);
+            Assert.AreEqual(TimeSpan.Zero, gll.FixTime);
+        }
 
 
-		[TestMethod]
-		public void TestGpbod_Empty()
-		{
-			string input = "$GPBOD,,T,,M,,*47";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Bod));
-			Bod bod = (Bod)msg;
-			Assert.AreEqual(double.NaN, bod.TrueBearing, "TrueBearing");
-			Assert.AreEqual(double.NaN, bod.MagneticBearing, "MagneticBearing");
-			Assert.IsNull(bod.OriginId, "OriginID");
-			Assert.IsNull(bod.DestinationId, "DestinationID");
-		}
+        [TestMethod]
+        public void TestGpbod_Empty()
+        {
+            string input = "$GPBOD,,T,,M,,*47";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Bod));
+            Bod bod = (Bod)msg;
+            Assert.AreEqual(double.NaN, bod.TrueBearing, "TrueBearing");
+            Assert.AreEqual(double.NaN, bod.MagneticBearing, "MagneticBearing");
+            Assert.IsNull(bod.OriginId, "OriginID");
+            Assert.IsNull(bod.DestinationId, "DestinationID");
+        }
 
-		[TestMethod]
-		public void TestGpbod_GoToMode()
-		{
-			string input = "$GPBOD,099.3,T,105.6,M,POINTB,*48";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Bod));
-			Bod bod = (Bod)msg;
-			Assert.AreEqual(99.3, bod.TrueBearing, "TrueBearing");
-			Assert.AreEqual(105.6, bod.MagneticBearing, "MagneticBearing");
-			Assert.AreEqual("POINTB", bod.DestinationId, "DestinationID");
-			Assert.IsNull(bod.OriginId, "OriginID");
-		}
-
-
-		[TestMethod]
-		public void TestGpbod()
-		{
-			string input = "$GPBOD,097.0,T,103.2,M,POINTB,POINTA*4A";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Bod));
-			Bod bod = (Bod)msg;
-			Assert.AreEqual(97d, bod.TrueBearing, "TrueBearing");
-			Assert.AreEqual(103.2, bod.MagneticBearing, "MagneticBearing");
-			Assert.AreEqual("POINTB", bod.DestinationId, "DestinationID");
-			Assert.AreEqual("POINTA", bod.OriginId, "OriginID");
-		}
+        [TestMethod]
+        public void TestGpbod_GoToMode()
+        {
+            string input = "$GPBOD,099.3,T,105.6,M,POINTB,*48";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Bod));
+            Bod bod = (Bod)msg;
+            Assert.AreEqual(99.3, bod.TrueBearing, "TrueBearing");
+            Assert.AreEqual(105.6, bod.MagneticBearing, "MagneticBearing");
+            Assert.AreEqual("POINTB", bod.DestinationId, "DestinationID");
+            Assert.IsNull(bod.OriginId, "OriginID");
+        }
 
 
-		[TestMethod]
-		public void TestPgrmz_Empty()
-		{
-			string input = "$PGRMZ,,,*7E";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
-			Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
-		}
+        [TestMethod]
+        public void TestGpbod()
+        {
+            string input = "$GPBOD,097.0,T,103.2,M,POINTB,POINTA*4A";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Bod));
+            Bod bod = (Bod)msg;
+            Assert.AreEqual(97d, bod.TrueBearing, "TrueBearing");
+            Assert.AreEqual(103.2, bod.MagneticBearing, "MagneticBearing");
+            Assert.AreEqual("POINTB", bod.DestinationId, "DestinationID");
+            Assert.AreEqual("POINTA", bod.OriginId, "OriginID");
+        }
 
-		[TestMethod]
-		public void TestPgrmz()
-		{
-			string input = "$PGRMZ,93,f,3*21";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-			var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
-			Assert.AreEqual(93d, rmz.Altitude, "Altitude");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
-			Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
-		}
 
-		[TestMethod]
-		public void TestGprte()
-		{
-			string input = "$GPRTE,2,1,c,0,W3IWI,DRIVWY,32CEDR,32-29,32BKLD,32-I95,32-US1,BW-32,BW-198*69";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Rte));
-			Rte gsv = (Rte)msg;
-			Assert.AreEqual(2, gsv.TotalMessages);
-			Assert.AreEqual(1, gsv.MessageNumber);
-			Assert.AreEqual(Rte.WaypointListType.CompleteWaypointsList, gsv.ListType);
-			Assert.AreEqual("0", gsv.RouteId);
-			Assert.AreEqual("0", gsv.RouteId);
-			Assert.AreEqual(9, gsv.Waypoints.Count);
-			Assert.AreEqual("W3IWI", gsv.Waypoints[0]);
-			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
-			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
-		}
+        [TestMethod]
+        public void TestPgrmz_Empty()
+        {
+            string input = "$PGRMZ,,,*7E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
+            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
+        }
 
-		[TestMethod]
-		public void TestGpgst()
-		{
-			string input = "$GPGST,172814.0,0.006,0.023,0.020,273.6,0.023,0.020,0.031*6A";
-			var msg = NmeaMessage.Parse(input);
-			Assert.IsInstanceOfType(msg, typeof(Gst));
-			Gst gst = (Gst)msg;
-			Assert.AreEqual(new TimeSpan(17, 28, 14), gst.FixTime);
-			Assert.AreEqual(0.006, gst.Rms);
-			Assert.AreEqual(0.023, gst.SemiMajorError);
-			Assert.AreEqual(0.02, gst.SemiMinorError);
-			Assert.AreEqual(273.6, gst.ErrorOrientation);
-			Assert.AreEqual(0.023, gst.SigmaLatitudeError);
-			Assert.AreEqual(0.020, gst.SigmaLongitudeError);
-			Assert.AreEqual(0.031, gst.SigmaHeightError);
-		}
+        [TestMethod]
+        public void TestPgrmz()
+        {
+            string input = "$PGRMZ,93,f,3*21";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.AreEqual(93d, rmz.Altitude, "Altitude");
+            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
+        }
+
+        [TestMethod]
+        public void TestGprte()
+        {
+            string input = "$GPRTE,2,1,c,0,W3IWI,DRIVWY,32CEDR,32-29,32BKLD,32-I95,32-US1,BW-32,BW-198*69";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Rte));
+            Rte rte = (Rte)msg;
+            Assert.IsFalse(((IMultiSentenceMessage)rte).IsComplete);
+            Assert.AreEqual(Rte.WaypointListType.CompleteWaypointsList, rte.ListType);
+            Assert.AreEqual("0", rte.RouteId);
+            Assert.AreEqual("0", rte.RouteId);
+            Assert.AreEqual(9, rte.Waypoints.Count);
+            Assert.AreEqual("W3IWI", rte.Waypoints[0]);
+            Assert.AreEqual("32BKLD", rte.Waypoints[4]);
+            Assert.AreEqual("BW-198", rte.Waypoints[8]);
+        }
+
+        [TestMethod]
+        public void TestGpgst()
+        {
+            string input = "$GPGST,172814.0,0.006,0.023,0.020,273.6,0.023,0.020,0.031*6A";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gst));
+            Gst gst = (Gst)msg;
+            Assert.AreEqual(new TimeSpan(17, 28, 14), gst.FixTime);
+            Assert.AreEqual(0.006, gst.Rms);
+            Assert.AreEqual(0.023, gst.SemiMajorError);
+            Assert.AreEqual(0.02, gst.SemiMinorError);
+            Assert.AreEqual(273.6, gst.ErrorOrientation);
+            Assert.AreEqual(0.023, gst.SigmaLatitudeError);
+            Assert.AreEqual(0.020, gst.SigmaLongitudeError);
+            Assert.AreEqual(0.031, gst.SigmaHeightError);
+        }
 
         [TestMethod]
         public void TestGngst()

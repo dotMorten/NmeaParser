@@ -60,7 +60,7 @@ namespace SampleApp.Droid
             socket?.Close();
             socket?.Dispose();
             socket = null;
-            listener.CloseAsync();
+            _ = listener.CloseAsync();
             listener = null;
             startButton.Enabled = !(stopButton.Enabled = false);            
         }

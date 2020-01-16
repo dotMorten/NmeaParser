@@ -22,11 +22,11 @@ using Android.Bluetooth;
 
 namespace NmeaParser
 {
-	/// <summary>
-	/// A Bluetooth NMEA device
-	/// </summary>
-	public class BluetoothDevice : NmeaDevice
-	{
+    /// <summary>
+    /// A Bluetooth NMEA device
+    /// </summary>
+    public class BluetoothDevice : NmeaDevice
+    {
         private static Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
         private Android.Bluetooth.BluetoothDevice m_device;
         private BluetoothSocket? m_socket;
@@ -45,14 +45,14 @@ namespace NmeaParser
             }
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BluetoothDevice"/> class.
-		/// </summary>
-		/// <param name="device">The Android Bluetooth Device.</param>
-		public BluetoothDevice(Android.Bluetooth.BluetoothDevice device)
-		{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BluetoothDevice"/> class.
+        /// </summary>
+        /// <param name="device">The Android Bluetooth Device.</param>
+        public BluetoothDevice(Android.Bluetooth.BluetoothDevice device)
+        {
             m_device = device ?? throw new ArgumentNullException(nameof(device));
-		}
+        }
         
         /// <summary>
         /// Creates the stream the NmeaDevice is working on top off.
@@ -66,24 +66,24 @@ namespace NmeaParser
             var d = adapter.GetRemoteDevice(m_device.Address);
             var socket = d.CreateRfcommSocketToServiceRecord(SERIAL_UUID);
             socket.Connect();
-			m_socket = socket;
+            m_socket = socket;
             return Task.FromResult<Stream>(socket.InputStream);
-		}
+        }
 
-		/// <summary>
-		/// Closes the stream the NmeaDevice is working on top off.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <returns></returns>
-		protected override Task CloseStreamAsync(System.IO.Stream stream)
-		{
-			if (stream == null)
-				throw new ArgumentNullException("stream");
-			stream.Dispose();
-			m_socket?.Dispose();
-			m_socket = null;
-			return Task.FromResult(true);
-		}
+        /// <summary>
+        /// Closes the stream the NmeaDevice is working on top off.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns></returns>
+        protected override Task CloseStreamAsync(System.IO.Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+            stream.Dispose();
+            m_socket?.Dispose();
+            m_socket = null;
+            return Task.FromResult(true);
+        }
 
         /// <inheritdoc />
         public override bool CanWrite => true;
@@ -95,6 +95,6 @@ namespace NmeaParser
                 throw new InvalidOperationException("Device not open");
             return m_socket.OutputStream.WriteAsync(buffer, offset, length);
         }
-	}
+    }
 }
 #endif

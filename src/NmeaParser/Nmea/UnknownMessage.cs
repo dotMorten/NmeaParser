@@ -20,12 +20,12 @@ namespace NmeaParser.Nmea
     /// Represents an unknown message type
     /// </summary>
     public class UnknownMessage : NmeaMessage
-	{
+    {
         internal UnknownMessage(string type, string[] messageParts) : base(type, messageParts) { }
 
-		/// <summary>
-		/// Gets the nmea value array.
-		/// </summary>
-		public IReadOnlyList<string> Values { get { return base.MessageParts; } }
-	}
+        /// <summary>
+        /// Gets the nmea value array.
+        /// </summary>
+        public IReadOnlyList<string> Values { get { return base.MessageParts; } }
+    }
 }

@@ -28,12 +28,12 @@ using Windows.Networking.Proximity;
 
 namespace NmeaParser
 {
-	/// <summary>
-	/// A Bluetooth NMEA device
-	/// </summary>
-	public class BluetoothDevice : NmeaDevice
-	{
-		private Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService? m_deviceService;
+    /// <summary>
+    /// A Bluetooth NMEA device
+    /// </summary>
+    public class BluetoothDevice : NmeaDevice
+    {
+        private Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService? m_deviceService;
         private Windows.Networking.Proximity.PeerInformation? m_devicePeer;
         private StreamSocket? m_socket;
         private bool m_disposeService;
@@ -59,8 +59,8 @@ namespace NmeaParser
         /// <param name="service">The RF Comm Device service.</param>
         /// <param name="disposeService">Whether this devicee should also dispose the RfcommDeviceService provided when this device disposes.</param>
         public BluetoothDevice(RfcommDeviceService service, bool disposeService = false)
-		{
-			m_deviceService = service ?? throw new ArgumentNullException(nameof(service));
+        {
+            m_deviceService = service ?? throw new ArgumentNullException(nameof(service));
             m_disposeService = disposeService;
         }
 
@@ -88,8 +88,8 @@ namespace NmeaParser
         /// </summary>
         /// <returns></returns>
         protected override async Task<System.IO.Stream> OpenStreamAsync()
-		{
-			var socket = new Windows.Networking.Sockets.StreamSocket();
+        {
+            var socket = new Windows.Networking.Sockets.StreamSocket();
             socket.Control.KeepAlive = true;
             if (m_devicePeer != null)
             {
@@ -101,10 +101,10 @@ namespace NmeaParser
             }
             else
                 throw new InvalidOperationException();
-			m_socket = socket;
+            m_socket = socket;
             
             return new DummyStream(); //We're going to use WinRT buffers instead and will handle read/write, so no reason to return a real stream. This is mainly done to avoid locking issues reading and writing at the same time
-		}
+        }
 
         private class DummyStream : Stream
         {
@@ -126,13 +126,13 @@ namespace NmeaParser
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
         protected override Task CloseStreamAsync(System.IO.Stream stream)
-		{
+        {
             if(m_socket == null)
                 throw new InvalidOperationException("No connection to close");
-			m_socket.Dispose();
-			m_socket = null;
-			return Task.FromResult(true);
-		}
+            m_socket.Dispose();
+            m_socket = null;
+            return Task.FromResult(true);
+        }
 
 
         /// <inheritdoc />
@@ -174,6 +174,6 @@ namespace NmeaParser
                 m_semaphoreSlim.Release();
             }
         }
-	}
+    }
 }
 #endif

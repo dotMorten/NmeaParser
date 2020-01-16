@@ -32,8 +32,10 @@ namespace NmeaParser.Nmea
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprte")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [NmeaMessageType("--RTE")]
-    public sealed class Rte : NmeaMessage, IMultiPartMessage<string>
+    public sealed class Rte : NmeaMultiSentenceMessage, IEnumerable<string>
     {
+        private readonly List<string> _waypoints = new List<string>();
+        
         /// <summary>
         /// Waypoint tpe
         /// </summary>
@@ -58,23 +60,18 @@ namespace NmeaParser.Nmea
         {
             if (message == null || message.Length < 4)
                 throw new ArgumentException("Invalid GPRTE", "message");
-
-            TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
-            MessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
             ListType = message[2] == "c" ? WaypointListType.CompleteWaypointsList : WaypointListType.RemainingWaypointsList;
             RouteId = message[3];
-            Waypoints = message.Skip(4).ToArray();
         }
 
-        /// <summary>
-        /// Total number of messages of this type in this cycle
-        /// </summary>
-        public int TotalMessages { get; }
-
-        /// <summary>
-        /// Message number
-        /// </summary>
-        public int MessageNumber { get; }
+        /// <inheritdoc />
+        protected override bool ParseSentences(Talker talker, string[] message)
+        {
+            if (MessageParts[2] != message[2] || MessageParts[3] != message[3])
+                return false;
+            _waypoints.AddRange(message.Skip(4));
+            return true;
+        }
 
         /// <summary>
         /// Gets the type of the list.
@@ -89,7 +86,7 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Waypoints
         /// </summary>
-        public IReadOnlyList<string> Waypoints { get; }
+        public IReadOnlyList<string> Waypoints => _waypoints.AsReadOnly();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
