@@ -3,53 +3,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:local="clr-namespace:SampleApp.WinDesktop"
+             xmlns:local="clr-namespace:SampleApp.WinDesktop"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-	<Grid Height="100">
+    <Grid Height="100">
        
-		<Grid >
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
-			</Grid.ColumnDefinitions>
-			
-			
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            
 
-			<Path Stroke="Black" StrokeThickness="1"
-				  Grid.RowSpan="4" Grid.ColumnSpan="4"
-				  Stretch="Fill"
-				  Data="M0,0 L 1,0 M 0,1 L 1,1 M 0,2 L 1,2 M 0,3 L 1,3 M 0,4 L 1,4" />
-		</Grid>
-		<ItemsControl x:Name="satellites"
-					  HorizontalAlignment="Stretch" 
-					  VerticalAlignment="Stretch">
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Border Height="{Binding SignalToNoiseRatio}"
-							Background="CornflowerBlue"
-							BorderBrush="Black" 
-							Margin="0,0,10,0" Width="20"
-							BorderThickness="1"
-							ToolTip="{Binding SignalToNoiseRatio}"
-							VerticalAlignment="Bottom">
-						<TextBlock Text="{Binding PrnNumber}"
-								   Foreground="White" FontWeight="Bold"
-								   HorizontalAlignment="Center" />
-					</Border>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</Grid>
+            <Path Stroke="Black" StrokeThickness="1"
+                  Grid.RowSpan="4" Grid.ColumnSpan="4"
+                  Stretch="Fill"
+                  Data="M0,0 L 1,0 M 0,1 L 1,1 M 0,2 L 1,2 M 0,3 L 1,3 M 0,4 L 1,4" />
+        </Grid>
+        <ItemsControl x:Name="satellites"
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.Resources>
+                <local:SatelliteVechicleColorConverter x:Key="conv" />
+            </ItemsControl.Resources>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left">
+                        <TextBlock Text="{Binding PrnNumber}"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center" >
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{Binding Converter={StaticResource conv}}" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Border Height="{Binding SignalToNoiseRatio, FallbackValue=10}"
+                            BorderBrush="Black" 
+                            Margin="5,0" Width="20"
+                            BorderThickness="1"
+                            ToolTip="{Binding SignalToNoiseRatio}"
+                            VerticalAlignment="Bottom">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding Converter={StaticResource conv}}" />
+                            </Border.Background>
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
 </UserControl>

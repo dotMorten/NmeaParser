@@ -58,8 +58,8 @@ namespace SampleApp.WinDesktop
 			if (currentDevice != null)
 			{
 				currentDevice.MessageReceived -= device_MessageReceived;
-                if(currentDevice.IsOpen)
-                    await currentDevice.CloseAsync();
+				if (currentDevice.IsOpen)
+					await currentDevice.CloseAsync();
 				currentDevice.Dispose();
 			}
 			output.Text = "";
@@ -69,7 +69,7 @@ namespace SampleApp.WinDesktop
 			gpgsaView.Message = null;
 			gpgllView.Message = null;
 			pgrmeView.Message = null;
-			satView.GsvMessages = null;
+			satView.GsvMessage = null;
 			//Start new device
 			currentDevice = device;
 			currentDevice.MessageReceived += device_MessageReceived;
@@ -82,8 +82,7 @@ namespace SampleApp.WinDesktop
 					((NmeaParser.SerialPortDevice)device).Port.PortName,
 					((NmeaParser.SerialPortDevice)device).Port.BaudRate);
 			}
-        }
-        Dictionary<NmeaParser.Nmea.Talker, NmeaParser.Nmea.Gsv> gsvMessages = new Dictionary<NmeaParser.Nmea.Talker, NmeaParser.Nmea.Gsv>();
+		}
 
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
@@ -96,8 +95,7 @@ namespace SampleApp.WinDesktop
 
 				if (args.Message is NmeaParser.Nmea.Gsv gpgsv)
 				{
-					gsvMessages[gpgsv.TalkerId] = gpgsv;
-					satView.GsvMessages = gsvMessages.Values;
+					satView.GsvMessage = gpgsv;
 				}
 				else if (args.Message is NmeaParser.Nmea.Rmc)
 					gprmcView.Message = args.Message as NmeaParser.Nmea.Rmc;
