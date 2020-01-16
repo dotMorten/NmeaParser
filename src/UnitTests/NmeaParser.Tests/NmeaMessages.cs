@@ -44,12 +44,13 @@ namespace NmeaParser.Tests
 #else
             System.IO.StreamReader reader = new System.IO.StreamReader("NmeaSampleData.txt");
 #endif
+            NmeaMessage previousMessage = null;
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 if (line.StartsWith("$"))
                 {
-                    var msg = NmeaMessage.Parse(line);
+                    var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
@@ -76,12 +77,13 @@ namespace NmeaParser.Tests
 #else
             System.IO.StreamReader reader = new System.IO.StreamReader("TrimbleR2SampleData.txt");
 #endif
+            NmeaMessage previousMessage = null;
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 if (line.StartsWith("$"))
                 {
-                    var msg = NmeaMessage.Parse(line);
+                    var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
