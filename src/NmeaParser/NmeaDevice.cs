@@ -55,8 +55,8 @@ namespace NmeaParser
 			m_cts = new CancellationTokenSource();
 			m_stream = await OpenStreamAsync();
 			StartParser(m_cts.Token);
-			MultiPartMessageCache.Clear();
-            lock (m_lockObject)
+			_lastMultiMessage = null;
+			lock (m_lockObject)
             {
                 IsOpen = true;
                 m_isOpening = false;
@@ -132,7 +132,7 @@ namespace NmeaParser
                 await m_ParserTask;
             if (m_stream != null)
                 await CloseStreamAsync(m_stream);
-			MultiPartMessageCache.Clear();
+			_lastMultiMessage = null;
 			m_stream = null;
             lock (m_lockObject)
             {
@@ -169,56 +169,39 @@ namespace NmeaParser
 				ProcessMessage(line);
 		}
 
+
+		private IMultiSentenceMessage? _lastMultiMessage;
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification="Must silently handle invalid/corrupt input")]
 		private void ProcessMessage(string p)
 		{
 			try
 			{
-				var msg = NmeaParser.Nmea.NmeaMessage.Parse(p);
+				var msg = NmeaParser.Nmea.NmeaMessage.Parse(p, _lastMultiMessage);
+				if(msg is IMultiSentenceMessage multi)
+				{
+					if (!multi.IsComplete)
+					{
+						_lastMultiMessage = multi; //Keep it around until next time
+						return;
+					}
+					_lastMultiMessage = null;
+				}
 				if (msg != null)
 					OnMessageReceived(msg);
 			}
 			catch { }
 		}
 
-        private void OnMessageReceived(Nmea.NmeaMessage msg)
+		private void OnMessageReceived(Nmea.NmeaMessage msg)
         {
             if (msg == null)
                 return;
-            Nmea.NmeaMessage[]? messageParts = null;
-            if (msg is IMultiPartMessage multi)
-            {
-                string messageType = msg.MessageType.Substring(2); //We don't care about the two first characters. Ie GPGSV, GLGSV, GAGSV etc are all part of the same multi-part message
-                if (MultiPartMessageCache.ContainsKey(messageType))
-                {
-                    var dic = MultiPartMessageCache[messageType];
-                    if (dic.ContainsKey(multi.MessageNumber - 1) && !dic.ContainsKey(multi.MessageNumber))
-                    {
-                        dic[multi.MessageNumber] = msg;
-                    }
-                    else //Something is out of order. Clear cache
-                        MultiPartMessageCache.Remove(messageType);
-                }
-                else if (multi.MessageNumber == 1)
-                {
-                    MultiPartMessageCache[messageType] = new Dictionary<int, Nmea.NmeaMessage>(multi.TotalMessages);
-                    MultiPartMessageCache[messageType][1] = msg;
-                }
-                if (MultiPartMessageCache.ContainsKey(messageType))
-                {
-                    var dic = MultiPartMessageCache[messageType];
-                    if (dic.Count == multi.TotalMessages) //We have a full list
-                    {
-                        MultiPartMessageCache.Remove(messageType);
-                        messageParts = dic.Values.ToArray();
-                    }
-                }
-            }
-
-            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg, messageParts));
+            
+            MessageReceived?.Invoke(this, new NmeaMessageReceivedEventArgs(msg));
         }
 
-		private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
+		//private readonly Dictionary<string, Dictionary<int, Nmea.NmeaMessage>> MultiPartMessageCache = new Dictionary<string,Dictionary<int,Nmea.NmeaMessage>>();
 
 		/// <summary>
 		/// Occurs when an NMEA message is received.
@@ -289,10 +272,9 @@ namespace NmeaParser
 	/// </summary>
 	public sealed class NmeaMessageReceivedEventArgs : EventArgs
 	{
-		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message, IReadOnlyList<Nmea.NmeaMessage>? messageParts)
+		internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
         {
 			Message = message;
-            MessageParts = messageParts;
 		}
 
 		/// <summary>
@@ -309,7 +291,7 @@ namespace NmeaParser
         /// <value>
         /// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
         /// </value>
-        public bool IsMultipart => Message is IMultiPartMessage;
+        public bool IsMultipart => Message is IMultiSentenceMessage;
 
         /// <summary>
         /// Gets the message parts if this is a multi-part message and all message parts has been received.

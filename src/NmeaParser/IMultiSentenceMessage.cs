@@ -18,19 +18,14 @@ using System.Text;
 
 namespace NmeaParser
 {
-	interface IMultiPartMessage : System.Collections.IEnumerable
+	public interface IMultiSentenceMessage : System.Collections.IEnumerable
 	{
-		/// <summary>
-		/// Total number of messages of this type in this cycle
-		/// </summary>
-		int TotalMessages { get; }
-
-		/// <summary>
-		/// Message number
-		/// </summary>
-		int MessageNumber { get; }
+		bool TryAppend(string[] values);
+		bool IsComplete { get; }
+		IEnumerable<string> SerializeParts();
 	}
-	interface IMultiPartMessage<T> : IMultiPartMessage, IEnumerable<T>
-    {
+
+	public interface IMultiSentenceMessage<T> : IMultiSentenceMessage, IEnumerable<T>
+	{
 	}
 }

@@ -92,10 +92,10 @@ namespace NmeaParser.Nmea
         /// Invalid nmea message: Missing starting character '$'
         /// or checksum failure
         /// </exception>
-        public static NmeaMessage Parse(string message)
+        public static NmeaMessage Parse(string message, IMultiSentenceMessage? previousSentence = null)
         {
             if (string.IsNullOrEmpty(message))
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
 
             int checksum = -1;
             if (message[0] != '$')
@@ -120,6 +120,13 @@ namespace NmeaParser.Nmea
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
             string[] MessageParts = parts.Skip(1).ToArray();
+            if(previousSentence is NmeaMessage pmsg && pmsg.MessageType == MessageType)
+            {
+                if (previousSentence.TryAppend(MessageParts))
+                {
+                    return pmsg;
+                }
+            }
             if (messageTypes.ContainsKey(MessageType))
             {
                 return (NmeaMessage)messageTypes[MessageType].Invoke(new object[] { MessageType, MessageParts });

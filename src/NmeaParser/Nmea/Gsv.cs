@@ -24,8 +24,13 @@ namespace NmeaParser.Nmea
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [NmeaMessageType("--GSV")]
-    public class Gsv : NmeaMessage, IMultiPartMessage<SatelliteVehicle>
+    public class Gsv : NmeaMessage, IMultiSentenceMessage<SatelliteVehicle>
     {
+        private readonly List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
+        private int lastMessageNumber = 0;
+        private int totalMessages;
+        private readonly int firstMessageNumber;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Gsv"/> class.
         /// </summary>
@@ -36,9 +41,10 @@ namespace NmeaParser.Nmea
             if (message == null || message.Length < 3)
                 throw new ArgumentException("Invalid GSV", "message");
 
-            TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
-            MessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
+            totalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
+            firstMessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
             SVsInView = int.Parse(message[2], CultureInfo.InvariantCulture);
+            AppendParts(message);
 
             List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
             for (int i = 3; i < message.Length - 3; i += 4)
@@ -48,18 +54,37 @@ namespace NmeaParser.Nmea
                 else
                     svs.Add(new SatelliteVehicle(message, i));
             }
-            this.SVs = svs.ToArray();
+            this.SVs = svs.AsReadOnly();
         }
 
-        /// <summary>
-        /// Total number of messages of this type in this cycle
-        /// </summary>
-        public int TotalMessages { get; }
+        bool IMultiSentenceMessage.TryAppend(string[] values) => AppendParts(values);
+        bool IMultiSentenceMessage.IsComplete => firstMessageNumber == 1 && lastMessageNumber == totalMessages;
 
-        /// <summary>
-        /// Message number
-        /// </summary>
-        public int MessageNumber { get; }
+        private bool AppendParts(string[] message)
+        {
+            int msgCount = int.Parse(message[0], CultureInfo.InvariantCulture);
+            int msgNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
+            var satellites = int.Parse(message[2], CultureInfo.InvariantCulture);
+
+            if (msgCount != totalMessages || msgNumber != lastMessageNumber + 1 || satellites != SVsInView)
+                return false; // Messages do not match
+
+            for (int i = 3; i < message.Length - 3; i += 4)
+            {
+                if (message[i].Length == 0)
+                    continue;
+                else
+                    svs.Add(new SatelliteVehicle(message, i));
+            }
+            lastMessageNumber = msgNumber;
+            this.SVs = svs.AsReadOnly();
+            return true;
+        }
+
+        IEnumerable<string> IMultiSentenceMessage.SerializeParts()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Total number of SVs in view
@@ -69,7 +94,7 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Satellite vehicles in this message part.
         /// </summary>
-        public IReadOnlyList<SatelliteVehicle> SVs { get; }
+        public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
