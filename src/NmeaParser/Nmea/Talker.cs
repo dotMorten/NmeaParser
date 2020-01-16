@@ -115,9 +115,13 @@ namespace NmeaParser.Nmea
     public enum Talker
     {
         /// <summary>
+        /// Multiple talker IDs sometimes seen in <see cref="IMultiSentenceMessage"/>
+        /// </summary>
+        Multiple = -2,
+        /// <summary>
         /// Unrecognized Talker ID
         /// </summary>
-        Unknown,
+        Unknown = -1,
         /// <summary>Independent AIS Base Station</summary>
         IndependentAISBaseStation, // = AB
         /// <summary>Dependent AIS Base Station</summary>

@@ -83,24 +83,21 @@ namespace SampleApp.WinDesktop
 					((NmeaParser.SerialPortDevice)device).Port.BaudRate);
 			}
         }
-        Dictionary<string, List<NmeaParser.Nmea.Gsv>> gsvMessages = new Dictionary<string, List<NmeaParser.Nmea.Gsv>>();
+        Dictionary<NmeaParser.Nmea.Talker, NmeaParser.Nmea.Gsv> gsvMessages = new Dictionary<NmeaParser.Nmea.Talker, NmeaParser.Nmea.Gsv>();
 
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
 			Dispatcher.BeginInvoke((Action) delegate()
 			{
-				messages.Enqueue(args.Message.MessageType + ": " + args.Message.ToString());
+				messages.Enqueue(args.Message.ToString());
 				if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				if(args.Message is NmeaParser.Nmea.Gsv gpgsv)
+				if (args.Message is NmeaParser.Nmea.Gsv gpgsv)
 				{
-                    if (args.IsMultipart && args.MessageParts != null)
-                    {
-                        gsvMessages[args.Message.MessageType] = args.MessageParts.OfType<NmeaParser.Nmea.Gsv>().ToList();
-                        satView.GsvMessages = gsvMessages.SelectMany(m=>m.Value);
-                    }
+					gsvMessages[gpgsv.TalkerId] = gpgsv;
+					satView.GsvMessages = gsvMessages.Values;
 				}
 				else if (args.Message is NmeaParser.Nmea.Rmc)
 					gprmcView.Message = args.Message as NmeaParser.Nmea.Rmc;
@@ -112,19 +109,19 @@ namespace SampleApp.WinDesktop
 					gpgllView.Message = args.Message as NmeaParser.Nmea.Gll;
 				else if (args.Message is NmeaParser.Nmea.Garmin.Pgrme)
 					pgrmeView.Message = args.Message as NmeaParser.Nmea.Garmin.Pgrme;
-                else
-                {
-                    var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
-                    if(ctrl == null)
-                    {
-                        ctrl = new UnknownMessageControl()
-                        {
-                            Style = this.Resources["card"] as Style
-                        };
-                        MessagePanel.Children.Add(ctrl);
-                    }
-                    ctrl.Message = args.Message;
-                }
+				else
+				{
+					var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
+					if (ctrl == null)
+					{
+						ctrl = new UnknownMessageControl()
+						{
+							Style = this.Resources["card"] as Style
+						};
+						MessagePanel.Children.Add(ctrl);
+					}
+					ctrl.Message = args.Message;
+				}
 			});
 		}
 

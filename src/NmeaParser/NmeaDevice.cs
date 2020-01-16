@@ -185,8 +185,8 @@ namespace NmeaParser
 						_lastMultiMessage = multi; //Keep it around until next time
 						return;
 					}
-					_lastMultiMessage = null;
 				}
+				_lastMultiMessage = null;
 				if (msg != null)
 					OnMessageReceived(msg);
 			}
@@ -284,21 +284,5 @@ namespace NmeaParser
 		/// The nmea message.
 		/// </value>
 		public Nmea.NmeaMessage Message { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is a multi part message.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is multi part; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsMultipart => Message is IMultiSentenceMessage;
-
-        /// <summary>
-        /// Gets the message parts if this is a multi-part message and all message parts has been received.
-        /// </summary>
-        /// <value>
-        /// The message parts.
-        /// </value>
-        public IReadOnlyList<Nmea.NmeaMessage>? MessageParts { get; }
 	}
 }

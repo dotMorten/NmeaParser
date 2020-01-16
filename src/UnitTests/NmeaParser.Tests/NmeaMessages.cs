@@ -302,8 +302,8 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(3, gsv.TotalMessages);
-            Assert.AreEqual(3, gsv.MessageNumber);
+            Assert.IsInstanceOfType(msg, typeof(IMultiSentenceMessage));
+            Assert.IsFalse(((IMultiSentenceMessage)msg).IsComplete);
             Assert.AreEqual(11, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(3, gsv.SVs.Count);
@@ -336,13 +336,75 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(1, gsv.TotalMessages);
-            Assert.AreEqual(1, gsv.MessageNumber);
+            Assert.IsTrue(((IMultiSentenceMessage)gsv).IsComplete);
             Assert.AreEqual(0, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(0, gsv.SVs.Count);
         }
 
+        [TestMethod]
+        public void TestGpgsv_Multi()
+        {
+            var input1 = "$GPGSV,3,1,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4C";
+            var input2 = "$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F";
+            var input3 = "$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
+            var msg1 = NmeaMessage.Parse(input1);
+            Assert.IsFalse(((IMultiSentenceMessage)msg1).IsComplete);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            var msg3 = NmeaMessage.Parse(input3, msg2 as IMultiSentenceMessage);
+            Assert.IsTrue(((IMultiSentenceMessage)msg3).IsComplete);
+            Assert.IsInstanceOfType(msg1, typeof(Gsv));
+            Assert.AreSame(msg1, msg2);
+            Assert.AreSame(msg1, msg3);
+            Gsv gsv = (Gsv)msg1;
+            Assert.AreEqual(9, gsv.SVsInView);
+            Assert.IsNotNull(gsv.SVs);
+            Assert.AreEqual(9, gsv.SVs.Count);
+        }
+
+        [TestMethod]
+        public void TestGpgsv_MultiMissing()
+        {
+            var input1 = "$GPGSV,2,1,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4D";
+            var input2 = "$GPGSV,2,2,8,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F"; //Satellite count doesn't match, so append will fail
+            var msg1 = NmeaMessage.Parse(input1);
+            Assert.IsFalse(((IMultiSentenceMessage)msg1).IsComplete);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            Assert.IsInstanceOfType(msg2, typeof(Gsv));
+            Assert.AreNotSame(msg1, msg2);
+            Gsv gsv1 = (Gsv)msg1;
+            Assert.AreEqual(9, gsv1.SVsInView);
+            Assert.IsNotNull(gsv1.SVs);
+            Assert.AreEqual(4, gsv1.SVs.Count);
+            Gsv gsv2 = (Gsv)msg2;
+            Assert.AreEqual(8, gsv2.SVsInView);
+            Assert.IsNotNull(gsv2.SVs);
+            Assert.AreEqual(4, gsv2.SVs.Count);
+        }
+
+
+        [TestMethod]
+        public void TestGpgsv_MultiNotMatching()
+        {
+            var input2 = "$GPGSV,3,2,9,00,30,055,48,00,19,281,00,27,19,275,00,12,16,319,00*4F";
+            var input3 = "$GPGSV,3,3,9,32,10,037,00,,,,,,,,,,,,*74";
+            var msg2 = NmeaMessage.Parse(input2);
+            Assert.IsFalse(((IMultiSentenceMessage)msg2).IsComplete);
+            var msg3 = NmeaMessage.Parse(input3, msg2 as IMultiSentenceMessage);
+            Assert.IsFalse(((IMultiSentenceMessage)msg3).IsComplete);
+            Assert.IsInstanceOfType(msg2, typeof(Gsv));
+            Assert.AreNotSame(msg2, msg3);
+            Gsv gsv2 = (Gsv)msg2;
+            Assert.AreEqual(9, gsv2.SVsInView);
+            Assert.IsNotNull(gsv2.SVs);
+            Assert.AreEqual(4, gsv2.SVs.Count);
+            Gsv gsv3 = (Gsv)msg3;
+            Assert.AreEqual(9, gsv3.SVsInView);
+            Assert.IsNotNull(gsv3.SVs);
+            Assert.AreEqual(1, gsv3.SVs.Count);
+        }
 
         [TestMethod]
         [WorkItem(53)]
@@ -352,8 +414,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(msgstr);
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
-            Assert.AreEqual(3, gsv.TotalMessages);
-            Assert.AreEqual(1, gsv.MessageNumber);
+            Assert.IsFalse(((IMultiSentenceMessage)gsv).IsComplete);
             Assert.AreEqual(12, gsv.SVsInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(4, gsv.SVs.Count);
@@ -581,16 +642,15 @@ namespace NmeaParser.Tests
 			string input = "$GPRTE,2,1,c,0,W3IWI,DRIVWY,32CEDR,32-29,32BKLD,32-I95,32-US1,BW-32,BW-198*69";
 			var msg = NmeaMessage.Parse(input);
 			Assert.IsInstanceOfType(msg, typeof(Rte));
-			Rte gsv = (Rte)msg;
-			Assert.AreEqual(2, gsv.TotalMessages);
-			Assert.AreEqual(1, gsv.MessageNumber);
-			Assert.AreEqual(Rte.WaypointListType.CompleteWaypointsList, gsv.ListType);
-			Assert.AreEqual("0", gsv.RouteId);
-			Assert.AreEqual("0", gsv.RouteId);
-			Assert.AreEqual(9, gsv.Waypoints.Count);
-			Assert.AreEqual("W3IWI", gsv.Waypoints[0]);
-			Assert.AreEqual("32BKLD", gsv.Waypoints[4]);
-			Assert.AreEqual("BW-198", gsv.Waypoints[8]);
+			Rte rte = (Rte)msg;
+            Assert.IsFalse(((IMultiSentenceMessage)rte).IsComplete);
+            Assert.AreEqual(Rte.WaypointListType.CompleteWaypointsList, rte.ListType);
+			Assert.AreEqual("0", rte.RouteId);
+			Assert.AreEqual("0", rte.RouteId);
+			Assert.AreEqual(9, rte.Waypoints.Count);
+			Assert.AreEqual("W3IWI", rte.Waypoints[0]);
+			Assert.AreEqual("32BKLD", rte.Waypoints[4]);
+			Assert.AreEqual("BW-198", rte.Waypoints[8]);
 		}
 
 		[TestMethod]

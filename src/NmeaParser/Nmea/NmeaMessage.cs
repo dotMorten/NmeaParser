@@ -87,6 +87,7 @@ namespace NmeaParser.Nmea
         /// Parses the specified NMEA message.
         /// </summary>
         /// <param name="message">The NMEA message string.</param>
+        /// <param name="previousSentence">The previously received message (only used if parsing multi-sentence messages)</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">
         /// Invalid nmea message: Missing starting character '$'
@@ -120,9 +121,9 @@ namespace NmeaParser.Nmea
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
             string[] MessageParts = parts.Skip(1).ToArray();
-            if(previousSentence is NmeaMessage pmsg && pmsg.MessageType == MessageType)
+            if(previousSentence is NmeaMessage pmsg && pmsg.MessageType.Substring(2) == MessageType.Substring(2))
             {
-                if (previousSentence.TryAppend(MessageParts))
+                if (previousSentence.TryAppend(MessageType, MessageParts))
                 {
                     return pmsg;
                 }
@@ -154,7 +155,7 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Gets the talker ID for this message (
         /// </summary>
-        public Talker TalkerId => TalkerHelper.GetTalker(MessageType);
+        public virtual Talker TalkerId => TalkerHelper.GetTalker(MessageType);
 
         /// <summary>
         /// Gets a value indicating whether this message type is proprietary
@@ -175,24 +176,23 @@ namespace NmeaParser.Nmea
 		/// <summary>
 		/// Gets the checksum value of the message.
 		/// </summary>
-		public byte Checksum
-		{
-			get
-			{
-				int checksumTest = 0;
-				for (int j = -1; j < MessageParts.Count; j++)
-				{
-					string message = j < 0 ? MessageType : MessageParts[j];
-					if (j >= 0)
-						checksumTest ^= 0x2C; //Comma separator
-					for (int i = 0; i < message.Length; i++)
-					{
-						checksumTest ^= Convert.ToByte(message[i]);
-					}
-				}
-				return Convert.ToByte(checksumTest);
-			}
-		}
+		public byte Checksum => GetChecksum(MessageType, MessageParts);
+
+        internal static byte GetChecksum(string messageType, IReadOnlyList<string> messageParts)
+        {
+            int checksumTest = 0;
+            for (int j = -1; j < messageParts.Count; j++)
+            {
+                string message = j < 0 ? messageType : messageParts[j];
+                if (j >= 0)
+                    checksumTest ^= 0x2C; //Comma separator
+                for (int i = 0; i < message.Length; i++)
+                {
+                    checksumTest ^= Convert.ToByte(message[i]);
+                }
+            }
+            return Convert.ToByte(checksumTest);
+        }
 
 		internal static double StringToLatitude(string value, string ns)
 		{

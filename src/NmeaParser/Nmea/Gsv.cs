@@ -24,12 +24,9 @@ namespace NmeaParser.Nmea
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [NmeaMessageType("--GSV")]
-    public class Gsv : NmeaMessage, IMultiSentenceMessage<SatelliteVehicle>
+    public class Gsv : NmeaMultiSentenceMessage, IEnumerable<SatelliteVehicle>
     {
         private readonly List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
-        private int lastMessageNumber = 0;
-        private int totalMessages;
-        private readonly int firstMessageNumber;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Gsv"/> class.
@@ -40,33 +37,22 @@ namespace NmeaParser.Nmea
         {
             if (message == null || message.Length < 3)
                 throw new ArgumentException("Invalid GSV", "message");
-
-            totalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
-            firstMessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
-            SVsInView = int.Parse(message[2], CultureInfo.InvariantCulture);
-            AppendParts(message);
-
-            List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
-            for (int i = 3; i < message.Length - 3; i += 4)
-            {
-                if (message[i].Length == 0)
-                    continue;
-                else
-                    svs.Add(new SatelliteVehicle(message, i));
-            }
-            this.SVs = svs.AsReadOnly();
         }
 
-        bool IMultiSentenceMessage.TryAppend(string[] values) => AppendParts(values);
-        bool IMultiSentenceMessage.IsComplete => firstMessageNumber == 1 && lastMessageNumber == totalMessages;
+        /// <inheritdoc />
+        protected override int MessageCountIndex => 0;
 
-        private bool AppendParts(string[] message)
+        /// <inheritdoc />
+        protected override int MessageNumberIndex => 1;
+
+        /// <inheritdoc />
+        protected override bool ParseSentences(Talker talkerType, string[] message)
         {
-            int msgCount = int.Parse(message[0], CultureInfo.InvariantCulture);
-            int msgNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
             var satellites = int.Parse(message[2], CultureInfo.InvariantCulture);
 
-            if (msgCount != totalMessages || msgNumber != lastMessageNumber + 1 || satellites != SVsInView)
+            if (SVsInView == -1)
+                SVsInView = satellites;
+            else if ( satellites != SVsInView)
                 return false; // Messages do not match
 
             for (int i = 3; i < message.Length - 3; i += 4)
@@ -74,27 +60,20 @@ namespace NmeaParser.Nmea
                 if (message[i].Length == 0)
                     continue;
                 else
-                    svs.Add(new SatelliteVehicle(message, i));
+                    svs.Add(new SatelliteVehicle(talkerType, message, i));
             }
-            lastMessageNumber = msgNumber;
-            this.SVs = svs.AsReadOnly();
             return true;
-        }
-
-        IEnumerable<string> IMultiSentenceMessage.SerializeParts()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
         /// Total number of SVs in view
         /// </summary>
-        public int SVsInView { get; }
+        public int SVsInView { get; private set; } = -1;
 
         /// <summary>
         /// Satellite vehicles in this message part.
         /// </summary>
-        public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
+        public IReadOnlyList<SatelliteVehicle> SVs => svs.AsReadOnly();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -120,7 +99,7 @@ namespace NmeaParser.Nmea
     /// </summary>
     public sealed class SatelliteVehicle
     {
-        internal SatelliteVehicle(string[] message, int startIndex)
+        internal SatelliteVehicle(Talker talker, string[] message, int startIndex)
         {
             PrnNumber = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
             if (double.TryParse(message[startIndex + 1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double e))
@@ -130,19 +109,29 @@ namespace NmeaParser.Nmea
             int snr = -1;
             if (int.TryParse(message[startIndex + 3], out snr))
                 SignalToNoiseRatio = snr;
+            TalkerId = talker;
         }
+
+        /// <summary>
+        /// Gets the talker ID for this vehicle
+        /// </summary>
+        public Talker TalkerId { get; }
+
         /// <summary>
         /// SV PRN number
         /// </summary>
         public int PrnNumber { get; }
+
         /// <summary>
         /// Elevation in degrees, 90 maximum
         /// </summary>
         public double Elevation { get; } = double.NaN;
+
         /// <summary>
         /// Azimuth, degrees from true north, 000 to 359
         /// </summary>
         public double Azimuth { get; } = double.NaN;
+
         /// <summary>
         /// Signal-to-Noise ratio, 0-99 dB (-1 when not tracking) 
         /// </summary>
