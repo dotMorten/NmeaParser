@@ -30,7 +30,13 @@ namespace NmeaParser.Tests
     public class NmeaMessages
     {
         [TestMethod]
-        public async Task ParseNmeaFile()
+        public
+#if NETFX_CORE
+            async Task
+#else
+            void
+#endif
+            ParseNmeaFile()
         {
 #if NETFX_CORE
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
@@ -56,7 +62,13 @@ namespace NmeaParser.Tests
             }
         }
         [TestMethod]
-        public async Task ParseTrimbleR2NmeaFile()
+        public
+#if NETFX_CORE
+            async Task
+#else
+            void
+#endif
+            ParseTrimbleR2NmeaFile()
         {
 #if NETFX_CORE
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///TrimbleR2SampleData.txt"));
