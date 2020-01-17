@@ -17,13 +17,10 @@
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2019</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
-    <PackageReleaseNotes>Lots of API cleanup to avoid null-references.
-Revamped talker-specific message to use same class, instead of having talker-specific types (breaking).
-Simplify object model for creation (semi-breaking).
-Updated license to Apache 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>New refined and easier to use v2 API</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
