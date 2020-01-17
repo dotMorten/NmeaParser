@@ -12,7 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-#if NETFX
+#if NETFX || NETCOREAPP
 using System;
 using System.Collections.Generic;
 using System.Linq;
