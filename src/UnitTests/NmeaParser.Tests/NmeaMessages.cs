@@ -97,6 +97,24 @@ namespace NmeaParser.Tests
                 }
             }
         }
+          
+        [TestMethod]
+        public void TestGprma()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*38";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Rma));
+            Rma rma = (Rma)msg;
+            Assert.AreEqual(Rma.PositioningStatus.Autonomous, rma.Status);
+            Assert.AreEqual(-49.287333333333333333, rma.Latitude);
+            Assert.AreEqual(-123.1595, rma.Longitude);
+            Assert.AreEqual(TimeSpan.FromMilliseconds(1), rma.TimeDifferenceA);
+            Assert.AreEqual(TimeSpan.FromMilliseconds(2), rma.TimeDifferenceB);
+            Assert.AreEqual(123.4, rma.Speed);
+            Assert.AreEqual(321, rma.Course);
+            Assert.AreEqual(-10, rma.MagneticVariation);
+            Assert.AreEqual(Rma.PositioningMode.Autonomous, rma.Mode);
+        }
 
         [TestMethod]
         public void TestGprmb_Empty()
@@ -143,7 +161,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Rmc));
             Rmc rmc = (Rmc)msg;
-            Assert.AreEqual(new DateTime(2013, 03, 23, 12, 35, 19, DateTimeKind.Utc), rmc.FixTime);
+            Assert.AreEqual(new DateTimeOffset(2013, 03, 23, 12, 35, 19, TimeSpan.Zero), rmc.FixTime);
             Assert.AreEqual(-48.1173, rmc.Latitude);
             Assert.AreEqual(-11.516666666666667, rmc.Longitude, 0.0000000001);
         }
@@ -156,7 +174,7 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Rmc));
             Rmc rmc = (Rmc)msg;
             Assert.AreEqual("GNRMC", rmc.MessageType);
-            Assert.AreEqual(new DateTime(2017, 12, 20, 23, 10, 11, DateTimeKind.Utc), rmc.FixTime);
+            Assert.AreEqual(new DateTimeOffset(2017, 12, 20, 23, 10, 11, TimeSpan.Zero), rmc.FixTime);
             Assert.AreEqual(34.057860634, rmc.Latitude, 0.0000000001);
             Assert.AreEqual(-117.19682109916667, rmc.Longitude, 0.0000000001);
             Assert.AreEqual(true, rmc.Active);
@@ -180,7 +198,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(.8, gga.Hdop);
             Assert.AreEqual(1378, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
-            Assert.AreEqual(-22.1, gga.HeightOfGeoid);
+            Assert.AreEqual(-22.1, gga.GeoidalSeparation);
             Assert.AreEqual("M", gga.HeightOfGeoidUnits);
             Assert.AreEqual(-1, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
@@ -201,7 +219,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(.9, gga.Hdop);
             Assert.AreEqual(403.641, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
-            Assert.AreEqual(-32.133, gga.HeightOfGeoid);
+            Assert.AreEqual(-32.133, gga.GeoidalSeparation);
             Assert.AreEqual("M", gga.HeightOfGeoidUnits);
             Assert.AreEqual(0, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.FromSeconds(1), gga.TimeSinceLastDgpsUpdate);
@@ -248,13 +266,13 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsa));
             Gsa gsa = (Gsa)msg;
-            Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.GpsMode);
-            Assert.AreEqual(Gsa.Mode.Fix3D, gsa.FixMode);
-            Assert.AreEqual(4, gsa.SVs.Count);
-            Assert.AreEqual(16, gsa.SVs[0]);
-            Assert.AreEqual(18, gsa.SVs[1]);
-            Assert.AreEqual(22, gsa.SVs[2]);
-            Assert.AreEqual(24, gsa.SVs[3]);
+            Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.Mode);
+            Assert.AreEqual(Gsa.FixType.Fix3D, gsa.Fix);
+            Assert.AreEqual(4, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(16, gsa.SatelliteIDs[0]);
+            Assert.AreEqual(18, gsa.SatelliteIDs[1]);
+            Assert.AreEqual(22, gsa.SatelliteIDs[2]);
+            Assert.AreEqual(24, gsa.SatelliteIDs[3]);
             Assert.AreEqual(double.NaN, gsa.Pdop);
             Assert.AreEqual(double.NaN, gsa.Hdop);
             Assert.AreEqual(double.NaN, gsa.Vdop);
@@ -267,21 +285,21 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Gsa));
             Gsa gsa = (Gsa)msg;
-            Assert.AreEqual(Gsa.ModeSelection.Manual, gsa.GpsMode);
-            Assert.AreEqual(Gsa.Mode.Fix2D, gsa.FixMode);
-            Assert.AreEqual(12, gsa.SVs.Count);
-            Assert.AreEqual(19, gsa.SVs[0]);
-            Assert.AreEqual(28, gsa.SVs[1]);
-            Assert.AreEqual(14, gsa.SVs[2]);
-            Assert.AreEqual(18, gsa.SVs[3]);
-            Assert.AreEqual(27, gsa.SVs[4]);
-            Assert.AreEqual(22, gsa.SVs[5]);
-            Assert.AreEqual(31, gsa.SVs[6]);
-            Assert.AreEqual(39, gsa.SVs[7]);
-            Assert.AreEqual(40, gsa.SVs[8]);
-            Assert.AreEqual(42, gsa.SVs[9]);
-            Assert.AreEqual(43, gsa.SVs[10]);
-            Assert.AreEqual(44, gsa.SVs[11]);
+            Assert.AreEqual(Gsa.ModeSelection.Manual, gsa.Mode);
+            Assert.AreEqual(Gsa.FixType.Fix2D, gsa.Fix);
+            Assert.AreEqual(12, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(19, gsa.SatelliteIDs[0]);
+            Assert.AreEqual(28, gsa.SatelliteIDs[1]);
+            Assert.AreEqual(14, gsa.SatelliteIDs[2]);
+            Assert.AreEqual(18, gsa.SatelliteIDs[3]);
+            Assert.AreEqual(27, gsa.SatelliteIDs[4]);
+            Assert.AreEqual(22, gsa.SatelliteIDs[5]);
+            Assert.AreEqual(31, gsa.SatelliteIDs[6]);
+            Assert.AreEqual(39, gsa.SatelliteIDs[7]);
+            Assert.AreEqual(40, gsa.SatelliteIDs[8]);
+            Assert.AreEqual(42, gsa.SatelliteIDs[9]);
+            Assert.AreEqual(43, gsa.SatelliteIDs[10]);
+            Assert.AreEqual(44, gsa.SatelliteIDs[11]);
             Assert.AreEqual(1.7, gsa.Pdop);
             Assert.AreEqual(1.0, gsa.Hdop);
             Assert.AreEqual(1.3, gsa.Vdop);
@@ -295,15 +313,15 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Gsa));
             Assert.AreEqual("GNGSA", msg.MessageType);
             Gsa gsa = (Gsa)msg;
-            Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.GpsMode);
-            Assert.AreEqual(Gsa.Mode.Fix3D, gsa.FixMode);
-            Assert.AreEqual(6, gsa.SVs.Count);
-            Assert.AreEqual(3, gsa.SVs[0]);
-            Assert.AreEqual(7, gsa.SVs[1]);
-            Assert.AreEqual(16, gsa.SVs[2]);
-            Assert.AreEqual(23, gsa.SVs[3]);
-            Assert.AreEqual(9, gsa.SVs[4]);
-            Assert.AreEqual(26, gsa.SVs[5]);
+            Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.Mode);
+            Assert.AreEqual(Gsa.FixType.Fix3D, gsa.Fix);
+            Assert.AreEqual(6, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(3, gsa.SatelliteIDs[0]);
+            Assert.AreEqual(7, gsa.SatelliteIDs[1]);
+            Assert.AreEqual(16, gsa.SatelliteIDs[2]);
+            Assert.AreEqual(23, gsa.SatelliteIDs[3]);
+            Assert.AreEqual(9, gsa.SatelliteIDs[4]);
+            Assert.AreEqual(26, gsa.SatelliteIDs[5]);
             Assert.AreEqual(3.5, gsa.Pdop);
             Assert.AreEqual(1.4, gsa.Hdop);
             Assert.AreEqual(3.2, gsa.Vdop);
@@ -318,25 +336,25 @@ namespace NmeaParser.Tests
             Gsv gsv = (Gsv)msg;
             Assert.IsInstanceOfType(msg, typeof(IMultiSentenceMessage));
             Assert.IsFalse(((IMultiSentenceMessage)msg).IsComplete);
-            Assert.AreEqual(11, gsv.SVsInView);
+            Assert.AreEqual(11, gsv.SatellitesInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(3, gsv.SVs.Count);
             var sv = gsv.SVs[0];
-            Assert.AreEqual(22, sv.PrnNumber);
+            Assert.AreEqual(22, sv.Id);
             Assert.AreEqual(42, sv.Elevation);
             Assert.AreEqual(67, sv.Azimuth);
             Assert.AreEqual(42, sv.SignalToNoiseRatio);
             Assert.AreEqual(SatelliteSystem.Gps, sv.System);
 
             sv = gsv.SVs[1];
-            Assert.AreEqual(75, sv.PrnNumber);
+            Assert.AreEqual(75, sv.Id);
             Assert.AreEqual(14, sv.Elevation);
             Assert.AreEqual(311, sv.Azimuth);
             Assert.AreEqual(43, sv.SignalToNoiseRatio);
             Assert.AreEqual(SatelliteSystem.Glonass, sv.System);
 
             sv = gsv.SVs[2];
-            Assert.AreEqual(50, sv.PrnNumber);
+            Assert.AreEqual(50, sv.Id);
             Assert.AreEqual(5, sv.Elevation);
             Assert.AreEqual(244, sv.Azimuth);
             Assert.AreEqual(00, sv.SignalToNoiseRatio);
@@ -351,7 +369,7 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
             Assert.IsTrue(((IMultiSentenceMessage)gsv).IsComplete);
-            Assert.AreEqual(0, gsv.SVsInView);
+            Assert.AreEqual(0, gsv.SatellitesInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(0, gsv.SVs.Count);
         }
@@ -372,7 +390,7 @@ namespace NmeaParser.Tests
             Assert.AreSame(msg1, msg2);
             Assert.AreSame(msg1, msg3);
             Gsv gsv = (Gsv)msg1;
-            Assert.AreEqual(9, gsv.SVsInView);
+            Assert.AreEqual(9, gsv.SatellitesInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(9, gsv.SVs.Count);
         }
@@ -389,11 +407,11 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg2, typeof(Gsv));
             Assert.AreNotSame(msg1, msg2);
             Gsv gsv1 = (Gsv)msg1;
-            Assert.AreEqual(9, gsv1.SVsInView);
+            Assert.AreEqual(9, gsv1.SatellitesInView);
             Assert.IsNotNull(gsv1.SVs);
             Assert.AreEqual(4, gsv1.SVs.Count);
             Gsv gsv2 = (Gsv)msg2;
-            Assert.AreEqual(8, gsv2.SVsInView);
+            Assert.AreEqual(8, gsv2.SatellitesInView);
             Assert.IsNotNull(gsv2.SVs);
             Assert.AreEqual(4, gsv2.SVs.Count);
         }
@@ -411,11 +429,11 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg2, typeof(Gsv));
             Assert.AreNotSame(msg2, msg3);
             Gsv gsv2 = (Gsv)msg2;
-            Assert.AreEqual(9, gsv2.SVsInView);
+            Assert.AreEqual(9, gsv2.SatellitesInView);
             Assert.IsNotNull(gsv2.SVs);
             Assert.AreEqual(4, gsv2.SVs.Count);
             Gsv gsv3 = (Gsv)msg3;
-            Assert.AreEqual(9, gsv3.SVsInView);
+            Assert.AreEqual(9, gsv3.SatellitesInView);
             Assert.IsNotNull(gsv3.SVs);
             Assert.AreEqual(1, gsv3.SVs.Count);
         }
@@ -429,10 +447,10 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Gsv));
             Gsv gsv = (Gsv)msg;
             Assert.IsFalse(((IMultiSentenceMessage)gsv).IsComplete);
-            Assert.AreEqual(12, gsv.SVsInView);
+            Assert.AreEqual(12, gsv.SatellitesInView);
             Assert.IsNotNull(gsv.SVs);
             Assert.AreEqual(4, gsv.SVs.Count);
-            Assert.AreEqual(4, gsv.SVs[1].PrnNumber);
+            Assert.AreEqual(4, gsv.SVs[1].Id);
             Assert.IsTrue(double.IsNaN(gsv.SVs[1].Elevation));
             Assert.IsTrue(double.IsNaN(gsv.SVs[1].Azimuth));
             Assert.AreEqual(40, gsv.SVs[1].SignalToNoiseRatio);
@@ -492,7 +510,10 @@ namespace NmeaParser.Tests
             Assert.AreEqual(-111.889230455, gns.Longitude, .000000000001);
             Assert.AreEqual(Gns.Mode.Differential, gns.GpsModeIndicator);
             Assert.AreEqual(Gns.Mode.NoFix, gns.GlonassModeIndicator);
-            Assert.AreEqual(0, gns.FutureModeIndicator.Length);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.GalileoModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.BDSModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.QZSSModeIndicator);
+            Assert.AreEqual(1, gns.ModeIndicators.Length);
             Assert.AreEqual(19, gns.NumberOfSatellites);
             Assert.AreEqual(.6, gns.Hdop);
             Assert.AreEqual(406.110, gns.OrhometricHeight);
@@ -515,7 +536,10 @@ namespace NmeaParser.Tests
             Assert.AreEqual(double.NaN, gns.Longitude);
             Assert.AreEqual(Gns.Mode.NoFix, gns.GpsModeIndicator);
             Assert.AreEqual(Gns.Mode.NoFix, gns.GlonassModeIndicator);
-            Assert.AreEqual(0, gns.FutureModeIndicator.Length);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.GalileoModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.BDSModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.QZSSModeIndicator);
+            Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(6, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
             Assert.AreEqual(double.NaN, gns.OrhometricHeight);
@@ -537,16 +561,47 @@ namespace NmeaParser.Tests
             Assert.AreEqual(-117.196825025667, gns.Longitude, .00000000001);
             Assert.AreEqual(Gns.Mode.Differential, gns.GpsModeIndicator);
             Assert.AreEqual(Gns.Mode.Differential, gns.GlonassModeIndicator);
-            Assert.AreEqual(3, gns.FutureModeIndicator.Length);
-            Assert.AreEqual(Gns.Mode.NoFix, gns.FutureModeIndicator[0]);
-            Assert.AreEqual(Gns.Mode.NoFix, gns.FutureModeIndicator[1]);
-            Assert.AreEqual(Gns.Mode.NoFix, gns.FutureModeIndicator[2]);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.GalileoModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.BDSModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.QZSSModeIndicator);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.NavICModeIndicator);
+            Assert.AreEqual(5, gns.ModeIndicators.Length);
+            Assert.AreEqual(Gns.Mode.Differential, gns.ModeIndicators[0]);
+            Assert.AreEqual(Gns.Mode.Differential, gns.ModeIndicators[1]);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.ModeIndicators[2]);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.ModeIndicators[3]);
+            Assert.AreEqual(Gns.Mode.NoFix, gns.ModeIndicators[4]);
             Assert.AreEqual(10, gns.NumberOfSatellites);
             Assert.AreEqual(1.4, gns.Hdop);
             Assert.AreEqual(402.411, gns.OrhometricHeight);
             Assert.AreEqual(-32.133, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.MaxValue, gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual(null, gns.DgpsStationId);
+            Assert.AreEqual(Gns.NavigationalStatus.NotValid, gns.Status);
+        }
+
+        [TestMethod]
+        public void TestGngnsModeIndicators()
+        {
+            string input = "$GNGNS,122310.2,3722.425671,N,12258.856215,W,DAAAAA,14,0.9,1005.543,6.5,,,S*0E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gns));
+            Gns gns = (Gns)msg;
+            Assert.AreEqual(Gns.Mode.Differential, gns.GpsModeIndicator);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.GlonassModeIndicator);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.GalileoModeIndicator);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.BDSModeIndicator);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.QZSSModeIndicator);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.NavICModeIndicator);
+            Assert.AreEqual(6, gns.ModeIndicators.Length);
+            Assert.AreEqual(Gns.Mode.Differential, gns.ModeIndicators[0]);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.ModeIndicators[1]);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.ModeIndicators[2]);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.ModeIndicators[3]);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.ModeIndicators[4]);
+            Assert.AreEqual(Gns.Mode.Autonomous, gns.ModeIndicators[5]);
+            Assert.AreEqual(null, gns.DgpsStationId);
+            Assert.AreEqual(Gns.NavigationalStatus.Safe, gns.Status);
         }
 
 
@@ -563,7 +618,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(double.NaN, gns.Longitude);
             Assert.AreEqual(Gns.Mode.NoFix, gns.GpsModeIndicator);
             Assert.AreEqual(Gns.Mode.NoFix, gns.GlonassModeIndicator);
-            Assert.AreEqual(0, gns.FutureModeIndicator.Length);
+            Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(4, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
             Assert.AreEqual(double.NaN, gns.OrhometricHeight);
@@ -708,10 +763,10 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Vtg));
             Vtg vtg = (Vtg)msg;
-            Assert.AreEqual(103.85, vtg.TrueCourseOverGround);
-            Assert.AreEqual(92.79, vtg.MagneticCourseOverGround);
-            Assert.AreEqual(0.14, vtg.SpeedInKnots);
-            Assert.AreEqual(0.25, vtg.SpeedInKph);
+            Assert.AreEqual(103.85, vtg.CourseTrue);
+            Assert.AreEqual(92.79, vtg.CourseMagnetic);
+            Assert.AreEqual(0.14, vtg.SpeedKnots);
+            Assert.AreEqual(0.25, vtg.SpeedKph);
         }
 
         [TestMethod]
@@ -721,10 +776,10 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Vtg));
             Vtg vtg = (Vtg)msg;
-            Assert.IsTrue(double.IsNaN(vtg.TrueCourseOverGround));
-            Assert.IsTrue(double.IsNaN(vtg.MagneticCourseOverGround));
-            Assert.AreEqual(0.0, vtg.SpeedInKnots);
-            Assert.AreEqual(0.0, vtg.SpeedInKph);
+            Assert.IsTrue(double.IsNaN(vtg.CourseTrue));
+            Assert.IsTrue(double.IsNaN(vtg.CourseMagnetic));
+            Assert.AreEqual(0.0, vtg.SpeedKnots);
+            Assert.AreEqual(0.0, vtg.SpeedKph);
         }
 
         [TestMethod]
@@ -734,7 +789,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Zda));
             var zda = (Zda)msg;
-            Assert.AreEqual(new DateTime(2018, 10, 02, 07, 54, 51, 00, DateTimeKind.Utc), zda.FixDateTime);
+            Assert.AreEqual(new DateTimeOffset(2018, 10, 02, 07, 54, 51, 00, TimeSpan.Zero), zda.FixDateTime);
         }
 
         [TestMethod]
@@ -744,7 +799,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Zda));
             var zda = (Zda)msg;
-            Assert.AreEqual(new DateTime(2005, 08, 25, 14, 30, 42, 00, DateTimeKind.Utc), zda.FixDateTime);
+            Assert.AreEqual(new DateTimeOffset(2005, 08, 25, 14, 30, 42, 00, TimeSpan.Zero), zda.FixDateTime);
         }
 
         [TestMethod]
@@ -754,7 +809,7 @@ namespace NmeaParser.Tests
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(Zda));
             var zda = (Zda)msg;
-            Assert.AreEqual(new DateTime(2015, 09, 21, 22, 56, 27, 00, DateTimeKind.Utc), zda.FixDateTime);
+            Assert.AreEqual(new DateTimeOffset(2015, 09, 21, 22, 56, 27, 00, TimeSpan.Zero), zda.FixDateTime);
         }
     }
 }

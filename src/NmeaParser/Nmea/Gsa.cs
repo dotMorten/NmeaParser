@@ -35,8 +35,8 @@ namespace NmeaParser.Nmea
             if (message == null || message.Length < 17)
                 throw new ArgumentException("Invalid GPGSA", "message");
 
-            GpsMode = message[0] == "A" ? Gsa.ModeSelection.Auto : Gsa.ModeSelection.Manual;
-            FixMode = (Gsa.Mode)int.Parse(message[1], CultureInfo.InvariantCulture);
+            Mode = message[0] == "A" ? Gsa.ModeSelection.Auto : Gsa.ModeSelection.Manual;
+            Fix = (Gsa.FixType)int.Parse(message[1], CultureInfo.InvariantCulture);
 
             List<int> svs = new List<int>();
             for (int i = 2; i < 14; i++)
@@ -45,7 +45,7 @@ namespace NmeaParser.Nmea
                 if (message[i].Length > 0 && int.TryParse(message[i], out id))
                     svs.Add(id);
             }
-            SVs = svs.ToArray();
+            SatelliteIDs = svs.ToArray();
 
             double tmp;
             if (double.TryParse(message[14], NumberStyles.Float, CultureInfo.InvariantCulture, out tmp))
@@ -67,17 +67,23 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Mode
         /// </summary>
-        public ModeSelection GpsMode { get; }
+        public ModeSelection Mode { get; }
 
         /// <summary>
         /// Mode
         /// </summary>
-        public Mode FixMode { get; }
+        public FixType Fix { get; }
 
         /// <summary>
-        /// IDs of SVs used in position fix
+        /// ID numbers of satellite vehicles used in the solution.
         /// </summary>
-        public IReadOnlyList<int> SVs { get; }
+        /// <remarks>
+        /// - GPS satellites are identified by their PRN numbers, which range from 1 to 32.
+        /// - The numbers 33-64 are reserved for SBAS satellites. The SBAS system PRN numbers are 120-138. The offset from NMEA SBAS SB ID to SBAS PRN number is 87.
+        /// A SBAS PRN number of 120 minus 87 yields the SV ID of 33. The addition of87 to the SVID yields the SBAS PRN number.
+        /// - The numbers 65-96 are reserved for GLONASS satellites. GLONASS satellites are identified by 64+satellite slot number.
+        /// </remarks>
+        public IReadOnlyList<int> SatelliteIDs { get; }
 
         /// <summary>
         /// Dilution of precision
@@ -103,7 +109,7 @@ namespace NmeaParser.Nmea
         public enum ModeSelection
         {
             /// <summary>
-            /// Auto
+            /// Automatic, allowed to automatically switch 2D/3D
             /// </summary>
             Auto,
             /// <summary>
@@ -111,11 +117,12 @@ namespace NmeaParser.Nmea
             /// </summary>
             Manual,
         }
+
         /// <summary>
         /// Fix Mode
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Enum values matches NMEA spec")]
-        public enum Mode : int
+        public enum FixType : int
         {
             /// <summary>
             /// Not available

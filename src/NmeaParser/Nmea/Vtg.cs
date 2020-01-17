@@ -35,30 +35,30 @@ namespace NmeaParser.Nmea
         {
             if (message == null || message.Length < 7)
                 throw new ArgumentException("Invalid Gpvtg", "message");
-            TrueCourseOverGround = NmeaMessage.StringToDouble(message[0]);
-            MagneticCourseOverGround = NmeaMessage.StringToDouble(message[2]);
-            SpeedInKnots = NmeaMessage.StringToDouble(message[4]);
-            SpeedInKph = NmeaMessage.StringToDouble(message[6]);
+            CourseTrue = NmeaMessage.StringToDouble(message[0]);
+            CourseMagnetic = NmeaMessage.StringToDouble(message[2]);
+            SpeedKnots = NmeaMessage.StringToDouble(message[4]);
+            SpeedKph = NmeaMessage.StringToDouble(message[6]);
         }
 
         /// <summary>
         ///  Course over ground relative to true north
         /// </summary>
-        public double TrueCourseOverGround { get; }
+        public double CourseTrue { get; }
 
         /// <summary>
         ///  Course over ground relative to magnetic north
         /// </summary>
-        public double MagneticCourseOverGround { get; }
+        public double CourseMagnetic { get; }
 
         /// <summary>
         /// Speed over ground in knots
         /// </summary>
-        public double SpeedInKnots { get; }
+        public double SpeedKnots { get; }
 
         /// <summary>
         /// Speed over ground in kilometers/hour
         /// </summary>
-        public double SpeedInKph { get; }
+        public double SpeedKph { get; }
     }
 }

@@ -17,7 +17,7 @@ using System;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Position error statistics
+    /// Pseudorange error statistics
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgst")]
     [NmeaMessageType("--GST")]
@@ -48,48 +48,39 @@ namespace NmeaParser.Nmea
         public TimeSpan FixTime { get; }
 
         /// <summary>
-        /// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing
+        /// RMS value of the standard deviation of the range inputs in the navigation process. Range inputs include pseudoranges and DGNSS corrections.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rms")]
         public double Rms { get; }
 
         /// <summary>
-        /// Error ellipse semi-major axis 1 sigma error, in meters
+        /// Standard deviation of semi-major axis of error ellipse in meters.
         /// </summary>
         public double SemiMajorError { get; }
 
         /// <summary>
-        /// Error ellipse semi-minor axis 1 sigma error, in meters
+        /// Standard deviation of semi-minor axis of error ellipse in meters.
         /// </summary>
         public double SemiMinorError { get; }
 
         /// <summary>
-        /// Error ellipse orientation, degrees from true north
+        /// Orientation of semi-major axis of error ellipse (degrees from true north).
         /// </summary>
         public double ErrorOrientation { get; }
 
         /// <summary>
-        /// Latitude 1 sigma error, in meters
+        /// Standard deviation of latitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
         public double SigmaLatitudeError { get; }
 
-        /// <summary >
-        /// Longitude 1 sigma error, in meters
+        /// <summary>
+        /// Standard deviation of longitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
         public double SigmaLongitudeError { get; }
 
-        /// <summary >
-        /// Height 1 sigma error, in meters
+        /// <summary>
+        /// Standard deviation of altitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
         public double SigmaHeightError { get; }
     }
 }

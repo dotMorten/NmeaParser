@@ -18,7 +18,7 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Bearing Origin to Destination
+    /// Bearing - Origin to Destination
     /// </summary>
     /// <remarks>
     /// Bearing angle of the line, calculated at the origin waypoint, extending to the destination waypoint from 
@@ -51,22 +51,22 @@ namespace NmeaParser.Nmea
                 OriginId = message[5];
         }
         /// <summary>
-        /// True Bearing from start to destination
+        /// True Bearing in degrees from start to destination
         /// </summary>
         public double TrueBearing { get; }
 
         /// <summary>
-        /// Magnetic Bearing from start to destination
+        /// Magnetic Bearing in degrees from start to destination
         /// </summary>
         public double MagneticBearing { get; }
 
         /// <summary>
-        /// Name of origin
+        /// Name of origin waypoint ID
         /// </summary>
         public string? OriginId { get; }
 
         /// <summary>
-        /// Name of destination
+        /// Name of destination waypoint ID
         /// </summary>
         public string? DestinationId { get; }
     }

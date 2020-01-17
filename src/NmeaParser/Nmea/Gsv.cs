@@ -19,8 +19,11 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// GPS Satellites in view
+    /// GNSS Satellites in view
     /// </summary>
+    /// <remarks>
+    /// The GSV sentence provides the number of satellites (SV) in view, satellite ID numbers, elevation, azimuth, and SNR value.
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [NmeaMessageType("--GSV")]
@@ -50,9 +53,9 @@ namespace NmeaParser.Nmea
         {
             var satellites = int.Parse(message[2], CultureInfo.InvariantCulture);
 
-            if (SVsInView == -1)
-                SVsInView = satellites;
-            else if ( satellites != SVsInView)
+            if (SatellitesInView == -1)
+                SatellitesInView = satellites;
+            else if ( satellites != SatellitesInView)
                 return false; // Messages do not match
 
             for (int i = 3; i < message.Length - 3; i += 4)
@@ -66,9 +69,10 @@ namespace NmeaParser.Nmea
         }
 
         /// <summary>
-        /// Total number of SVs in view
+        /// Total number of satellite vehicles (SV) in view
         /// </summary>
-        public int SVsInView { get; private set; } = -1;
+        /// <seealso cref="SVs"/>
+        public int SatellitesInView { get; private set; } = -1;
 
         /// <summary>
         /// Satellite vehicles in this message part.
@@ -101,7 +105,7 @@ namespace NmeaParser.Nmea
     {
         internal SatelliteVehicle(Talker talker, string[] message, int startIndex)
         {
-            PrnNumber = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
+            Id = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
             if (double.TryParse(message[startIndex + 1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double e))
                 Elevation = e;
             if (double.TryParse(message[startIndex + 2], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double a))
@@ -118,9 +122,9 @@ namespace NmeaParser.Nmea
         public Talker TalkerId { get; }
 
         /// <summary>
-        /// SV PRN number
+        /// Satellite ID number
         /// </summary>
-        public int PrnNumber { get; }
+        public int Id { get; }
 
         /// <summary>
         /// Elevation in degrees, 90 maximum
@@ -144,11 +148,11 @@ namespace NmeaParser.Nmea
         {
             get
             {
-                if (PrnNumber >= 1 && PrnNumber <= 32)
+                if (Id >= 1 && Id <= 32)
                     return SatelliteSystem.Gps;
-                if (PrnNumber >= 33 && PrnNumber <= 64)
+                if (Id >= 33 && Id <= 64)
                     return SatelliteSystem.Waas;
-                if (PrnNumber >= 65 && PrnNumber <= 96)
+                if (Id >= 65 && Id <= 96)
                     return SatelliteSystem.Glonass;
                 return SatelliteSystem.Unknown;
             }

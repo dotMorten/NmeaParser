@@ -17,8 +17,11 @@ using System;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Geographic position, latitude / longitude
+    /// Geographic position, latitude / longitude.
     /// </summary>
+    /// <remarks>
+    /// Latitude and Longitude of vessel position, time of position fix and status.
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
     [NmeaMessageType("--GLL")]
     public class Gll : NmeaMessage

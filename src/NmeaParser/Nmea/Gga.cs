@@ -18,8 +18,12 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Global Positioning System Fix Data
+    ///  Global Positioning System Fix Data
     /// </summary>
+    /// <remarks>
+    /// This sentence is designed for use only with the <c>GP</c> Talker ID for U.S. Global Positioning System. All Global Satellite System receivers,
+    /// invcluding GPS, should use the <see cref="Gns"/> sentence in new equipment designs.
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]
     public class Gga : NmeaMessage
@@ -41,7 +45,7 @@ namespace NmeaParser.Nmea
             Hdop = NmeaMessage.StringToDouble(message[7]);
             Altitude = NmeaMessage.StringToDouble(message[8]);
             AltitudeUnits = message[9];
-            HeightOfGeoid = NmeaMessage.StringToDouble(message[10]);
+            GeoidalSeparation = NmeaMessage.StringToDouble(message[10]);
             HeightOfGeoidUnits = message[11];            
             var timeInSeconds = StringToDouble(message[12]);
             if (!double.IsNaN(timeInSeconds))
@@ -96,9 +100,12 @@ namespace NmeaParser.Nmea
         public string AltitudeUnits { get; }
     
         /// <summary>
-        /// Height of geoid (mean sea level) above WGS84
+        /// Geoidal separation: the difference between the WGS-84 earth ellipsoid surface and mean-sea-level (geoid) surface.
         /// </summary>
-        public double HeightOfGeoid { get; }
+        /// <remarks>
+        /// A negative value means mean-sea-level surface is below the WGS-84 ellipsoid surface.
+        /// </remarks>
+        public double GeoidalSeparation { get; }
 
         /// <summary>
         /// Altitude units ('M' for Meters)
@@ -106,41 +113,41 @@ namespace NmeaParser.Nmea
         public string HeightOfGeoidUnits { get; }
 
         /// <summary>
-        /// Time since last DGPS update
+        /// Time since last DGPS update (ie age of the differential GPS data)
         /// </summary>
         public TimeSpan TimeSinceLastDgpsUpdate { get; }
 
         /// <summary>
-        /// DGPS Station ID Number
+        /// Differential Reference Station ID
         /// </summary>
         public int DgpsStationId { get; }
 
         /// <summary>
-        /// Fix quality
+        /// Fix quality indicater
         /// </summary>
         public enum FixQuality : int
         {
-            /// <summary>Invalid</summary>
+            /// <summary>Fix not available or invalid</summary>
             Invalid = 0,
-            /// <summary>GPS</summary>
+            /// <summary>GPS SPS Mode, fix valid</summary>
             GpsFix = 1,
-            /// <summary>Differential GPS</summary>
+            /// <summary>Differential GPS, SPS Mode, or Satellite Based Augmentation System (SBAS), fix valid</summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dgps")]
             DgpsFix = 2,
-            /// <summary>Precise Positioning Service</summary>
+            /// <summary>GPS PPS (Precise Positioning Service) mode, fix valid</summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pps")]
             PpsFix = 3,
-            /// <summary>Real Time Kinematic (Fixed)</summary>
+            /// <summary>Real Time Kinematic (Fixed). System used in RTK mode with fixed integers</summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
             Rtk = 4,
-            /// <summary>Real Time Kinematic (Floating)</summary>
+            /// <summary>Real Time Kinematic (Floating). Satellite system used in RTK mode, floating integers</summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rtk")]
             FloatRtk = 5,
-            /// <summary>Estimated</summary>
+            /// <summary>Estimated (dead reckoning) mode</summary>
             Estimated = 6,
-            /// <summary>Manual input</summary>
+            /// <summary>Manual input mode</summary>
             ManualInput = 7,
-            /// <summary>Simulation</summary>
+            /// <summary>Simulator mode</summary>
             Simulation = 8
         }
     }

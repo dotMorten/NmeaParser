@@ -18,8 +18,14 @@ using System.Globalization;
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Recommended Minimum
+    /// Recommended Minimum specific GNSS data
     /// </summary>
+    /// <remarks>
+    /// <para>Time, date, position, course and speed data provided by a GNSS navigation receiver. This sentence is
+    /// transmitted at intervals not exceeding 2-seconds and is always accompanied by <see cref="Rmb"/> when a destination waypoint
+    /// is active.</para>
+    /// <para><see cref="Rmc"/> and <see cref="Rmb"/> are the recommended minimum data to be provided by a GNSS receiver.</para>
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
     [NmeaMessageType("--RMC")]
     public class Rmc : NmeaMessage
@@ -36,12 +42,12 @@ namespace NmeaParser.Nmea
             
             if (message[8].Length == 6 && message[0].Length >= 6)
             {
-                FixTime = new DateTime(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
+                FixTime = new DateTimeOffset(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
                                        int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture),
                                        int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture),
                                        int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
                                        int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
-                                       0, DateTimeKind.Utc).AddSeconds(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture));
+                                       0, TimeSpan.Zero).AddSeconds(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture));
             }
             Active = (message[1] == "A");
             Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
@@ -56,7 +62,7 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Fix Time
         /// </summary>
-        public DateTime FixTime { get; }
+        public DateTimeOffset FixTime { get; }
 
         /// <summary>
         /// Gets a value whether the device is active

@@ -60,9 +60,12 @@ namespace NmeaParser.Nmea
             {"FR", Talker.FireDetectionPoint                        },
             {"FS", Talker.FireSprinklerSystem                       },
             {"GA", Talker.GalileoPositioningSystem                  },
+            {"GB", Talker.BeiDouNavigationSatelliteSystem           },
             {"GL", Talker.GlonassReceiver                           },
             {"GN", Talker.GlobalNavigationSatelliteSystem           },
             {"GP", Talker.GlobalPositioningSystem                   },
+            {"GI", Talker.IndianRegionalNavigationSatelliteSystem   },
+            {"GQ", Talker.QuasiZenithSatelliteSystem                },
             {"HC", Talker.CompassMagnetic                           },
             {"HE", Talker.GyroNorthSeeking                          },
             {"HF", Talker.Fluxgate                                  },
@@ -142,6 +145,8 @@ namespace NmeaParser.Nmea
         AISTransmittingStation, // = AT
         /// <summary>AIS Simplex Repeater Station</summary>
         AISSimplexRepeaterStation, // = AX
+        /// <summary>BeiDou Navigation Satellite System</summary>
+        BeiDouNavigationSatelliteSystem, // == GB
         /// <summary>Bilge Systems</summary>
         BilgeSystems, // = BI
         /// <summary></summary>
@@ -182,7 +187,7 @@ namespace NmeaParser.Nmea
         GalileoPositioningSystem, // = GA
         /// <summary>GLONASS Receiver</summary>
         GlonassReceiver, // = GL
-        /// <summary>Global Navigation Satellite System (GNSS</summary>
+        /// <summary>Global Navigation Satellite System (GNSS)</summary>
         GlobalNavigationSatelliteSystem, // = GN
         /// <summary>Global Positioning System (GPS)</summary>
         GlobalPositioningSystem, // = GPS
@@ -198,6 +203,8 @@ namespace NmeaParser.Nmea
         HullDoorControllerMonitoringPanel, // = HD
         /// <summary>Hull Stress Monitoring</summary>
         HullStressMonitoring, // = HS
+        /// <summary>Indian Regional Navigation Satellite System (IRNSS)</summary>
+        IndianRegionalNavigationSatelliteSystem, // = GI
         /// <summary>Integrated Instrumentation</summary>
         IntegratedInstrumentation, // = II
         /// <summary>Integrated Navigation</summary>
@@ -266,6 +273,8 @@ namespace NmeaParser.Nmea
         Chronometer, // = ZC
         /// <summary>Time keeper - Quartz</summary>
         Quartz, // = ZQ
+        /// <summary>Quasi-Zenith Satellite System (QZSS)</summary>
+        QuasiZenithSatelliteSystem, 
         /// <summary>Time keeper - Radio Update</summary>
         RadioUpdate, // = ZV
 

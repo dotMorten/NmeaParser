@@ -28,7 +28,7 @@ namespace NmeaParser.Tests
                     Assert.IsInstanceOfType(e.Message, typeof(Gsv));
                     var msg = (NmeaParser.Nmea.Gsv)e.Message;
                     Assert.IsTrue(((IMultiSentenceMessage)e.Message).IsComplete);
-                    Assert.AreEqual(9, msg.SVsInView);
+                    Assert.AreEqual(9, msg.SatellitesInView);
                     Assert.AreEqual(9, msg.SVs.Count);
                     
                     if (count > 1)

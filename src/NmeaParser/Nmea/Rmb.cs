@@ -20,6 +20,14 @@ namespace NmeaParser.Nmea
     /// <summary>
     /// Recommended minimum navigation information
     /// </summary>
+    /// <remarks>
+    /// <para>Navigation data from present position to a destination waypoint provided by a Loran-C, GNSS, DECCA, navigatin computer
+    /// or other integrated navigation system.</para>
+    /// <para>
+    /// This sentence always accompanies <see cref="Rma"/> and <see cref="Rmc"/> sentences when a destination is active when provided by a Loran-C or GNSS receiver,
+    /// other systems may transmit <see cref="Rmb"/> without <see cref="Rma"/> or <see cref="Rmc"/>.
+    /// </para>
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmb")]
     [NmeaMessageType("--RMB")]
     public class Rmb : NmeaMessage

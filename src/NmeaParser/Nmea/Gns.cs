@@ -21,6 +21,21 @@ namespace NmeaParser.Nmea
     /// <summary>
     /// Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems
     /// </summary>
+    /// <remarks>
+    /// <para>This sentence provides fix data for GPS, GLONASS, BDS, QZSS, NavIC (IRNSS) and possible fiture satellite systems, and systems combining these.
+    /// This sentence could be used with the talker identification of <see cref="Talker.GlobalPositioningSystem"/> for GPS, <see cref="Talker.GlonassReceiver"/> for GLONASS,
+    /// <see cref="Talker.GalileoPositioningSystem"/> for Galileo, <see cref="Talker.BeiDouNavigationSatelliteSystem"/> for BDS, <see cref="Talker.QuasiZenithSatelliteSystem"/> for QZSS,
+    /// <see cref="Talker.IndianRegionalNavigationSatelliteSystem"/> for NavIC (IRNSS), and <see cref="Talker.GlobalNavigationSatelliteSystem"/> for GNSS combined systems, as well as future identifiers.
+    /// </para>
+    /// <para>
+    /// If a GNSS receiver is capable simultanously of producing a position using combined satellite systems, as well as a position using only one of the satellite systems, then separate GNS sentences
+    /// with different <see cref="NmeaMessage.TalkerId"/> may be used to report the data calculated from the individual systems.
+    /// </para>
+    /// <para>
+    /// If a GNSS receiver is set up to use more than one satellite system, but for some reason one or more of the systems are not available, then it may continue to report the positions
+    /// using <c>GNGNS</c>, and use the <see cref="GpsModeIndicator"/> to show which satellit esystems are being used.
+    /// </para>
+    /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gns")]
     [NmeaMessageType("--GNS")]
     public class Gns : NmeaMessage
@@ -81,19 +96,23 @@ namespace NmeaParser.Nmea
         public enum NavigationalStatus
         {
             /// <summary>
-            /// Not valid for navigation
+            /// Navigational status not valid, equipment is not providing navigational status indication.
             /// </summary>
             NotValid,
             /// <summary>
-            /// Safe
+            /// Safe: When the estimated positioning accuracy (95% confidence) is within the selected accuracy level corresponding
+            /// to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
+            /// and a new valid position has been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.
             /// </summary>
             Safe,
             /// <summary>
-            /// Caution
+            /// Caution: When integrity is not available
             /// </summary>
             Caution,
             /// <summary>
-            /// Unsafe
+            /// UnsafeL When the estimated positioning accuracy (95% confidence) is less than the selected accuracy level corresponding
+            /// to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
+            /// and/or a new valid position has not been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.
             /// </summary>
             Unsafe
         }
@@ -127,16 +146,7 @@ namespace NmeaParser.Nmea
             FixTime = StringToTimeSpan(message[0]);
             Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
             Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-            if (message[5].Length > 0)
-                GpsModeIndicator = ParseModeIndicator(message[5][0]);
-            if (message[5].Length > 1)
-                GlonassModeIndicator = ParseModeIndicator(message[5][1]);
-            if (message[5].Length > 2)
-            {
-                FutureModeIndicator = message[5].Skip(2).Select(t => ParseModeIndicator(t)).ToArray();
-            }
-            else
-                FutureModeIndicator = new Mode[] { };
+            ModeIndicators = message[5].Select(t => ParseModeIndicator(t)).ToArray();
             NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
             Hdop = NmeaMessage.StringToDouble(message[7]);
             OrhometricHeight = NmeaMessage.StringToDouble(message[8]);
@@ -180,23 +190,37 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Mode indicator for GPS
         /// </summary>
-        /// <seealso cref="GlonassModeIndicator"/>
-        /// <see cref="FutureModeIndicator"/>
-        public Mode GpsModeIndicator { get; }
+        public Mode GpsModeIndicator => ModeIndicators.Length > 0 ? ModeIndicators[0] : Mode.NoFix;
 
         /// <summary>
         /// Mode indicator for GLONASS
         /// </summary>
-        /// <seealso cref="GpsModeIndicator"/>
-        /// <see cref="FutureModeIndicator"/>
-        public Mode GlonassModeIndicator { get; }
+        public Mode GlonassModeIndicator => ModeIndicators.Length > 1 ? ModeIndicators[1] : Mode.NoFix;
+
+        /// <summary>
+        /// Mode indicator for Galileo
+        /// </summary>
+        public Mode GalileoModeIndicator => ModeIndicators.Length > 2 ? ModeIndicators[2] : Mode.NoFix;
+
+        /// <summary>
+        /// Mode indicator for Beidou (BDS)
+        /// </summary>
+        public Mode BDSModeIndicator => ModeIndicators.Length > 3 ? ModeIndicators[3] : Mode.NoFix;
+
+        /// <summary>
+        /// Mode indicator for QZSS
+        /// </summary>
+        public Mode QZSSModeIndicator => ModeIndicators.Length > 4 ? ModeIndicators[4] : Mode.NoFix;
+
+        /// <summary>
+        /// Mode indicator for NavIC (IRNSS)
+        /// </summary>
+        public Mode NavICModeIndicator => ModeIndicators.Length > 5 ? ModeIndicators[5] : Mode.NoFix;
 
         /// <summary>
         /// Mode indicator for future constallations
         /// </summary>
-        /// <seealso cref="GlonassModeIndicator"/>
-        /// <seealso cref="GpsModeIndicator"/>
-        public Mode[] FutureModeIndicator { get; }
+        public Mode[] ModeIndicators { get; }
 
         /// <summary>
         /// Number of satellites (SVs) in use

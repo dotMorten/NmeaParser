@@ -41,8 +41,8 @@ namespace NmeaParser.Nmea
             var month = int.Parse(message[2], CultureInfo.InvariantCulture);
             var year = int.Parse(message[3], CultureInfo.InvariantCulture);
 
-            FixDateTime = new DateTime(year, month, day, time.Hours, time.Minutes,
-                time.Seconds, DateTimeKind.Utc);
+            FixDateTime = new DateTimeOffset(year, month, day, time.Hours, time.Minutes,
+                time.Seconds, TimeSpan.Zero);
 
             // Index 4 and 5 is used to specify a local time zone.
             // However I haven't come across any receiver that actually
@@ -52,6 +52,6 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// Gets the time of fix
         /// </summary>
-        public DateTime FixDateTime { get; }
+        public DateTimeOffset FixDateTime { get; }
     }
 }
