@@ -46,7 +46,7 @@ namespace NmeaParser.Nmea
             Altitude = NmeaMessage.StringToDouble(message[8]);
             AltitudeUnits = message[9];
             GeoidalSeparation = NmeaMessage.StringToDouble(message[10]);
-            HeightOfGeoidUnits = message[11];            
+            GeoidalSeparationUnits = message[11];            
             var timeInSeconds = StringToDouble(message[12]);
             if (!double.IsNaN(timeInSeconds))
                 TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
@@ -105,12 +105,13 @@ namespace NmeaParser.Nmea
         /// <remarks>
         /// A negative value means mean-sea-level surface is below the WGS-84 ellipsoid surface.
         /// </remarks>
+        /// <seealso cref="GeoidalSeparationUnits"/>
         public double GeoidalSeparation { get; }
 
         /// <summary>
         /// Altitude units ('M' for Meters)
         /// </summary>
-        public string HeightOfGeoidUnits { get; }
+        public string GeoidalSeparationUnits { get; }
 
         /// <summary>
         /// Time since last DGPS update (ie age of the differential GPS data)

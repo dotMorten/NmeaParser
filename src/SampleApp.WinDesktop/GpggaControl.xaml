@@ -27,8 +27,8 @@
 		<local:KeyValuePairControl Header="Height of Geoid: ">
 			<local:KeyValuePairControl.Value>
 				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{Binding HeightOfGeoid}" />
-					<TextBlock Text="{Binding HeightOfGeoidUnits}" />
+                    <TextBlock Text="{Binding GeoidalSeparation}" />
+                    <TextBlock Text="{Binding GeoidalSeparationUnits}" />
 				</StackPanel>
 			</local:KeyValuePairControl.Value>
 		</local:KeyValuePairControl>

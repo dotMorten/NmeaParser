@@ -199,7 +199,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(1378, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
             Assert.AreEqual(-22.1, gga.GeoidalSeparation);
-            Assert.AreEqual("M", gga.HeightOfGeoidUnits);
+            Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(-1, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
         }
@@ -220,7 +220,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(403.641, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
             Assert.AreEqual(-32.133, gga.GeoidalSeparation);
-            Assert.AreEqual("M", gga.HeightOfGeoidUnits);
+            Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(0, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.FromSeconds(1), gga.TimeSinceLastDgpsUpdate);
         }

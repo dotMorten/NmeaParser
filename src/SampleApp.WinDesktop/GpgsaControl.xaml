@@ -10,9 +10,9 @@
 		<Border Background="CornflowerBlue" Padding="10" Margin="-10,-10,-10,5">
 			<TextBlock Text="GPGSA" FontSize="20" FontWeight="Bold" Foreground="White"  />
 		</Border>
-		<local:KeyValuePairControl Header="GPS Mode: " Value="{Binding GpsMode}"/>
-		<local:KeyValuePairControl Header="Fix Mode: " Value="{Binding FixMode, Mode=OneTime}" />
-		<local:KeyValuePairControl Header="Satellite vehicles: " Value="{Binding SVs, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="GPS Mode: " Value="{Binding Mode}"/>
+        <local:KeyValuePairControl Header="Fix Mode: " Value="{Binding Fix, Mode=OneTime}" />
+        <local:KeyValuePairControl Header="Satellite vehicles: " Value="{Binding SatelliteIDs, Mode=OneTime}" />
 		<local:KeyValuePairControl Header="HDOP: " Value="{Binding Hdop, Mode=OneTime}" />
 		<local:KeyValuePairControl Header="VDOP: " Value="{Binding Vdop, Mode=OneTime}" />
 		<local:KeyValuePairControl Header="PDOP: " Value="{Binding Pdop, Mode=OneTime}" />
