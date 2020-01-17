@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;net451;monoandroid50;xamarinios10;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.4;netcoreapp2.1;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0.16299</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -11,59 +11,64 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>1.9.0</Version>
-    <PackageLicenseUrl>http://opensource.org/licenses/ms-pl.html</PackageLicenseUrl>
+    <Version>2.0-beta1</Version>
+    <Product>NMEA Parser</Product>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/dotMorten/NmeaParser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2017</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
-    <AssemblyVersion>1.9.0.0</AssemblyVersion>
-    <FileVersion>1.9.0.0</FileVersion>
-    <PackageReleaseNotes>Added new GLONASS and GALILEO. Moved more GPS message to abstract base classes for better handling of multiple satelitte constellations.</PackageReleaseNotes>    
+    <PackageReleaseNotes>New refined and easier to use v2 API</PackageReleaseNotes>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>8.0</LangVersion>
+    <TreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</CodeAnalysisTreatWarningsAsErrors>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
-    <Product>NMEA Parser - .NET Standard 1.4</Product>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'net451'">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
-    <Product>NMEA Parser - .NET Framework 4.5.1</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
-    <Product>NMEA Parser - Android</Product>
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
+    <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
+    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
+    <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
+    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
-    <Product>NMEA Parser - iOS</Product>
+    <NoWarn>$(NoWarn);VSX1000</NoWarn>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
-    <Product>NMEA Parser - UWP</Product>
-  </PropertyGroup>  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.1.0" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.1.0" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
     <EmbeddedResource Include="**\*.rd.xml" />
-  </ItemGroup>  
-  
-  <ItemGroup>
-    <None Remove="NuGet.exe" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
   </ItemGroup>
-  
-  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackageReference Include="System.IO.Ports" Version="4.7.0" />
+  </ItemGroup>
+
 </Project>

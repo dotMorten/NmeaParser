@@ -1,97 +1,191 @@
-﻿//
-// Copyright (c) 2014 Morten Nielsen
-//
-// Licensed under the Microsoft Public License (Ms-PL) (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://opensource.org/licenses/Ms-PL.html
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+﻿//  *******************************************************************************
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************
 
-using NmeaParser.Nmea.Gps;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
-	/// <summary>
-	///  GPS Satellites in view
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-	public abstract class Gsv : NmeaMessage, IMultiPartMessage<SatelliteVehicle>
-	{
-		/// <summary>
-		/// Called when the message is being loaded.
-		/// </summary>
-		/// <param name="message">The NMEA message values.</param>
-		protected override void OnLoadMessage(string[] message)
-		{
-			if (message == null || message.Length < 3)
-				throw new ArgumentException("Invalid GSV", "message"); 
-			
-			TotalMessages = int.Parse(message[0], CultureInfo.InvariantCulture);
-			MessageNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
-			SVsInView = int.Parse(message[2], CultureInfo.InvariantCulture);
+    /// <summary>
+    /// GNSS Satellites in view
+    /// </summary>
+    /// <remarks>
+    /// The GSV sentence provides the number of satellites (SV) in view, satellite ID numbers, elevation, azimuth, and SNR value.
+    /// </remarks>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gsv")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [NmeaMessageType("--GSV")]
+    public class Gsv : NmeaMultiSentenceMessage, IEnumerable<SatelliteVehicle>
+    {
+        private readonly List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
 
-			List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
-			for (int i = 3; i < message.Length - 3; i += 4)
-			{
-				if (message[i].Length == 0)
-					continue;
-				else
-					svs.Add(new SatelliteVehicle(message, i));
-			}
-			this.SVs = svs.ToArray();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gsv"/> class.
+        /// </summary>
+        /// <param name="type">The message type</param>
+        /// <param name="message">The NMEA message values.</param>
+        public Gsv(string type, string[] message) : base(type, message)
+        {
+            if (message == null || message.Length < 3)
+                throw new ArgumentException("Invalid GSV", "message");
+        }
 
-		/// <summary>
-		/// Total number of messages of this type in this cycle
-		/// </summary>
-		public int TotalMessages { get; private set; }
+        /// <inheritdoc />
+        protected override int MessageCountIndex => 0;
 
-		/// <summary>
-		/// Message number
-		/// </summary>
-		public int MessageNumber { get; private set; }
+        /// <inheritdoc />
+        protected override int MessageNumberIndex => 1;
 
-		/// <summary>
-		/// Total number of SVs in view
-		/// </summary>
-		public int SVsInView { get; private set; }
+        /// <inheritdoc />
+        protected override bool ParseSentences(Talker talkerType, string[] message)
+        {
+            var satellites = int.Parse(message[2], CultureInfo.InvariantCulture);
 
-		/// <summary>
-		/// Dilution of precision
-		/// </summary>
-		public IReadOnlyList<SatelliteVehicle> SVs { get; private set; }
+            if (SatellitesInView == -1)
+                SatellitesInView = satellites;
+            else if ( satellites != SatellitesInView)
+                return false; // Messages do not match
 
-		/// <summary>
-		/// Returns an enumerator that iterates through the collection.
-		/// </summary>
-		/// <returns> A System.Collections.Generic.IEnumerator{SatelliteVehicle} that can be used to iterate through the collection.</returns>
-		public IEnumerator<SatelliteVehicle> GetEnumerator()
-		{
-			foreach(var sv in SVs)
-				yield return sv;
-		}
+            for (int i = 3; i < message.Length - 3; i += 4)
+            {
+                if (message[i].Length == 0)
+                    continue;
+                else
+                    svs.Add(new SatelliteVehicle(talkerType, message, i));
+            }
+            return true;
+        }
 
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns> An System.Collections.IEnumerator object that can be used to iterate through the collection.</returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
+        /// <summary>
+        /// Total number of satellite vehicles (SV) in view
+        /// </summary>
+        /// <seealso cref="SVs"/>
+        public int SatellitesInView { get; private set; } = -1;
+
+        /// <summary>
+        /// Satellite vehicles in this message part.
+        /// </summary>
+        public IReadOnlyList<SatelliteVehicle> SVs => svs.AsReadOnly();
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns> A System.Collections.Generic.IEnumerator{SatelliteVehicle} that can be used to iterate through the collection.</returns>
+        public IEnumerator<SatelliteVehicle> GetEnumerator()
+        {
+            foreach (var sv in SVs)
+                yield return sv;
+        }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns> An System.Collections.IEnumerator object that can be used to iterate through the collection.</returns>
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+    /// <summary>
+    /// Satellite vehicle
+    /// </summary>
+    public sealed class SatelliteVehicle
+    {
+        internal SatelliteVehicle(Talker talker, string[] message, int startIndex)
+        {
+            Id = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
+            if (double.TryParse(message[startIndex + 1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double e))
+                Elevation = e;
+            if (double.TryParse(message[startIndex + 2], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double a))
+                Azimuth = a;
+            int snr = -1;
+            if (int.TryParse(message[startIndex + 3], out snr))
+                SignalToNoiseRatio = snr;
+            TalkerId = talker;
+        }
+
+        /// <summary>
+        /// Gets the talker ID for this vehicle
+        /// </summary>
+        public Talker TalkerId { get; }
+
+        /// <summary>
+        /// Satellite ID number
+        /// </summary>
+        public int Id { get; }
+
+        /// <summary>
+        /// Elevation in degrees, 90 maximum
+        /// </summary>
+        public double Elevation { get; } = double.NaN;
+
+        /// <summary>
+        /// Azimuth, degrees from true north, 000 to 359
+        /// </summary>
+        public double Azimuth { get; } = double.NaN;
+
+        /// <summary>
+        /// Signal-to-Noise ratio, 0-99 dB (-1 when not tracking) 
+        /// </summary>
+        public int SignalToNoiseRatio { get; } = -1;
+
+        /// <summary>
+        /// Satellite system
+        /// </summary>
+        public SatelliteSystem System
+        {
+            get
+            {
+                if (Id >= 1 && Id <= 32)
+                    return SatelliteSystem.Gps;
+                if (Id >= 33 && Id <= 64)
+                    return SatelliteSystem.Waas;
+                if (Id >= 65 && Id <= 96)
+                    return SatelliteSystem.Glonass;
+                return SatelliteSystem.Unknown;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Satellite system
+    /// </summary>
+    public enum SatelliteSystem
+    {
+        /// <summary>
+        /// Unknown
+        /// </summary>
+        Unknown,
+        /// <summary>
+        /// GPS - Global Positioning System (NAVSTAR)
+        /// </summary>
+        Gps,
+        /// <summary>
+        /// WAAS - Wide Area Augmentation System
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Waas")]
+        Waas,
+        /// <summary>
+        /// GLONASS - Globalnaya navigatsionnaya sputnikovaya sistema
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Glonass")]
+        Glonass,
+        /// <summary>
+        /// Galileo
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Galileo")]
+        Galileo
+    }
 }

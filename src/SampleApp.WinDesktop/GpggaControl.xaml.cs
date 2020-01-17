@@ -1,4 +1,4 @@
-﻿using NmeaParser.Nmea.Gps;
+﻿using NmeaParser.Nmea;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	/// <summary>
 	/// Interaction logic for GpggaControl.xaml
@@ -26,13 +26,13 @@ namespace SampleApp
 			InitializeComponent();
 		}
 
-		public Gpgga Message
+		public Gga Message
 		{
-			get { return (Gpgga)GetValue(GpggaProperty); }
+			get { return (Gga)GetValue(GpggaProperty); }
 			set { SetValue(GpggaProperty, value); }
 		}
 
 		public static readonly DependencyProperty GpggaProperty =
-			DependencyProperty.Register("Message", typeof(Gpgga), typeof(GpggaControl), new PropertyMetadata(null));
+			DependencyProperty.Register("Message", typeof(Gga), typeof(GpggaControl), new PropertyMetadata(null));
 	}
 }

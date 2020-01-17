@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	/// <summary>
 	/// Interaction logic for SatelliteView.xaml
@@ -25,25 +25,22 @@ namespace SampleApp
 			InitializeComponent();
 		}
 
-
-
-		public IEnumerable<NmeaParser.Nmea.Gps.Gpgsv> GpgsvMessages
+		public NmeaParser.Nmea.Gsv GsvMessage
 		{
-			get { return (IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>)GetValue(GpgsvMessagesProperty); }
-			set { SetValue(GpgsvMessagesProperty, value); }
+			get { return (NmeaParser.Nmea.Gsv)GetValue(GsvMessageProperty); }
+			set { SetValue(GsvMessageProperty, value); }
 		}
 
-		// Using a DependencyProperty as the backing store for GpgsvMessages.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty GpgsvMessagesProperty =
-			DependencyProperty.Register("GpgsvMessages", typeof(IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>), typeof(SatelliteSnr), new PropertyMetadata(null, OnGpgsvMessagesChanged));
+		public static readonly DependencyProperty GsvMessageProperty =
+			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Nmea.Gsv), typeof(SatelliteSnr), new PropertyMetadata(null, OnGpgsvMessagePropertyChanged));
 
-		private static void OnGpgsvMessagesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void OnGpgsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var sats = e.NewValue as IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>;
-			if (sats == null)
+			var gsv = e.NewValue as NmeaParser.Nmea.Gsv;
+			if (gsv == null)
 				(d as SatelliteSnr).satellites.ItemsSource = null;
 			else
-				(d as SatelliteSnr).satellites.ItemsSource = sats.SelectMany(s => s.SVs);
+				(d as SatelliteSnr).satellites.ItemsSource = gsv.SVs;
 		}		
 	}
 }

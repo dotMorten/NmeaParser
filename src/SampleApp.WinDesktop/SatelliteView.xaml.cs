@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	/// <summary>
 	/// Interaction logic for SatelliteView.xaml
@@ -25,26 +26,23 @@ namespace SampleApp
 			InitializeComponent();
 		}
 
-
-
-		public IEnumerable<NmeaParser.Nmea.Gps.Gpgsv> GpgsvMessages
+		public NmeaParser.Nmea.Gsv GsvMessage
 		{
-			get { return (IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>)GetValue(GpgsvMessagesProperty); }
-			set { SetValue(GpgsvMessagesProperty, value); }
+			get { return (NmeaParser.Nmea.Gsv)GetValue(GsvMessageProperty); }
+			set { SetValue(GsvMessageProperty, value); }
 		}
 
-		// Using a DependencyProperty as the backing store for GpgsvMessages.  This enables animation, styling, binding, etc...
-		public static readonly DependencyProperty GpgsvMessagesProperty =
-			DependencyProperty.Register("GpgsvMessages", typeof(IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>), typeof(SatelliteView), new PropertyMetadata(null, OnGpgsvMessagesChanged));
+		public static readonly DependencyProperty GsvMessageProperty =
+			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Nmea.Gsv), typeof(SatelliteView), new PropertyMetadata(null, OnGsvMessagePropertyChanged));
 
-		private static void OnGpgsvMessagesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void OnGsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var sats = e.NewValue as IEnumerable<NmeaParser.Nmea.Gps.Gpgsv>;
-			if (sats == null)
+			var gsv = e.NewValue as NmeaParser.Nmea.Gsv;
+			if (gsv == null)
 				(d as SatelliteView).satellites.ItemsSource = null;
 			else
-				(d as SatelliteView).satellites.ItemsSource = sats.SelectMany(s => s.SVs);
-		}		
+				(d as SatelliteView).satellites.ItemsSource = gsv.SVs;
+		}
 	}
 	public class PolarPlacementItem : ContentControl
 	{
@@ -93,5 +91,31 @@ namespace SampleApp
 			(d as PolarPlacementItem).InvalidateArrange();
 		}
 
+	}
+
+
+	public class SatelliteVechicleColorConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (value is NmeaParser.Nmea.SatelliteVehicle sv)
+			{
+				byte alpha = (byte)(sv.SignalToNoiseRatio <= 0 ? 80 : 255);
+				switch (sv.TalkerId)
+				{
+					case NmeaParser.Nmea.Talker.GlobalPositioningSystem: return Color.FromArgb(alpha, 255, 0, 0);
+					case NmeaParser.Nmea.Talker.GalileoPositioningSystem: return Color.FromArgb(alpha, 0, 255, 0);
+					case NmeaParser.Nmea.Talker.GlonassReceiver: return Color.FromArgb(255, 0, 0, alpha);
+					case NmeaParser.Nmea.Talker.GlobalNavigationSatelliteSystem: return Color.FromArgb(alpha, 0, 0, 0);
+					default: return Colors.CornflowerBlue;
+				}
+			}
+			return value;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

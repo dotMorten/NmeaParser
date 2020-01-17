@@ -1,5 +1,4 @@
-﻿using NmeaParser.Nmea.Gps;
-using NmeaParser.Nmea.Gps.Garmin;
+﻿using NmeaParser.Nmea.Garmin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	/// <summary>
 	/// Interaction logic for PgrmeControl.xaml

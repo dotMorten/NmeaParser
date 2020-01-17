@@ -12,7 +12,7 @@ using System.Windows.Threading;
 #endif
 
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	public class RestoreAutoPanMode
 	{

@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+    - release/*
+  pull_request:
+    branches:
+    - master
+    
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+    - name: Clone NmeaParser
+      uses: actions/checkout@v1
+    
+    - name: Setup Visual Studio Command Prompt
+      uses: warrenbuckley/Setup-MSBuild@v1
+      
+    - name: Build
+      run: |
+        msbuild /restore /t:Build src/NmeaParser.sln /p:Configuration=Release
+      
+    - name: Tests
+      run: |
+        dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/netcoreapp3.1/NmeaParser.Tests.Net.dll -v normal

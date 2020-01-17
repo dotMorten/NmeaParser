@@ -1,4 +1,4 @@
-﻿using NmeaParser.Nmea.Gps;
+﻿using NmeaParser.Nmea;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
 	/// <summary>
 	/// Interaction logic for GprmcControl.xaml
@@ -26,13 +26,13 @@ namespace SampleApp
 			InitializeComponent();
 		}
 
-		public Gprmc Message
+		public Rmc Message
 		{
-			get { return (Gprmc)GetValue(MessageProperty); }
+			get { return (Rmc)GetValue(MessageProperty); }
 			set { SetValue(MessageProperty, value); }
 		}
 
 		public static readonly DependencyProperty MessageProperty =
-			DependencyProperty.Register("Message", typeof(Gprmc), typeof(GprmcControl), new PropertyMetadata(null));
+			DependencyProperty.Register("Message", typeof(Rmc), typeof(GprmcControl), new PropertyMetadata(null));
 	}
 }

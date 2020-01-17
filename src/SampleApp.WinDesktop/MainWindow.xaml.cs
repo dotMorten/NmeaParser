@@ -1,6 +1,4 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using NmeaParser;
 
 namespace SampleApp.WinDesktop
 {
@@ -33,10 +34,10 @@ namespace SampleApp.WinDesktop
 		public MainWindow()
 		{
 			InitializeComponent();
-            mapView.Map = new Map(Basemap.CreateNavigationVector());
+			mapView.Map = new Map(Basemap.CreateNavigationVector());
 
 			//Get list of serial ports for device tab
-			var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s=>s);
+			var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s => s);
 			serialPorts.ItemsSource = availableSerialPorts;
 			serialPorts.SelectedIndex = 0;
 			// Use serial portName:
@@ -50,16 +51,18 @@ namespace SampleApp.WinDesktop
 			StartDevice(device);
 		}
 
-        /// <summary>
-        /// Unloads the current device, and opens the next device
-        /// </summary>
-        /// <param name="device"></param>
-        private void StartDevice(NmeaParser.NmeaDevice device)
+		/// <summary>
+		/// Unloads the current device, and opens the next device
+		/// </summary>
+		/// <param name="device"></param>
+		private async void StartDevice(NmeaParser.NmeaDevice device)
 		{
 			//Clean up old device
 			if (currentDevice != null)
 			{
 				currentDevice.MessageReceived -= device_MessageReceived;
+				if (currentDevice.IsOpen)
+					await currentDevice.CloseAsync();
 				currentDevice.Dispose();
 				mapView.LocationDisplay.DataSource = new Esri.ArcGISRuntime.Location.SystemLocationDataSource();
 			}
@@ -70,17 +73,16 @@ namespace SampleApp.WinDesktop
 			gpgsaView.Message = null;
 			gpgllView.Message = null;
 			pgrmeView.Message = null;
-			satView.GpgsvMessages = null;
+			satView.GsvMessage = null;
 			//Start new device
 			currentDevice = device;
 			currentDevice.MessageReceived += device_MessageReceived;
 			mapView.LocationDisplay.DataSource = new NmeaLocationProvider(device);
 			mapView.LocationDisplay.IsEnabled = true;
-            mapView.LocationDisplay.InitialZoomScale = 5000;
-            mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Navigation;
-
-            //var _ = currentDevice.OpenAsync();
-            if (device is NmeaParser.NmeaFileDevice)
+			mapView.LocationDisplay.InitialZoomScale = 5000;
+			mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Navigation;
+			//var _ = currentDevice.OpenAsync();
+			if (device is NmeaParser.NmeaFileDevice)
 				currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
 			else if (device is NmeaParser.SerialPortDevice)
 			{
@@ -89,49 +91,43 @@ namespace SampleApp.WinDesktop
 					((NmeaParser.SerialPortDevice)device).Port.BaudRate);
 			}
 		}
-		
+
 		private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
 		{
-			Dispatcher.BeginInvoke((Action) delegate()
+			Dispatcher.BeginInvoke((Action)delegate ()
 			{
-				messages.Enqueue(args.Message.MessageType + ": " + args.Message.ToString());
+				messages.Enqueue(args.Message.ToString());
 				if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				if(args.Message is NmeaParser.Nmea.Gps.Gpgsv)
+				if (args.Message is NmeaParser.Nmea.Gsv gpgsv)
 				{
-					var gpgsv = (NmeaParser.Nmea.Gps.Gpgsv)args.Message;
-					if(args.IsMultipart && args.MessageParts != null)
-						satView.GpgsvMessages = args.MessageParts.OfType<NmeaParser.Nmea.Gps.Gpgsv>();
+					satView.GsvMessage = gpgsv;
 				}
-				if (args.Message is NmeaParser.Nmea.Gps.Gprmc)
-					gprmcView.Message = args.Message as NmeaParser.Nmea.Gps.Gprmc;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgga)
-					gpggaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgga;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgsa)
-					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgsa;
-				else if (args.Message is NmeaParser.Nmea.Gps.Gpgll)
-					gpgllView.Message = args.Message as NmeaParser.Nmea.Gps.Gpgll;
-				else if (args.Message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
-					pgrmeView.Message = args.Message as NmeaParser.Nmea.Gps.Garmin.Pgrme;
-                else if (args.Message is NmeaParser.Nmea.UnknownMessage)
-                {
-                    var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
-                    if(ctrl == null)
-                    {
-                        ctrl = new UnknownMessageControl()
-                        {
-                            Style = this.Resources["card"] as Style
-                        };
-                        MessagePanel.Children.Add(ctrl);
-                    }
-                    ctrl.Message = args.Message as NmeaParser.Nmea.UnknownMessage;
-                }
-                else
-                {
-                    //
-                }
+				else if (args.Message is NmeaParser.Nmea.Rmc)
+					gprmcView.Message = args.Message as NmeaParser.Nmea.Rmc;
+				else if (args.Message is NmeaParser.Nmea.Gga)
+					gpggaView.Message = args.Message as NmeaParser.Nmea.Gga;
+				else if (args.Message is NmeaParser.Nmea.Gsa)
+					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gsa;
+				else if (args.Message is NmeaParser.Nmea.Gll)
+					gpgllView.Message = args.Message as NmeaParser.Nmea.Gll;
+				else if (args.Message is NmeaParser.Nmea.Garmin.Pgrme)
+					pgrmeView.Message = args.Message as NmeaParser.Nmea.Garmin.Pgrme;
+				else
+				{
+					var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
+					if (ctrl == null)
+					{
+						ctrl = new UnknownMessageControl()
+						{
+							Style = this.Resources["card"] as Style
+						};
+						MessagePanel.Children.Add(ctrl);
+					}
+					ctrl.Message = args.Message;
+				}
 			});
 		}
 
@@ -142,7 +138,7 @@ namespace SampleApp.WinDesktop
 			if (result.HasValue && result.Value)
 			{
 				var file = nmeaOpenFileDialog.FileName;
-				var device = new NmeaParser.NmeaFileDevice(file, 100);
+				var device = new NmeaParser.NmeaFileDevice(file);
 				StartDevice(device);
 			}
 		}
@@ -150,10 +146,17 @@ namespace SampleApp.WinDesktop
 		//Creates a serial port device from the selected settings
 		private void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
 		{
-			var portName = serialPorts.Text as string;
-			var baudRate = int.Parse(baudRates.Text);
-			var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
-			StartDevice(device);
+			try
+			{
+				var portName = serialPorts.Text as string;
+				var baudRate = int.Parse(baudRates.Text);
+				var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
+				StartDevice(device);
+			}
+			catch (System.Exception ex)
+			{
+				MessageBox.Show("Error connecting: " + ex.Message);
+			}
 		}
 
 		//Attempts to perform an auto discovery of serial ports
@@ -163,7 +166,7 @@ namespace SampleApp.WinDesktop
 			button.IsEnabled = false;
 			System.IO.Ports.SerialPort port = await Task.Run<System.IO.Ports.SerialPort>(() => {
 				return FindPort(
-					new System.Progress<string>((s) => { Dispatcher.BeginInvoke((Action)delegate() { autoDiscoverStatus.Text = s; }); }));
+					new System.Progress<string>((s) => { Dispatcher.BeginInvoke((Action)delegate () { autoDiscoverStatus.Text = s; }); }));
 			});
 			if (port != null) //we found a port
 			{
@@ -188,7 +191,7 @@ namespace SampleApp.WinDesktop
 				{
 					var defaultRate = port.BaudRate;
 					List<int> baudRatesToTest = new List<int>(new[] { 9600, 4800, 115200, 19200, 57600, 38400, 2400 }); //Ordered by likelihood
-					//Move default rate to first spot
+																														//Move default rate to first spot
 					if (baudRatesToTest.Contains(defaultRate)) baudRatesToTest.Remove(defaultRate);
 					baudRatesToTest.Insert(0, defaultRate);
 					foreach (var baud in baudRatesToTest)
@@ -212,6 +215,7 @@ namespace SampleApp.WinDesktop
 							{
 								continue;
 							}
+							success = true;
 						}
 						catch
 						{
@@ -231,9 +235,6 @@ namespace SampleApp.WinDesktop
 			return null;
 		}
 	}
-}
-namespace SampleApp
-{
 	public class ReverseConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

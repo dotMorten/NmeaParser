@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SampleApp
+namespace SampleApp.WinDesktop
 {
     public class NmeaLocationProvider : Esri.ArcGISRuntime.Location.LocationDataSource
     {
@@ -30,9 +30,9 @@ namespace SampleApp
             bool lostFix = false;
             double lat = 0;
             double lon = 0;
-            if (message is NmeaParser.Nmea.Gps.Garmin.Pgrme)
+            if (message is NmeaParser.Nmea.Garmin.Pgrme)
             {
-                m_Accuracy = ((NmeaParser.Nmea.Gps.Garmin.Pgrme)message).HorizontalError;
+                m_Accuracy = ((NmeaParser.Nmea.Garmin.Pgrme)message).HorizontalError;
             }
             else if(message is NmeaParser.Nmea.Gst)
             {
@@ -42,7 +42,7 @@ namespace SampleApp
             else if(message is NmeaParser.Nmea.Gga)
             {
                 Gga = ((NmeaParser.Nmea.Gga)message);
-                isNewFix = Gga.Quality != NmeaParser.Nmea.Gps.Gpgga.FixQuality.Invalid;
+                isNewFix = Gga.Quality != NmeaParser.Nmea.Gga.FixQuality.Invalid;
                 lostFix = !isNewFix;
                 m_altitude = Gga.Altitude;
                 lat = Gga.Latitude;

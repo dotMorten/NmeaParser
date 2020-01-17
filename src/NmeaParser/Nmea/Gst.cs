@@ -1,39 +1,34 @@
-﻿//
-// Copyright (c) 2014 Morten Nielsen
-//
-// Licensed under the Microsoft Public License (Ms-PL) (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://opensource.org/licenses/Ms-PL.html
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+﻿//  *******************************************************************************
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NmeaParser.Nmea
 {
     /// <summary>
-    /// Position error statistics
+    /// Pseudorange error statistics
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgst")]
-    public abstract class Gst : NmeaMessage
+    [NmeaMessageType("--GST")]
+    public class Gst : NmeaMessage
     {
         /// <summary>
-        /// Called when the message is being loaded.
+        /// Initializes a new instance of the <see cref="Gst"/> class.
         /// </summary>
+        /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        protected override void OnLoadMessage(string[] message)
+        public Gst(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 8)
                 throw new ArgumentException("Invalid GPGST", "message");
@@ -50,51 +45,42 @@ namespace NmeaParser.Nmea
         /// <summary>
         /// UTC of position fix
         /// </summary>
-        public TimeSpan FixTime { get; private set; }
+        public TimeSpan FixTime { get; }
 
         /// <summary>
-        /// RMS value of the pseudorange residuals; includes carrier phase residuals during periods of RTK (float) and RTK (fixed) processing
+        /// RMS value of the standard deviation of the range inputs in the navigation process. Range inputs include pseudoranges and DGNSS corrections.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rms")]
-        public double Rms { get; private set; }
+        public double Rms { get; }
 
         /// <summary>
-        /// Error ellipse semi-major axis 1 sigma error, in meters
+        /// Standard deviation of semi-major axis of error ellipse in meters.
         /// </summary>
-        public double SemiMajorError { get; private set; }
+        public double SemiMajorError { get; }
 
         /// <summary>
-        /// Error ellipse semi-minor axis 1 sigma error, in meters
+        /// Standard deviation of semi-minor axis of error ellipse in meters.
         /// </summary>
-        public double SemiMinorError { get; private set; }
+        public double SemiMinorError { get; }
 
         /// <summary>
-        /// Error ellipse orientation, degrees from true north
+        /// Orientation of semi-major axis of error ellipse (degrees from true north).
         /// </summary>
-        public double ErrorOrientation { get; private set; }
+        public double ErrorOrientation { get; }
 
         /// <summary>
-        /// Latitude 1 sigma error, in meters
+        /// Standard deviation of latitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
-        public double SigmaLatitudeError { get; private set; }
+        public double SigmaLatitudeError { get; }
 
-        /// <summary >
-        /// Longitude 1 sigma error, in meters
+        /// <summary>
+        /// Standard deviation of longitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
-        public double SigmaLongitudeError { get; private set; }
+        public double SigmaLongitudeError { get; }
 
-        /// <summary >
-        /// Height 1 sigma error, in meters
+        /// <summary>
+        /// Standard deviation of altitude error in meters.
         /// </summary>
-        /// <remarks>
-        /// The error expressed as one standard deviation.
-        /// </remarks>
-        public double SigmaHeightError { get; private set; }
+        public double SigmaHeightError { get; }
     }
 }
