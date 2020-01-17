@@ -22,7 +22,7 @@ namespace NmeaParser.Nmea
     /// Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems
     /// </summary>
     /// <remarks>
-    /// <para>This sentence provides fix data for GPS, GLONASS, BDS, QZSS, NavIC (IRNSS) and possible fiture satellite systems, and systems combining these.
+    /// <para>This sentence provides fix data for GPS, GLONASS, BDS, QZSS, NavIC (IRNSS) and possible future satellite systems, and systems combining these.
     /// This sentence could be used with the talker identification of <see cref="Talker.GlobalPositioningSystem"/> for GPS, <see cref="Talker.GlonassReceiver"/> for GLONASS,
     /// <see cref="Talker.GalileoPositioningSystem"/> for Galileo, <see cref="Talker.BeiDouNavigationSatelliteSystem"/> for BDS, <see cref="Talker.QuasiZenithSatelliteSystem"/> for QZSS,
     /// <see cref="Talker.IndianRegionalNavigationSatelliteSystem"/> for NavIC (IRNSS), and <see cref="Talker.GlobalNavigationSatelliteSystem"/> for GNSS combined systems, as well as future identifiers.
@@ -98,23 +98,23 @@ namespace NmeaParser.Nmea
             /// <summary>
             /// Navigational status not valid, equipment is not providing navigational status indication.
             /// </summary>
-            NotValid,
+            NotValid = 0,
             /// <summary>
             /// Safe: When the estimated positioning accuracy (95% confidence) is within the selected accuracy level corresponding
             /// to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
             /// and a new valid position has been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.
             /// </summary>
-            Safe,
+            Safe = 3,
             /// <summary>
             /// Caution: When integrity is not available
             /// </summary>
-            Caution,
+            Caution = 2,
             /// <summary>
-            /// UnsafeL When the estimated positioning accuracy (95% confidence) is less than the selected accuracy level corresponding
+            /// Unsafe When the estimated positioning accuracy (95% confidence) is less than the selected accuracy level corresponding
             /// to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
             /// and/or a new valid position has not been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.
             /// </summary>
-            Unsafe
+            Unsafe = 1
         }
 
         private static Mode ParseModeIndicator(char c)

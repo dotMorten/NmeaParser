@@ -83,7 +83,7 @@ namespace NmeaParser.Nmea
         /// A SBAS PRN number of 120 minus 87 yields the SV ID of 33. The addition of87 to the SVID yields the SBAS PRN number.
         /// - The numbers 65-96 are reserved for GLONASS satellites. GLONASS satellites are identified by 64+satellite slot number.
         /// </remarks>
-        public IReadOnlyList<int> SatelliteIDs { get; }
+        public int[] SatelliteIDs { get; }
 
         /// <summary>
         /// Dilution of precision
