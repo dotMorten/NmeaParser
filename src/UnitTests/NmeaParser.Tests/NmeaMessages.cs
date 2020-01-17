@@ -268,7 +268,7 @@ namespace NmeaParser.Tests
             Gsa gsa = (Gsa)msg;
             Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.Mode);
             Assert.AreEqual(Gsa.FixType.Fix3D, gsa.Fix);
-            Assert.AreEqual(4, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(4, gsa.SatelliteIDs.Length);
             Assert.AreEqual(16, gsa.SatelliteIDs[0]);
             Assert.AreEqual(18, gsa.SatelliteIDs[1]);
             Assert.AreEqual(22, gsa.SatelliteIDs[2]);
@@ -287,7 +287,7 @@ namespace NmeaParser.Tests
             Gsa gsa = (Gsa)msg;
             Assert.AreEqual(Gsa.ModeSelection.Manual, gsa.Mode);
             Assert.AreEqual(Gsa.FixType.Fix2D, gsa.Fix);
-            Assert.AreEqual(12, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(12, gsa.SatelliteIDs.Length);
             Assert.AreEqual(19, gsa.SatelliteIDs[0]);
             Assert.AreEqual(28, gsa.SatelliteIDs[1]);
             Assert.AreEqual(14, gsa.SatelliteIDs[2]);
@@ -315,7 +315,7 @@ namespace NmeaParser.Tests
             Gsa gsa = (Gsa)msg;
             Assert.AreEqual(Gsa.ModeSelection.Auto, gsa.Mode);
             Assert.AreEqual(Gsa.FixType.Fix3D, gsa.Fix);
-            Assert.AreEqual(6, gsa.SatelliteIDs.Count);
+            Assert.AreEqual(6, gsa.SatelliteIDs.Length);
             Assert.AreEqual(3, gsa.SatelliteIDs[0]);
             Assert.AreEqual(7, gsa.SatelliteIDs[1]);
             Assert.AreEqual(16, gsa.SatelliteIDs[2]);
