@@ -12,20 +12,20 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-namespace NmeaParser.Nmea.LaserRange.LaserTech
+namespace NmeaParser.Nmea.Trimble
 {
     /// <summary>
-    /// Laser Range 
+    /// Laser Range Burden finder
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pltit")]
-    [NmeaMessageType("PLTIT")]
-    public class Pltit : LaserRangeMessage
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnla")]
+    [NmeaMessageType("PTNLA")]
+    public class Ptnla : LaserRangeMessage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Pltit"/> class.
+        /// Initializes a new instance of the <see cref="Ptnla"/> class.
         /// </summary>
         /// <param name="type">The message type</param>
         /// <param name="message">The NMEA message values.</param>
-        public Pltit(string type, string[] message) : base(type, message) { }
+        public Ptnla(string type, string[] message) : base(type, message) { }
     }
 }

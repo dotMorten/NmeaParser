@@ -8,7 +8,6 @@ using Android.Content.PM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NmeaParser.Nmea.Gps;
 using NmeaParser.Nmea;
 
 namespace SampleApp.Droid

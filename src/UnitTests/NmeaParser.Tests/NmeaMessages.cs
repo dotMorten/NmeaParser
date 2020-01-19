@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NmeaParser.Nmea;
-using NmeaParser.Nmea.Gps;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -230,9 +229,9 @@ namespace NmeaParser.Tests
         {
             string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.LaserRange.Trimble.Ptnla));
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Trimble.Ptnla));
             Assert.AreEqual(Talker.ProprietaryCode, msg.TalkerId);
-            NmeaParser.Nmea.LaserRange.Trimble.Ptnla ptlna = (NmeaParser.Nmea.LaserRange.Trimble.Ptnla)msg;
+            NmeaParser.Nmea.Trimble.Ptnla ptlna = (NmeaParser.Nmea.Trimble.Ptnla)msg;
             Assert.AreEqual(2.94, ptlna.HorizontalDistance);
             Assert.AreEqual('M', ptlna.HorizontalDistanceUnits);
             Assert.AreEqual(288.1, ptlna.HorizontalAngle);
@@ -686,11 +685,11 @@ namespace NmeaParser.Tests
         {
             string input = "$PGRMZ,,,*7E";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Nmea.Garmin.Pgrmz)msg;
             Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
+            Assert.AreEqual(NmeaParser.Nmea.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Nmea.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
         }
 
         [TestMethod]
@@ -698,11 +697,11 @@ namespace NmeaParser.Tests
         {
             string input = "$PGRMZ,93,f,3*21";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Nmea.Garmin.Pgrmz)msg;
             Assert.AreEqual(93d, rmz.Altitude, "Altitude");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
+            Assert.AreEqual(NmeaParser.Nmea.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Nmea.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
         }
 
         [TestMethod]
