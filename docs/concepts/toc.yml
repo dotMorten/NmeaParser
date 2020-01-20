@@ -30,3 +30,5 @@
   href: CustomMessages.md
 - name: Creating a location provider for ArcGIS Runtime SDK
   href: ArcGISRuntime.md
+- name: Object Model Diagram
+  href: ../api/omd.html
