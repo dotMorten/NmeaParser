@@ -11,7 +11,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>2.0-beta1</Version>
+    <Version>2.0</Version>
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
