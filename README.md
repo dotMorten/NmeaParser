@@ -4,41 +4,33 @@ Nmea Parser
 Library for reading and parsing NMEA data message streams.
 It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Universal, Windows Desktop/.NET and Windows Universal apps as well as Xamarin for iOS and Android.
 
+
 ## Sponsoring
 
 If you like this library and use it a lot, consider sponsoring me. Anything helps and encourages me to keep going.
 
 See here for details: https://github.com/sponsors/dotMorten
 
+
+### Documentation
+
+Read the full documentation here: https://dotmorten.github.io/NmeaParser/
+
+
 ### Features
-The following inputs are supported:
-- System.IO.Stream (all platforms)
-- Emulation from NMEA log file (all platforms)
-- Bluetooth: Windows Universal and Android. Desktop is supported using the bluetooth device via the SerialPortDevice.
-- Serial Device: Windows Desktop and Windows Universal.
 
-
-Currently supported NMEA messages:
-- GNSS: BOD, GGA, GLL, GNS, GSA, GST, GSV, RMB, RMA, RMB, RMC, RTE, VTG, ZDA
-- Garmin Proprietary: PGRME, PGRMZ
-- Trimble Laser Range Finder: PTNLA, PTNLB
-- TruePulse Laser Range Finder: PLTIT
-
-The API is easily extensible with more NMEA messages. Simply create a new class inheriting from "NmeaMessage" and use the NmeaMessageType Attribute to tag it with the NMEA Message Token it supports.
-
-Example:
-```csharp
-[NmeaMessageType("--RMC")]
-public class Rmc : NmeaMessage
-{
-	protected override void LoadMessage(string[] message)
-	{
-		//TODO: Process message parts
-	}
-}
-```
-
-If you add new messages, please fork, provide a simple unit test for the message and submit a pull request.
+- Most common NMEA messages fully supported
+  - GNSS: BOD, GGA, GLL, GNS, GSA, GST, GSV, RMB, RMA, RMB, RMC, RTE, VTG, ZDA
+  - Garmin Proprietary: PGRME, PGRMZ
+  - Trimble Laser Range Finder: PTNLA, PTNLB
+  - TruePulse Laser Range Finder: PLTIT
+- Automatic merging of multi-sentence messages for simplified usage.
+- Extensible with custom NMEA messages [see here](concepts/CustomMessages.html)
+- Multiple input devices out of the box
+  - System.IO.Stream (all platforms)
+  - Emulation from NMEA log file (all platforms)
+  - Serial Device: .NET Framework, .NET Core (Windows, Linux, Mac) and Windows Universal.
+  - Bluetooth: Windows Universal and Android. .NET Core/.NET Framework is supported using the bluetooth device via the SerialPortDevice.
 
 
 ### NuGet
@@ -52,7 +44,7 @@ You can get the library via [NuGet](http://www.nuget.org) if you have the extens
 Usage
 =====================
 
-Please see the [WIKI](http://www.github.com/dotMorten/NmeaParser/wiki) how to use it on the various platforms
+Please see the [Documentation](https://dotmorten.github.io/NmeaParser/concepts/index.html) on how to use it on the various platforms.
 
 Screenshots
 =====================
