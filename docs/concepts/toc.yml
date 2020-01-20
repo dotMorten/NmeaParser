@@ -8,7 +8,7 @@
     items:
     - name: SerialPort
       href: SerialPortNetFX.md
-  - name: .NET Framework
+  - name: .NET Core
     items:
     - name: SerialPort
       href: SerialPortNetCore.md
