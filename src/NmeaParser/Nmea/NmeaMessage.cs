@@ -62,25 +62,65 @@ namespace NmeaParser.Nmea
         {
             messageTypes = new Dictionary<string, ConstructorInfo>();
             var typeinfo = typeof(NmeaMessage).GetTypeInfo();
-            foreach (var subclass in typeinfo.Assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage))))
+            RegisterAssembly(typeinfo.Assembly);
+        }
+
+        /// <summary>
+        /// Registers messages from a different assembly
+        /// </summary>
+        /// <remarks>
+        /// The custom message MUST have a constructor taking a <c>string</c> as first parameter (message type name) and a <c>string[]</c> (message parts) as the second.
+        /// In addition the class must have the <see cref="NmeaMessageTypeAttribute" /> defind on the class.
+        /// </remarks>
+        /// <param name="assembly">The assembly to load custom message types from</param>
+        /// <param name="replace">Set to <c>true</c> if you want to replace already registered type. Otherwise this method will throw.</param>
+        /// <returns>Number of message types found.</returns>
+        public static int RegisterAssembly(Assembly assembly, bool replace = false)
+        {
+            int count = 0;
+            foreach (var subclass in assembly.DefinedTypes.Where(t => t.IsSubclassOf(typeof(NmeaMessage)) && !t.IsAbstract))
             {
                 var attr = subclass.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
                 if (attr != null)
                 {
-                    if (!subclass.IsAbstract)
-                    {
-                        foreach (var c in subclass.DeclaredConstructors)
-                        {
-                            var pinfo = c.GetParameters();
-                            if (pinfo.Length == 2 && pinfo[0].ParameterType == typeof(string) && pinfo[1].ParameterType == typeof(string[]))
-                            {
-                                messageTypes.Add(attr.NmeaType, c);
-                                break;
-                            }
-                        }
-                    }
+                    RegisterNmeaMessage(subclass, attr.NmeaType, replace);
+                    count++;
                 }
             }
+            return count;
+        }
+
+        /// <summary>
+        /// Registers a specific NMEA Message type
+        /// </summary>
+        /// <param name="typeInfo">TypeInfo for the class being registered</param>
+        /// <param name="nmeaType">The 5-character NMEA Type name (eg <c>GPGLL</c>). If <c>null</c>, it'll expect the <see cref="NmeaMessageTypeAttribute" /> to be declared on the class. </param>
+        /// <param name="replace">Set to <c>true</c> if you want to replace already registered type. Otherwise this method will throw.</param>
+        public static void RegisterNmeaMessage(TypeInfo typeInfo, string nmeaType = "", bool replace = false)
+        {
+            if (string.IsNullOrEmpty(nmeaType))
+            {
+                var attr = typeInfo.GetCustomAttribute<NmeaMessageTypeAttribute>(false);
+                if (attr == null)
+                    throw new ArgumentException("Message does not have a NmeaMessageTypeAttribute and no type name was specified.");
+                nmeaType = attr.NmeaType;
+                if (string.IsNullOrEmpty(nmeaType))
+                {
+                    throw new ArgumentException("No NmeaType declared on the NmeaMessageTypeAttribute.");
+                }
+            }
+            foreach (var c in typeInfo.DeclaredConstructors)
+            {
+                var pinfo = c.GetParameters();
+                if (pinfo.Length == 2 && pinfo[0].ParameterType == typeof(string) && pinfo[1].ParameterType == typeof(string[]))
+                {
+                    if (!replace && messageTypes.ContainsKey(nmeaType))
+                        throw new InvalidOperationException($"Message type {nmeaType} declared in {typeInfo.FullName} is already registered by {messageTypes[nmeaType].DeclaringType.FullName}");
+                    messageTypes[nmeaType] = c;
+                    return;
+                }
+            }
+            throw new ArgumentException("Type does not have a constructor with parameters (string,string[])");
         }
 
         /// <summary>
