@@ -22,6 +22,7 @@ using NmeaParser.Nmea;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Reflection;
 
 namespace NmeaParser.Tests
 {
@@ -815,7 +816,7 @@ namespace NmeaParser.Tests
         public void TestCustomMessageRegistration()
         {
             int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
-            Assert.AreEqual(1, count);
+            Assert.AreEqual(2, count);
             var input = "$PTEST,TEST*7C";
             var msg = NmeaMessage.Parse(input);
             Assert.IsInstanceOfType(msg, typeof(CustomMessage));
@@ -828,8 +829,21 @@ namespace NmeaParser.Tests
         public void TestCustomMessageDuplicateRegistrationFailure()
         {
             int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
-            Assert.AreEqual(1, count);
-            count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, false); // This will throw
+            Assert.AreEqual(2, count);
+            NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, false); // This will throw
+        }
+
+        [TestMethod]
+        public void TestCustomMultiMessage()
+        {
+            NmeaMessage.RegisterNmeaMessage(typeof(CustomMultiMessage).GetTypeInfo(), "", true);
+            var input1 = "$PTST2,2,1,123,A,B,C,D*2A";
+            var input2 = "$PTST2,2,2,123,E,F,G,H*21";
+            var msg1 = NmeaMessage.Parse(input1);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsInstanceOfType(msg2, typeof(CustomMultiMessage));
+            var cmsg = (CustomMultiMessage)msg2;
+            Assert.AreEqual(8, cmsg.Values.Count);
         }
 
         [Nmea.NmeaMessageType("PTEST")]
@@ -840,6 +854,27 @@ namespace NmeaParser.Tests
                 Value = parameters[0];
             }
             public string Value { get; }
+        }
+
+        [NmeaMessageType("PTST2")]
+        private class CustomMultiMessage : NmeaMultiSentenceMessage, IMultiSentenceMessage
+        {   
+            public CustomMultiMessage(string type, string[] parameters) : base(type, parameters)
+            {
+            }
+            public string Id { get; private set; }
+            public List<string> Values { get; } = new List<string>();
+            protected override int MessageCountIndex => 0;
+            protected override int MessageNumberIndex => 1;
+            protected override bool ParseSentences(Talker talkerType, string[] message)
+            {
+                if (Id == null)
+                    Id = message[2]; //First time
+                else if (Id != message[2])
+                    return false; // This message doesn't match previous message
+                Values.AddRange(message.Skip(3));
+                return true;
+            }
         }
     }
 }

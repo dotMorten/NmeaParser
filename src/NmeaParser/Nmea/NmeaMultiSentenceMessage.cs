@@ -75,8 +75,8 @@ namespace NmeaParser.Nmea
                 throw new ArgumentException("Invalid message", "message");
 
 
-            int msgCount = int.Parse(message[0], CultureInfo.InvariantCulture);
-            int msgNumber = int.Parse(message[1], CultureInfo.InvariantCulture);
+            int msgCount = int.Parse(message[MessageCountIndex], CultureInfo.InvariantCulture);
+            int msgNumber = int.Parse(message[MessageNumberIndex], CultureInfo.InvariantCulture);
 
             if (initialized)
             {
