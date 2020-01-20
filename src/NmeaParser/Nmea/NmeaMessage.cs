@@ -18,25 +18,34 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Nmea message attribute type used on concrete <see cref="NmeaMessage"/> implementations.
     /// </summary>
+    /// <remarks>
+    /// The 5-character <see cref="NmeaType"/> indicates which message the class is meant to parse.
+    /// Set the first two characters to <c>--</c> to make the message talker-independent.
+    /// </remarks>
+    /// <seealso cref="NmeaMessage.RegisterAssembly(Assembly, bool)"/>
+    /// <seealso cref="NmeaMessage.RegisterNmeaMessage(TypeInfo, string, bool)"/>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class NmeaMessageTypeAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaMessageTypeAttribute"/> class.
         /// </summary>
-        /// <param name="nmeaType">The type.</param>
+        /// <param name="nmeaType">The 5-character NMEA type name, for instance <c>GPRMC</c>, or <c>--RMC</c> to make it apply to all talkers.</param>
         public NmeaMessageTypeAttribute(string nmeaType)
         {
             NmeaType = nmeaType;
         }
         /// <summary>
-        /// Gets or sets the NMEA message type.
+        /// Gets the NMEA message type name.
         /// </summary>
+        /// <remarks>
+        /// If the type name starts with <c>--</c>, this message can apply to all talker types.
+        /// </remarks>
         public string NmeaType { get; private set; }
     }
 

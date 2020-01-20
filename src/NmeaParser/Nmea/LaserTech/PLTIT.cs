@@ -12,7 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-namespace NmeaParser.Nmea.LaserTech
+namespace NmeaParser.Messages.LaserTech
 {
     /// <summary>
     /// Laser Range 

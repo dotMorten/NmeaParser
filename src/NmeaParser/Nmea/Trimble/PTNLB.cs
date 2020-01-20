@@ -15,7 +15,7 @@
 using System;
 using System.Globalization;
 
-namespace NmeaParser.Nmea.Trimble
+namespace NmeaParser.Messages.Trimble
 {
     /// <summary>
     /// Laser Range Tree Measurement

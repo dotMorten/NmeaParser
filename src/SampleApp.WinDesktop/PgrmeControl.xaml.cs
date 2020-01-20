@@ -1,4 +1,4 @@
-﻿using NmeaParser.Nmea.Garmin;
+﻿using NmeaParser.Messages.Garmin;
 using System;
 using System.Collections.Generic;
 using System.Linq;

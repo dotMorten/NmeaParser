@@ -12,7 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-namespace NmeaParser.Nmea.Trimble
+namespace NmeaParser.Messages.Trimble
 {
     /// <summary>
     /// Laser Range Burden finder

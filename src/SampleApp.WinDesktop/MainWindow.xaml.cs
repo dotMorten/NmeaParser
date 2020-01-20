@@ -93,20 +93,20 @@ namespace SampleApp.WinDesktop
 				output.Text = string.Join("\n", messages.ToArray());
 				output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
-				if (args.Message is NmeaParser.Nmea.Gsv gpgsv)
+				if (args.Message is NmeaParser.Messages.Gsv gpgsv)
 				{
 					satView.GsvMessage = gpgsv;
 				}
-				else if (args.Message is NmeaParser.Nmea.Rmc)
-					gprmcView.Message = args.Message as NmeaParser.Nmea.Rmc;
-				else if (args.Message is NmeaParser.Nmea.Gga)
-					gpggaView.Message = args.Message as NmeaParser.Nmea.Gga;
-				else if (args.Message is NmeaParser.Nmea.Gsa)
-					gpgsaView.Message = args.Message as NmeaParser.Nmea.Gsa;
-				else if (args.Message is NmeaParser.Nmea.Gll)
-					gpgllView.Message = args.Message as NmeaParser.Nmea.Gll;
-				else if (args.Message is NmeaParser.Nmea.Garmin.Pgrme)
-					pgrmeView.Message = args.Message as NmeaParser.Nmea.Garmin.Pgrme;
+				else if (args.Message is NmeaParser.Messages.Rmc)
+					gprmcView.Message = args.Message as NmeaParser.Messages.Rmc;
+				else if (args.Message is NmeaParser.Messages.Gga)
+					gpggaView.Message = args.Message as NmeaParser.Messages.Gga;
+				else if (args.Message is NmeaParser.Messages.Gsa)
+					gpgsaView.Message = args.Message as NmeaParser.Messages.Gsa;
+				else if (args.Message is NmeaParser.Messages.Gll)
+					gpgllView.Message = args.Message as NmeaParser.Messages.Gll;
+				else if (args.Message is NmeaParser.Messages.Garmin.Pgrme)
+					pgrmeView.Message = args.Message as NmeaParser.Messages.Garmin.Pgrme;
 				else
 				{
 					var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();

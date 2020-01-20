@@ -1,4 +1,4 @@
-﻿using NmeaParser.Nmea;
+﻿using NmeaParser.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

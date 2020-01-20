@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using NmeaParser.Messages;
 
 namespace NmeaParser
 {
@@ -177,7 +178,7 @@ namespace NmeaParser
         {
             try
             {
-                var msg = NmeaParser.Nmea.NmeaMessage.Parse(p, _lastMultiMessage);
+                var msg = NmeaMessage.Parse(p, _lastMultiMessage);
                 if(msg is IMultiSentenceMessage multi)
                 {
                     if (!multi.IsComplete)
@@ -193,7 +194,7 @@ namespace NmeaParser
             catch { }
         }
 
-        private void OnMessageReceived(Nmea.NmeaMessage msg)
+        private void OnMessageReceived(NmeaMessage msg)
         {
             if (msg == null)
                 return;
@@ -272,7 +273,7 @@ namespace NmeaParser
     /// </summary>
     public sealed class NmeaMessageReceivedEventArgs : EventArgs
     {
-        internal NmeaMessageReceivedEventArgs(Nmea.NmeaMessage message)
+        internal NmeaMessageReceivedEventArgs(NmeaMessage message)
         {
             Message = message;
         }
@@ -283,6 +284,6 @@ namespace NmeaParser
         /// <value>
         /// The nmea message.
         /// </value>
-        public Nmea.NmeaMessage Message { get; }
+        public NmeaMessage Message { get; }
     }
 }

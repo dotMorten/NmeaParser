@@ -15,7 +15,7 @@
 using System;
 using System.Globalization;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Recommended minimum navigation information

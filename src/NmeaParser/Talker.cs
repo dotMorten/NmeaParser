@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser
 {
     internal static class TalkerHelper
     {

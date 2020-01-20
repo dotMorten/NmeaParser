@@ -14,7 +14,7 @@
 
 using System;
 
-namespace NmeaParser.Nmea.Garmin
+namespace NmeaParser.Messages.Garmin
 {
     /// <summary>
     ///  Recommended Minimum

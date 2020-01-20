@@ -25,18 +25,18 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 		}
 
-		public NmeaParser.Nmea.Gsv GsvMessage
+		public NmeaParser.Messages.Gsv GsvMessage
 		{
-			get { return (NmeaParser.Nmea.Gsv)GetValue(GsvMessageProperty); }
+			get { return (NmeaParser.Messages.Gsv)GetValue(GsvMessageProperty); }
 			set { SetValue(GsvMessageProperty, value); }
 		}
 
 		public static readonly DependencyProperty GsvMessageProperty =
-			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Nmea.Gsv), typeof(SatelliteSnr), new PropertyMetadata(null, OnGpgsvMessagePropertyChanged));
+			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Messages.Gsv), typeof(SatelliteSnr), new PropertyMetadata(null, OnGpgsvMessagePropertyChanged));
 
 		private static void OnGpgsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var gsv = e.NewValue as NmeaParser.Nmea.Gsv;
+			var gsv = e.NewValue as NmeaParser.Messages.Gsv;
 			if (gsv == null)
 				(d as SatelliteSnr).satellites.ItemsSource = null;
 			else

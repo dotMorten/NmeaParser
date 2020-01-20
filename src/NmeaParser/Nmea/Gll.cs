@@ -14,7 +14,7 @@
 
 using System;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Geographic position, latitude / longitude.

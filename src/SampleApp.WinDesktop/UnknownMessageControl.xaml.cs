@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using NmeaParser.Nmea;
+using NmeaParser.Messages;
 
 namespace SampleApp.WinDesktop
 {

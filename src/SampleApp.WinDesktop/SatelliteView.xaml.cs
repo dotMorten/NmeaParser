@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NmeaParser;
+using NmeaParser.Messages;
 
 namespace SampleApp.WinDesktop
 {
@@ -26,18 +28,18 @@ namespace SampleApp.WinDesktop
 			InitializeComponent();
 		}
 
-		public NmeaParser.Nmea.Gsv GsvMessage
+		public Gsv GsvMessage
 		{
-			get { return (NmeaParser.Nmea.Gsv)GetValue(GsvMessageProperty); }
+			get { return (Gsv)GetValue(GsvMessageProperty); }
 			set { SetValue(GsvMessageProperty, value); }
 		}
 
 		public static readonly DependencyProperty GsvMessageProperty =
-			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Nmea.Gsv), typeof(SatelliteView), new PropertyMetadata(null, OnGsvMessagePropertyChanged));
+			DependencyProperty.Register(nameof(GsvMessage), typeof(Gsv), typeof(SatelliteView), new PropertyMetadata(null, OnGsvMessagePropertyChanged));
 
 		private static void OnGsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var gsv = e.NewValue as NmeaParser.Nmea.Gsv;
+			var gsv = e.NewValue as Gsv;
 			if (gsv == null)
 				(d as SatelliteView).satellites.ItemsSource = null;
 			else
@@ -98,15 +100,15 @@ namespace SampleApp.WinDesktop
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value is NmeaParser.Nmea.SatelliteVehicle sv)
+			if (value is SatelliteVehicle sv)
 			{
 				byte alpha = (byte)(sv.SignalToNoiseRatio <= 0 ? 80 : 255);
 				switch (sv.TalkerId)
 				{
-					case NmeaParser.Nmea.Talker.GlobalPositioningSystem: return Color.FromArgb(alpha, 255, 0, 0);
-					case NmeaParser.Nmea.Talker.GalileoPositioningSystem: return Color.FromArgb(alpha, 0, 255, 0);
-					case NmeaParser.Nmea.Talker.GlonassReceiver: return Color.FromArgb(255, 0, 0, alpha);
-					case NmeaParser.Nmea.Talker.GlobalNavigationSatelliteSystem: return Color.FromArgb(alpha, 0, 0, 0);
+					case Talker.GlobalPositioningSystem: return Color.FromArgb(alpha, 255, 0, 0);
+					case Talker.GalileoPositioningSystem: return Color.FromArgb(alpha, 0, 255, 0);
+					case Talker.GlonassReceiver: return Color.FromArgb(255, 0, 0, alpha);
+					case Talker.GlobalNavigationSatelliteSystem: return Color.FromArgb(alpha, 0, 0, 0);
 					default: return Colors.CornflowerBlue;
 				}
 			}
