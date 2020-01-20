@@ -1,5 +1,7 @@
 - name: Getting Started
   href: index.md
+- name: Migrating from v1.x
+  href: MigrateFromV1.md
 - name: Platform specific device creation
   items:
   - name: .NET Framework
