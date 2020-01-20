@@ -111,3 +111,4 @@ Tools/Nuget/*.nupkg
 src/NmeaParser.sln.ide/
 project.lock.json
 src/.vs/
+artifacts
