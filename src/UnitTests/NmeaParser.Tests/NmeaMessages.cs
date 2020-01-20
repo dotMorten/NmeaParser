@@ -810,5 +810,36 @@ namespace NmeaParser.Tests
             var zda = (Zda)msg;
             Assert.AreEqual(new DateTimeOffset(2015, 09, 21, 22, 56, 27, 00, TimeSpan.Zero), zda.FixDateTime);
         }
+
+        [TestMethod]
+        public void TestCustomMessageRegistration()
+        {
+            int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
+            Assert.AreEqual(1, count);
+            var input = "$PTEST,TEST*7C";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(CustomMessage));
+            var cmsg = (CustomMessage)msg;
+            Assert.AreEqual("TEST", cmsg.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestCustomMessageDuplicateRegistrationFailure()
+        {
+            int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
+            Assert.AreEqual(1, count);
+            count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, false); // This will throw
+        }
+
+        [Nmea.NmeaMessageType("PTEST")]
+        private class CustomMessage : NmeaMessage
+        {
+            public CustomMessage(string type, string[] parameters) : base(type, parameters)
+            {
+                Value = parameters[0];
+            }
+            public string Value { get; }
+        }
     }
 }
