@@ -1,0 +1,30 @@
+- name: Getting Started
+  href: index.md
+- name: Platform specific device creation
+  items:
+  - name: .NET Framework
+    items:
+    - name: SerialPort
+      href: SerialPortNetFX.md
+  - name: .NET Framework
+    items:
+    - name: SerialPort
+      href: SerialPortNetCore.md
+  - name: UWP
+    items:
+    - name: SerialPort
+      href: SerialPortUWP.md
+    - name: Bluetooth
+      href: BluetoothUWP.md
+  - name: Android
+    items:
+    - name: Bluetooth
+      href: BluetoothAndroid.md
+  - name: iOS
+    items:
+    - name: Bluetooth
+      href: BluetoothiOS.md
+- name: Custom message types
+  href: CustomMessages.md
+- name: Creating a location provider for ArcGIS Runtime SDK
+  href: ArcGISRuntime.md
