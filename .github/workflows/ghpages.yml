@@ -8,15 +8,21 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Clone NmeaParser
       uses: actions/checkout@v1
+    - name: Install .NET OMD Generator
+      run: dotnet tool install --global dotMorten.OmdGenerator
+    - name: Generate OMD
+      run: generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
     - name: Build Documentation
-      run: build/GenerateDoc.cmd
+      uses: nikeee/docfx-action@master
+      with:
+        args: docs\docfx.json
     - name: Publish Documentation
-      uses: maxheld83/ghpages@master
+      uses: maxheld83/ghpages@v0.2.1"
       env:
         BUILD_DIR: artifacts/docs_site
         GH_PAT: ${{ secrets.GH_PAT }}
