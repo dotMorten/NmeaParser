@@ -1,0 +1,23 @@
+name: Publish Documentation
+
+on: 
+  push
+    brances:
+	- master
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+	- name: Clone NmeaParser
+      uses: actions/checkout@v1
+    - name: Build Documentation
+      run: build/GenerateDoc.cmd
+	  
+    - name: Publish Documentation
+	  use: maxheld83/ghpages@master
+      env:
+	    BUILD_DIR: artifacts/docs_site
+		GH_PAT: ${{ secrets.GH_PAT }}
