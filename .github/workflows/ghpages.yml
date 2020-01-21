@@ -15,7 +15,6 @@ jobs:
       uses: actions/checkout@v1
     - name: Build Documentation
       run: build/GenerateDoc.cmd
-	  
     - name: Publish Documentation
       uses: maxheld83/ghpages@master
       env:
