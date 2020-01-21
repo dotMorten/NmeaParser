@@ -22,7 +22,7 @@ jobs:
       with:
         args: docs\docfx.json
     - name: Publish Documentation
-      uses: maxheld83/ghpages@v0.2.1"
+      uses: maxheld83/ghpages@master"
       env:
         BUILD_DIR: artifacts/docs_site
         GH_PAT: ${{ secrets.GH_PAT }}
