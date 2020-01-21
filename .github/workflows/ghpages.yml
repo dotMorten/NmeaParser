@@ -14,9 +14,9 @@ jobs:
     - name: Clone NmeaParser
       uses: actions/checkout@v1
     - name: Install .NET OMD Generator
-      run: dotnet tool install --global dotMorten.OmdGenerator
+      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
     - name: Generate OMD
-      run: generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+      run: artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
     - name: Build Documentation
       uses: nikeee/docfx-action@master
       with:
