@@ -8,23 +8,24 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Clone NmeaParser
       uses: actions/checkout@v1
-    - name: Install .NET OMD Generator
-      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
+#    - name: Install .NET OMD Generator
+#      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
     - name: restore nuget packages
       run: dotnet msbuild /t:restore src/NmeaParser/NmeaParser.csproj
-    - name: Generate OMD
-      run: |
-        mkdir -p artifacts/docs/api
-        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+#    - name: Generate OMD
+#      run: |
+#        mkdir artifacts/docs/api
+#        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
     - name: Build Documentation
-      uses: nikeee/docfx-action@master
-      with:
-        args: docs/docfx.json
+#      uses: nikeee/docfx-action@master
+#      with:
+#        args: docs/docfx.json
+      run: build\GenerateDoc.cmd
     - name: Publish Documentation
       uses: maxheld83/ghpages@master
       env:
