@@ -19,3 +19,5 @@ Read the [Getting Started](concepts/index.html) notes
 
 ![sampleapp2](https://cloud.githubusercontent.com/assets/1378165/5062460/10cc3064-6d77-11e4-8365-1e9c7c346afc.png)
 ![sampleapp3](https://cloud.githubusercontent.com/assets/1378165/5062461/123adfc2-6d77-11e4-8573-1fe95fa0325f.png)
+
+This is a test of github action auto-deploy
