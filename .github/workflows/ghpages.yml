@@ -16,7 +16,9 @@ jobs:
     - name: Install .NET OMD Generator
       run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
     - name: Generate OMD
-      run: artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+      run: |
+        mkdir artifacts/docs/api
+        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
     - name: Build Documentation
       uses: nikeee/docfx-action@master
       with:
