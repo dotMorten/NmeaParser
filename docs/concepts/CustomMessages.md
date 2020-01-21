@@ -10,15 +10,15 @@ Next ensure you have a constructor that takes the `TypeName` string parameter fi
 
 Example:
 ```cs
-    [NmeaMessageType("PTEST")]
-    public class CustomMessage : NmeaMessage
+[NmeaMessageType("PTEST")]
+public class CustomMessage : NmeaMessage
+{
+    public CustomMessage(string type, string[] parameters) : base(type, parameters)
     {
-        public CustomMessage(string type, string[] parameters) : base(type, parameters)
-        {
-            Value = parameters[0];
-        }
-        public string Value { get; }
+        Value = parameters[0];
     }
+    public string Value { get; }
+}
 ```
 
 Next register this with the NMEA Parser using either:
