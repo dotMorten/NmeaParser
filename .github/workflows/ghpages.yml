@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    - docpush
 
 jobs:
   build:
