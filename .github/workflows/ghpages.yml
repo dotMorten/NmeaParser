@@ -13,20 +13,7 @@ jobs:
 
     steps:
     - name: Clone NmeaParser
-      uses: actions/checkout@v1
-      
-    - name: Create submodule
-      env:
-        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: artifacts/docs_site # The folder the action should deploy.
-      run: |
-        git worktree add --checkout gh-action-temp-deployment-folder origin/gh-pages
-        ROBOCOPY $FOLDER gh-action-temp-deployment-folder /MIR /XF .git
-        git --work-tree=gh-action-temp-deployment-folder stage -A
-        git --work-tree=gh-action-temp-deployment-folder commit -M ${action.commitMessage}
-#        git --work-tree=gh-action-temp-deployment-folder push 
-        
+      uses: actions/checkout@v1        
 
 #    - name: Install .NET OMD Generator
 #      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
@@ -41,14 +28,24 @@ jobs:
 #      uses: nikeee/docfx-action@master
 #      with:
 #        args: docs/docfx.json
-
+      
     - name: Publish Documentation
+      env:
+        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+      run: |
+        git worktree add --checkout gh-action-temp-deployment-folder origin/gh-pages
+        ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
+        git --work-tree=gh-action-temp-deployment-folder stage -A
+        git --work-tree=gh-action-temp-deployment-folder commit -M ${action.commitMessage}
+#        git --work-tree=gh-action-temp-deployment-folder push 
+
+#    - name: Publish Documentation
 #      uses: maxheld83/ghpages@master
 #      env:
 #        BUILD_DIR: artifacts/docs_site
 #        GH_PAT: ${{ secrets.GH_PAT }}
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: artifacts/docs_site # The folder the action should deploy.
+#      uses: JamesIves/github-pages-deploy-action@releases/v3
+#      with:
+#        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+#        BRANCH: gh-pages # The branch the action should deploy to.
+#        FOLDER: artifacts/docs_site # The folder the action should deploy.
