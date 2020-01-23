@@ -11,9 +11,7 @@ jobs:
 
     runs-on: windows-latest
 
-    steps:
-    - name: Clone NmeaParser
-      uses: actions/checkout@v1        
+    steps:        
       
     - name: Debugging
       env:
@@ -22,7 +20,10 @@ jobs:
         MIDDLE_NAME: The
         LAST_NAME: Octocat
       run: |
-        echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME.
+        echo %MY_VAR% %FIRST_NAME% %MIDDLE_NAME% %%LAST_NAME%%.
+        
+    - name: Clone NmeaParser
+      uses: actions/checkout@v1
         
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 #    - name: Install .NET OMD Generator
