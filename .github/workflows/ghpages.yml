@@ -19,7 +19,7 @@ jobs:
       env:
         BRANCH: gh-branch
       run: |
-        echo REPO: https://github.com/${{ GITHUB_REPOSITORY }}, SHA: ${{ GITHUB_SHA }} Branch: ${{ BRANCH }}
+        echo REPO: https://github.com/$GITHUB_REPOSITORY, SHA: $GITHUB_SHA Branch: $BRANCH
 
 #    - name: Install .NET OMD Generator
 #      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
