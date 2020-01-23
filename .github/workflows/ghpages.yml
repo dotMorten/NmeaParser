@@ -14,6 +14,12 @@ jobs:
     steps:
     - name: Clone NmeaParser
       uses: actions/checkout@v1        
+      
+    - name: Debugging
+      env:
+        BRANCH: gh-branch
+      run: |
+        echo REPO: https://github.com/${{ GITHUB_REPOSITORY }}, SHA: ${{ GITHUB_SHA }} Branch: ${{ BRANCH }}
 
 #    - name: Install .NET OMD Generator
 #      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
@@ -32,11 +38,13 @@ jobs:
     - name: Publish Documentation
       env:
         ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+        BRANCH: gh-branch
       run: |
-        git worktree add --checkout gh-action-temp-deployment-folder origin/gh-pages
+        echo REPO: https://github.com/${{ GITHUB_REPOSITORY }}, SHA ${{ GITHUB_SHA }}
+        git worktree add --checkout gh-action-temp-deployment-folder origin/${{ BRANCH }}
         ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
         git --work-tree=gh-action-temp-deployment-folder stage -A
-        git --work-tree=gh-action-temp-deployment-folder commit -M ${action.commitMessage}
+        git --work-tree=gh-action-temp-deployment-folder commit -M "${{ action.commitMessage }}"
 #        git --work-tree=gh-action-temp-deployment-folder push 
 
 #    - name: Publish Documentation
