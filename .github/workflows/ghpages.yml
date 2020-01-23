@@ -43,7 +43,7 @@ jobs:
         git worktree add --checkout gh-action-temp-deployment-folder origin/$BRANCH
         ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
         git --work-tree=gh-action-temp-deployment-folder stage -A
-        git --work-tree=gh-action-temp-deployment-folder commit -M "${{ action.commitMessage }}"
+        git --work-tree=gh-action-temp-deployment-folder commit -M "msg here"
 #        git --work-tree=gh-action-temp-deployment-folder push 
 
 #    - name: Publish Documentation
