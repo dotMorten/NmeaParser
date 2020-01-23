@@ -40,7 +40,7 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         BRANCH: gh-branch
       run: |
-        git worktree add --checkout gh-action-temp-deployment-folder origin/${{ BRANCH }}
+        git worktree add --checkout gh-action-temp-deployment-folder origin/$BRANCH
         ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
         git --work-tree=gh-action-temp-deployment-folder stage -A
         git --work-tree=gh-action-temp-deployment-folder commit -M "${{ action.commitMessage }}"
