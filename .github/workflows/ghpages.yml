@@ -19,6 +19,7 @@ jobs:
       env:
         BRANCH: gh-branch
       run: |
+        SET
         echo REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
 #    - name: Install .NET OMD Generator
