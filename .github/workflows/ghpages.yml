@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v1        
       
     - name: Debugging
-      run: echo HELLO ${{ BRANCH }}
+      env: echo HELLO ${{ BRANCH }}
       with:
         BRANCH: gh-branch
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
