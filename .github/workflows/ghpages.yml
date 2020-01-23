@@ -21,7 +21,7 @@ jobs:
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: artifacts/docs_site # The folder the action should deploy.
       run: |
-        "C:\Program Files\Git\cmd\git.exe" worktree add --checkout gh-action-temp-deployment-folder origin/%BRANCH%
+        "C:\Program Files\Git\cmd\git.exe" worktree add --checkout gh-action-temp-deployment-folder origin/gh-pages
         ROBOCOPY $FOLDER gh-action-temp-deployment-folder /MIR /XF .git
         git --work-tree=gh-action-temp-deployment-folder stage -A
         git --work-tree=gh-action-temp-deployment-folder commit -M ${action.commitMessage}
