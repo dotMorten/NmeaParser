@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:        
-      
+    
     - name: Debugging
       run: echo REPO https://github.com/${env:GITHUB_REPOSITORY} SHA ${env:GITHUB_SHA} Branch ${env:BRANCH}
       env:
@@ -20,7 +20,17 @@ jobs:
         
     - name: Clone NmeaParser
       uses: actions/checkout@v1
-        
+
+    - name: Download DocFX
+      run: |
+        mkdir .docfx
+        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx.zip" -OutFile ".docfx\docfx.zip"
+        [System.IO.Compression.ZipFile]::ExtractToDirectory(".docfx\docfx.zip", ".docfx" )
+        .docfx\docfx.exe docs\docfx.json
+      env:
+        DOCFXVERSION: 2.48.1
+
+
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
     - name: Install .NET OMD Generator
       run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
