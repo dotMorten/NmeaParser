@@ -14,7 +14,7 @@ jobs:
     steps:        
       
     - name: Debugging
-      run: echo Hello world $FIRST_NAME $middle_name $Last_Name!
+      run: echo Hello world  {{ env.FIRST_NAME }} $middle_name $Last_Name!
       env:
         FIRST_NAME: Mona
         middle_name: The
