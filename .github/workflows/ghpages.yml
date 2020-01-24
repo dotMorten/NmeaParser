@@ -40,6 +40,7 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         BRANCH: gh-pages
         DOCSFOLDER: artifacts/docs_site
+      shell: cmd
       run: |
          cd  ${env:DOCSFOLDER}
          git init
@@ -48,32 +49,7 @@ jobs:
          git config --local core.autocrlf false
          git add .
          git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
-         echo "*********** commit complete"
          echo "*********** Running: git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}"
          git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
          echo "*********** push complete"
-         Remove-Item .git -Force -Recurse
-#        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
-#        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
-#        xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
-#        echo *********** copy complete
-#        cd .\gh-action-temp-deployment-folder\
-#        git config --local core.autocrlf false
-#        git add .
-#        echo *********** stage complete
-#        git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
-#        echo *********** commit complete
-#        git push 
-#        echo *********** push complete        
-# REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
-
-#    - name: Publish Documentation
-#      uses: maxheld83/ghpages@master
-#      env:
-#        BUILD_DIR: artifacts/docs_site
-#        GH_PAT: ${{ secrets.GH_PAT }}
-#      uses: JamesIves/github-pages-deploy-action@releases/v3
-#      with:
-#        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
-#        BRANCH: gh-pages # The branch the action should deploy to.
-#        FOLDER: artifacts/docs_site # The folder the action should deploy.
+         
