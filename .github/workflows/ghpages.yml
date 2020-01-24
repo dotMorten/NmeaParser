@@ -42,14 +42,15 @@ jobs:
         DOCSFOLDER: artifacts/docs_site
       shell: cmd
       run: |
-         cd  ${env:DOCSFOLDER}
+         cd  %DOCSFOLDER%
          git init
-         git config --local user.name "${env:GITHUB_ACTOR}"
-         git config --local user.email "${env:GITHUB_ACTOR}@users.noreply.github.com"
+         git config --local user.name "%GITHUB_ACTOR%"
+         git config --local user.email "%GITHUB_ACTOR%@users.noreply.github.com"
          git config --local core.autocrlf false
          git add .
-         git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
-         echo "*********** Running: git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}"
-         git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
+         git commit -m "Auto-update doc from commit %GITHUB_SHA%"
+         echo "*********** Running: git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git master:%BRANCH%"
+         git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git master:%BRANCH%
          echo "*********** push complete"
+         rmdir .git /S /Q
          
