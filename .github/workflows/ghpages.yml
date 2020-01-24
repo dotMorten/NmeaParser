@@ -42,7 +42,7 @@ jobs:
         DOCSFOLDER: artifacts/docs_site
       run: |
         git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
-        del gh-action-temp-deployment-folder\*.* -H /S /Q
+        del gh-action-temp-deployment-folder\*.* /A -H /S /Q
         xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
         git --work-tree=gh-action-temp-deployment-folder stage -A
         git --work-tree=gh-action-temp-deployment-folder commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
