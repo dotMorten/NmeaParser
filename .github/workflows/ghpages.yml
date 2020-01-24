@@ -43,19 +43,15 @@ jobs:
       run: |
          cd  ${env:DOCSFOLDER}
          git init
-         echo *********** Running: git config --local user.name "${env:GITHUB_ACTOR}"         
          git config --local user.name "${env:GITHUB_ACTOR}"
-         echo *********** Running: git config --local user.email "${env:GITHUB_ACTOR}@users.noreply.github.com"
          git config --local user.email "${env:GITHUB_ACTOR}@users.noreply.github.com"
-         echo *********** user set   
          git config --local core.autocrlf false
          git add .
-         echo *********** stage complete
-         git commit -m "Auto-update doc"
-         echo *********** commit complete
-         echo Running: push --force https://github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
+         git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+         echo "*********** commit complete"
+         echo "*********** Running: git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}"
          git push --force https://${env:ACCESS_TOKEN}@github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
-         echo *********** push complete        
+         echo "*********** push complete"
          Remove-Item .git -Force -Recurse
 #        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
 #        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
