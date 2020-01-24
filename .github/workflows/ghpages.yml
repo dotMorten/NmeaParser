@@ -22,14 +22,15 @@ jobs:
       uses: actions/checkout@v1
         
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
-#    - name: Install .NET OMD Generator
-#      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
+    - name: Install .NET OMD Generator
+      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
 #    - name: restore nuget packages
 #      run: dotnet msbuild /t:restore src/NmeaParser/NmeaParser.csproj
-#    - name: Generate OMD
-#      run: |
-#        mkdir artifacts/docs/api
-#        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+    - name: Generate OMD
+      run: |
+        mkdir artifacts/docs/api
+        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+        
     - name: Build Documentation
       run: build\GenerateDoc.cmd
 #      uses: nikeee/docfx-action@master
@@ -42,11 +43,11 @@ jobs:
         BRANCH: gh-branch
       run: |
         echo on
-        git worktree add --checkout gh-action-temp-deployment-folder origin/$BRANCH
+        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
         ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
         git --work-tree=gh-action-temp-deployment-folder stage -A
-        git --work-tree=gh-action-temp-deployment-folder commit -M "msg here"
-#        git --work-tree=gh-action-temp-deployment-folder push 
+        git --work-tree=gh-action-temp-deployment-folder commit -M "Auto-update doc from commit ${env:GITHUB_SHA}"
+        git --work-tree=gh-action-temp-deployment-folder push 
 
 #    - name: Publish Documentation
 #      uses: maxheld83/ghpages@master
