@@ -11,12 +11,7 @@ jobs:
 
     runs-on: windows-latest
 
-    steps:        
-    
-    - name: Debugging
-      run: echo REPO https://github.com/${env:GITHUB_REPOSITORY} SHA ${env:GITHUB_SHA} Branch ${env:BRANCH}
-      env:
-        BRANCH: gh-pages
+    steps:
         
     - name: Clone NmeaParser
       uses: actions/checkout@v1
@@ -47,11 +42,11 @@ jobs:
         DOCSFOLDER: artifacts/docs_site
       run: |
         git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
-        ROBOCOPY ${env:DOCSFOLDER} gh-action-temp-deployment-folder /MIR /XF .git
-        ECHO ROBO COPY COMPLETE
-#        git --work-tree=gh-action-temp-deployment-folder stage -A
-#        git --work-tree=gh-action-temp-deployment-folder commit -M "Auto-update doc from commit ${env:GITHUB_SHA}"
-#        git --work-tree=gh-action-temp-deployment-folder push 
+        del gh-action-temp-deployment-folder\*.* -H /S /Q
+        xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
+        git --work-tree=gh-action-temp-deployment-folder stage -A
+        git --work-tree=gh-action-temp-deployment-folder commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+        git --work-tree=gh-action-temp-deployment-folder push 
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
 #    - name: Publish Documentation
