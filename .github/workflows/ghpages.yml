@@ -14,13 +14,11 @@ jobs:
     steps:        
       
     - name: Debugging
+      run: echo Hello world $FIRST_NAME $middle_name $Last_Name!
       env:
-        MY_VAR: Hi there! My name is
         FIRST_NAME: Mona
-        MIDDLE_NAME: The
-        LAST_NAME: Octocat
-      run: |
-        echo %MY_VAR% %FIRST_NAME% %MIDDLE_NAME% %%LAST_NAME%%.
+        middle_name: The
+        Last_Name: Octocat
         
     - name: Clone NmeaParser
       uses: actions/checkout@v1
