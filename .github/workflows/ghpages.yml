@@ -45,11 +45,12 @@ jobs:
         Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
         xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
         echo *********** copy complete
-        git --work-tree=gh-action-temp-deployment-folder stage -A
+        cd .\gh-action-temp-deployment-folder\
+        git add .
         echo *********** stage complete
-        git --work-tree=gh-action-temp-deployment-folder commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+        git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
         echo *********** commit complete
-        git --work-tree=gh-action-temp-deployment-folder push 
+        git push 
         echo *********** push complete        
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
