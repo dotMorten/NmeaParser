@@ -43,7 +43,8 @@ jobs:
       run: |
          cd  ${DOCSFOLDER}
          git init
-         git config user.name "${env:GITHUB_ACTOR}"
+         echo *********** Running: git config --local user.name "${env:GITHUB_ACTOR}"         
+         git config --local user.name "${env:GITHUB_ACTOR}"
          echo *********** user set   
          git config --local core.autocrlf false
          git add .
