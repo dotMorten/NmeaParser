@@ -41,18 +41,29 @@ jobs:
         BRANCH: gh-pages
         DOCSFOLDER: artifacts/docs_site
       run: |
-        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
-        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
-        xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
-        echo *********** copy complete
-        cd .\gh-action-temp-deployment-folder\
-        git config --local core.autocrlf false
-        git add .
-        echo *********** stage complete
-        git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
-        echo *********** commit complete
-        git push 
-        echo *********** push complete        
+         cd  artifacts\docs_site
+         git init
+         git config user.name "${env:GITHUB_ACTOR}"
+         echo *********** user set   
+         git config --local core.autocrlf false
+         git add .
+         echo *********** stage complete
+         git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+         echo *********** commit complete
+         git push --force https://github.com/${env:GITHUB_REPOSITORY} master:${env:BRANCH}
+         echo *********** push complete        
+#        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
+#        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
+#        xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
+#        echo *********** copy complete
+#        cd .\gh-action-temp-deployment-folder\
+#        git config --local core.autocrlf false
+#        git add .
+#        echo *********** stage complete
+#        git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+#        echo *********** commit complete
+#        git push 
+#        echo *********** push complete        
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
 #    - name: Publish Documentation
