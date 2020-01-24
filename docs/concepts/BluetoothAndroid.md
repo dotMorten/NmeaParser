@@ -6,7 +6,7 @@ First ensure you have the necessary permissions in the AndroidManifest.xml file:
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
-```xml
+```
 
 Next see MainActivity.cs in the Android sample as a reference:
 
