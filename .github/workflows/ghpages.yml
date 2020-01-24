@@ -46,6 +46,7 @@ jobs:
         xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
         echo *********** copy complete
         cd .\gh-action-temp-deployment-folder\
+        git config --local core.autocrlf false
         git add .
         echo *********** stage complete
         git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
