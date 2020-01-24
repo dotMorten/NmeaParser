@@ -41,10 +41,12 @@ jobs:
         BRANCH: gh-pages
         DOCSFOLDER: artifacts/docs_site
       run: |
-         cd  ${DOCSFOLDER}
+         cd  ${env:DOCSFOLDER}
          git init
          echo *********** Running: git config --local user.name "${env:GITHUB_ACTOR}"         
          git config --local user.name "${env:GITHUB_ACTOR}"
+         echo *********** Running: git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+         git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
          echo *********** user set   
          git config --local core.autocrlf false
          git add .
