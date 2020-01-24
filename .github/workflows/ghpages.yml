@@ -23,41 +23,36 @@ jobs:
 
     - name: Download DocFX
       run: |
-        mkdir .docfx
+        mkdir .tools/docfx
         Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx.zip" -OutFile ".docfx\docfx.zip"
-        [System.IO.Compression.ZipFile]::ExtractToDirectory(".docfx\docfx.zip", ".docfx" )
-        .docfx\docfx.exe docs\docfx.json
+        [System.IO.Compression.ZipFile]::ExtractToDirectory(".docfx\docfx.zip", ".tools/docfx" )
       env:
         DOCFXVERSION: 2.48.1
 
-
-# REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
     - name: Install .NET OMD Generator
-      run: dotnet tool install --tool-path artifacts/toolset dotMorten.OmdGenerator --version 1.2.0
-#    - name: restore nuget packages
-#      run: dotnet msbuild /t:restore src/NmeaParser/NmeaParser.csproj
+      run: dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.2.0
+
     - name: Generate OMD
       run: |
         mkdir artifacts/docs/api
-        artifacts/toolset/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+        .tools/omd/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
         
     - name: Build Documentation
-      run: build\GenerateDoc.cmd
-#      uses: nikeee/docfx-action@master
-#      with:
-#        args: docs/docfx.json
+      run: .tools/docfx/docfx.exe docs/docfx.json
       
     - name: Publish Documentation
       env:
         ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         BRANCH: gh-pages
+        DOCSFOLDER: artifacts/docs_site
       run: |
-        echo on
         git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
-        ROBOCOPY artifacts/docs_site gh-action-temp-deployment-folder /MIR /XF .git
-        git --work-tree=gh-action-temp-deployment-folder stage -A
+        ROBOCOPY ${env:DOCSFOLDER} gh-action-temp-deployment-folder /MIR /XF .git
+        ECHO ROBO COPY COMPLETE
+#        git --work-tree=gh-action-temp-deployment-folder stage -A
 #        git --work-tree=gh-action-temp-deployment-folder commit -M "Auto-update doc from commit ${env:GITHUB_SHA}"
 #        git --work-tree=gh-action-temp-deployment-folder push 
+# REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
 #    - name: Publish Documentation
 #      uses: maxheld83/ghpages@master
