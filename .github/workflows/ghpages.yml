@@ -41,7 +41,7 @@ jobs:
         BRANCH: gh-pages
         DOCSFOLDER: artifacts/docs_site
       run: |
-         cd  artifacts\docs_site
+         cd  ${DOCSFOLDER}
          git init
          git config user.name "${env:GITHUB_ACTOR}"
          echo *********** user set   
@@ -50,8 +50,10 @@ jobs:
          echo *********** stage complete
          git commit -m "Auto-update doc"
          echo *********** commit complete
+         echo Running: push --force https://github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
          git push --force https://github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
          echo *********** push complete        
+         Remove-Item .git -Force -Recurse
 #        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
 #        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
 #        xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
