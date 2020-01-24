@@ -14,11 +14,9 @@ jobs:
     steps:        
       
     - name: Debugging
-      run: echo Hello world ${env:FIRST_NAME} $middle_name $Last_Name!
+      run: echo REPO: https://github.com/{env:GITHUB_REPOSITORY} SHA: ${env:GITHUB_SHA} Branch: ${env:BRANCH}
       env:
-        FIRST_NAME: Mona
-        middle_name: The
-        Last_Name: Octocat
+        BRANCH: gh-pages
         
     - name: Clone NmeaParser
       uses: actions/checkout@v1
