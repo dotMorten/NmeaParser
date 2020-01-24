@@ -44,9 +44,13 @@ jobs:
         git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
         Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
         xcopy artifacts\docs_site\*.* gh-action-temp-deployment-folder /S
+        echo *********** copy complete
         git --work-tree=gh-action-temp-deployment-folder stage -A
+        echo *********** stage complete
         git --work-tree=gh-action-temp-deployment-folder commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+        echo *********** commit complete
         git --work-tree=gh-action-temp-deployment-folder push 
+        echo *********** push complete        
 # REPO: https://github.com/%GITHUB_REPOSITORY%, SHA: %GITHUB_SHA% Branch: %BRANCH%
 
 #    - name: Publish Documentation
