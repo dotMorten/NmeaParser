@@ -48,9 +48,9 @@ jobs:
          git config --local core.autocrlf false
          git add .
          echo *********** stage complete
-         git commit -m "Auto-update doc from commit ${env:GITHUB_SHA}"
+         git commit -m "Auto-update doc"
          echo *********** commit complete
-         git push --force https://github.com/${env:GITHUB_REPOSITORY} master:${env:BRANCH}
+         git push --force https://github.com/${env:GITHUB_REPOSITORY}.git master:${env:BRANCH}
          echo *********** push complete        
 #        git worktree add --checkout gh-action-temp-deployment-folder origin/${env:BRANCH}
 #        Remove-Item -Path gh-action-temp-deployment-folder\* -Recurse -Exclude .git
