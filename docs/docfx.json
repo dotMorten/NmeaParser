@@ -117,7 +117,7 @@
       }
     ],
     "globalMetadata": {
-      "_appLogoPath": "logo.png",
+      "_appLogoPath": "images/logo.png",
 	  "_gitContribute": {
 	    "branch": "master"
 	  }
