@@ -23,6 +23,10 @@ You can get the library via [NuGet](http://www.nuget.org) if you have the extens
  private void device_NmeaMessageReceived(NmeaDevice sender, NmeaMessageReceivedEventArgs args)
  {
     // called when a message is received
+    if(args.Message is NmeaParser.Messages.Rmc rmc)
+    {
+        Console.WriteLine($"Your current location is: {rmc.Latitude} , {rmc.Longitude}");
+    }
  }
 ```
 See the Platform specific device creation section in the menu for more specifics on device creation.
