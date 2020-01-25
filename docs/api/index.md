@@ -14,9 +14,10 @@
 
 - [iOS API Reference](ios/index.html)
 
-### Object model diagram:
+### Object model diagrams
+Click below to see the full object model diagram:
 
-[Click here](omd.html) to see the full object model diagram
+ - [.NET Standard](omd.html)
 
 ### Platform specific devices:
 
