@@ -32,6 +32,8 @@ jobs:
         .tools/omd/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
         
     - name: Build Documentation
+      env:         
+        DOCFX_SOURCE_BRANCH_NAME: master
       run: .tools/docfx/docfx.exe docs/docfx.json
       
     - name: Publish Documentation

@@ -16,7 +16,7 @@
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
-        },
+        }
 	  ],
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net451" },
@@ -27,7 +27,7 @@
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
-        },
+        }
 	  ],
       "dest": "../artifacts/docs/api/netcore",
       "properties": { "TargetFramework": "netcoreapp2.1" },
@@ -38,7 +38,7 @@
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
-        },
+        }
 	  ],
       "dest": "../artifacts/docs/api/android",
       "properties": { "TargetFramework": "monoandroid70" },
@@ -49,7 +49,7 @@
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
-        },
+        }
 	  ],
       "dest": "../artifacts/docs/api/ios",
       "properties": { "TargetFramework": "xamarinios10" },
@@ -60,7 +60,7 @@
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
-        },
+        }
 	  ],
       "dest": "../artifacts/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.16299" },
@@ -94,7 +94,8 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+		  "favicon.ico"
         ]
       },
 	   {
@@ -115,6 +116,12 @@
         ]
       }
     ],
+    "globalMetadata": {
+      "_appLogoPath": "logo.png",
+	  "_gitContribute": {
+	    "branch": "master"
+	  }
+    },
     "dest": "../artifacts/docs_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
