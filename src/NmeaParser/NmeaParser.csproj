@@ -18,7 +18,7 @@
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
-    <OutputPath>$(MSBuildThisFileDirectory)..\Bin\$(Configuration)</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>$(OutDir)</PackageOutputPath>
     <PackageReleaseNotes>New refined and easier to use v2 API</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
