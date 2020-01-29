@@ -1,4 +1,4 @@
-#Using NTRIP for DGPS
+# Using NTRIP for DGPS
 
 You can use data from a nearby NTRIP server to improve the accuracy if your GPS position, if your device supports it.
 The Serial and Bluetooth devices supports writing to them, so you merely need to stream the data from the NTRIP server directly to your device.
