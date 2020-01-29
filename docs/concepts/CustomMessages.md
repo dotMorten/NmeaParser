@@ -50,15 +50,15 @@ private class CustomMultiMessage : NmeaMultiSentenceMessage, IMultiSentenceMessa
     }
     public string Id { get; private set; }
     public List<string> Values { get; } = new List<string>();
-	// Set index in the message where the total count is:
+    // Set index in the message where the total count is:
     protected override int MessageCountIndex => 0;
-	// Set index in the message where the message number is:
+    // Set index in the message where the message number is:
     protected override int MessageNumberIndex => 1;
     protected override bool ParseSentences(Talker talkerType, string[] message)
     {
-	    // Ensure this message matches the previous message.
-		// Use any indicator to detect message difference, so you can to error out and avoid
-		// appending the wrong message
+        // Ensure this message matches the previous message.
+        // Use any indicator to detect message difference, so you can to error out and avoid
+        // appending the wrong message
         if (Id == null)
             Id = message[2]; //First time it's not set
         else if (Id != message[2])
