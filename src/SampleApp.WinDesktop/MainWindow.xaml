@@ -1,8 +1,8 @@
 ﻿<Window x:Class="SampleApp.WinDesktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:local="clr-namespace:SampleApp.WinDesktop"
-		xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+        xmlns:local="clr-namespace:SampleApp.WinDesktop"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
         Title="Sample App" Height="500" Width="625">
     <Window.Resources>
         <local:NullToCollapsedConverter x:Key="nullConv" />
@@ -13,7 +13,7 @@
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Direction="0"  ShadowDepth="0"
-										  BlurRadius="20" Opacity=".5" />
+                                      BlurRadius="20" Opacity=".5" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -38,9 +38,9 @@
                         <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
                     <local:SatelliteView MaxWidth="{Binding ActualHeight, ElementName=satView}"
-					Grid.Column="1" x:Name="satView" />
+                    Grid.Column="1" x:Name="satView" />
                     <local:SatelliteSnr Grid.Row="1"
-						GsvMessage="{Binding GsvMessage, ElementName=satView}" />
+                        GsvMessage="{Binding GsvMessage, ElementName=satView}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Map">
@@ -54,22 +54,22 @@
 
                     <!--North arrow-->
                     <Grid Width="50" Height="50" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-						  Margin="20" RenderTransformOrigin=".5,.5">
+                          Margin="20" RenderTransformOrigin=".5,.5">
                         <Grid.Resources>
                             <local:ReverseConverter x:Key="conv" />
                         </Grid.Resources>
                         <Grid.Effect>
                             <DropShadowEffect Direction="0"  ShadowDepth="0"
-										  BlurRadius="10" Opacity=".75" />
+                                          BlurRadius="10" Opacity=".75" />
                         </Grid.Effect>
                         <Grid.RenderTransform>
                             <RotateTransform Angle="{Binding ElementName=mapView, Path=MapRotation, Converter={StaticResource conv}}" />
                         </Grid.RenderTransform>
                         <TextBlock Text="Ù" FontFamily="Wingdings" HorizontalAlignment="Center" VerticalAlignment="Center"
-								   FontSize="40" Foreground="White" />
+                                   FontSize="40" Foreground="White" />
                         <TextBlock Text="N" HorizontalAlignment="Center" VerticalAlignment="Top"
-								   FontSize="12" Margin="0,-5,0,0" RenderTransformOrigin=".5,.5" 
-								   Foreground="White" >
+                                   FontSize="12" Margin="0,-5,0,0" RenderTransformOrigin=".5,.5" 
+                                   Foreground="White" >
                             <TextBlock.RenderTransform>
                                 <RotateTransform Angle="{Binding ElementName=mapView, Path=MapRotation}" />
                             </TextBlock.RenderTransform>
@@ -77,11 +77,11 @@
                     </Grid>
 
                     <Grid HorizontalAlignment="Right" VerticalAlignment="Top"
-								Margin="10" Background="White" Width="150"
-						  DataContext="{Binding ElementName=mapView, Path=LocationDisplay.Location}">
+                                Margin="10" Background="White" Width="150"
+                          DataContext="{Binding ElementName=mapView, Path=LocationDisplay.Location}">
                         <Grid.Effect>
                             <DropShadowEffect Direction="0"  ShadowDepth="0"
-										  BlurRadius="10" Opacity=".75" />
+                                          BlurRadius="10" Opacity=".75" />
                         </Grid.Effect>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -113,11 +113,11 @@
             </TabItem>
             <TabItem Header="Messages">
                 <TextBox x:Name="output"
-				 AcceptsReturn="True"
-				 IsReadOnly="True"
-				 VerticalScrollBarVisibility="Auto"
-				 HorizontalScrollBarVisibility="Visible"
-				 />
+                 AcceptsReturn="True"
+                 IsReadOnly="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Visible"
+                 />
             </TabItem>
             <TabItem Header="Device">
                 <Grid>
@@ -129,8 +129,8 @@
                         <Button Width="200" Content="Open NMEA Log..." Click="OpenNmeaLogButton_Click" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" />
                         <StackPanel Orientation="Horizontal">
                             <Button Width="200" Content="Auto-discover serial port"
-									HorizontalAlignment="Left" Padding="20,5" Margin="0,5" 
-									Click="AutoDiscoverButton_Click" />
+                                    HorizontalAlignment="Left" Padding="20,5" Margin="0,5" 
+                                    Click="AutoDiscoverButton_Click" />
                             <TextBlock x:Name="autoDiscoverStatus" VerticalAlignment="Center" />
                         </StackPanel>
                         <GroupBox Header="Open Serial device" Width="200" HorizontalAlignment="Left">
@@ -160,10 +160,6 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-
-
-
-
 
     </Grid>
 </Window>
