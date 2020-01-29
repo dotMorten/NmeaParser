@@ -12,4 +12,5 @@
   - Emulation from NMEA log file (all platforms)
   - Serial Device: .NET Framework, .NET Core (Windows, Linux, Mac) and Windows Universal.
   - Bluetooth: Windows Universal and Android. .NET Core/.NET Framework is supported using the Bluetooth device via the SerialPortDevice.
+- Devices support two-way communication, allowing you to enhance accuracy with [NTRIP](concepts/ntrip.md) or send other messages to your device.
 
