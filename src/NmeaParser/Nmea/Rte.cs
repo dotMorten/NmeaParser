@@ -59,7 +59,7 @@ namespace NmeaParser.Messages
         public Rte(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 4)
-                throw new ArgumentException("Invalid GPRTE", "message");
+                throw new ArgumentException("Invalid RTE", "message");
             ListType = message[2] == "c" ? WaypointListType.CompleteWaypointsList : WaypointListType.RemainingWaypointsList;
             RouteId = message[3];
         }

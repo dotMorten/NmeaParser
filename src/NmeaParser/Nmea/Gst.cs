@@ -31,7 +31,7 @@ namespace NmeaParser.Messages
         public Gst(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 8)
-                throw new ArgumentException("Invalid GPGST", "message");
+                throw new ArgumentException("Invalid GST", "message");
             FixTime = StringToTimeSpan(message[0]);
             Rms = NmeaMessage.StringToDouble(message[1]);
             SemiMajorError = NmeaMessage.StringToDouble(message[2]);

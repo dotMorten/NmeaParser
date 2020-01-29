@@ -36,7 +36,7 @@ namespace NmeaParser.Messages
         public Gga(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 14)
-                throw new ArgumentException("Invalid GPGGA", "message"); 
+                throw new ArgumentException("Invalid GGA", "message"); 
             FixTime = StringToTimeSpan(message[0]);
             Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
             Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);

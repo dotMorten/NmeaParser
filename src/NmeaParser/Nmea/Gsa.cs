@@ -33,7 +33,7 @@ namespace NmeaParser.Messages
         public Gsa(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 17)
-                throw new ArgumentException("Invalid GPGSA", "message");
+                throw new ArgumentException("Invalid GSA", "message");
 
             Mode = message[0] == "A" ? Gsa.ModeSelection.Auto : Gsa.ModeSelection.Manual;
             Fix = (Gsa.FixType)int.Parse(message[1], CultureInfo.InvariantCulture);

@@ -38,7 +38,7 @@ namespace NmeaParser.Messages
         public Rmc(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 11)
-                throw new ArgumentException("Invalid GPRMC", "message"); 
+                throw new ArgumentException("Invalid RMC", "message"); 
             
             if (message[8].Length == 6 && message[0].Length >= 6)
             {

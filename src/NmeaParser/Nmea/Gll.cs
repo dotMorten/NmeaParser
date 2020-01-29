@@ -34,7 +34,7 @@ namespace NmeaParser.Messages
         public Gll(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 4)
-                throw new ArgumentException("Invalid GPGLL", "message");
+                throw new ArgumentException("Invalid GLL", "message");
             Latitude = NmeaMessage.StringToLatitude(message[0], message[1]);
             Longitude = NmeaMessage.StringToLongitude(message[2], message[3]);
             if (message.Length >= 5) //Some older GPS doesn't broadcast fix time

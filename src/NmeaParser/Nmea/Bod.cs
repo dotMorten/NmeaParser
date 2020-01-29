@@ -36,7 +36,7 @@ namespace NmeaParser.Messages
         public Bod(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 3)
-                throw new ArgumentException("Invalid GPBOD", "message");
+                throw new ArgumentException("Invalid BOD", "message");
             if (message[0].Length > 0)
                 TrueBearing = double.Parse(message[0], CultureInfo.InvariantCulture);
             else

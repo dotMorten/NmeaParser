@@ -55,7 +55,7 @@ namespace NmeaParser.Messages
         public Rmb(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 13)
-                throw new ArgumentException("Invalid GPRMB", "message");
+                throw new ArgumentException("Invalid RMB", "message");
 
             Status = message[0] == "A" ? DataStatus.Ok : Rmb.DataStatus.Warning;
             double tmp;

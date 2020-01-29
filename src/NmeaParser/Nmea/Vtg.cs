@@ -34,7 +34,7 @@ namespace NmeaParser.Messages
         public Vtg(string type, string[] message) : base(type, message)
         {
             if (message == null || message.Length < 7)
-                throw new ArgumentException("Invalid Gpvtg", "message");
+                throw new ArgumentException("Invalid VTG", "message");
             CourseTrue = NmeaMessage.StringToDouble(message[0]);
             CourseMagnetic = NmeaMessage.StringToDouble(message[2]);
             SpeedKnots = NmeaMessage.StringToDouble(message[4]);
