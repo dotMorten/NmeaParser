@@ -2,6 +2,9 @@
 
 Below is an implementation for use with the [ArcGIS Runtime SDK for .NET](http://developers.arcgis.com/net). Use this location provider on the MapView's LocationDisplay to send it location data from your NMEA device to display your current location on a map.
 
+Below is an example implementation of this.
+You can also check out the Desktop Sample app in the [Github Repo]( https://github.com/dotMorten/NmeaParser/blob/master/src/SampleApp.WinDesktop/NmeaProvider.cs) which uses this to display a map.
+
 **Usage:**
 ```csharp
 NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
