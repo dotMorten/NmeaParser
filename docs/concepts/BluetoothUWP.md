@@ -8,7 +8,7 @@ To use the NMEA Parser against a bluetooth device in a Windows Store or Windows 
       </Device>
     </DeviceCapability>
 ```
-See more here on bluetooth device capabilities in WinStore: http://msdn.microsoft.com/en-us/library/windows/apps/dn263090.aspx
+See more here on bluetooth device capabilities in UWP Apps: https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/how-to-specify-device-capabilities-for-bluetooth
 
 Make sure your Bluetooth device is paired with your Windows Device.
 
