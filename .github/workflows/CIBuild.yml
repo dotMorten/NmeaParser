@@ -32,3 +32,9 @@ jobs:
     - name: Tests
       run: |
         dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/netcoreapp3.1/NmeaParser.Tests.Net.dll -v normal
+
+    - name: Upload artfacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: NuGet Packages
+        path: artifacts/NuGet/Release
