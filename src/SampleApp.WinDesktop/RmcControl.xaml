@@ -1,23 +1,25 @@
-﻿<UserControl x:Class="SampleApp.WinDesktop.GpgllControl"
+﻿<UserControl x:Class="SampleApp.WinDesktop.RmcControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SampleApp.WinDesktop"
-             mc:Ignorable="d" 
+            mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Message}">
 		<Border Background="CornflowerBlue" Padding="10" Margin="-10,-10,-10,5">
-			<TextBlock Text="GPGLL" FontSize="20" FontWeight="Bold" Foreground="White"  />
+            <TextBlock Text="{Binding MessageType}" FontSize="20" FontWeight="Bold" Foreground="White"  />
 		</Border>
 		<TextBlock Text="Location:" FontWeight="Bold" />
 		<TextBlock Text="{Binding Latitude, Mode=OneTime}" />
 		<TextBlock Text="{Binding Longitude, Mode=OneTime}" />
-		<TextBlock Text="Time:" FontWeight="Bold" />
+		<local:KeyValuePairControl Header="Speed: " Value="{Binding Speed, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="Magnetic Variation: " Value="{Binding MagneticVariation, Mode=OneTime}" />
+		<TextBlock Text="Time: " FontWeight="Bold" />
 		<TextBlock Text="{Binding FixTime, Mode=OneTime}" />
-		<local:KeyValuePairControl Header="Data active: " FontWeight="Bold" >
+		<local:KeyValuePairControl Header="Active: " FontWeight="Bold" >
 			<local:KeyValuePairControl.Value>
-				<CheckBox IsChecked="{Binding DataActive, Mode=OneTime}" IsEnabled="False" />
+				<CheckBox IsChecked="{Binding Active, Mode=OneTime}" IsEnabled="False" />
 			</local:KeyValuePairControl.Value>
 		</local:KeyValuePairControl>
 	</StackPanel>

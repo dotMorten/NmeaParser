@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SampleApp.WinDesktop.GpgsaControl"
+﻿<UserControl x:Class="SampleApp.WinDesktop.GsaControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
 	<StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Message}">
 		<Border Background="CornflowerBlue" Padding="10" Margin="-10,-10,-10,5">
-			<TextBlock Text="GPGSA" FontSize="20" FontWeight="Bold" Foreground="White"  />
+            <TextBlock Text="{Binding MessageType}" FontSize="20" FontWeight="Bold" Foreground="White"  />
 		</Border>
 		<local:KeyValuePairControl Header="GPS Mode: " Value="{Binding Mode}"/>
         <local:KeyValuePairControl Header="Fix Mode: " Value="{Binding Fix, Mode=OneTime}" />

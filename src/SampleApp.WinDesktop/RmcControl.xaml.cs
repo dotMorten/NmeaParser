@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace SampleApp.WinDesktop
 {
 	/// <summary>
-	/// Interaction logic for GprmcControl.xaml
+	/// Interaction logic for RmcControl.xaml
 	/// </summary>
-	public partial class GprmcControl : UserControl
+	public partial class RmcControl : UserControl
 	{
-		public GprmcControl()
+		public RmcControl()
 		{
 			InitializeComponent();
 		}
@@ -33,6 +33,6 @@ namespace SampleApp.WinDesktop
 		}
 
 		public static readonly DependencyProperty MessageProperty =
-			DependencyProperty.Register("Message", typeof(Rmc), typeof(GprmcControl), new PropertyMetadata(null));
+			DependencyProperty.Register(nameof(Message), typeof(Rmc), typeof(RmcControl), new PropertyMetadata(null));
 	}
 }

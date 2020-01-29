@@ -17,22 +17,22 @@ using System.Windows.Shapes;
 namespace SampleApp.WinDesktop
 {
 	/// <summary>
-	/// Interaction logic for GpggaControl.xaml
+	/// Interaction logic for GpgllControl.xaml
 	/// </summary>
-	public partial class GpggaControl : UserControl
+	public partial class GllControl : UserControl
 	{
-		public GpggaControl()
+		public GllControl()
 		{
 			InitializeComponent();
 		}
 
-		public Gga Message
+		public Gll Message
 		{
-			get { return (Gga)GetValue(GpggaProperty); }
-			set { SetValue(GpggaProperty, value); }
+			get { return (Gll)GetValue(MessageProperty); }
+			set { SetValue(MessageProperty, value); }
 		}
 
-		public static readonly DependencyProperty GpggaProperty =
-			DependencyProperty.Register("Message", typeof(Gga), typeof(GpggaControl), new PropertyMetadata(null));
+		public static readonly DependencyProperty MessageProperty =
+			DependencyProperty.Register(nameof(Message), typeof(Gll), typeof(GllControl), new PropertyMetadata(null));	
 	}
 }

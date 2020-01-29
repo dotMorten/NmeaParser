@@ -23,10 +23,10 @@
             <TabItem Header="GPS Info">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
                     <WrapPanel x:Name="MessagePanel">
-                        <local:GprmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
-                        <local:GpggaControl x:Name="gpggaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
-                        <local:GpgsaControl x:Name="gpgsaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
-                        <local:GpgllControl x:Name="gpgllView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
+                        <local:RmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
+                        <local:GgaControl x:Name="gpggaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpggaView, Converter={StaticResource nullConv}}" />
+                        <local:GsaControl x:Name="gpgsaView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgsaView, Converter={StaticResource nullConv}}" />
+                        <local:GllControl x:Name="gpgllView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gpgllView, Converter={StaticResource nullConv}}" />
                         <local:PgrmeControl x:Name="pgrmeView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=pgrmeView, Converter={StaticResource nullConv}}" />
                     </WrapPanel>
                 </ScrollViewer>

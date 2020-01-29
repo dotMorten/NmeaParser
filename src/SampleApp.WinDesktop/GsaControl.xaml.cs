@@ -19,20 +19,20 @@ namespace SampleApp.WinDesktop
 	/// <summary>
 	/// Interaction logic for GpgsaControl.xaml
 	/// </summary>
-	public partial class GpgsaControl : UserControl
+	public partial class GsaControl : UserControl
 	{
-		public GpgsaControl()
+		public GsaControl()
 		{
 			InitializeComponent();
 		}
 
 		public Gsa Message
 		{
-			get { return (Gsa)GetValue(GpgsaProperty); }
-			set { SetValue(GpgsaProperty, value); }
+			get { return (Gsa)GetValue(MessageProperty); }
+			set { SetValue(MessageProperty, value); }
 		}
 
-		public static readonly DependencyProperty GpgsaProperty =
-			DependencyProperty.Register("Message", typeof(Gsa), typeof(GpgsaControl), new PropertyMetadata(null));	
+		public static readonly DependencyProperty MessageProperty =
+			DependencyProperty.Register(nameof(Message), typeof(Gsa), typeof(GsaControl), new PropertyMetadata(null));	
 	}
 }
