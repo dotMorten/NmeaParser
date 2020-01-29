@@ -20,7 +20,6 @@
     <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
-    <PackageOutputPath>$(OutDir)</PackageOutputPath>
     <PackageReleaseNotes>New refined and easier to use v2 API</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
