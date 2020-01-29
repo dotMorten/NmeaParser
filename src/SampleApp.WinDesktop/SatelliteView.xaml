@@ -68,7 +68,7 @@
                                     </StackPanel>
                                 </Ellipse.ToolTip>
                             </Ellipse>
-                            <TextBlock Text="{Binding PrnNumber}" Margin="8,-8" />
+                            <TextBlock Text="{Binding Id}" Margin="8,-8" />
                         </Canvas>
                     </local:PolarPlacementItem>
                 </DataTemplate>

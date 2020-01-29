@@ -41,7 +41,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left">
-                        <TextBlock Text="{Binding PrnNumber}"
+                        <TextBlock Text="{Binding Id}"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Center" >
                             <TextBlock.Foreground>
