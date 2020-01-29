@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Esri.ArcGISRuntime.Mapping;
-using NmeaParser;
 
 namespace SampleApp.WinDesktop
 {
@@ -30,10 +21,10 @@ namespace SampleApp.WinDesktop
             Filter = "Text files|*.txt|NMEA Log|*.nmea|All files|*.*",
             InitialDirectory = new System.IO.FileInfo(typeof(MainWindow).Assembly.Location).DirectoryName
         };
+
         public MainWindow()
         {
             InitializeComponent();
-            mapView.Map = new Map(Basemap.CreateNavigationVector());
 
             //Get list of serial ports for device tab
             var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s=>s);
@@ -46,7 +37,6 @@ namespace SampleApp.WinDesktop
 
             //Use a log file for playing back logged data
             var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
-
             StartDevice(device);
         }
 
@@ -75,10 +65,9 @@ namespace SampleApp.WinDesktop
             //Start new device
             currentDevice = device;
             currentDevice.MessageReceived += device_MessageReceived;
-            mapView.LocationDisplay.DataSource = new NmeaLocationProvider(device);
-            mapView.LocationDisplay.IsEnabled = true;
-            mapView.LocationDisplay.InitialZoomScale = 5000;
-            mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Navigation;
+            view2d.NmeaDevice = device;
+            view3d.NmeaDevice = device;
+
             if (device is NmeaParser.NmeaFileDevice)
                 currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
             else if (device is NmeaParser.SerialPortDevice)

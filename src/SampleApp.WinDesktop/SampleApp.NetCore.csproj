@@ -4,7 +4,12 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <RootNamespace>SampleApp.WinDesktop</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="car.glb" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NmeaParser\NmeaParser.csproj" />
@@ -14,8 +19,9 @@
       <Link>NmeaSampleData.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.7.0" />
+    <Content Include="car.glb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
