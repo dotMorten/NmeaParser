@@ -8,8 +8,7 @@ using Android.Content.PM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NmeaParser.Nmea.Gps;
-using NmeaParser.Nmea;
+using NmeaParser.Messages;
 
 namespace SampleApp.Droid
 {
@@ -157,7 +156,7 @@ namespace SampleApp.Droid
             //Start();
         }
 
-        Queue<NmeaParser.Nmea.NmeaMessage> messages = new Queue<NmeaParser.Nmea.NmeaMessage>(100);
+        Queue<NmeaParser.Messages.NmeaMessage> messages = new Queue<NmeaParser.Messages.NmeaMessage>(100);
         private void Listener_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
         {
             var message = e.Message;

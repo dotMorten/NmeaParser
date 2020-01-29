@@ -18,11 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NmeaParser.Nmea;
-using NmeaParser.Nmea.Gps;
+using NmeaParser.Messages;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Reflection;
 
 namespace NmeaParser.Tests
 {
@@ -58,7 +58,7 @@ namespace NmeaParser.Tests
                         byte checksum = (byte)Convert.ToInt32(line.Substring(idx + 1), 16);
                         Assert.AreEqual(checksum, msg.Checksum);
                     }
-                    Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+                    Assert.IsNotInstanceOfType(msg, typeof(UnknownMessage), "Type " + msg.MessageType + " not supported");
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace NmeaParser.Tests
                     }
                     if (msg.MessageType == "PTNL" || msg.MessageType == "GNVTG" || msg.MessageType == "GNZDA")
                         continue; //TODO
-                    Assert.IsNotInstanceOfType(msg, typeof(Nmea.UnknownMessage), "Type " + msg.MessageType + " not supported");
+                    Assert.IsNotInstanceOfType(msg, typeof(UnknownMessage), "Type " + msg.MessageType + " not supported");
                 }
             }
         }
@@ -193,13 +193,13 @@ namespace NmeaParser.Tests
             Assert.AreEqual(new TimeSpan(23, 52, 36), gga.FixTime);
             Assert.AreEqual(39.432465, gga.Latitude);
             Assert.AreEqual(-119.7653516666666667, gga.Longitude, 0.0000000001);
-            Assert.AreEqual(NmeaParser.Nmea.Gga.FixQuality.GpsFix, gga.Quality);
+            Assert.AreEqual(Gga.FixQuality.GpsFix, gga.Quality);
             Assert.AreEqual(10, gga.NumberOfSatellites);
             Assert.AreEqual(.8, gga.Hdop);
             Assert.AreEqual(1378, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
             Assert.AreEqual(-22.1, gga.GeoidalSeparation);
-            Assert.AreEqual("M", gga.HeightOfGeoidUnits);
+            Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(-1, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
         }
@@ -214,13 +214,13 @@ namespace NmeaParser.Tests
             Assert.AreEqual(new TimeSpan(23, 10, 11), gga.FixTime);
             Assert.AreEqual(34.057860634, gga.Latitude);
             Assert.AreEqual(-117.19682109916667, gga.Longitude, 0.0000000001);
-            Assert.AreEqual(NmeaParser.Nmea.Gga.FixQuality.FloatRtk, gga.Quality);
+            Assert.AreEqual(Gga.FixQuality.FloatRtk, gga.Quality);
             Assert.AreEqual(13, gga.NumberOfSatellites);
             Assert.AreEqual(.9, gga.Hdop);
             Assert.AreEqual(403.641, gga.Altitude);
             Assert.AreEqual("M", gga.AltitudeUnits);
             Assert.AreEqual(-32.133, gga.GeoidalSeparation);
-            Assert.AreEqual("M", gga.HeightOfGeoidUnits);
+            Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(0, gga.DgpsStationId);
             Assert.AreEqual(TimeSpan.FromSeconds(1), gga.TimeSinceLastDgpsUpdate);
         }
@@ -230,9 +230,9 @@ namespace NmeaParser.Tests
         {
             string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.LaserRange.Trimble.Ptnla));
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Messages.Trimble.Ptnla));
             Assert.AreEqual(Talker.ProprietaryCode, msg.TalkerId);
-            NmeaParser.Nmea.LaserRange.Trimble.Ptnla ptlna = (NmeaParser.Nmea.LaserRange.Trimble.Ptnla)msg;
+            NmeaParser.Messages.Trimble.Ptnla ptlna = (NmeaParser.Messages.Trimble.Ptnla)msg;
             Assert.AreEqual(2.94, ptlna.HorizontalDistance);
             Assert.AreEqual('M', ptlna.HorizontalDistanceUnits);
             Assert.AreEqual(288.1, ptlna.HorizontalAngle);
@@ -248,9 +248,9 @@ namespace NmeaParser.Tests
         {
             string input = "$PGRME,2.3,M,3.3,M,4.0,M*2B";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Garmin.Pgrme));
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Messages.Garmin.Pgrme));
             Assert.AreEqual(Talker.ProprietaryCode, msg.TalkerId);
-            NmeaParser.Nmea.Garmin.Pgrme rme = (NmeaParser.Nmea.Garmin.Pgrme)msg;
+            NmeaParser.Messages.Garmin.Pgrme rme = (NmeaParser.Messages.Garmin.Pgrme)msg;
             Assert.AreEqual(2.3, rme.HorizontalError);
             Assert.AreEqual("M", rme.HorizontalErrorUnits);
             Assert.AreEqual(3.3, rme.VerticalError);
@@ -686,11 +686,11 @@ namespace NmeaParser.Tests
         {
             string input = "$PGRMZ,,,*7E";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Messages.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Messages.Garmin.Pgrmz)msg;
             Assert.AreEqual(double.NaN, rmz.Altitude, "Altitude");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
+            Assert.AreEqual(NmeaParser.Messages.Garmin.Pgrmz.AltitudeUnit.Unknown, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Messages.Garmin.Pgrmz.PositionFixType.Unknown, rmz.FixType, "FixDimension");
         }
 
         [TestMethod]
@@ -698,11 +698,11 @@ namespace NmeaParser.Tests
         {
             string input = "$PGRMZ,93,f,3*21";
             var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Nmea.Gps.Garmin.Pgrmz));
-            var rmz = (NmeaParser.Nmea.Gps.Garmin.Pgrmz)msg;
+            Assert.IsInstanceOfType(msg, typeof(NmeaParser.Messages.Garmin.Pgrmz));
+            var rmz = (NmeaParser.Messages.Garmin.Pgrmz)msg;
             Assert.AreEqual(93d, rmz.Altitude, "Altitude");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
-            Assert.AreEqual(NmeaParser.Nmea.Gps.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
+            Assert.AreEqual(NmeaParser.Messages.Garmin.Pgrmz.AltitudeUnit.Feet, rmz.Unit, "Unit");
+            Assert.AreEqual(NmeaParser.Messages.Garmin.Pgrmz.PositionFixType.Fix3D, rmz.FixType, "FixDimension");
         }
 
         [TestMethod]
@@ -810,6 +810,71 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Zda));
             var zda = (Zda)msg;
             Assert.AreEqual(new DateTimeOffset(2015, 09, 21, 22, 56, 27, 00, TimeSpan.Zero), zda.FixDateTime);
+        }
+
+        [TestMethod]
+        public void TestCustomMessageRegistration()
+        {
+            int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
+            Assert.AreEqual(2, count);
+            var input = "$PTEST,TEST*7C";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(CustomMessage));
+            var cmsg = (CustomMessage)msg;
+            Assert.AreEqual("TEST", cmsg.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestCustomMessageDuplicateRegistrationFailure()
+        {
+            int count = NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, true);
+            Assert.AreEqual(2, count);
+            NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly, false); // This will throw
+        }
+
+        [TestMethod]
+        public void TestCustomMultiMessage()
+        {
+            NmeaMessage.RegisterNmeaMessage(typeof(CustomMultiMessage).GetTypeInfo(), "", true);
+            var input1 = "$PTST2,2,1,123,A,B,C,D*2A";
+            var input2 = "$PTST2,2,2,123,E,F,G,H*21";
+            var msg1 = NmeaMessage.Parse(input1);
+            var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+            Assert.IsInstanceOfType(msg2, typeof(CustomMultiMessage));
+            var cmsg = (CustomMultiMessage)msg2;
+            Assert.AreEqual(8, cmsg.Values.Count);
+        }
+
+        [NmeaMessageType("PTEST")]
+        private class CustomMessage : NmeaMessage
+        {
+            public CustomMessage(string type, string[] parameters) : base(type, parameters)
+            {
+                Value = parameters[0];
+            }
+            public string Value { get; }
+        }
+
+        [NmeaMessageType("PTST2")]
+        private class CustomMultiMessage : NmeaMultiSentenceMessage, IMultiSentenceMessage
+        {   
+            public CustomMultiMessage(string type, string[] parameters) : base(type, parameters)
+            {
+            }
+            public string Id { get; private set; }
+            public List<string> Values { get; } = new List<string>();
+            protected override int MessageCountIndex => 0;
+            protected override int MessageNumberIndex => 1;
+            protected override bool ParseSentences(Talker talkerType, string[] message)
+            {
+                if (Id == null)
+                    Id = message[2]; //First time
+                else if (Id != message[2])
+                    return false; // This message doesn't match previous message
+                Values.AddRange(message.Skip(3));
+                return true;
+            }
         }
     }
 }

@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Represents an unknown message type

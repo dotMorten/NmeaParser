@@ -15,7 +15,7 @@
 using System;
 using System.Globalization;
 
-namespace NmeaParser.Nmea.LaserRange
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Laser Range Measurement

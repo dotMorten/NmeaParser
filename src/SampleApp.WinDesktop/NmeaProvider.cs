@@ -24,33 +24,33 @@ namespace SampleApp.WinDesktop
             ParseMessage(message);
         }
 
-        public void ParseMessage(NmeaParser.Nmea.NmeaMessage message)
+        public void ParseMessage(NmeaParser.Messages.NmeaMessage message)
         {
             bool isNewFix = false;
             bool lostFix = false;
             double lat = 0;
             double lon = 0;
-            if (message is NmeaParser.Nmea.Garmin.Pgrme)
+            if (message is NmeaParser.Messages.Garmin.Pgrme)
             {
-                m_Accuracy = ((NmeaParser.Nmea.Garmin.Pgrme)message).HorizontalError;
+                m_Accuracy = ((NmeaParser.Messages.Garmin.Pgrme)message).HorizontalError;
             }
-            else if(message is NmeaParser.Nmea.Gst)
+            else if(message is NmeaParser.Messages.Gst)
             {
-                Gst = ((NmeaParser.Nmea.Gst)message);
+                Gst = ((NmeaParser.Messages.Gst)message);
                 m_Accuracy = Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError);
             }
-            else if(message is NmeaParser.Nmea.Gga)
+            else if(message is NmeaParser.Messages.Gga)
             {
-                Gga = ((NmeaParser.Nmea.Gga)message);
-                isNewFix = Gga.Quality != NmeaParser.Nmea.Gga.FixQuality.Invalid;
+                Gga = ((NmeaParser.Messages.Gga)message);
+                isNewFix = Gga.Quality != NmeaParser.Messages.Gga.FixQuality.Invalid;
                 lostFix = !isNewFix;
                 m_altitude = Gga.Altitude;
                 lat = Gga.Latitude;
                 lon = Gga.Longitude;
             }
-            else if (message is NmeaParser.Nmea.Rmc)
+            else if (message is NmeaParser.Messages.Rmc)
             {
-                Rmc = (NmeaParser.Nmea.Rmc)message;
+                Rmc = (NmeaParser.Messages.Rmc)message;
                 if (Rmc.Active)
                 {
                     isNewFix = true;
@@ -61,9 +61,9 @@ namespace SampleApp.WinDesktop
                 }
                 else lostFix = true;
             }
-            else if (message is NmeaParser.Nmea.Gsa)
+            else if (message is NmeaParser.Messages.Gsa)
             {
-                Gsa = (NmeaParser.Nmea.Gsa)message;
+                Gsa = (NmeaParser.Messages.Gsa)message;
             }
             if (isNewFix)
             {
@@ -92,9 +92,9 @@ namespace SampleApp.WinDesktop
                 return System.Threading.Tasks.Task<bool>.FromResult(true);
         }
 
-        public NmeaParser.Nmea.Gsa Gsa { get; private set; }
-        public NmeaParser.Nmea.Gga Gga { get; private set; }
-        public NmeaParser.Nmea.Rmc Rmc { get; private set; }
-        public NmeaParser.Nmea.Gst Gst { get; private set; }
+        public NmeaParser.Messages.Gsa Gsa { get; private set; }
+        public NmeaParser.Messages.Gga Gga { get; private set; }
+        public NmeaParser.Messages.Rmc Rmc { get; private set; }
+        public NmeaParser.Messages.Gst Gst { get; private set; }
     }
 }

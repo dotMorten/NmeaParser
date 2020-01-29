@@ -15,10 +15,10 @@
 using System;
 using System.Globalization;
 
-namespace NmeaParser.Nmea.LaserRange.Trimble
+namespace NmeaParser.Messages.Trimble
 {
     /// <summary>
-    /// Tree Measurement
+    /// Laser Range Tree Measurement
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ptnlb")]
     [NmeaMessageType("PTNLB")]

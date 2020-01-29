@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NmeaParser.Nmea;
+using NmeaParser.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace NmeaParser.Tests
                 try
                 {
                     Assert.IsInstanceOfType(e.Message, typeof(Gsv));
-                    var msg = (NmeaParser.Nmea.Gsv)e.Message;
+                    var msg = (NmeaParser.Messages.Gsv)e.Message;
                     Assert.IsTrue(((IMultiSentenceMessage)e.Message).IsComplete);
                     Assert.AreEqual(9, msg.SatellitesInView);
                     Assert.AreEqual(9, msg.SVs.Count);
@@ -61,9 +61,9 @@ $GAGSV,4,4,14,19,82,349,40,1,44,220,40,4,24,314,38*5F";
             {
                 try
                 {
-                    Assert.IsInstanceOfType(e.Message, typeof(NmeaParser.Nmea.Gsv));
+                    Assert.IsInstanceOfType(e.Message, typeof(Gsv));
                     Assert.AreEqual(Talker.Multiple, e.Message.TalkerId);
-                    var msg = (NmeaParser.Nmea.Gsv)e.Message;
+                    var msg = (Gsv)e.Message;
                     Assert.AreEqual(Talker.GlobalPositioningSystem, msg.SVs[0].TalkerId);
                     Assert.AreEqual(Talker.GlobalPositioningSystem, msg.SVs[4].TalkerId);
                     Assert.AreEqual(Talker.GlonassReceiver, msg.SVs[8].TalkerId);

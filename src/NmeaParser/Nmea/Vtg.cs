@@ -14,7 +14,7 @@
 
 using System;
 
-namespace NmeaParser.Nmea
+namespace NmeaParser.Messages
 {
     /// <summary>
     /// Course over ground and ground speed

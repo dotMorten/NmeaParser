@@ -15,7 +15,7 @@
 using System;
 using System.Globalization;
 
-namespace NmeaParser.Nmea.Gps.Garmin
+namespace NmeaParser.Messages.Garmin
 {
     /// <summary>
     /// Altitude Information
