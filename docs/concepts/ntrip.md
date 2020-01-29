@@ -60,11 +60,14 @@ namespace Ntrip
         private readonly int _port;
         private string _auth;
         private Socket sckt;
-        public Client(string host, int port, string authKey = null)
+        public Client(string host, int port)
         {
             _host = host;
             _port = port;
-            _auth = authKey;
+        }
+        public Client(string host, int port, string username, string password) : this(host, port)
+        {
+            _auth = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
         }
         public IEnumerable<NtripSource> GetSourceTable()
         {
