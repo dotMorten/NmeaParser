@@ -31,8 +31,10 @@ jobs:
         mkdir artifacts/docs/api
         .tools/omd/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
         
-    - name: Build Documentation
+    - name: Install NuGet
       uses: nuget/setup-nuget@v1
+    
+    - name: Build Documentation
       env:         
         DOCFX_SOURCE_BRANCH_NAME: master
       run: |
