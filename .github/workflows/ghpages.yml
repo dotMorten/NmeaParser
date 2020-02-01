@@ -32,10 +32,11 @@ jobs:
         .tools/omd/generateomd /source=src/NmeaParser /output=artifacts/docs/api/omd.html
         
     - name: Build Documentation
+      uses: nuget/setup-nuget@v1
       env:         
         DOCFX_SOURCE_BRANCH_NAME: master
       run: |
-        dotnet nuget install memberpage -Version 2.48.1 -OutputDirectory docs
+        nuget install memberpage -Version 2.48.1 -OutputDirectory docs
         .tools/docfx/docfx.exe docs/docfx.json
         powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path artifacts\docs_site\api\
       
