@@ -127,7 +127,7 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default","template_overrides"
+      "default","template_overrides","memberpage.2.48.1/content"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

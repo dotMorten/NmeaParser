@@ -25,7 +25,7 @@ jobs:
 
     - name: Install .NET OMD Generator
       run: dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.2.0
-
+    
     - name: Generate OMD
       run: |
         mkdir artifacts/docs/api
@@ -35,6 +35,7 @@ jobs:
       env:         
         DOCFX_SOURCE_BRANCH_NAME: master
       run: |
+        dotnet nuget install memberpage -Version 2.48.1 -OutputDirectory docs
         .tools/docfx/docfx.exe docs/docfx.json
         powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path artifacts\docs_site\api\
       

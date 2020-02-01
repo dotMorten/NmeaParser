@@ -11,14 +11,19 @@ IF NOT EXIST "%DocFxFolder%\v%DocFXVersion%\docfx.exe" (
    powershell -ExecutionPolicy ByPass -command "Expand-Archive -LiteralPath '%DocFxFolder%\docfx_v%DocFXVersion%.zip' -DestinationPath '%DocFxFolder%\v%DocFXVersion%'"
    DEL "%DocFxFolder%\docfx_v%DocFXVersion%.zip" /Q
 )
+IF NOT EXIST "..\.tools\nuget.exe" (
+  powershell -ExecutionPolicy ByPass -command "Invoke-WebRequest -Uri "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -OutFile '%~dp0..\.tools\nuget.exe'"
+)
 
 REM Generate OMD
-dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.2.0
+dotnet tool install --tool-path %~dp0../.tools/omd dotMorten.OmdGenerator --version 1.2.0
 mkdir %~dp0../artifacts/docs/api
-.tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
+%~dp0..\.tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
 
+%~dp0..\.tools\nuget install memberpage -Version 2.48.1 -OutputDirectory %~dp0
+PAUSE
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
-REM %DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
+%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
 ECHO Fixing API Reference Links
 powershell -ExecutionPolicy ByPass -command "%~dp0FixApiRefLinks.ps1" -Path %~dp0..\artifacts\docs_site\api\
 start http://localhost:8080
