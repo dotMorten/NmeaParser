@@ -18,4 +18,8 @@ mkdir %~dp0../artifacts/docs/api
 .tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
 
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
-%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json -t --serve
+REM %DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
+ECHO Fixing API Reference Links
+powershell -ExecutionPolicy ByPass -command "%~dp0FixApiRefLinks.ps1" -Path %~dp0..\artifacts\docs_site\api\
+start http://localhost:8080
+%DocFxFolder%\v%DocFXVersion%\docfx.exe serve %~dp0..\artifacts\docs_site\
