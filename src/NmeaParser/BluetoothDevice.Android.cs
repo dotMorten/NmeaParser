@@ -25,6 +25,20 @@ namespace NmeaParser
     /// <summary>
     /// A Bluetooth NMEA device
     /// </summary>
+    /// <remarks>
+    /// To use this device, ensure you have the necessary permissions in the <c>AndroidManifest.xml</c> file:
+    /// <code lang="xml">
+    /// ```xml
+    /// 	&lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    /// 	&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    /// 	&lt;uses-permission android:name="android.permission.BLUETOOTH" />
+    /// ```
+    /// </code>
+    /// <para>
+    /// Next see MainActivity.cs in the Android sample as a reference:
+    /// https://github.com/dotMorten/NmeaParser/blob/master/src/SampleApp.Droid/MainActivity.cs
+    /// </para>
+    /// </remarks>
     public class BluetoothDevice : NmeaDevice
     {
         private static Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");

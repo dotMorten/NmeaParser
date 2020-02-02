@@ -21,7 +21,6 @@ mkdir %~dp0../artifacts/docs/api
 %~dp0..\.tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
 
 %~dp0..\.tools\nuget install memberpage -Version 2.48.1 -OutputDirectory %~dp0
-PAUSE
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
 %DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
 ECHO Fixing API Reference Links

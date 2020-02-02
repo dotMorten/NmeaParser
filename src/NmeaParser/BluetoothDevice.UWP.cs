@@ -31,6 +31,42 @@ namespace NmeaParser
     /// <summary>
     /// A Bluetooth NMEA device
     /// </summary>
+    /// <remarks>
+    /// To use the NMEA Parser against a bluetooth device in a Universal App,
+    /// ensure the bluetooth capability is enabled by opening <c>package.appxmanifest</c> in a text editor,
+    /// and add the following to the <c>&lt;Capabilities></c> section:
+    /// <code lang="xml">
+    /// &lt;DeviceCapability Name="bluetooth.rfcomm">
+    ///   &lt;Device Id="any">
+    ///     &lt;Function Type="name:serialPort" />
+    ///   &lt;/Device>
+    /// &lt;/DeviceCapability>
+    /// </code>
+    /// <para>
+    /// See more here on bluetooth device capabilities in UWP Apps: https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/how-to-specify-device-capabilities-for-bluetooth
+    /// </para>
+    /// <para>Make sure your Bluetooth device is paired with your Windows Device.</para>
+    /// <code lang="cs">
+    /// //Get list of devices
+    ///     string serialDeviceType = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
+    ///     var devices = await DeviceInformation.FindAllAsync(serialDeviceType);
+    ///     //Select device by name (in this case TruePulse 360B Laser Range Finder)
+    ///     var TruePulse360B = devices.Where(t => t.Name.StartsWith("TP360B-")).FirstOrDefault();
+    ///     //Get service
+    ///     RfcommDeviceService rfcommService = await RfcommDeviceService.FromIdAsync(TruePulse360B.Id);
+    /// if (rfcommService != null)
+    /// {
+    /// 	var rangeFinder = new NmeaParser.BluetoothDevice(rfcommService);
+    ///     rangeFinder.MessageReceived += device_NmeaMessageReceived;
+    /// 	await rangeFinder.OpenAsync();
+    /// }
+    /// ...
+    /// private void device_NmeaMessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
+    /// {
+    ///     // called when a message is received
+    /// }
+    /// </code>
+    /// </remarks>
     public class BluetoothDevice : NmeaDevice
     {
         private Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService? m_deviceService;

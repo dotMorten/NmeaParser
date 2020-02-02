@@ -25,6 +25,23 @@ namespace NmeaParser
     /// <summary>
     /// A Serial Port NMEA device
     /// </summary>
+    /// <remarks>
+    /// Below is an example of connecting to a serial port using .NET Core or .NET Framework.
+    /// Make sure you choose the correct port name and baud rate.
+    /// <code lang="cs">
+    /// string portname = "COM3"; // Change to match the name of the port your device is connected to
+    /// int baudrate = 9600; // Change to the baud rate your device communicates at (usually specified in the manual)
+    /// var port = new System.IO.Ports.SerialPort(portname, baudrate);
+    /// var device = new NmeaParser.SerialPortDevice(port);
+    /// device.MessageReceived += OnNmeaMessageReceived;
+    /// device.OpenAsync();
+    /// ...
+    /// private void OnNmeaMessageReceived(NmeaParser.NmeaDevice sender, NmeaParser.NmeaMessageReceivedEventArgs args)
+    /// {
+    ///    // called when a message is received
+    /// }
+    /// </code>
+    /// </remarks>
     public class SerialPortDevice : NmeaDevice
     {
         /// <summary>
