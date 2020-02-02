@@ -44,10 +44,7 @@ namespace NmeaParser
         /// </summary>
         public System.IO.Ports.SerialPort Port { get; }
 
-        /// <summary>
-        /// Creates the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task<System.IO.Stream> OpenStreamAsync()
         {
             if (!Port.IsOpen)
@@ -55,11 +52,7 @@ namespace NmeaParser
             return Task.FromResult<System.IO.Stream>(Port.BaseStream);
         }
 
-        /// <summary>
-        /// Closes the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
             if (Port.IsOpen)

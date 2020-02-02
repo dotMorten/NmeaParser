@@ -36,20 +36,13 @@ namespace NmeaParser
             m_stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
-        /// <summary>
-        /// Opens the stream asynchronous.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task<Stream> OpenStreamAsync()
         {
             return Task.FromResult(m_stream);
         }
 
-        /// <summary>
-        /// Closes the stream asynchronous.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
             return Task.FromResult(true); //do nothing

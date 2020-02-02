@@ -34,7 +34,7 @@ namespace NmeaParser
         /// <summary>
         /// Gets a list of bluetooth devices that supports serial communication
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A set of bluetooth devices available that supports serial connections</returns>
         public static IEnumerable<Android.Bluetooth.BluetoothDevice> GetBluetoothSerialDevices()
         {
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
@@ -54,10 +54,7 @@ namespace NmeaParser
             m_device = device ?? throw new ArgumentNullException(nameof(device));
         }
         
-        /// <summary>
-        /// Creates the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task<System.IO.Stream> OpenStreamAsync()
         {
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
@@ -70,11 +67,7 @@ namespace NmeaParser
             return Task.FromResult<Stream>(socket.InputStream);
         }
 
-        /// <summary>
-        /// Closes the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
             if (stream == null)

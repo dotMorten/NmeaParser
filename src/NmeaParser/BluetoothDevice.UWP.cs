@@ -42,7 +42,7 @@ namespace NmeaParser
         /// <summary>
         /// Gets a list of bluetooth devices that supports serial communication
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A set of bluetooth devices available that supports serial connections</returns>
         public static async Task<IEnumerable<RfcommDeviceService>> GetBluetoothSerialDevicesAsync()
         {
             string serialDeviceType = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
@@ -83,10 +83,7 @@ namespace NmeaParser
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Creates the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override async Task<System.IO.Stream> OpenStreamAsync()
         {
             var socket = new Windows.Networking.Sockets.StreamSocket();
@@ -120,11 +117,7 @@ namespace NmeaParser
             public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// Closes the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
             if(m_socket == null)

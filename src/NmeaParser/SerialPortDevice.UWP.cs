@@ -54,20 +54,13 @@ namespace NmeaParser
             }
         }
 
-        /// <summary>
-        /// Creates the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task<System.IO.Stream> OpenStreamAsync()
         {
             return Task.FromResult<System.IO.Stream>(m_port.InputStream.AsStreamForRead(0));
         }
 
-        /// <summary>
-        /// Closes the stream the NmeaDevice is working on top off.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
             return Task.CompletedTask;

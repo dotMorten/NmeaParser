@@ -137,7 +137,7 @@ namespace NmeaParser.Messages
         /// </summary>
         /// <param name="message">The NMEA message string.</param>
         /// <param name="previousSentence">The previously received message (only used if parsing multi-sentence messages)</param>
-        /// <returns></returns>
+        /// <returns>The nmea message that was parsed.</returns>
         /// <exception cref="System.ArgumentException">
         /// Invalid nmea message: Missing starting character '$'
         /// or checksum failure
@@ -199,6 +199,7 @@ namespace NmeaParser.Messages
         /// <summary>
         /// Gets the NMEA type id for the message.
         /// </summary>
+        /// <value>The 5 character string that identifies the message type</value>
         public string MessageType { get; }
 
         /// <summary>
@@ -211,12 +212,7 @@ namespace NmeaParser.Messages
         /// </summary>
         public bool IsProprietary => MessageType[0] == 'P'; //Appendix B
 
-        /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
+        /// <inheritdoc />
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);

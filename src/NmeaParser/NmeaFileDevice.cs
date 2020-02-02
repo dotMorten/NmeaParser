@@ -84,10 +84,7 @@ namespace NmeaParser
             }
         }
 
-        /// <summary>
-        /// Gets the stream to perform buffer reads on.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         protected override Task<Stream> GetStreamAsync()
         {

@@ -43,9 +43,9 @@ namespace NmeaParser
         }
 
         /// <summary>
-        /// Opens the device connection.
+        /// Creates and opens the stream the <see cref="NmeaDevice"/> will be working on top off.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A task that represents the asynchronous action.</returns>
         public async Task OpenAsync()
         {
             lock (m_lockObject)
@@ -112,15 +112,16 @@ namespace NmeaParser
         }
 
         /// <summary>
-        /// Creates the stream the NmeaDevice is working on top off.
+        /// Creates and opens the stream the NmeaDevice is working on top off.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The opened data stream.</returns>
+        /// <seealso cref="CloseStreamAsync(Stream)"/>
         protected abstract Task<Stream> OpenStreamAsync();
 
         /// <summary>
         /// Closes the device.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A task that represents the asynchronous action.</returns>
         public async Task CloseAsync()
         {
             if (m_cts != null)
@@ -144,8 +145,9 @@ namespace NmeaParser
         /// <summary>
         /// Closes the stream the NmeaDevice is working on top off.
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns></returns>
+        /// <param name="stream">The stream to be closed.</param>
+        /// <returns>A task that represents the asynchronous action.</returns>
+        /// <seealso cref="OpenStreamAsync"/>
         protected abstract Task CloseStreamAsync(Stream stream);
 
         private void OnData(byte[] data)
@@ -169,7 +171,6 @@ namespace NmeaParser
             foreach(var line in lines)
                 ProcessMessage(line);
         }
-
 
         private IMultiSentenceMessage? _lastMultiMessage;
 
