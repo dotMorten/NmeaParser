@@ -184,7 +184,7 @@ namespace SampleApp.WinDesktop
                     {
 
                         if (progress != null)
-                            progress.Report(string.Format("Trying {0} @ {1}baud", portName, port.BaudRate));
+                            progress.Report(string.Format("Trying {0} @ {1}baud", portName, baud));
                         port.BaudRate = baud;
                         port.ReadTimeout = 2000; //this might not be long enough
                         bool success = false;
