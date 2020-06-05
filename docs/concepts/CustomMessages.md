@@ -28,7 +28,7 @@ NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly); //Registers all ty
 NmeaMessage.RegisterMessage(typeof(CustomMessage).GetTypeInfo());  //Registers a single NMEA message
 ```
 
-Note that these methods will throw if the NMEA type has already been registers (there's an overload where you can declare the `replace` parameter to `true` to overwrite already registered messages.
+Note that these methods will throw if the NMEA type has already been registered (there's an overload where you can declare the `replace` parameter to `true` to overwrite already registered messages.
 
 Next you should be able to test this method using the Parse method:
 ```cs
