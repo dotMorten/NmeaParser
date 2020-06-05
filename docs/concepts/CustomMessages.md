@@ -57,7 +57,7 @@ private class CustomMultiMessage : NmeaMultiSentenceMessage, IMultiSentenceMessa
     protected override bool ParseSentences(Talker talkerType, string[] message)
     {
         // Ensure this message matches the previous message.
-        // Use any indicator to detect message difference, so you can to error out and avoid
+        // Use any indicator to detect message difference, so you can error out and avoid
         // appending the wrong message
         if (Id == null)
             Id = message[2]; //First time it's not set
