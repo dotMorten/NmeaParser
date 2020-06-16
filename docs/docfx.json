@@ -119,7 +119,7 @@
     "globalMetadata": {
       "_appLogoPath": "images/logo.png",
       "_gitContribute": {
-        "branch": "master",
+        "branch": "main",
         "apiSpecFolder": "docs/api_overwrites"
       }
     },
