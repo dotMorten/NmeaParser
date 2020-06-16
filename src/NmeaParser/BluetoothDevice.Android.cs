@@ -36,7 +36,7 @@ namespace NmeaParser
     /// </code>
     /// <para>
     /// Next see MainActivity.cs in the Android sample as a reference:
-    /// https://github.com/dotMorten/NmeaParser/blob/master/src/SampleApp.Droid/MainActivity.cs
+    /// https://github.com/dotMorten/NmeaParser/blob/main/src/SampleApp.Droid/MainActivity.cs
     /// </para>
     /// </remarks>
     public class BluetoothDevice : NmeaDevice
