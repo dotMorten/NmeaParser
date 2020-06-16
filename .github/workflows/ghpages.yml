@@ -36,7 +36,7 @@ jobs:
     
     - name: Build Documentation
       env:         
-        DOCFX_SOURCE_BRANCH_NAME: master
+        DOCFX_SOURCE_BRANCH_NAME: main
       run: |
         nuget install memberpage -Version 2.48.1 -OutputDirectory docs
         .tools/docfx/docfx.exe docs/docfx.json
@@ -56,6 +56,6 @@ jobs:
          git config --local core.autocrlf false
          git add .
          git commit -m "Auto-update doc from commit %GITHUB_SHA%"
-         git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git main:%BRANCH%
+         git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git master:%BRANCH%
          rmdir .git /S /Q
          
