@@ -10,5 +10,5 @@ First ensure you have the necessary permissions in the AndroidManifest.xml file:
 
 Next see MainActivity.cs in the Android sample as a reference:
 
-https://github.com/dotMorten/NmeaParser/blob/master/src/SampleApp.Droid/MainActivity.cs
+https://github.com/dotMorten/NmeaParser/blob/main/src/SampleApp.Droid/MainActivity.cs
 
