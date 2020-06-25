@@ -1,0 +1,10 @@
+{
+  "monikers": [
+    { "moniker_name": "netstandard1.4", "product_name": ".NET Standard 1.4" },
+    { "moniker_name": "net451", "product_name": ".NET Framework" },
+    { "moniker_name": "netcoreapp2.1", "product_name": ".NET Core" },
+    { "moniker_name": "monoandroid70", "product_name": "Xamarin.Android" },
+    { "moniker_name": "xamarinios10", "product_name": "Xamarin.iOS" },
+    { "moniker_name": "uap10.0.16299", "product_name": "uwp" },
+  ]
+}
