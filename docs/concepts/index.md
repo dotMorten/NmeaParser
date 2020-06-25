@@ -31,7 +31,7 @@ You can get the library via [NuGet](http://www.nuget.org) if you have the extens
 ```
 See the Platform specific device creation section in the menu for more specifics on device creation.
 
-### 3. [Browse the API Reference](../api/index.html)
+### 3. [Browse the API Reference](../api/index.md)
 
 ### 4. Explore the Object Model Diagrams
 [.NET Standard OMD](../api/omd.html)
