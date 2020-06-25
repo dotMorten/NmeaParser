@@ -68,6 +68,45 @@
       "disableDefaultFilter": false
     }
   ],
+   "merge": {
+        "content": [
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/netstd"
+            },
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/netfx"
+            },
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/netcore"
+            },
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/android"
+            },
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/uwp"
+            },
+            {
+                "files": "*.yml",
+                "src": "../artifacts/docs/api/ios"
+            }
+        ],
+        "fileMetadata": {
+            "platform": {
+                "../artifacts/docs/api/netstd/*.yml":  [ "netstandard1.4" ],
+				"../artifacts/docs/api/netfx/*.yml":   [ "net451" ],
+				"../artifacts/docs/api/netcore/*.yml": [ "netcoreapp2.1" ],
+				"../artifacts/docs/api/android/*.yml": [ "monoandroid70" ],
+				"../artifacts/docs/api/uwp/*.yml":     [ "uap10.0.16299" ],
+                "../artifacts/docs/api/ios/*.yml":     [ "xamarinios10" ]
+            }
+        },
+        "dest": "api"
+    },
   "build": {
     "content": [
 	{
@@ -98,10 +137,8 @@
           "favicon.ico"
         ]
       },
+
 	   {
-        "files": [
-           "api/omd.html"
-        ],
 		"src" : "../artifacts/docs"
       }
     ],
@@ -126,9 +163,6 @@
     "dest": "../artifacts/docs_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
-    "template": [
-      "default","template_overrides","memberpage.2.48.1/content"
-    ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
