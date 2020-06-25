@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET DocFXVersion=2.48.1
+SET DocFXVersion=2.55
 SET DocFxFolder=%~dp0..\.tools\docfx
 
 REM Download DocFx

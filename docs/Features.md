@@ -6,7 +6,7 @@
   - Trimble Laser Range Finder: `PTNLA`, `PTNLB`
   - TruePulse Laser Range Finder: `PLTIT`
 - Automatic merging of multi-sentence messages for simplified usage.
-- Extensible with custom NMEA messages. [See here](concepts/CustomMessages.html)
+- Extensible with custom NMEA messages. [See here](concepts/CustomMessages.md)
 - Multiple input devices out of the box
   - System.IO.Stream (all platforms)
   - Emulation from NMEA log file (all platforms)
