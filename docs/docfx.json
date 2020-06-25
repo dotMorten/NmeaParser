@@ -71,9 +71,8 @@
   "build": {
     "content": [
 	  {
-        "files": [
-          "api/**/index.md"
-        ]
+        "version": "netstandard1.4",
+        "files": [ "api/netstd/**.md" ]
       },
       {
         "version": "netstandard1.4",
@@ -83,6 +82,10 @@
         ],
 		"src" : "../artifacts/docs"
       },
+	  {
+        "version": "net451",
+        "files": [ "api/netfx/**.md" ]
+      },
       {
         "version": "net451",
         "files": [
@@ -90,6 +93,10 @@
           "api/netfx/toc.yml",
         ],
 		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "netcoreapp2.1",
+        "files": [ "api/netcore/**.md" ]
       },
       {
         "version": "netcoreapp2.1",
@@ -99,6 +106,10 @@
         ],
 		"src" : "../artifacts/docs"
       },
+	  {
+        "version": "monoandroid70",
+        "files": [ "api/android/**.md" ]
+      },
       {
         "version": "monoandroid70",
         "files": [
@@ -107,6 +118,10 @@
         ],
 		"src" : "../artifacts/docs"
       },
+	  {
+        "version": "xamarinios10",
+        "files": [ "api/ios/**.md" ]
+      },
       {
         "version": "xamarinios10",
         "files": [
@@ -114,6 +129,10 @@
           "api/ios/toc.yml",
         ],
 		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "uap10.0.16299",
+        "files": [ "api/uwp/**.md" ]
       },
       {
         "version": "uap10.0.16299",
