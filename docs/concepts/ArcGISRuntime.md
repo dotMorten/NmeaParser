@@ -39,8 +39,8 @@ namespace NmeaParser.ArcGIS
             {
                 LocationChanged?.Invoke(this, new LocationInfo()
                 {
-                    Course = rmc.Course,
-                    Speed = rmc.Speed,
+                    Course = double.IsNaN(rmc.Course) ? 0 : rmc.Course, // Current ArcGIS Runtime limitation that course can't be NaN
+                    Speed = double.IsNaN(rmc.Speed) ? 0 : rmc.Speed,
                     Location = new MapPoint(rmc.Longitude, rmc.Latitude, SpatialReferences.Wgs84)
                 });
             }
