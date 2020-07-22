@@ -28,7 +28,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
     [NmeaMessageType("--RMC")]
-    public class Rmc : NmeaMessage
+    public class Rmc : NmeaMessage, ITimestampedMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Rmc"/> class.
@@ -93,5 +93,7 @@ namespace NmeaParser.Messages
         /// Magnetic Variation
         /// </summary>
         public double MagneticVariation { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixTime.TimeOfDay;
     }
 }

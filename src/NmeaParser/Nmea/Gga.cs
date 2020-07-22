@@ -26,7 +26,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]
-    public class Gga : NmeaMessage
+    public class Gga : NmeaMessage, ITimestampedMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gga"/> class.
@@ -122,6 +122,8 @@ namespace NmeaParser.Messages
         /// Differential Reference Station ID
         /// </summary>
         public int DgpsStationId { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixTime;
 
         /// <summary>
         /// Fix quality indicater

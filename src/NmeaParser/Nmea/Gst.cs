@@ -21,7 +21,7 @@ namespace NmeaParser.Messages
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgst")]
     [NmeaMessageType("--GST")]
-    public class Gst : NmeaMessage
+    public class Gst : NmeaMessage, ITimestampedMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gst"/> class.
@@ -82,5 +82,7 @@ namespace NmeaParser.Messages
         /// Standard deviation of altitude error in meters.
         /// </summary>
         public double SigmaHeightError { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixTime;
     }
 }

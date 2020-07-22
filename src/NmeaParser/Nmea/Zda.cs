@@ -22,7 +22,7 @@ namespace NmeaParser.Messages
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Zda")]
     [NmeaMessageType("--ZDA")]
-    public class Zda : NmeaMessage
+    public class Zda : NmeaMessage, ITimestampedMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Zda"/> class.
@@ -53,5 +53,7 @@ namespace NmeaParser.Messages
         /// Gets the time of fix
         /// </summary>
         public DateTimeOffset FixDateTime { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixDateTime.TimeOfDay;
     }
 }
