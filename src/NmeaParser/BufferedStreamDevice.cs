@@ -72,6 +72,7 @@ namespace NmeaParser
         // in lastLineRead by lastLineRead at a steady stream
         private class BufferedStream : Stream
         {
+            private bool isDisposed;
             private readonly StreamReader m_sr;
             private byte[] m_buffer = new byte[0];
             private readonly System.Threading.Timer m_timer;
@@ -96,6 +97,9 @@ namespace NmeaParser
                 while (groupToken == null && (lastLineRead == null || !lastLineRead.StartsWith("$", StringComparison.Ordinal)))
                 {
                     lastLineRead = ReadLine(); //seek forward to first nmea token
+                    if (isDisposed)
+                        return;
+                    if(lastLineRead != null)
                     AppendToBuffer(lastLineRead);
                 }
                 if(groupToken == null && lastLineRead != null)
@@ -105,7 +109,7 @@ namespace NmeaParser
                         groupToken = values[0];
                 }
                 lastLineRead = ReadLine();
-                while (!lastLineRead.StartsWith(groupToken, StringComparison.Ordinal)) //keep reading until messages start repeating again
+                while (!isDisposed && lastLineRead?.StartsWith(groupToken, StringComparison.Ordinal) == false) //keep reading until messages start repeating again
                 {
                     AppendToBuffer(lastLineRead);
                     lastLineRead = ReadLine();
@@ -122,8 +126,10 @@ namespace NmeaParser
                     m_buffer = newBuffer;
                 }
             }
-            private string ReadLine()
+            private string? ReadLine()
             {
+                if (isDisposed)
+                    return null;
                 if (m_sr.EndOfStream)
                     m_sr.BaseStream.Seek(0, SeekOrigin.Begin); //start over
                 return m_sr.ReadLine() + '\n';
@@ -194,13 +200,14 @@ namespace NmeaParser
             {
                 throw new NotSupportedException();
             }
-
+            
             /// <inheritdoc />
             protected override void Dispose(bool disposing)
             {
-                base.Dispose(disposing);
-                m_sr.Dispose();
+                isDisposed = true;
                 m_timer.Dispose();
+                m_sr.Dispose();
+                base.Dispose(disposing);
             }
         }
     }
