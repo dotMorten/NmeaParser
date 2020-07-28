@@ -150,7 +150,7 @@ namespace NmeaParser.ArcGIS
                 {
                     // Vertical id 115700 == ellipsoid reference system. Gga is geoid, but we subtract GeoidalSeparation to simplify 
                     // vertical transformations from the simpler/better known ellipsoidal model
-                    position = new MapPoint(gga.Longitude, gga.Latitude, gga.Altitude - gga.GeoidalSeparation, SpatialReference.Create(4326, 115700));
+                    position = new MapPoint(gga.Longitude, gga.Latitude, gga.Altitude + gga.GeoidalSeparation, SpatialReference.Create(4326, 115700));
                 }
             }
             if (rmc != null && rmc.FixTime.TimeOfDay == timeOfFix)
