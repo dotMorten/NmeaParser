@@ -47,8 +47,7 @@ namespace SampleApp.WinDesktop
             else if(message is NmeaParser.Messages.Gst gst)
             {
                 Gst = gst;
-                int significantDigits = (int)Math.Ceiling(-Math.Log(Math.Min(Gst.SigmaLatitudeError%1, Gst.SigmaLongitudeError%1)));
-                m_Accuracy = Math.Round(Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError), significantDigits);
+                m_Accuracy = Math.Round(Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError), 3);
             }
             else if (message is NmeaParser.Messages.Rmc rmc)
             {
