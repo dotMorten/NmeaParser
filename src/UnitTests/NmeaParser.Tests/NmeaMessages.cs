@@ -516,7 +516,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(1, gns.ModeIndicators.Length);
             Assert.AreEqual(19, gns.NumberOfSatellites);
             Assert.AreEqual(.6, gns.Hdop);
-            Assert.AreEqual(406.110, gns.OrhometricHeight);
+            Assert.AreEqual(406.110, gns.OrthometricHeight);
             Assert.AreEqual(-26.294, gns.GeoidalSeparation);
             Assert.AreEqual("0138", gns.DgpsStationId);
             Assert.AreEqual(Gns.NavigationalStatus.Safe, gns.Status);
@@ -542,7 +542,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(6, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
-            Assert.AreEqual(double.NaN, gns.OrhometricHeight);
+            Assert.AreEqual(double.NaN, gns.OrthometricHeight);
             Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.FromSeconds(2), gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual("0", gns.DgpsStationId);
@@ -573,7 +573,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(Gns.Mode.NoFix, gns.ModeIndicators[4]);
             Assert.AreEqual(10, gns.NumberOfSatellites);
             Assert.AreEqual(1.4, gns.Hdop);
-            Assert.AreEqual(402.411, gns.OrhometricHeight);
+            Assert.AreEqual(402.411, gns.OrthometricHeight);
             Assert.AreEqual(-32.133, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.MaxValue, gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual(null, gns.DgpsStationId);
@@ -621,7 +621,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(4, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
-            Assert.AreEqual(double.NaN, gns.OrhometricHeight);
+            Assert.AreEqual(double.NaN, gns.OrthometricHeight);
             Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.FromSeconds(2), gns.TimeSinceLastDgpsUpdate);
         }

@@ -149,7 +149,7 @@ namespace NmeaParser.Messages
             ModeIndicators = message[5].Select(t => ParseModeIndicator(t)).ToArray();
             NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
             Hdop = NmeaMessage.StringToDouble(message[7]);
-            OrhometricHeight = NmeaMessage.StringToDouble(message[8]);
+            OrthometricHeight = NmeaMessage.StringToDouble(message[8]);
             GeoidalSeparation = NmeaMessage.StringToDouble(message[9]);
             var timeInSeconds = StringToDouble(message[10]);
             if (!double.IsNaN(timeInSeconds))
@@ -236,7 +236,7 @@ namespace NmeaParser.Messages
         /// <summary>
         /// Orthometric height in meters (MSL reference)
         /// </summary>
-        public double OrhometricHeight { get; }
+        public double OrthometricHeight { get; }
 
         /// <summary>
         /// Geoidal separation in meters - the difference between the earth ellipsoid surface and mean-sea-level (geoid) surface defined by the reference datum used in the position solution<br/>
