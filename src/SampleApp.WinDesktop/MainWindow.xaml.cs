@@ -14,7 +14,7 @@ namespace SampleApp.WinDesktop
     public partial class MainWindow : Window
     {
         private Queue<string> messages = new Queue<string>(101);
-        private NmeaParser.NmeaDevice currentDevice;
+        public static NmeaParser.NmeaDevice currentDevice;
         //Dialog for browsing to nmea log files
         private Microsoft.Win32.OpenFileDialog nmeaOpenFileDialog = new Microsoft.Win32.OpenFileDialog()
         {

@@ -75,7 +75,7 @@
                                 <TextBlock Text="Serial port:" />
                                 <ComboBox x:Name="serialPorts" />
                                 <TextBlock Text="Baud rate:" />
-                                <ComboBox x:Name="baudRates" SelectedIndex="3">
+                                <ComboBox x:Name="baudRates" SelectedIndex="5">
                                     <ComboBoxItem>1200</ComboBoxItem>
                                     <ComboBoxItem>2400</ComboBoxItem>
                                     <ComboBoxItem>4800</ComboBoxItem>
@@ -90,6 +90,9 @@
                         </GroupBox>
                     </StackPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="NTRIP">
+                <local:NtripView />
             </TabItem>
         </TabControl>
 
