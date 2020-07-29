@@ -36,7 +36,7 @@ namespace SampleApp.WinDesktop
             //var device = new NmeaParser.SerialPortDevice(portName);
 
             //Use a log file for playing back logged data
-            var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
+            var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt") { EmulatedBaudRate = 9600, BurstRate = TimeSpan.FromSeconds(1d) };
             StartDevice(device);
         }
 
