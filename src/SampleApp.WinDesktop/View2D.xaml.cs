@@ -28,7 +28,7 @@ namespace SampleApp.WinDesktop
             }
 
             mapView.LocationDisplay.InitialZoomScale = 5000;
-            mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Navigation;
+            mapView.LocationDisplay.AutoPanMode = Esri.ArcGISRuntime.UI.LocationDisplayAutoPanMode.Recenter;
         }
 
         public NmeaDevice NmeaDevice
@@ -51,7 +51,7 @@ namespace SampleApp.WinDesktop
             mapView.LocationDisplay.IsEnabled = false;
             if (newDevice != null)
             {
-                mapView.LocationDisplay.DataSource = new NmeaLocationProvider(newDevice);
+                mapView.LocationDisplay.DataSource = new NmeaLocationDataSource(newDevice);
                 mapView.LocationDisplay.IsEnabled = true;
             }
         }
