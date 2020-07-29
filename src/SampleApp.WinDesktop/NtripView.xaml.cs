@@ -1,6 +1,7 @@
 ﻿using NmeaParser.Gnss.Ntrip;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +65,12 @@ namespace SampleApp.WinDesktop
             }
             counter = 0;
             client.Connect(stream.Mountpoint);
+            client.Disconnected += (s, e) =>
+            {
+                Debug.WriteLine("NTRIP Stream Disconnected. Retrying...");
+                // Try and reconnect after a disconnect
+                client.Connect(stream.Mountpoint);
+            };
             stop = client.CloseAsync;
             ntripstatus.Text = $"Connected";
         }

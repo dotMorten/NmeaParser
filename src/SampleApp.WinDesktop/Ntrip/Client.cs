@@ -11,6 +11,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************
+#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -103,15 +104,24 @@ namespace NmeaParser.Gnss.Ntrip
         private async Task ReceiveThread()
         {
             byte[] buffer = new byte[65536];
-
+            sckt.ReceiveTimeout = 1000;
             while (connected && sckt != null)
             {
-                int count = sckt.Receive(buffer);
+                int count = sckt.Receive(buffer, SocketFlags.None, out SocketError errorCode);
                 if (count > 0)
                 {
                     DataReceived?.Invoke(this, buffer.Take(count).ToArray());
                 }
-                await Task.Delay(10);
+                await Task.Yield();
+                if (!sckt.Connected)
+                {
+                    if (connected)
+                    {
+                        connected = false;
+                        Disconnected?.Invoke(this, EventArgs.Empty);
+                    }
+                    break;
+                }
             }
             sckt?.Shutdown(SocketShutdown.Both);
             sckt?.Dispose();
@@ -136,5 +146,6 @@ namespace NmeaParser.Gnss.Ntrip
         }
 
         public event EventHandler<byte[]>? DataReceived;
+        public event EventHandler Disconnected;
     }
 }
