@@ -50,7 +50,7 @@ namespace SampleApp.WinDesktop
                 Rmc = rmc;
                 if (Rmc.Active)
                 {
-                    m_speed = double.IsNaN(Rmc.Speed) ? Rmc.Speed : 0;
+                    m_speed = double.IsNaN(Rmc.Speed) ? 0 : Rmc.Speed;
                     if (!double.IsNaN(Rmc.Course))
                         m_course = Rmc.Course;
                     lat = Rmc.Latitude;
@@ -71,7 +71,7 @@ namespace SampleApp.WinDesktop
                     lon = Rmc.Longitude;
                     m_altitude = gga.Altitude + gga.GeoidalSeparation; //Convert to ellipsoidal height
                 }
-                if (gga.Quality != NmeaParser.Messages.Gga.FixQuality.Invalid || gga.Quality == NmeaParser.Messages.Gga.FixQuality.Estimated)
+                if (gga.Quality == NmeaParser.Messages.Gga.FixQuality.Invalid || gga.Quality == NmeaParser.Messages.Gga.FixQuality.Estimated)
                 {
                     lostFix = true;
                 }
