@@ -6,20 +6,24 @@ namespace SampleApp.WinDesktop
 {
     public class NmeaLocationDataSource : Esri.ArcGISRuntime.Location.LocationDataSource
     {
-        private NmeaParser.NmeaDevice device;
+        private static SpatialReference wgs84_ellipsoidHeight = SpatialReference.Create(4326, 115700);
+        private readonly NmeaParser.NmeaDevice m_device;
         private double m_Accuracy = 0;
         private double m_altitude = double.NaN;
         private double m_speed = 0;
         private double m_course = 0;
-        private bool supportGNMessages; // If device detect GN* messages, ignore all other Talker ID
-        private bool supportGGaMessages; //If device support GGA, ignore RMC for location
+        private bool m_startStopDevice;
+        private bool m_supportGNMessages; // If device detect GN* messages, ignore all other Talker ID
+        private bool m_supportGGaMessages; //If device support GGA, ignore RMC for location
 
-        public NmeaLocationDataSource(NmeaParser.NmeaDevice device)
+        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true)
         {
-            this.device = device;
-            if(device != null)
-                device.MessageReceived += device_MessageReceived;
+            if (device == null)
+                throw new ArgumentNullException(nameof(device));
+            this.m_device = device;
+            m_startStopDevice = startStopDevice;
         }
+
         void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
         {
             var message = e.Message;
@@ -32,8 +36,8 @@ namespace SampleApp.WinDesktop
             double lat = 0;
             double lon = 0;
             if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
-                supportGNMessages = true;
-            else if(supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
+                m_supportGNMessages = true;
+            else if(m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
                     return; // If device supports combined GN* messages, ignore non-GN messages
 
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
@@ -61,15 +65,15 @@ namespace SampleApp.WinDesktop
                 {
                     lostFix = true;
                 }
-                isNewFix = !supportGGaMessages;
+                isNewFix = !m_supportGGaMessages;
             }
             else if (message is NmeaParser.Messages.Gga gga)
             {
-                supportGGaMessages = true;
+                m_supportGGaMessages = true;
                 if (gga.Quality != NmeaParser.Messages.Gga.FixQuality.Invalid)
                 {
-                    lat = Rmc.Latitude;
-                    lon = Rmc.Longitude;
+                    lat = gga.Latitude;
+                    lon = gga.Longitude;
                     m_altitude = gga.Altitude + gga.GeoidalSeparation; //Convert to ellipsoidal height
                 }
                 if (gga.Quality == NmeaParser.Messages.Gga.FixQuality.Invalid || gga.Quality == NmeaParser.Messages.Gga.FixQuality.Estimated)
@@ -89,20 +93,22 @@ namespace SampleApp.WinDesktop
                     m_Accuracy, m_speed, m_course, lostFix));
             }
         }
-        private static SpatialReference wgs84_ellipsoidHeight = SpatialReference.Create(4326, 115700);
+
         protected override Task OnStartAsync()
         {
-            if (device != null)
-                return this.device.OpenAsync();
+            m_device.MessageReceived += device_MessageReceived;
+            if (m_startStopDevice)
+                return this.m_device.OpenAsync();
             else
                 return System.Threading.Tasks.Task<bool>.FromResult(true);
         }
 
         protected override Task OnStopAsync()
         {
+            m_device.MessageReceived -= device_MessageReceived;
             m_Accuracy = double.NaN;
-            if(this.device != null)
-                return this.device.CloseAsync();
+            if(m_startStopDevice)
+                return this.m_device.CloseAsync();
             else
                 return System.Threading.Tasks.Task<bool>.FromResult(true);
         }

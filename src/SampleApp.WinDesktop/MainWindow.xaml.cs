@@ -77,6 +77,7 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.PortName,
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
+            _ = device.OpenAsync();
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
