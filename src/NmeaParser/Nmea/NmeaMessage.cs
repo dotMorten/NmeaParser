@@ -149,7 +149,7 @@ namespace NmeaParser.Messages
 
             int checksum = -1;
             if (message[0] != '$')
-                throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
+                throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
             var idx = message.IndexOf('*');
             if (idx >= 0)
             {
@@ -164,7 +164,7 @@ namespace NmeaParser.Messages
                     checksumTest ^= Convert.ToByte(message[i]);
                 }
                 if (checksum != checksumTest)
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid NMEA message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
             }
 
             string[] parts = message.Split(new char[] { ',' });
