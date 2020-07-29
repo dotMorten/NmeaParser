@@ -67,15 +67,16 @@ namespace SampleApp.WinDesktop
             symb.Width = 3; symb.Depth = 5; symb.Height = 2; symb.AnchorPosition = SceneSymbolAnchorPosition.Bottom;
             graphic3D.Symbol = symb;
             sceneView.GraphicsOverlays["Position"].Graphics.Add(graphic3D);
-
             sceneView.CameraController = new OrbitGeoElementCameraController(sceneView.GraphicsOverlays["Position"].Graphics[0], 200);
         }
-        
+
         private int updateId = 0;
         private async void UpdateLocation(double latitude, double longitude, double newHeading)
         {
             // Handle 3D updates on 3D Scene
             var cid = ++updateId;
+            if (double.IsNaN(newHeading))
+                newHeading = 0;
             var start = graphic3D.Geometry as MapPoint;
             if (start == null)
             {

@@ -10,7 +10,7 @@
         <!--Map-->
         <esri:MapView x:Name="mapView" Grid.Row="1">
             <local:RestoreAutoPanMode.RestoreAutoPanSettings>
-                <local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Navigation" IsEnabled="True" RestoreScale="5000" />
+                <local:RestoreAutoPanMode DelayInSeconds="2.5" PanMode="Recenter" IsEnabled="True" RestoreScale="5000" />
             </local:RestoreAutoPanMode.RestoreAutoPanSettings>
         </esri:MapView>
 
