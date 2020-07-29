@@ -27,23 +27,21 @@ namespace SampleApp.WinDesktop
 		{
 			InitializeComponent();
 		}
-
-		public Gsv GsvMessage
+		Dictionary<Talker, Gsv> messages = new Dictionary<Talker, Gsv>();
+		public void SetGsv(Gsv message)
 		{
-			get { return (Gsv)GetValue(GsvMessageProperty); }
-			set { SetValue(GsvMessageProperty, value); }
+			messages[message.TalkerId] = message;
+			UpdateSatellites();
+		}
+		public void ClearGsv()
+		{
+			messages.Clear();
+			UpdateSatellites();
 		}
 
-		public static readonly DependencyProperty GsvMessageProperty =
-			DependencyProperty.Register(nameof(GsvMessage), typeof(Gsv), typeof(SatelliteView), new PropertyMetadata(null, OnGsvMessagePropertyChanged));
-
-		private static void OnGsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private void UpdateSatellites()
 		{
-			var gsv = e.NewValue as Gsv;
-			if (gsv == null)
-				(d as SatelliteView).satellites.ItemsSource = null;
-			else
-				(d as SatelliteView).satellites.ItemsSource = gsv.SVs;
+			satellites.ItemsSource = messages.Values.SelectMany(g => g.SVs);
 		}
 	}
 	public class PolarPlacementItem : ContentControl
@@ -107,7 +105,8 @@ namespace SampleApp.WinDesktop
 				{
 					case Talker.GlobalPositioningSystem: return Color.FromArgb(alpha, 255, 0, 0);
 					case Talker.GalileoPositioningSystem: return Color.FromArgb(alpha, 0, 255, 0);
-					case Talker.GlonassReceiver: return Color.FromArgb(255, 0, 0, alpha);
+					case Talker.GlonassReceiver: return Color.FromArgb(alpha, 0, 0, 255);
+					case Talker.BeiDouNavigationSatelliteSystem : return Color.FromArgb(alpha, 0, 255, 255);
 					case Talker.GlobalNavigationSatelliteSystem: return Color.FromArgb(alpha, 0, 0, 0);
 					default: return Colors.CornflowerBlue;
 				}

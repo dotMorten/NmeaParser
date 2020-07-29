@@ -39,8 +39,7 @@
                     </Grid.RowDefinitions>
                     <local:SatelliteView MaxWidth="{Binding ActualHeight, ElementName=satView}"
                     Grid.Column="1" x:Name="satView" />
-                    <local:SatelliteSnr Grid.Row="1"
-                        GsvMessage="{Binding GsvMessage, ElementName=satView}" />
+                    <local:SatelliteSnr Grid.Row="1" x:Name="satSnr" />
                 </Grid>
             </TabItem>
             <TabItem Header="Map">

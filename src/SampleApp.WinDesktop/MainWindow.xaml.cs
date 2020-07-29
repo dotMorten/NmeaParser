@@ -61,7 +61,8 @@ namespace SampleApp.WinDesktop
             gpgsaView.Message = null;
             gpgllView.Message = null;
             pgrmeView.Message = null;
-            satView.GsvMessage = null;
+            satView.ClearGsv();
+            satSnr.ClearGsv();
             //Start new device
             currentDevice = device;
             currentDevice.MessageReceived += device_MessageReceived;
@@ -89,7 +90,8 @@ namespace SampleApp.WinDesktop
 
                 if (args.Message is NmeaParser.Messages.Gsv gpgsv)
                 {
-                    satView.GsvMessage = gpgsv;
+                    satView.SetGsv(gpgsv);
+                    satSnr.SetGsv(gpgsv);
                 }
                 else if (args.Message is NmeaParser.Messages.Rmc)
                     gprmcView.Message = args.Message as NmeaParser.Messages.Rmc;

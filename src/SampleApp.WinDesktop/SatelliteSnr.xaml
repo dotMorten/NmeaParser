@@ -48,7 +48,7 @@
                                 <SolidColorBrush Color="{Binding Converter={StaticResource conv}}" />
                             </TextBlock.Foreground>
                         </TextBlock>
-                        <Border Height="{Binding SignalToNoiseRatio, FallbackValue=10}"
+                        <Border Height="{Binding SignalToNoiseRatio, FallbackValue=10, NotifyOnValidationError=False}"
                             BorderBrush="Black" 
                             Margin="5,0" Width="20"
                             BorderThickness="1"
