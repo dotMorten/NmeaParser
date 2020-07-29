@@ -26,7 +26,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmb")]
     [NmeaMessageType("--RMA")]
-    public class Rma : NmeaMessage
+    public class Rma : NmeaMessage, IGeographicLocation
     {
         /// <summary>
         /// Positioning system status field

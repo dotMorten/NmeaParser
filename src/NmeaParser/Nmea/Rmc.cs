@@ -28,7 +28,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprmc")]
     [NmeaMessageType("--RMC")]
-    public class Rmc : NmeaMessage, ITimestampedMessage
+    public class Rmc : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Rmc"/> class.

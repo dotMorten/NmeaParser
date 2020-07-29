@@ -24,7 +24,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
     [NmeaMessageType("--GLL")]
-    public class Gll : NmeaMessage, ITimestampedMessage
+    public class Gll : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gll"/> class.

@@ -26,7 +26,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gpgga")]
     [NmeaMessageType("--GGA")]
-    public class Gga : NmeaMessage, ITimestampedMessage
+    public class Gga : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gga"/> class.

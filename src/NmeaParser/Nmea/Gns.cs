@@ -38,7 +38,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gns")]
     [NmeaMessageType("--GNS")]
-    public class Gns : NmeaMessage, ITimestampedMessage
+    public class Gns : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /*
          * Example of GNS messages:
