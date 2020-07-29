@@ -157,6 +157,19 @@ namespace NmeaParser.Messages
                 return SatelliteSystem.Unknown;
             }
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            switch (TalkerId)
+            {
+                case Talker.GlobalPositioningSystem: return $"GPS{Id}";
+                case Talker.GlonassReceiver: return $"GLO{Id}";
+                case Talker.GalileoPositioningSystem: return $"GAL{Id}";
+                case Talker.BeiDouNavigationSatelliteSystem: return $"BEI{Id}";
+                default: return Id.ToString();
+            }
+        }
     }
 
     /// <summary>
