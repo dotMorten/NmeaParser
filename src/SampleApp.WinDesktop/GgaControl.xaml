@@ -32,7 +32,7 @@
 				</StackPanel>
 			</local:KeyValuePairControl.Value>
 		</local:KeyValuePairControl>
-		<local:KeyValuePairControl Header="Last DGPS update: " Value="{Binding TimeSinceLastDgpsUpdate, Mode=OneTime}" />
+		<local:KeyValuePairControl Header="Last DGPS update: " Value="{Binding TimeSinceLastDgpsUpdate, Mode=OneTime, FallbackValue=Never}" />
 		<local:KeyValuePairControl Header="DGPS ID: " Value="{Binding DgpsStationId, Mode=OneTime}" />
 	</StackPanel>
 </UserControl>
