@@ -150,6 +150,8 @@ namespace NmeaParser.Messages
             int checksum = -1;
             if (message[0] != '$')
                 throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
+            if (message[0] != '$')
+                throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
             var idx = message.IndexOf('*');
             if (idx >= 0)
             {
@@ -161,14 +163,27 @@ namespace NmeaParser.Messages
                 int checksumTest = 0;
                 for (int i = 1; i < message.Length; i++)
                 {
-                    checksumTest ^= Convert.ToByte(message[i]);
+                    var c = message[i];
+                    if (c < 0x20 || c > 0x7E)
+                        throw new System.IO.InvalidDataException("NMEA Message contains invalid characters");
+                    checksumTest ^= Convert.ToByte(c);
                 }
                 if (checksum != checksumTest)
                     throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid NMEA message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
             }
+            else
+            {
+                for (int i = 1; i < message.Length; i++)
+                {
+                    if (message[i] < 0x20 || message[i] > 0x7E)
+                        throw new System.IO.InvalidDataException("NMEA Message contains invalid characters");
+                }
+            }
 
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
+            if (MessageType == string.Empty)
+                throw new ArgumentException("Missing NMEA Message Type");
             string[] MessageParts = parts.Skip(1).ToArray();
             if(previousSentence is NmeaMessage pmsg && pmsg.MessageType.Substring(2) == MessageType.Substring(2))
             {
@@ -233,7 +248,9 @@ namespace NmeaParser.Messages
                     checksumTest ^= 0x2C; //Comma separator
                 for (int i = 0; i < message.Length; i++)
                 {
-                    checksumTest ^= Convert.ToByte(message[i]);
+                    var c = message[i];
+                    if (c < 256)
+                        checksumTest ^= Convert.ToByte(c);
                 }
             }
             return Convert.ToByte(checksumTest);
