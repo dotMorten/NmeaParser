@@ -98,7 +98,6 @@ namespace NmeaParser
         /// <summary>
         /// Gets or sets the separator between each burst of data. Defaults to <see cref="BurstEmulationSeparator.FirstToken"/>.
         /// </summary>
-        /// <seealso cref="EnableBurstEmulation"/>
         public BurstEmulationSeparator BurstSeparator
         {
             get => emulationSettings.Separator;
