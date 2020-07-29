@@ -56,7 +56,11 @@ namespace SampleApp.WinDesktop
                 return;
             if (stop != null)
             {
-                await stop();
+                try
+                {
+                    await stop();
+                }
+                catch { }
             }
             counter = 0;
             client.Connect(stream.Mountpoint);
