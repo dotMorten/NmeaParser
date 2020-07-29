@@ -1,120 +1,87 @@
-﻿using Esri.ArcGISRuntime.Geometry;
+﻿//  *******************************************************************************
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************
+
 using System;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
+using NmeaParser.Gnss;
 
 namespace SampleApp.WinDesktop
 {
     public class NmeaLocationDataSource : Esri.ArcGISRuntime.Location.LocationDataSource
     {
         private static SpatialReference wgs84_ellipsoidHeight = SpatialReference.Create(4326, 115700);
-        private readonly NmeaParser.NmeaDevice m_device;
-        private double m_Accuracy = 0;
-        private double m_altitude = double.NaN;
-        private double m_speed = 0;
-        private double m_course = 0;
-        private bool m_startStopDevice;
-        private bool m_supportGNMessages; // If device detect GN* messages, ignore all other Talker ID
-        private bool m_supportGGaMessages; //If device support GGA, ignore RMC for location
+        private readonly GnssMonitor m_gnssMonitor;
+        private readonly bool m_startStopDevice;
+        private double lastCourse = 0; // Course can fallback to NaN, but ArcGIS Datasource don't allow NaN course, so we cache last known as a fallback
 
-        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaLocationDataSource"/> class.
+        /// </summary>
+        /// <param name="device">The NMEA device to monitor</param>
+        /// <param name="startStopDevice">Whether starting this datasource also controls the underlying NMEA device</param>
+        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true) : this(new GnssMonitor(device), startStopDevice)
         {
-            if (device == null)
-                throw new ArgumentNullException(nameof(device));
-            this.m_device = device;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaLocationDataSource"/> class.
+        /// </summary>
+        /// <param name="monitor">The NMEA device to monitor</param>
+        /// <param name="startStopDevice">Whether starting this datasource also controls the underlying NMEA device</param>
+        public NmeaLocationDataSource(NmeaParser.Gnss.GnssMonitor monitor, bool startStopDevice = true)
+        {
+            if (monitor == null)
+                throw new ArgumentNullException(nameof(monitor));
+            this.m_gnssMonitor = monitor;
             m_startStopDevice = startStopDevice;
         }
 
-        void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
+        protected async override Task OnStartAsync()
         {
-            var message = e.Message;
-            ParseMessage(message);
-        }
-        public void ParseMessage(NmeaParser.Messages.NmeaMessage message)
-        {
-            bool isNewFix = false;
-            bool lostFix = false;
-            double lat = 0;
-            double lon = 0;
-            if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
-                m_supportGNMessages = true;
-            else if(m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
-                    return; // If device supports combined GN* messages, ignore non-GN messages
+            m_gnssMonitor.LocationChanged += OnLocationChanged;
+            m_gnssMonitor.LocationLost += OnLocationChanged;
+            if (m_startStopDevice && !this.m_gnssMonitor.Device.IsOpen)
+                await this.m_gnssMonitor.Device.OpenAsync();
 
-            if (message is NmeaParser.Messages.Garmin.Pgrme rme)
-            {
-                m_Accuracy = rme.HorizontalError;
-            }
-            else if(message is NmeaParser.Messages.Gst gst)
-            {
-                Gst = gst;
-                m_Accuracy = Math.Round(Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError), 3);
-            }
-            else if (message is NmeaParser.Messages.Rmc rmc)
-            {
-                Rmc = rmc;
-                if (Rmc.Active)
-                {
-                    m_speed = double.IsNaN(Rmc.Speed) ? 0 : Rmc.Speed;
-                    if (!double.IsNaN(Rmc.Course))
-                        m_course = Rmc.Course;
-                    lat = Rmc.Latitude;
-                    lon = Rmc.Longitude;
-                }
-                else
-                {
-                    lostFix = true;
-                }
-                isNewFix = !m_supportGGaMessages;
-            }
-            else if (message is NmeaParser.Messages.Gga gga)
-            {
-                m_supportGGaMessages = true;
-                if (gga.Quality != NmeaParser.Messages.Gga.FixQuality.Invalid)
-                {
-                    lat = gga.Latitude;
-                    lon = gga.Longitude;
-                    m_altitude = gga.Altitude + gga.GeoidalSeparation; //Convert to ellipsoidal height
-                }
-                if (gga.Quality == NmeaParser.Messages.Gga.FixQuality.Invalid || gga.Quality == NmeaParser.Messages.Gga.FixQuality.Estimated)
-                {
-                    lostFix = true;
-                }
-                isNewFix = true;
-            }
-            else if (message is NmeaParser.Messages.Gsa gsa)
-            {
-                Gsa = gsa;
-            }
-            if (isNewFix)
-            {
-                base.UpdateLocation(new Esri.ArcGISRuntime.Location.Location(
-                    !double.IsNaN(m_altitude) ? new MapPoint(lon, lat, m_altitude, wgs84_ellipsoidHeight) : new MapPoint(lon, lat, SpatialReferences.Wgs84),
-                    m_Accuracy, m_speed, m_course, lostFix));
-            }
-        }
-
-        protected override Task OnStartAsync()
-        {
-            m_device.MessageReceived += device_MessageReceived;
-            if (m_startStopDevice)
-                return this.m_device.OpenAsync();
-            else
-                return System.Threading.Tasks.Task<bool>.FromResult(true);
+            if (m_gnssMonitor.IsFixValid)
+                OnLocationChanged(this, EventArgs.Empty);
         }
 
         protected override Task OnStopAsync()
         {
-            m_device.MessageReceived -= device_MessageReceived;
-            m_Accuracy = double.NaN;
+            m_gnssMonitor.LocationChanged -= OnLocationChanged;
+            m_gnssMonitor.LocationLost -= OnLocationChanged;
             if(m_startStopDevice)
-                return this.m_device.CloseAsync();
+                return m_gnssMonitor.Device.CloseAsync();
             else
-                return System.Threading.Tasks.Task<bool>.FromResult(true);
+                return Task.CompletedTask;
         }
 
-        public NmeaParser.Messages.Gsa Gsa { get; private set; }
-        public NmeaParser.Messages.Gga Gga { get; private set; }
-        public NmeaParser.Messages.Rmc Rmc { get; private set; }
-        public NmeaParser.Messages.Gst Gst { get; private set; }
+        private void OnLocationChanged(object sender, EventArgs e)
+        {
+            if (double.IsNaN(m_gnssMonitor.Longitude) || double.IsNaN(m_gnssMonitor.Latitude)) return;
+            if (!double.IsNaN(m_gnssMonitor.Course))
+                lastCourse = m_gnssMonitor.Course;
+            UpdateLocation(new Esri.ArcGISRuntime.Location.Location(
+                timestamp: null,
+                position: !double.IsNaN(m_gnssMonitor.Altitude) ? new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, m_gnssMonitor.Altitude, wgs84_ellipsoidHeight) : new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, SpatialReferences.Wgs84),
+                horizontalAccuracy: m_gnssMonitor.HorizontalError,
+                verticalAccuracy: m_gnssMonitor.VerticalError,
+                velocity: double.IsNaN(m_gnssMonitor.Speed) ? 0 : m_gnssMonitor.Speed * 0.51444444,
+                course: lastCourse,
+                !m_gnssMonitor.IsFixValid));
+        }
     }
 }

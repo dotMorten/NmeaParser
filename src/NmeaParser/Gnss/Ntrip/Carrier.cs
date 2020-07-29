@@ -14,10 +14,24 @@
 
 namespace NmeaParser.Gnss.Ntrip
 {
-    public class NtripSource
+    /// <summary>
+    /// Enumeration for the carrier used by the <see cref="NtripStream"/>
+    /// </summary>
+    public enum Carrier : int
     {
-        protected NtripSource()
-        {
-        }
+        /// <summary>
+        /// None / unknown
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// L1 wave
+        /// </summary>
+        L1 = 1,
+
+        /// <summary>
+        /// L1 and L2 waves
+        /// </summary>
+        L1L2 = 2
     }
 }

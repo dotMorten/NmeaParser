@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NmeaParser.Gnss;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace SampleApp.WinDesktop
     {
         private Queue<string> messages = new Queue<string>(101);
         public static NmeaParser.NmeaDevice currentDevice;
+
         //Dialog for browsing to nmea log files
         private Microsoft.Win32.OpenFileDialog nmeaOpenFileDialog = new Microsoft.Win32.OpenFileDialog()
         {
@@ -53,6 +55,7 @@ namespace SampleApp.WinDesktop
                 if (currentDevice.IsOpen)
                     await currentDevice.CloseAsync();
                 currentDevice.Dispose();
+                gnssMonitorView.Monitor = null;
             }
             output.Text = "";
             messages.Clear();
@@ -78,6 +81,7 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
             await device.OpenAsync();
+            gnssMonitorView.Monitor = new GnssMonitor(device);            
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)

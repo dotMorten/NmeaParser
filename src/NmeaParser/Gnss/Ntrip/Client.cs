@@ -11,7 +11,6 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************
-#nullable enable
 
 using System;
 using System.Collections.Generic;
@@ -21,6 +20,9 @@ using System.Threading.Tasks;
 
 namespace NmeaParser.Gnss.Ntrip
 {
+    /// <summary>
+    /// NTRIP Client for querying an NTRIP server and opening an NTRIP stream
+    /// </summary>
     public class Client : IDisposable
     {
         private readonly string _host;
@@ -30,17 +32,33 @@ namespace NmeaParser.Gnss.Ntrip
         private bool connected;
         private Task? runningTask;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Client"/> class
+        /// </summary>
+        /// <param name="host">Host name</param>
+        /// <param name="port">Port, usually 2101</param>
         public Client(string host, int port)
         {
             _host = host;
             _port = port;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Client"/> class
+        /// </summary>
+        /// <param name="host">Host name</param>
+        /// <param name="port">Port, usually 2101</param>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
         public Client(string host, int port, string username, string password) : this(host, port)
         {
             _auth = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
         }
 
+        /// <summary>
+        /// Gets a list of sources from the NTRIP endpoint
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<NtripSource> GetSourceTable()
         {
             string data = "";
@@ -77,8 +95,8 @@ namespace NmeaParser.Gnss.Ntrip
         {
             var sckt = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             sckt.Blocking = true;
+            sckt.ReceiveTimeout = 5000;
             sckt.Connect(_host, _port);
-
             string msg = $"GET /{path} HTTP/1.1\r\n";
             msg += "User-Agent: NTRIP ntripclient\r\n";
             if (_auth != null)
@@ -92,11 +110,29 @@ namespace NmeaParser.Gnss.Ntrip
             sckt.Send(data);
             return sckt;
         }
-
-        public void Connect(string strName)
+        /// <summary>
+        /// Connects to the endpoint for the specified <see cref="NtripStream.Mountpoint"/>
+        /// </summary>
+        /// <param name="stream"></param>
+        public void Connect(NtripStream stream)
         {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+            Connect(stream.Mountpoint);
+        }
+
+        /// <summary>
+        /// Connects to the endpoint for the specified <see cref="NtripStream.Mountpoint"/>
+        /// </summary>
+        /// <param name="mountPoint"></param>
+        public void Connect(string mountPoint)
+        {
+            if (mountPoint == null)
+                throw new ArgumentNullException(nameof(mountPoint));
+            if (string.IsNullOrWhiteSpace(mountPoint))
+                throw new ArgumentException(nameof(mountPoint));
             if (sckt != null) throw new Exception("Connection already open");
-            sckt = Request(strName);
+            sckt = Request(mountPoint);
             connected = true;
             runningTask = Task.Run(ReceiveThread);
         }
@@ -104,10 +140,10 @@ namespace NmeaParser.Gnss.Ntrip
         private async Task ReceiveThread()
         {
             byte[] buffer = new byte[65536];
-            sckt.ReceiveTimeout = 1000;
+            
             while (connected && sckt != null)
             {
-                int count = sckt.Receive(buffer, SocketFlags.None, out SocketError errorCode);
+                int count = sckt.Receive(buffer);
                 if (count > 0)
                 {
                     DataReceived?.Invoke(this, buffer.Take(count).ToArray());
@@ -128,6 +164,10 @@ namespace NmeaParser.Gnss.Ntrip
             sckt = null;
         }
 
+        /// <summary>
+        /// Shuts down the stream
+        /// </summary>
+        /// <returns></returns>
         public Task CloseAsync()
         {
             if (runningTask != null)
@@ -137,15 +177,30 @@ namespace NmeaParser.Gnss.Ntrip
                 runningTask = null;
                 return t;
             }
+#if NETSTANDARD || NETFX
+            return Task.FromResult<object?>(null);
+#else
             return Task.CompletedTask;
+#endif
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             _ = CloseAsync();
         }
 
+        /// <summary>
+        /// Fired when bytes has been received from the stream
+        /// </summary>
         public event EventHandler<byte[]>? DataReceived;
-        public event EventHandler Disconnected;
+
+        /// <summary>
+        /// Fired if the socket connection was dropped, and the connection was closed.
+        /// </summary>
+        /// <remarks>
+        /// This event is useful for handling network glitches, and trying to retry connection by calling <see cref="Connect(string)"/> again a few times.
+        /// </remarks>
+        public event EventHandler? Disconnected;
     }
 }

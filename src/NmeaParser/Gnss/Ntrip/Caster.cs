@@ -17,6 +17,9 @@ using System.Net;
 
 namespace NmeaParser.Gnss.Ntrip
 {
+    /// <summary>
+    /// Gets metadata about the NTRIP Caster
+    /// </summary>
     public class Caster : NtripSource
     {
         internal Caster (string[] d)
@@ -33,6 +36,18 @@ namespace NmeaParser.Gnss.Ntrip
             FallbackAddress = IPAddress.Parse(d[9]);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Caster"/> class.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="port"></param>
+        /// <param name="identifier"></param>
+        /// <param name="_operator"></param>
+        /// <param name="supportsNmea"></param>
+        /// <param name="countryCode"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="fallbackkAddress"></param>
         public Caster(IPAddress address, int port, string identifier, string _operator, bool supportsNmea, string countryCode, double latitude, double longitude, IPAddress fallbackkAddress)
         {
             Address = address;
@@ -46,14 +61,49 @@ namespace NmeaParser.Gnss.Ntrip
             FallbackAddress = fallbackkAddress;
         }
 
+        /// <summary>
+        /// Gets the caster IP Address
+        /// </summary>
         public IPAddress Address { get; }
+
+        /// <summary>
+        /// Gets the caster port
+        /// </summary>
         public int Port { get; }
+
+        /// <summary>
+        /// Gets the caster identifier
+        /// </summary>
         public string Identifier { get; }
+
+        /// <summary>
+        /// Gets the caster operator
+        /// </summary>
         public string Operator { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether it supports NMEA
+        /// </summary>
         public bool SupportsNmea { get; }
+
+        /// <summary>
+        /// Gets the country code for the caster origin
+        /// </summary>
         public string CountryCode { get; }
+
+        /// <summary>
+        /// Gets the latitude for the caster
+        /// </summary>
         public double Latitude { get; }
+        
+        /// <summary>
+        /// Gets the longitude for the caster
+        /// </summary>
         public double Longitude { get; }
+
+        /// <summary>
+        /// Gets the fallback address for the caster
+        /// </summary>
         public IPAddress FallbackAddress { get; }
     }
 }

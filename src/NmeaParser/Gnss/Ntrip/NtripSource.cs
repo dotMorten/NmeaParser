@@ -14,10 +14,16 @@
 
 namespace NmeaParser.Gnss.Ntrip
 {
-    public enum Carrier : int
+    /// <summary>
+    /// Baseclass for the sources returned from an NTRIP Service
+    /// </summary>
+    public abstract class NtripSource
     {
-        No = 0,
-        L1 = 1,
-        L1L2 = 2
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NtripSource"/> class.
+        /// </summary>
+        protected NtripSource()
+        {
+        }
     }
 }

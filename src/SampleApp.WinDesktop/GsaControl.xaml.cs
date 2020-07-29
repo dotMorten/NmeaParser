@@ -37,7 +37,10 @@ namespace SampleApp.WinDesktop
 
         private void OnGsaPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-			vehicles.Value = string.Join(",", Message?.SatelliteIDs);
+			if (Message == null)
+				vehicles.Value = null;
+			else
+				vehicles.Value = string.Join(",", Message?.SatelliteIDs);
         }
     }
 }

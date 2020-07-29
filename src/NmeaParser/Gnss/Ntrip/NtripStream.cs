@@ -17,6 +17,9 @@ using System.Globalization;
 
 namespace NmeaParser.Gnss.Ntrip
 {
+    /// <summary>
+    /// Metadata on an NTRIP Data Stream
+    /// </summary>
     public class NtripStream : NtripSource
     {
         internal NtripStream(string[] d)
@@ -38,15 +41,54 @@ namespace NmeaParser.Gnss.Ntrip
             SupportsNmea = d[11] == "1";
         }
 
+        /// <summary>
+        /// The mountpoint used with <see cref="Client.Connect(string)"/>
+        /// </summary>
         public string Mountpoint { get; }
+        
+        /// <summary>
+        /// Gets the unique identifier for the stream
+        /// </summary>
         public string Identifier { get; }
+
+        /// <summary>
+        /// Gets the stream format
+        /// </summary>
         public string Format { get; }
+
+        /// <summary>
+        /// Gets the details about the format
+        /// </summary>
         public string FormatDetails { get; }
+
+        /// <summary>
+        /// Gets the wave carrier for the stream
+        /// </summary>
         public Carrier Carrier { get; }
+        
+        /// <summary>
+        /// Gets the network for the stream
+        /// </summary>
         public string Network { get; }
+        
+        /// <summary>
+        /// Gets the country code for where the stream originates
+        /// </summary>
         public string CountryCode { get; }
+        
+        /// <summary>
+        /// Gets the latitude location of the base station
+        /// </summary>
         public double Latitude { get; }
+
+        /// <summary>
+        /// Gets the longitude location of the base station
+        /// </summary>
         public double Longitude { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the stream supports NMEA
+        /// </summary>
         public bool SupportsNmea { get; }
     }
 }

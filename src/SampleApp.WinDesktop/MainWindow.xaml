@@ -20,7 +20,7 @@
     </Window.Resources>
     <Grid>
         <TabControl>
-            <TabItem Header="GPS Info">
+            <TabItem Header="Messages">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
                     <WrapPanel x:Name="MessagePanel">
                         <local:RmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
@@ -42,13 +42,16 @@
                     <local:SatelliteSnr Grid.Row="1" x:Name="satSnr" />
                 </Grid>
             </TabItem>
+            <TabItem Header="GNSS Monitor">
+                <local:GnssMonitorView x:Name="gnssMonitorView" />
+            </TabItem>
             <TabItem Header="Map">
                 <local:View2D x:Name="view2d" />
             </TabItem>
             <TabItem Header="3D">
                 <local:View3D x:Name="view3d" />
             </TabItem>
-            <TabItem Header="Messages">
+            <TabItem Header="NMEA Log">
                 <TextBox x:Name="output"
                  AcceptsReturn="True"
                  IsReadOnly="True"
