@@ -37,14 +37,14 @@ namespace SampleApp.WinDesktop
 
             //Use a log file for playing back logged data
             var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt") { EmulatedBaudRate = 9600, BurstRate = TimeSpan.FromSeconds(1d) };
-            StartDevice(device);
+            _ = StartDevice(device);
         }
 
         /// <summary>
         /// Unloads the current device, and opens the next device
         /// </summary>
         /// <param name="device"></param>
-        private async void StartDevice(NmeaParser.NmeaDevice device)
+        private async Task StartDevice(NmeaParser.NmeaDevice device)
         {
             //Clean up old device
             if (currentDevice != null)
@@ -77,7 +77,7 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.PortName,
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
-            _ = device.OpenAsync();
+            await device.OpenAsync();
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
@@ -121,26 +121,40 @@ namespace SampleApp.WinDesktop
         }
 
         //Browse to nmea file and create device from selected file
-        private void OpenNmeaLogButton_Click(object sender, RoutedEventArgs e)
+        private async void OpenNmeaLogButton_Click(object sender, RoutedEventArgs e)
         {
             var result = nmeaOpenFileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
                 var file = nmeaOpenFileDialog.FileName;
                 var device = new NmeaParser.NmeaFileDevice(file);
-                StartDevice(device);
+                try
+                {
+                    await StartDevice(device);
+                }
+                catch(System.Exception ex)
+                {
+                    MessageBox.Show("Failed to start device: " + ex.Message);
+                }
             }
         }
 
         //Creates a serial port device from the selected settings
-        private void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
+        private async void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var portName = serialPorts.Text as string;
                 var baudRate = int.Parse(baudRates.Text);
                 var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
-                StartDevice(device);
+                try
+                {
+                    await StartDevice(device);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("Failed to start device: " + ex.Message);
+                }
             }
             catch(System.Exception ex)
             {
