@@ -51,7 +51,7 @@ namespace NmeaParser.Messages
             if (!double.IsNaN(timeInSeconds))
                 TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
             else
-                TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
+                TimeSinceLastDgpsUpdate = null;
             if (message[13].Length > 0)
                 DgpsStationId = int.Parse(message[13], CultureInfo.InvariantCulture);
             else
@@ -116,7 +116,7 @@ namespace NmeaParser.Messages
         /// <summary>
         /// Time since last DGPS update (ie age of the differential GPS data)
         /// </summary>
-        public TimeSpan TimeSinceLastDgpsUpdate { get; }
+        public TimeSpan? TimeSinceLastDgpsUpdate { get; }
 
         /// <summary>
         /// Differential Reference Station ID

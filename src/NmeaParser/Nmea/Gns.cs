@@ -155,7 +155,7 @@ namespace NmeaParser.Messages
             if (!double.IsNaN(timeInSeconds))
                 TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
             else
-                TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
+                TimeSinceLastDgpsUpdate = null;
             if (message[11].Length > 0)
                 DgpsStationId = message[11];
 
@@ -247,7 +247,7 @@ namespace NmeaParser.Messages
         /// <summary>
         ///  Age of differential data - <see cref="TimeSpan.MaxValue"/> if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data
         /// </summary>
-        public TimeSpan TimeSinceLastDgpsUpdate { get; }
+        public TimeSpan? TimeSinceLastDgpsUpdate { get; }
 
         /// <summary>
         /// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
