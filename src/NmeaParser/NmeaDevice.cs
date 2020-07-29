@@ -83,9 +83,9 @@ namespace NmeaParser
                         break;
                     if (readCount > 0)
                     {
-                        OnData(buffer.Take(readCount).ToArray());
+                        OnData(buffer, readCount);
                     }
-                    await Task.Delay(50);
+                    await Task.Yield();
                 }
             });
         }
@@ -150,9 +150,9 @@ namespace NmeaParser
         /// <seealso cref="OpenStreamAsync"/>
         protected abstract Task CloseStreamAsync(Stream stream);
 
-        private void OnData(byte[] data)
+        private void OnData(byte[] data, int count)
         {
-            var nmea = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+            var nmea = System.Text.Encoding.UTF8.GetString(data, 0, count);
             List<string> lines = new List<string>();
             lock (m_lockObject)
             {
