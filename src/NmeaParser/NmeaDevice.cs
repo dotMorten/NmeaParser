@@ -179,6 +179,8 @@ namespace NmeaParser
         {
             try
             {
+                if (p.Length == 0 || p[0] != '$')
+                    return;
                 var msg = NmeaMessage.Parse(p, _lastMultiMessage);
                 if(msg is IMultiSentenceMessage multi)
                 {
