@@ -2,6 +2,7 @@
 using NmeaParser.Messages;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,4 +44,20 @@ namespace SampleApp.WinDesktop
 			satellites.ItemsSource = messages.Values.SelectMany(g => g.SVs);
 		}		
 	}
+    public class SnrToHeightConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is SatelliteVehicle sv)
+            {
+				return Math.Max(10, sv.SignalToNoiseRatio * 2);
+            }
+			return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
