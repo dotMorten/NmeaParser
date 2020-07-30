@@ -43,15 +43,15 @@ namespace NmeaParser.Messages
         /// <param name="message">The NMEA message values.</param>
         public Dtm (string type, string[] message) : base(type, message)
         {
-            if (message == null || message.Length < 6)
+            if (message == null || message.Length < 8)
                 throw new ArgumentException("Invalid DTM", "message");
             LocalDatumCode = message[0];
             if (message[1].Length > 0)
                 LocalDatumSubdivisionCode = message[1][0];
-            LatitudeOffset = NmeaMessage.StringToDouble(message[2]);
-            LongitudeOffset = NmeaMessage.StringToDouble(message[3]);
-            AltitudeOffset = NmeaMessage.StringToDouble(message[4]);
-            ReferenceDatumCode = message[5];
+            LatitudeOffset = NmeaMessage.StringToDouble(message[2]) * (message[3]=="S" ? -1 : 1);
+            LongitudeOffset = NmeaMessage.StringToDouble(message[4]) * (message[5] == "W" ? -1 : 1);
+            AltitudeOffset = NmeaMessage.StringToDouble(message[6]);
+            ReferenceDatumCode = message[7];
         }
 
         /// <summary>
