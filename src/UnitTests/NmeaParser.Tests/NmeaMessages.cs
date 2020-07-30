@@ -201,7 +201,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(-22.1, gga.GeoidalSeparation);
             Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(-1, gga.DgpsStationId);
-            Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
+            Assert.IsNull(gga.TimeSinceLastDgpsUpdate);
         }
 
         [TestMethod]
@@ -575,7 +575,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(1.4, gns.Hdop);
             Assert.AreEqual(402.411, gns.OrthometricHeight);
             Assert.AreEqual(-32.133, gns.GeoidalSeparation);
-            Assert.AreEqual(TimeSpan.MaxValue, gns.TimeSinceLastDgpsUpdate);
+            Assert.IsNull(gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual(null, gns.DgpsStationId);
             Assert.AreEqual(Gns.NavigationalStatus.NotValid, gns.Status);
         }
