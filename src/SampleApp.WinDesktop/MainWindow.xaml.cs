@@ -68,6 +68,10 @@ namespace SampleApp.WinDesktop
             satSnr.ClearGsv();
             //Start new device
             currentDevice = device;
+            foreach(var child in MessagePanel.Children.OfType<UnknownMessageControl>().ToArray())
+            {
+                MessagePanel.Children.Remove(child);
+            }
             currentDevice.MessageReceived += device_MessageReceived;
             view2d.NmeaDevice = device;
             view3d.NmeaDevice = device;
