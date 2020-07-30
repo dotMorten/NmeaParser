@@ -24,7 +24,8 @@
 Added IGeographicLocation interface to easily get any message that supports reporting a location.
 Added GnssMonitor for simplifying monitoring location messages and reporting a location.
 Added an NTRIP client for getting RTCM correctional messages from an NTRIP Server.
-Improved the buffered stream to more accurately emulate baud rates.</PackageReleaseNotes>
+Improved the buffered stream to more accurately emulate baud rates.
+All messages now have a unique timestamp useful to expire older messages.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

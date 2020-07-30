@@ -65,6 +65,7 @@ namespace NmeaParser.Messages
         {
             MessageType = messageType;
             MessageParts = messageParts;
+            Timestamp = System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency;
         }
 
         static NmeaMessage()
@@ -294,5 +295,14 @@ namespace NmeaParser.Messages
             }
             return TimeSpan.Zero;
         }
+
+        /// <summary>
+        /// Gets a relative timestamp in milliseconds indicating the time the message was created.
+        /// </summary>
+        /// <remarks>
+        /// This value is deduced from <c>System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency</c>.
+        /// You can use it to calculate the age of the message in seconds by calculating the difference between the timestamp and the above expression
+        /// </remarks>
+        public double Timestamp { get; }
     }
 }
