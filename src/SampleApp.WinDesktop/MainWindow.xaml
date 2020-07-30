@@ -67,18 +67,12 @@
                             <TextBlock Text="None" x:Name="currentDeviceInfo" FontWeight="Bold" />
                         </StackPanel>
                         <Button Width="200" Content="Open NMEA Log..." Click="OpenNmeaLogButton_Click" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" />
-                        <StackPanel Orientation="Horizontal">
-                            <Button Width="200" Content="Auto-discover serial port"
-                                    HorizontalAlignment="Left" Padding="20,5" Margin="0,5" 
-                                    Click="AutoDiscoverButton_Click" />
-                            <TextBlock x:Name="autoDiscoverStatus" VerticalAlignment="Center" />
-                        </StackPanel>
                         <GroupBox Header="Open Serial device" Width="200" HorizontalAlignment="Left">
                             <StackPanel>
                                 <TextBlock Text="Serial port:" />
                                 <ComboBox x:Name="serialPorts" />
                                 <TextBlock Text="Baud rate:" />
-                                <ComboBox x:Name="baudRates" SelectedIndex="5">
+                                <ComboBox x:Name="baudRates" SelectedIndex="7">
                                     <ComboBoxItem>1200</ComboBoxItem>
                                     <ComboBoxItem>2400</ComboBoxItem>
                                     <ComboBoxItem>4800</ComboBoxItem>
