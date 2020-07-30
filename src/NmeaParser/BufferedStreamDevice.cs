@@ -61,7 +61,18 @@ namespace NmeaParser
             var stream = await GetStreamAsync().ConfigureAwait(false);
             StreamReader sr = new StreamReader(stream);
             m_stream = new BufferedStream(sr, emulationSettings);
+            m_stream.EndOfStreamReached += OnEndOfStreamReached;
             return m_stream;
+        }
+
+        private void OnEndOfStreamReached(object sender, EventArgs e)
+        {
+            EndOfStreamReached?.Invoke(this, e);
+            if (m_stream is BufferedStream stream && !stream.CanRewind && IsOpen)
+            {
+                // If we can't rewind the stream, stop
+                _ = CloseAsync();
+            }
         }
 
         /// <summary>
@@ -107,7 +118,11 @@ namespace NmeaParser
         /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
         {
-            m_stream?.Dispose();
+            if (m_stream != null)
+            {
+                m_stream.EndOfStreamReached -= OnEndOfStreamReached;
+                m_stream?.Dispose();
+            }
             return Task.FromResult(true);
         }
 
@@ -134,6 +149,11 @@ namespace NmeaParser
             EmptyLine
         }
 
+        /// <summary>
+        /// Raised when the stream has reached the end. If the stream can be revound, it'll start over, unless you stop the device in this thread.
+        /// </summary>
+        public event EventHandler? EndOfStreamReached;
+
         // stream that slowly populates a buffer from a StreamReader to simulate nmea messages coming
         // in lastLineRead by lastLineRead at a steady stream
         private class BufferedStream : Stream
@@ -158,6 +178,8 @@ namespace NmeaParser
                 m_tcs = new CancellationTokenSource();
                 m_readTask = StartReadLoop(m_tcs.Token);
             }
+
+            internal bool CanRewind => m_sr.BaseStream.CanSeek;
 
             private async Task StartReadLoop(CancellationToken cancellationToken)
             {
@@ -230,7 +252,12 @@ namespace NmeaParser
                 if (m_tcs.IsCancellationRequested)
                     return null;
                 if (m_sr.EndOfStream)
+                {
+                    EndOfStreamReached?.Invoke(this, EventArgs.Empty);
+                    if (m_tcs.IsCancellationRequested)
+                        return null;
                     m_sr.BaseStream.Seek(0, SeekOrigin.Begin); //start over
+                }
                 return m_sr.ReadLine() + '\n';
             }
 
@@ -295,6 +322,8 @@ namespace NmeaParser
                 m_sr.Dispose();
                 base.Dispose(disposing);
             }
+
+            internal event EventHandler? EndOfStreamReached;
         }
     }
 }
