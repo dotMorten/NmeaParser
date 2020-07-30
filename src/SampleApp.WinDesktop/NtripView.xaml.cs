@@ -62,6 +62,7 @@ namespace SampleApp.WinDesktop
                     await stop();
                 }
                 catch { }
+                stop = null;
             }
             counter = 0;
             client.Connect(stream.Mountpoint);
@@ -71,7 +72,7 @@ namespace SampleApp.WinDesktop
                 // Try and reconnect after a disconnect
                 client.Connect(stream.Mountpoint);
             };
-            stop = client.CloseAsync;
+            stop = () => client.CloseAsync();
             ntripstatus.Text = $"Connected";
         }
 
