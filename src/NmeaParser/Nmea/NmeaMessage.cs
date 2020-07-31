@@ -301,7 +301,7 @@ namespace NmeaParser.Messages
         /// </summary>
         /// <remarks>
         /// This value is deduced from <c>System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency</c>.
-        /// You can use it to calculate the age of the message in seconds by calculating the difference between the timestamp and the above expression
+        /// You can use it to calculate the age of the message in milliseconds by calculating the difference between the timestamp and the above expression
         /// </remarks>
         public double Timestamp { get; }
     }
