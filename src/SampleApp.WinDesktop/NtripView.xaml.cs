@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,6 @@ namespace SampleApp.WinDesktop
                 return;
             }
             client = new NmeaParser.Gnss.Ntrip.Client(host.Text, portNumber, username.Text, password.Password);
-            client.DataReceived += Client_DataReceived;
             List<NtripStream> sources;
             try
             {
@@ -49,66 +49,32 @@ namespace SampleApp.WinDesktop
             }
             sourceList.ItemsSource = sources.OrderBy(s=>s.CountryCode);
         }
-        Func<Task> stop;
-        private async void Connect_Click(object sender, RoutedEventArgs e)
+        Stream ntripStream;
+        private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            var stream = ((Button)sender).DataContext as NtripStream;
-            if (stream == null)
+            var streaminfo = ((Button)sender).DataContext as NtripStream;
+            if (streaminfo == null)
                 return;
-            if (stop != null)
+            ntripStream?.Dispose();
+            var stream = ntripStream = client.OpenStream(streaminfo.Mountpoint);
+            _ = Task.Run(async () =>
             {
-                try
+                byte[] buffer = new byte[1024];
+                while (true)
                 {
-                    await stop();
-                }
-                catch { }
-                stop = null;
-            }
-            counter = 0;
-            client.Connect(stream.Mountpoint);
-            client.Disconnected += (s, e) =>
-            {
-                Debug.WriteLine("NTRIP Stream Disconnected. Retrying...");
-                // Try and reconnect after a disconnect
-                client.Connect(stream.Mountpoint);
-            };
-            stop = () => client.CloseAsync();
-            ntripstatus.Text = $"Connected";
-        }
-
-        System.Threading.Tasks.Task writingTask;
-        object writeLock = new object();
-        long counter = 0;
-        private async void Client_DataReceived(object sender, byte[] rtcm)
-        {
-            var device = MainWindow.currentDevice;
-            if (device != null && device.CanWrite)
-            {
-                try
-                {
-                    //lock (writeLock)
+                    var count = await stream.ReadAsync(buffer);
+                    var device = MainWindow.currentDevice;
+                    if (device != null && device.CanWrite)
                     {
-                        await device.WriteAsync(rtcm, 0, rtcm.Length);
-                        counter += rtcm.Length;
+                        await device.WriteAsync(buffer, 0, count);
                         Dispatcher.Invoke(() =>
                         {
-                            ntripstatus.Text = $"Transmitted {counter} bytes";
+                            ntripstatus.Text = $"Transmitted {ntripStream.Position} bytes";
                         });
                     }
                 }
-                catch
-                {
-
-                }
-            }
-            //ParseData(rtcm);
-        }
-        Queue<byte> rtcmData = new Queue<byte>();
-        private void ParseData(byte[] rtcm)
-        {
-            foreach (var b in rtcm)
-                rtcmData.Enqueue(b);
-            
+            });
+            ntripstatus.Text = $"Connected";
         }
     }
 }
