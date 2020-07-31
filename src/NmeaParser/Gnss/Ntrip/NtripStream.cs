@@ -42,7 +42,7 @@ namespace NmeaParser.Gnss.Ntrip
         }
 
         /// <summary>
-        /// The mountpoint used with <see cref="Client.Connect(string)"/>
+        /// The mountpoint used with <see cref="Client.OpenStream(string)"/>
         /// </summary>
         public string Mountpoint { get; }
         
