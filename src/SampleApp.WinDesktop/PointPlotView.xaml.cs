@@ -21,7 +21,8 @@ namespace SampleApp.WinDesktop
     /// </summary>
     public partial class PointPlotView : UserControl
     {
-        List<double[]> locations = new List<double[]>();
+        private List<double[]> locations = new List<double[]>();
+
         public PointPlotView()
         {
             InitializeComponent();
@@ -31,34 +32,47 @@ namespace SampleApp.WinDesktop
         {
             PlotMap.Width = PlotMap.Height = Math.Min(e.NewSize.Width, e.NewSize.Height);
         }
-
+        Size size = new Size();
         private void PlotMap_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            size = e.NewSize;
             UpdatePlot();
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
         }
 
         public void Clear()
         {
             locations.Clear();
-            UpdatePlot();
+            if(!autoFit)
+                autoFitToggle.IsChecked = true;
+            else
+                UpdatePlot();
         }
+
         public void AddLocation(double latitude, double longitude, double altitude)
         {
-            Dispatcher.Invoke(() =>
-            {
-                locations.Add(new double[] { latitude, longitude, altitude });
-                UpdatePlot();
-            });
+            locations.Add(new double[] { latitude, longitude, altitude });
+            UpdatePlot();
         }
-        static SolidColorBrush dotFill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+
+        
         private void UpdatePlot()
         {
-            if (canvas.ActualWidth == 0 || canvas.ActualHeight == 0 || !IsVisible)
+            if (size.Width == 0 || size.Height == 0 || !IsVisible)
                 return;
-            Status.Text = "";
-            canvas.Children.Clear();
             if (locations.Count == 0)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Status.Text = "";
+                    plot.Source = null;
+                });
                 return;
+            }
             var latAvr = locations.Select(l => l[0]).Average();
             var lonAvr = locations.Select(l => l[1]).Average();
             
@@ -86,45 +100,70 @@ namespace SampleApp.WinDesktop
             var lonAvr2 = locations2.Select(l => l[1]).Average();
             var maxDifLat = Math.Max(latAvr2 - latMin, latMax - latAvr2);
             var maxDifLon = Math.Max(lonAvr2 - lonMin, lonMax - lonAvr2);
-            var maxDif = Math.Max(maxDifLat, maxDifLon);
-            if (maxDif < .1)
-                maxDif = .1;
-            if (maxDif < .25)
-                maxDif = .25;
-            else if (maxDif < .5)
-                maxDif = .5;
+            //var maxDif = Math.Max(maxDifLat, maxDifLon);
+            double maxDif = 1;
+            if (autoFit)
+            {
+                maxDif = distances.Max();
+                if (maxDif < .1)
+                    maxDif = .1;
+                if (maxDif < .25)
+                    maxDif = .25;
+                else if (maxDif < .5)
+                    maxDif = .5;
+                else
+                    maxDif = Math.Ceiling(maxDif);
+                currentScale = maxDif / (Math.Min(size.Width, size.Height) * .5);
+            }
             else
-                maxDif = Math.Ceiling(maxDif);
-            //if(maxDif < 1)
-            SecondMeterLabel.Text = $"{maxDif}m";
-            FirstMeterLabel.Text = $"{maxDif/2}m";
-            double scale = maxDif / Math.Min(OuterRing.ActualWidth, OuterRing.ActualHeight) / .5;
+            {
+                maxDif = currentScale * (Math.Min(size.Width, size.Height) * .5);
+            }
+            double scale = currentScale;
             if (scale == 0)
                 scale = 1;
-            var MAXCOUNT = 1000;
-            for (int i = Math.Max(0, locations2.Count - MAXCOUNT); i < locations2.Count; i++) // Only draw the last 1000 points
+             int width = (int)size.Width;
+             int height = (int)size.Height;
+            int stride = width * 4;
+             byte[] pixels = new byte[width * height * 4];
+            double[][] stamp = new double[][] {new double[] { .3, .5, .3 }, new double[] { .5, 1, .5 }, new double[] { .3, .5, .3 } };
+                
+            for (int i = 0; i < locations2.Count; i++) 
             {
                 var l = locations2[i];
-                var x = canvas.ActualWidth * .5 + (l[1] - lonAvr2) / scale;
-                var y = canvas.ActualHeight * .5 - (l[0] - latAvr2) / scale;
-                Ellipse e = new Ellipse() { Width = 3, Height = 3, Fill = dotFill };
-
-                if (canvas.Children.Count == locations2.Count - 1 || canvas.Children.Count == MAXCOUNT - 1)
+                var x = (int)(width * .5 + (l[1] - lonAvr2) / scale);
+                var y = (int)(height * .5 - (l[0] - latAvr2) / scale);
+                var index = ((int)y) * stride + ((int)x) * 4;
+                for (int r = -1; r < stamp.Length-1; r++)
                 {
-                    e.Fill = new SolidColorBrush(Colors.Red);
-                    e.Width = 5;
-                    e.Height = 5;
+                    for (int c = -1; c < stamp[r + 1].Length-1; c++)
+                    {
+                        if (x + c >= width || x + c < 0 ||
+                           y + r >= width || y + r < 0)
+                            continue;
+                        var p = index + r * stride + c * 4;
+                        var val = stamp[r + 1][c + 1];
+                        pixels[p + 1] = 0;
+                        pixels[p + 1] = 255;
+                        pixels[p + 2] = 0;
+                        pixels[p + 3] = (byte)Math.Min(255, pixels[p + 3] + val * 255); //Multiply alpha
+                    }
                 }
-
-                Canvas.SetLeft(e, x - e.Width * .5);
-                Canvas.SetTop(e, y - e.Height * .5);
-                canvas.Children.Add(e);
             }
             var stdDevLat = Math.Sqrt(locations2.Sum(d => (d[0] - latAvr2) * (d[0] - latAvr2)) / locations2.Count);
             var stdDevLon = Math.Sqrt(locations2.Sum(d => (d[1] - lonAvr2) * (d[1] - lonAvr2)) / locations2.Count);
             var zAvr = locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Average();
             var stdDevZ = Math.Sqrt(locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Count());
-            Status.Text = $"Measurements: {locations.Count}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {distances.Average().ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
+            Dispatcher.Invoke(() =>
+            {
+                SecondMeterLabel.Text = $"{maxDif.ToString("0.###")}m";
+                FirstMeterLabel.Text = $"{(maxDif / 2).ToString("0.###")}m";
+                // Specify the area of the bitmap that changed.
+                var writeableBitmap = new WriteableBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Bgra32, null);
+                writeableBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, stride, 0);
+                plot.Source = writeableBitmap;
+                Status.Text = $"Measurements: {locations.Count}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {distances.Average().ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
+            });
         }
 
         internal static class Vincenty
@@ -193,10 +232,45 @@ namespace SampleApp.WinDesktop
                 return s;
             }
         }
-
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        bool autoFit = true;
+        double currentScale = 1;
+        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            Clear();
+            autoFit = false;
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            autoFit = true;
+            UpdatePlot();
+        }
+
+        private void plot_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var maxDif = Math.Round(currentScale * (Math.Min(size.Width, size.Height) * .5), 3);
+            var dif = 1;
+            if (maxDif < 1)
+                maxDif = e.Delta < 0 ? maxDif * 2 : maxDif / 2;
+            else
+                maxDif = e.Delta < 0 ? maxDif + 1 : maxDif - 1;
+            if (maxDif < .1)
+                maxDif = .1;
+            if (maxDif < .25)
+                maxDif = .25;
+            else if (maxDif < .5)
+                maxDif = .5;
+            else
+                maxDif = Math.Ceiling(maxDif);
+            currentScale = maxDif / (Math.Min(size.Width, size.Height) * .5);
+
+            if (autoFitToggle.IsChecked == true)
+            {
+                autoFitToggle.IsChecked = false;
+            }
+            else
+            {
+                UpdatePlot();
+            }
         }
     }
 }
