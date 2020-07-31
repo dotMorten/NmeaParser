@@ -60,13 +60,21 @@ namespace SampleApp.WinDesktop
             _ = Task.Run(async () =>
             {
                 byte[] buffer = new byte[1024];
+                int count = 0;
                 while (true)
                 {
-                    var count = await stream.ReadAsync(buffer);
+                    try
+                    {
+                        count = await stream.ReadAsync(buffer).ConfigureAwait(false);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debugger.Break();
+                    }
                     var device = MainWindow.currentDevice;
                     if (device != null && device.CanWrite)
                     {
-                        await device.WriteAsync(buffer, 0, count);
+                        await device.WriteAsync(buffer, 0, count).ConfigureAwait(false);
                         Dispatcher.Invoke(() =>
                         {
                             ntripstatus.Text = $"Transmitted {ntripStream.Position} bytes";
