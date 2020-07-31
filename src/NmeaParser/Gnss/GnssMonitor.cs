@@ -65,8 +65,6 @@ namespace NmeaParser.Gnss
                 m_supportGNMessages = true; // Support for GN* messages detected
             else if (m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
                 return; // If device supports combined GN* messages, ignore non-GN messages
-            if (message is ITimestampedMessage ts)
-                FixTime = ts.Timestamp;
 
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
             {
@@ -88,6 +86,7 @@ namespace NmeaParser.Gnss
                     {
                         lat = Rmc.Latitude;
                         lon = Rmc.Longitude;
+                        FixTime = Rmc.FixTime.TimeOfDay;
                         isNewFix = true;
                     }
                     else
@@ -122,6 +121,7 @@ namespace NmeaParser.Gnss
                 {
                     lostFix = true;
                 }
+                FixTime = Gga.FixTime;
                 isNewFix = true;
             }
             else if (message is Gsa gsa)
@@ -249,7 +249,7 @@ namespace NmeaParser.Gnss
         /// <summary>
         /// Gets the current fix time
         /// </summary>
-        public TimeSpan FixTime { get; private set; }
+        public TimeSpan? FixTime { get; private set; }
 
         /// <summary>
         /// Gets a list of satellite vehicles in the sky

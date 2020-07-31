@@ -69,19 +69,39 @@ namespace SampleApp.WinDesktop
                 return Task.CompletedTask;
         }
 
+        private Esri.ArcGISRuntime.Location.Location currentLocation;
+
         private void OnLocationChanged(object sender, EventArgs e)
         {
             if (double.IsNaN(m_gnssMonitor.Longitude) || double.IsNaN(m_gnssMonitor.Latitude)) return;
             if (!double.IsNaN(m_gnssMonitor.Course))
                 lastCourse = m_gnssMonitor.Course;
-            UpdateLocation(new Esri.ArcGISRuntime.Location.Location(
-                timestamp: null,
+            DateTimeOffset? timestamp = null;
+            if(m_gnssMonitor.FixTime.HasValue)
+                timestamp = new DateTimeOffset(DateTime.UtcNow.Date.Add(m_gnssMonitor.FixTime.Value));
+            var location = new Esri.ArcGISRuntime.Location.Location(
+                timestamp: timestamp,
                 position: !double.IsNaN(m_gnssMonitor.Altitude) ? new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, m_gnssMonitor.Altitude, wgs84_ellipsoidHeight) : new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, SpatialReferences.Wgs84),
                 horizontalAccuracy: m_gnssMonitor.HorizontalError,
                 verticalAccuracy: m_gnssMonitor.VerticalError,
                 velocity: double.IsNaN(m_gnssMonitor.Speed) ? 0 : m_gnssMonitor.Speed * 0.51444444,
                 course: lastCourse,
-                !m_gnssMonitor.IsFixValid));
+                !m_gnssMonitor.IsFixValid);
+            // Avoid raising additional location events if nothing changed
+            if (currentLocation == null ||
+                currentLocation.Position.X != location.Position.X ||
+                currentLocation.Position.Y != location.Position.Y ||
+                currentLocation.Position.Z != location.Position.Z ||
+                currentLocation.Course != location.Course ||
+                currentLocation.Velocity != location.Velocity ||
+                currentLocation.HorizontalAccuracy != location.HorizontalAccuracy ||
+                currentLocation.VerticalAccuracy != location.VerticalAccuracy ||
+                currentLocation.IsLastKnown != location.IsLastKnown ||
+                timestamp != location.Timestamp)
+            {                
+                currentLocation = location;
+                UpdateLocation(currentLocation);
+            }
         }
     }
 }
