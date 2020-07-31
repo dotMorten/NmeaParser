@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:SampleApp.WinDesktop"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-        Title="Sample App" Height="500" Width="625">
+        Title="NMEA Parser Sample App" Height="768" Width="1024">
     <Window.Resources>
         <local:NullToCollapsedConverter x:Key="nullConv" />
         <Style TargetType="UserControl" x:Key="card">
