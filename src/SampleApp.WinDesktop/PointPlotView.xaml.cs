@@ -50,7 +50,7 @@ namespace SampleApp.WinDesktop
                 UpdatePlot();
             });
         }
-        static SolidColorBrush dotFill = new SolidColorBrush(Colors.LightGreen);
+        static SolidColorBrush dotFill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
         private void UpdatePlot()
         {
             if (canvas.ActualWidth == 0 || canvas.ActualHeight == 0 || !IsVisible)
@@ -101,14 +101,15 @@ namespace SampleApp.WinDesktop
             double scale = maxDif / Math.Min(OuterRing.ActualWidth, OuterRing.ActualHeight) / .5;
             if (scale == 0)
                 scale = 1;
-            for (int i = Math.Max(0, locations2.Count - 1000); i < locations2.Count; i++) // Only draw the last 1000 points
+            var MAXCOUNT = 1000;
+            for (int i = Math.Max(0, locations2.Count - MAXCOUNT); i < locations2.Count; i++) // Only draw the last 1000 points
             {
                 var l = locations2[i];
                 var x = canvas.ActualWidth * .5 + (l[1] - lonAvr2) / scale;
                 var y = canvas.ActualHeight * .5 - (l[0] - latAvr2) / scale;
                 Ellipse e = new Ellipse() { Width = 3, Height = 3, Fill = dotFill };
 
-                if (canvas.Children.Count == locations2.Count - 1)
+                if (canvas.Children.Count == locations2.Count - 1 || canvas.Children.Count == MAXCOUNT - 1)
                 {
                     e.Fill = new SolidColorBrush(Colors.Red);
                     e.Width = 5;
@@ -123,7 +124,7 @@ namespace SampleApp.WinDesktop
             var stdDevLon = Math.Sqrt(locations2.Sum(d => (d[1] - lonAvr2) * (d[1] - lonAvr2)) / locations2.Count);
             var zAvr = locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Average();
             var stdDevZ = Math.Sqrt(locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Count());
-            Status.Text = $"Average:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {distances.Average().ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
+            Status.Text = $"Measurements: {locations.Count}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {distances.Average().ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
         }
 
         internal static class Vincenty
