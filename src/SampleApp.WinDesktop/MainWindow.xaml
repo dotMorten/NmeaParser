@@ -45,6 +45,9 @@
             <TabItem Header="GNSS Monitor">
                 <local:GnssMonitorView x:Name="gnssMonitorView" />
             </TabItem>
+            <TabItem Header="Deviation Map">
+                <local:PointPlotView x:Name="mapplot" />
+            </TabItem>
             <TabItem Header="Map">
                 <local:View2D x:Name="view2d" />
             </TabItem>

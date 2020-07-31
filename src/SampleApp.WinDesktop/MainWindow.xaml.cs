@@ -55,7 +55,12 @@ namespace SampleApp.WinDesktop
                 if (currentDevice.IsOpen)
                     await currentDevice.CloseAsync();
                 currentDevice.Dispose();
-                gnssMonitorView.Monitor = null;
+                if (gnssMonitorView.Monitor != null)
+                {
+                    gnssMonitorView.Monitor.LocationChanged -= Monitor_LocationChanged;
+                    gnssMonitorView.Monitor = null;
+                }
+                mapplot.Clear();
             }
             output.Text = "";
             messages.Clear();
@@ -85,7 +90,14 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
             await device.OpenAsync();
-            gnssMonitorView.Monitor = new GnssMonitor(device);            
+            gnssMonitorView.Monitor = new GnssMonitor(device);
+            gnssMonitorView.Monitor.LocationChanged += Monitor_LocationChanged;
+        }
+
+        private void Monitor_LocationChanged(object sender, EventArgs e)
+        {
+            var mon = sender as GnssMonitor;
+            mapplot.AddLocation(mon.Latitude, mon.Longitude, mon.Altitude);
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
