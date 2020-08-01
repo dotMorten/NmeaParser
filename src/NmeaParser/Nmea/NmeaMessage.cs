@@ -138,12 +138,13 @@ namespace NmeaParser.Messages
         /// </summary>
         /// <param name="message">The NMEA message string.</param>
         /// <param name="previousSentence">The previously received message (only used if parsing multi-sentence messages)</param>
+        /// <param name="ignoreChecksum">If <c>true</c> ignores the checksum completely, if <c>false</c> validates the checksum if present.</param>
         /// <returns>The nmea message that was parsed.</returns>
         /// <exception cref="System.ArgumentException">
         /// Invalid nmea message: Missing starting character '$'
         /// or checksum failure
         /// </exception>
-        public static NmeaMessage Parse(string message, IMultiSentenceMessage? previousSentence = null)
+        public static NmeaMessage Parse(string message, IMultiSentenceMessage? previousSentence = null, bool ignoreChecksum = false)
         {
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
@@ -151,15 +152,19 @@ namespace NmeaParser.Messages
             int checksum = -1;
             if (message[0] != '$')
                 throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
-            if (message[0] != '$')
-                throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
             var idx = message.IndexOf('*');
             if (idx >= 0)
             {
-                checksum = Convert.ToInt32(message.Substring(idx + 1), 16);
+                if (message.Length > idx + 1)
+                {
+                    if (int.TryParse(message.Substring(idx + 1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int c))
+                        checksum = c;
+                    else
+                        throw new ArgumentException("Invalid checksum string");
+                }
                 message = message.Substring(0, message.IndexOf('*'));
             }
-            if (checksum > -1)
+            if (!ignoreChecksum && checksum > -1)
             {
                 int checksumTest = 0;
                 for (int i = 1; i < message.Length; i++)

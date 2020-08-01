@@ -97,7 +97,33 @@ namespace NmeaParser.Tests
                 }
             }
         }
-          
+
+        [TestMethod]
+        public void MissingChecksumAfterStar()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsNotNull(msg);
+        }
+
+        [TestMethod]
+        public void MissingChecksum()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsNotNull(msg);
+        }
+
+        [TestMethod]
+        public void IgnoreChecksum()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*00";
+            var msg = NmeaMessage.Parse(input, ignoreChecksum: true);
+            Assert.IsNotNull(msg);
+
+            Assert.ThrowsException<ArgumentException>(() => NmeaMessage.Parse(input, ignoreChecksum: false));
+        }
+
         [TestMethod]
         public void TestGprma()
         {
