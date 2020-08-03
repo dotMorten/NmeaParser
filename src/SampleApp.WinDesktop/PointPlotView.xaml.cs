@@ -21,7 +21,7 @@ namespace SampleApp.WinDesktop
     /// </summary>
     public partial class PointPlotView : UserControl
     {
-        private List<double[]> locations = new List<double[]>();
+        private List<Point> locations = new List<Point>();
 
         public PointPlotView()
         {
@@ -53,9 +53,24 @@ namespace SampleApp.WinDesktop
                 UpdatePlot();
         }
 
-        public void AddLocation(double latitude, double longitude, double altitude)
+        private struct Point
         {
-            locations.Add(new double[] { latitude, longitude, altitude });
+            public double Latitude { get ;set; }
+            public double Longitude { get ;set; }
+            public double Z { get ;set; }
+            public NmeaParser.Messages.Gga.FixQuality Quality { get; set; }
+        }
+        
+        public void AddLocation(double latitude, double longitude, double altitude, NmeaParser.Messages.Gga.FixQuality quality)
+        {
+            if(quality == NmeaParser.Messages.Gga.FixQuality.Invalid)
+                return;
+            locations.Add(new Point { 
+                Latitude = latitude, 
+                Longitude = longitude, 
+                Z = altitude, 
+                Quality = quality 
+            });
             UpdatePlot();
         }
 
@@ -73,31 +88,31 @@ namespace SampleApp.WinDesktop
                 });
                 return;
             }
-            var latAvr = locations.Select(l => l[0]).Average();
-            var lonAvr = locations.Select(l => l[1]).Average();
+            var latAvr = locations.Select(l => l.Latitude).Average();
+            var lonAvr = locations.Select(l => l.Longitude).Average();
             
             //List<double> lonDistances = new List<double>(locations.Count);
             //List<double> latDistances = new List<double>(locations.Count);
             List<double> distances = new List<double>(locations.Count);
-            var locations2 = new List<double[]>();
+            var locations2 = new List<Point>();
             foreach (var l in locations)
             {
-                var d = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l[0], l[1]);
-                var dLat = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l[0], lonAvr);
-                var dLon = Vincenty.GetDistanceVincenty(latAvr, lonAvr, latAvr, l[1]);
+                var d = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l.Latitude, l.Longitude);
+                var dLat = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l.Latitude, lonAvr);
+                var dLon = Vincenty.GetDistanceVincenty(latAvr, lonAvr, latAvr, l.Longitude);
                 distances.Add(d);
                 //latDistances.Add(dLat);
                 //lonDistances.Add(dLon);
-                if (latAvr > l[0]) dLat = -dLat;
-                if (lonAvr > l[1]) dLon = -dLon;
-                locations2.Add(new double[] { dLat, dLon });
+                if (latAvr > l.Latitude) dLat = -dLat;
+                if (lonAvr > l.Longitude) dLon = -dLon;
+                locations2.Add(new Point() { Latitude = dLat, Longitude= dLon, Quality = l.Quality });
             }
-            var latMin = locations2.Select(l => l[0]).Min();
-            var lonMin = locations2.Select(l => l[1]).Min();
-            var latMax = locations2.Select(l => l[0]).Max();
-            var lonMax = locations2.Select(l => l[1]).Max();
-            var latAvr2 = locations2.Select(l => l[0]).Average();
-            var lonAvr2 = locations2.Select(l => l[1]).Average();
+            var latMin = locations2.Select(l => l.Latitude).Min();
+            var lonMin = locations2.Select(l => l.Longitude).Min();
+            var latMax = locations2.Select(l => l.Latitude).Max();
+            var lonMax = locations2.Select(l => l.Longitude).Max();
+            var latAvr2 = locations2.Select(l => l.Latitude).Average();
+            var lonAvr2 = locations2.Select(l => l.Longitude).Average();
             var maxDifLat = Math.Max(latAvr2 - latMin, latMax - latAvr2);
             var maxDifLon = Math.Max(lonAvr2 - lonMin, lonMax - lonAvr2);
             //var maxDif = Math.Max(maxDifLat, maxDifLon);
@@ -125,12 +140,12 @@ namespace SampleApp.WinDesktop
             int stride = width * 4;
              byte[] pixels = new byte[width * height * 4];
             double[][] stamp = new double[][] {new double[] { .3, .5, .3 }, new double[] { .5, 1, .5 }, new double[] { .3, .5, .3 } };
-                
+            Color col = Colors.Red;
             for (int i = 0; i < locations2.Count; i++) 
             {
                 var l = locations2[i];
-                var x = (int)(width * .5 + (l[1] - lonAvr2) / scale);
-                var y = (int)(height * .5 - (l[0] - latAvr2) / scale);
+                var x = (int)(width * .5 + (l.Longitude - lonAvr2) / scale);
+                var y = (int)(height * .5 - (l.Latitude - latAvr2) / scale);
                 var index = ((int)y) * stride + ((int)x) * 4;
                 for (int r = -1; r < stamp.Length-1; r++)
                 {
@@ -141,17 +156,32 @@ namespace SampleApp.WinDesktop
                             continue;
                         var p = index + r * stride + c * 4;
                         var val = stamp[r + 1][c + 1];
-                        pixels[p + 1] = 0;
-                        pixels[p + 1] = 255;
-                        pixels[p + 2] = 0;
+                        switch(l.Quality)
+                        {
+                            case NmeaParser.Messages.Gga.FixQuality.Estimated:
+                               col = Colors.Red; break;
+                            case NmeaParser.Messages.Gga.FixQuality.GpsFix:
+                               col = Colors.Orange; break;
+                            case NmeaParser.Messages.Gga.FixQuality.DgpsFix:
+                               col = Colors.Yellow; break;
+                            case NmeaParser.Messages.Gga.FixQuality.FloatRtk:
+                               col = Color.FromRgb(0,255,0); break;
+                            case NmeaParser.Messages.Gga.FixQuality.Rtk:
+                               col = Colors.LightBlue; break;
+                               default:
+                               col = Colors.Gray; break;
+                        }
+                        pixels[p + 1] = col.B;
+                        pixels[p + 1] = col.G;
+                        pixels[p + 2] = col.R;
                         pixels[p + 3] = (byte)Math.Min(255, pixels[p + 3] + val * 255); //Multiply alpha
                     }
                 }
             }
-            var stdDevLat = Math.Sqrt(locations2.Sum(d => (d[0] - latAvr2) * (d[0] - latAvr2)) / locations2.Count);
-            var stdDevLon = Math.Sqrt(locations2.Sum(d => (d[1] - lonAvr2) * (d[1] - lonAvr2)) / locations2.Count);
-            var zAvr = locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Average();
-            var stdDevZ = Math.Sqrt(locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / locations.Select(l => l[2]).Where(l => !double.IsNaN(l)).Count());
+            var stdDevLat = Math.Sqrt(locations2.Sum(d => (d.Latitude - latAvr2) * (d.Latitude - latAvr2)) / locations2.Count);
+            var stdDevLon = Math.Sqrt(locations2.Sum(d => (d.Longitude - lonAvr2) * (d.Longitude - lonAvr2)) / locations2.Count);
+            var zAvr = locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Average();
+            var stdDevZ = Math.Sqrt(locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Count());
             Dispatcher.Invoke(() =>
             {
                 SecondMeterLabel.Text = $"{maxDif.ToString("0.###")}m";

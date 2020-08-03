@@ -97,7 +97,7 @@ namespace SampleApp.WinDesktop
         private void Monitor_LocationChanged(object sender, EventArgs e)
         {
             var mon = sender as GnssMonitor;
-            mapplot.AddLocation(mon.Latitude, mon.Longitude, mon.Altitude);
+            mapplot.AddLocation(mon.Latitude, mon.Longitude, mon.Altitude, mon.FixQuality);
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
