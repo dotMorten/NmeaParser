@@ -105,12 +105,10 @@ namespace SampleApp.WinDesktop
             if (autoFit)
             {
                 maxDif = distances.Max();
-                if (maxDif < .1)
-                    maxDif = .1;
-                if (maxDif < .25)
-                    maxDif = .25;
-                else if (maxDif < .5)
-                    maxDif = .5;
+                if (maxDif < 0.05)
+                    maxDif = 0.05;
+                else if (maxDif < 1)
+                    maxDif = Math.Ceiling(maxDif * 10) / 10d;
                 else
                     maxDif = Math.Ceiling(maxDif);
                 currentScale = maxDif / (Math.Min(size.Width, size.Height) * .5);
@@ -253,12 +251,10 @@ namespace SampleApp.WinDesktop
                 maxDif = e.Delta < 0 ? maxDif * 2 : maxDif / 2;
             else
                 maxDif = e.Delta < 0 ? maxDif + 1 : maxDif - 1;
-            if (maxDif < .1)
-                maxDif = .1;
-            if (maxDif < .25)
-                maxDif = .25;
-            else if (maxDif < .5)
-                maxDif = .5;
+            if (maxDif < 0.05)
+                maxDif = 0.05;
+            else if (maxDif < 1)
+                maxDif = Math.Ceiling(maxDif * 10) / 10d;
             else
                 maxDif = Math.Ceiling(maxDif);
             currentScale = maxDif / (Math.Min(size.Width, size.Height) * .5);

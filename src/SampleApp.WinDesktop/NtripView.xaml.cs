@@ -69,7 +69,11 @@ namespace SampleApp.WinDesktop
                     }
                     catch (System.Exception ex)
                     {
-                        Debugger.Break();
+                        if(!stream.CanRead)
+                        {
+                            // TODO: Restart stream
+                            return;
+                        }
                     }
                     var device = MainWindow.currentDevice;
                     if (device != null && device.CanWrite)

@@ -132,18 +132,21 @@ namespace NmeaParser.Gnss.Ntrip
             if (string.IsNullOrWhiteSpace(mountPoint))
                 throw new ArgumentException(nameof(mountPoint));
             
-            var sckt = Request(mountPoint);
-            return new NtripDataStream(sckt);
+            return new NtripDataStream(() => Request(mountPoint));
         }
 
         private class NtripDataStream : System.IO.Stream
         {
+            private Func<Socket> m_openSocketAction;
             private Socket m_socket;
-            public NtripDataStream(Socket socket)
+
+            public NtripDataStream(Func<Socket> openSocketAction)
             {
-                m_socket = socket;
+                m_openSocketAction = openSocketAction;
+                m_socket = openSocketAction();
             }
-            public override bool CanRead => true;
+
+            public override bool CanRead => m_socket.Connected;
 
             public override bool CanSeek => false;
 
@@ -158,6 +161,14 @@ namespace NmeaParser.Gnss.Ntrip
 
             public override int Read(byte[] buffer, int offset, int count)
             {
+                if (isDiposed)
+                    throw new ObjectDisposedException("NTRIP Stream");
+                if(!m_socket.Connected)
+                {
+                    // reconnect
+                    m_socket.Dispose();
+                    m_socket = m_openSocketAction();
+                }
                 int read = m_socket.Receive(buffer, offset, count, SocketFlags.None);
                 position += read;
                 return read;
@@ -168,6 +179,14 @@ namespace NmeaParser.Gnss.Ntrip
                 TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
                 if (cancellationToken.CanBeCanceled)
                     cancellationToken.Register(() => tcs.TrySetCanceled());
+                if (isDiposed)
+                    throw new ObjectDisposedException("NTRIP Stream");
+                if (!m_socket.Connected)
+                {
+                    // reconnect
+                    m_socket.Dispose();
+                    m_socket = m_openSocketAction();
+                }
                 m_socket.BeginReceive(buffer, offset, count, SocketFlags.None, ReceiveCallback, tcs);
                 return tcs.Task;
             }
@@ -195,10 +214,11 @@ namespace NmeaParser.Gnss.Ntrip
             public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
             protected override void Dispose(bool disposing)
             {
+                isDiposed = true;
                 m_socket.Dispose();
                 base.Dispose(disposing);
             }
-
+            private bool isDiposed;
             public override int ReadTimeout { get => m_socket.ReceiveTimeout; set => m_socket.ReceiveTimeout = value; }
         }
     }
