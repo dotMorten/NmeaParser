@@ -83,8 +83,8 @@ namespace NmeaParser.Gnss
             properties.Add(nameof(AllMessages));
             if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
                 m_supportGNMessages = true; // Support for GN* messages detected
-            else if (m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
-                return; // If device supports combined GN* messages, ignore non-GN messages
+            else if (m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv))
+                return; // If device supports combined GN* messages, ignore non-GN messages, except for Gsv
 
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
             {
