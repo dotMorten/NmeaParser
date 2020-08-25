@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using NmeaParser.Gnss;
 using NmeaParser.Messages;
@@ -16,9 +18,33 @@ namespace SampleApp.WinDesktop
 		public GnssMonitorView()
 		{
 			InitializeComponent();
-		}
+            SetupBindings();
+        }
 
-		public GnssMonitor Monitor
+        private void SetupBindings()
+        {            
+            var props = typeof(GnssMonitor).GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            List<KeyValuePair<string, object>> values = new List<KeyValuePair<string, object>>();
+            int count = 0;
+            ArrayConverter conv = new ArrayConverter();
+            foreach (var prop in props.OrderBy(t => t.Name))
+            {
+                if (prop.Name == nameof(GnssMonitor.AllMessages) || prop.Name == nameof(GnssMonitor.SynchronizationContext)) continue;
+                data.RowDefinitions.Add(new RowDefinition());
+                var title = new TextBlock() { Text = prop.Name, FontWeight = FontWeights.Bold, Margin = new Thickness(0, 0, 5, 0), VerticalAlignment = VerticalAlignment.Top };
+                Grid.SetRow(title, count);
+                data.Children.Add(title);
+                var valuebox = new TextBlock() { VerticalAlignment = VerticalAlignment.Top, TextWrapping = TextWrapping.Wrap };
+                Grid.SetRow(valuebox, count);
+                Grid.SetColumn(valuebox, 1);
+                var binding = new Binding(prop.Name) { Converter = conv };
+                valuebox.SetBinding(TextBlock.TextProperty, binding);
+                data.Children.Add(valuebox);
+                count++;
+            }
+        }
+
+        public GnssMonitor Monitor
 		{
 			get { return (GnssMonitor)GetValue(MonitorProperty); }
 			set { SetValue(MonitorProperty, value); }
@@ -29,48 +55,29 @@ namespace SampleApp.WinDesktop
 
         private void OnMonitorPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is GnssMonitor oldMonitor)
-            {
-                oldMonitor.LocationChanged -= LocationChanged;
-                oldMonitor.LocationLost -= LocationChanged;
-            }
-            if (e.NewValue is GnssMonitor newMonitor)
-            {
-                newMonitor.LocationChanged += LocationChanged;
-                newMonitor.LocationLost += LocationChanged;
-            }
-            UpdateValues();
+            data.DataContext = Monitor;
         }
 
-        private void LocationChanged(object sender, System.EventArgs e)
+        private class ArrayConverter : IValueConverter
         {
-            Dispatcher.Invoke(UpdateValues);
-        }
-        private void UpdateValues()
-        { 
-            if (Monitor == null)
-                Values.ItemsSource = null;
-            else
+            public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
             {
-                var props = Monitor.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                List<KeyValuePair<string, object>> values = new List<KeyValuePair<string, object>>();
-                foreach (var prop in props.OrderBy(t => t.Name))
+                if (!(value is string) && value is System.Collections.IEnumerable arr)
                 {
-                    if (prop.Name == nameof(GnssMonitor.AllMessages)) continue;
-                    if (prop.PropertyType.IsSubclassOf(typeof(NmeaMessage)))
-                        continue;
-                    var value = prop.GetValue(Monitor);
-                    if (!(value is string) && value is System.Collections.IEnumerable arr)
-                    {
-                        var str = "[" + string.Join(",", arr.OfType<object>().ToArray()) + "]";
-                        if (str.Length == 2)
-                            str = "[ ]";
-                        value = str;
-                    }
-                    values.Add(new KeyValuePair<string, object>(prop.Name, value));
+                    var str = "[" + string.Join(",", arr.OfType<object>().ToArray()) + "]";
+                    if (str.Length == 2)
+                        str = "[ ]";
+                    value = str;
                 }
-                Values.ItemsSource = values;
+                if (value is null)
+                    return "<null>";
+                return value;
             }
-        }        
+
+            public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new System.NotImplementedException();
+            }
+        }
     }
 }

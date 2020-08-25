@@ -10,19 +10,11 @@
 		<Border Background="CornflowerBlue" Padding="20,10" Margin="-10,-10,-10,5" x:Name="HeaderPanel">
             <TextBlock Text="GNSS Monitor" FontSize="20" FontWeight="Bold" Foreground="White" />
         </Border>
-        <ItemsControl x:Name="Values" Margin="20,10">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="100" Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Key}" Margin="0,0,5,0" VerticalAlignment="Top" FontWeight="Bold" />
-                        <TextBlock Text="{Binding Value}" TextWrapping="Wrap" Grid.Column="1" VerticalAlignment="Top" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid x:Name="data" Margin="20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
     </StackPanel>
 </UserControl>

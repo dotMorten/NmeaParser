@@ -14,7 +14,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using NmeaParser.Messages;
 
 namespace NmeaParser.Gnss
@@ -22,10 +24,12 @@ namespace NmeaParser.Gnss
     /// <summary>
     /// Helper class for monitoring GNSS messages and combine them into a single useful location info
     /// </summary>
-    public class GnssMonitor
+    public class GnssMonitor : INotifyPropertyChanged
     {
         private bool m_supportGNMessages; // If device detect GN* messages, ignore all other Talker ID
         private bool m_supportGGaMessages; //If device support GGA, ignore RMC for location
+        private Dictionary<string, NmeaMessage> m_allMessages { get; } = new Dictionary<string, NmeaMessage>();
+        private object m_lock = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GnssMonitor"/> class.
@@ -37,7 +41,17 @@ namespace NmeaParser.Gnss
                 throw new ArgumentNullException(nameof(device));
             Device = device;
             Device.MessageReceived += NmeaMessageReceived;
+            SynchronizationContext = SynchronizationContext.Current;
         }
+
+        /// <summary>
+        /// Gets or sets the syncronization context that <see cref="PropertyChanged"/> should be fired on
+        /// </summary>
+        /// <remarks>
+        /// The default is the context this thread was created monitor was created on, but for use in UI applications, 
+        /// it can be beneficial to ensure this is the UI Thread. You can also set this to <c>null</c> for best performance
+        /// </remarks>
+        public SynchronizationContext? SynchronizationContext { get; set; }
 
         /// <summary>
         /// Gets the NMEA device that is being monitored
@@ -53,14 +67,16 @@ namespace NmeaParser.Gnss
         /// Called when a message is received.
         /// </summary>
         /// <param name="message">The NMEA message that was received</param>
-        protected virtual void OnMessageReceived(NmeaMessage message) 
-        { 
+        protected virtual void OnMessageReceived(NmeaMessage message)
+        {
             bool isNewFix = false;
             bool lostFix = false;
             double lat = 0;
             double lon = 0;
-            AllMessages[message.MessageType] = message;
-            
+            List<string> properties = new List<string>();
+            lock (m_lock)
+                m_allMessages[message.MessageType] = message;
+            properties.Add(nameof(AllMessages));
             if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
                 m_supportGNMessages = true; // Support for GN* messages detected
             else if (m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem)
@@ -68,25 +84,52 @@ namespace NmeaParser.Gnss
 
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
             {
-                HorizontalError = rme.HorizontalError;
-                VerticalError = rme.VerticalError;
+                if (rme.HorizontalError != HorizontalError)
+                {
+                    properties.Add(nameof(HorizontalError));
+                    HorizontalError = rme.HorizontalError;
+                }
+                if (rme.VerticalError != VerticalError)
+                {
+                    VerticalError = rme.VerticalError;
+                    properties.Add(nameof(VerticalError));
+                }
             }
             else if (message is Gst gst)
             {
                 Gst = gst;
-                VerticalError = gst.SigmaHeightError;
-                HorizontalError = Math.Round(Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError), 3);
+                properties.Add(nameof(Gst));
+                var error = Math.Round(Math.Sqrt(Gst.SigmaLatitudeError * Gst.SigmaLatitudeError + Gst.SigmaLongitudeError * Gst.SigmaLongitudeError), 3);
+                if (error != HorizontalError)
+                {
+                    HorizontalError = error;
+                    properties.Add(nameof(HorizontalError));
+                }
+                if (VerticalError != gst.SigmaHeightError)
+                {
+                    VerticalError = gst.SigmaHeightError;
+                    properties.Add(nameof(VerticalError));
+                }
             }
             else if (message is Rmc rmc)
             {
+                if (Speed != rmc.Speed)
+                    properties.Add(nameof(Speed));
+                if (Course != rmc.Course)
+                    properties.Add(nameof(Course));
                 Rmc = rmc;
+                properties.Add(nameof(Rmc));
                 if (!m_supportGGaMessages)
                 {
                     if (Rmc.Active)
                     {
                         lat = Rmc.Latitude;
                         lon = Rmc.Longitude;
-                        FixTime = Rmc.FixTime.TimeOfDay;
+                        if (FixTime != Rmc.FixTime.TimeOfDay)
+                        {
+                            FixTime = Rmc.FixTime.TimeOfDay;
+                            properties.Add(nameof(FixTime));
+                        }
                         isNewFix = true;
                     }
                     else
@@ -101,52 +144,102 @@ namespace NmeaParser.Gnss
                 {
                     // Datum change
                     Dtm = dtm;
+                    properties.Add(nameof(Dtm));
                     Latitude = double.NaN;
                     Longitude = double.NaN;
                     IsFixValid = false;
+                    properties.Add(nameof(Dtm));
+                    properties.Add(nameof(Datum));
+                    properties.Add(nameof(Latitude));
+                    properties.Add(nameof(Longitude));
+                    properties.Add(nameof(IsFixValid));
                 }
             }
             else if (message is Gga gga)
             {
+                if (gga.Hdop != Hdop)
+                    properties.Add(nameof(Hdop));
+                if (gga.Quality != FixQuality)
+                    properties.Add(nameof(FixQuality));
                 Gga = gga;
+                properties.Add(nameof(Gga));
                 m_supportGGaMessages = true;
                 if (gga.Quality != Gga.FixQuality.Invalid)
                 {
                     lat = gga.Latitude;
                     lon = gga.Longitude;
                     GeoidHeight = gga.GeoidalSeparation;
+                    properties.Add(nameof(GeoidHeight));
                     Altitude = gga.Altitude + gga.GeoidalSeparation; //Convert to ellipsoidal height
+                    properties.Add(nameof(Altitude));
                 }
                 if (gga.Quality == Gga.FixQuality.Invalid || gga.Quality == Gga.FixQuality.Estimated)
                 {
                     lostFix = true;
                 }
-                FixTime = Gga.FixTime;
+                if (FixTime != Gga.FixTime)
+                {
+                    FixTime = Gga.FixTime;
+                    properties.Add(nameof(FixTime));
+                }
                 isNewFix = true;
             }
             else if (message is Gsa gsa)
             {
+                if (gsa.Hdop != Hdop)
+                    properties.Add(nameof(Hdop));
+                if (gsa.Pdop != Pdop)
+                    properties.Add(nameof(Pdop));
+                if (gsa.Vdop != Vdop)
+                    properties.Add(nameof(Vdop));
                 Gsa = gsa;
+                properties.Add(nameof(Gsa));
             }
             else if (message is Vtg vtg)
             {
+                if (Speed != vtg.SpeedKnots)
+                    properties.Add(nameof(Speed));
                 Vtg = vtg;
+                properties.Add(nameof(Vtg));
+            }
+            else if (message is Gsv)
+            {
+                properties.Add(nameof(Satellites));
+                properties.Add(nameof(SatellitesInView));
             }
             if (lostFix)
             {
                 if (!IsFixValid)
                 {
                     IsFixValid = false;
+                    properties.Add(nameof(IsFixValid));
+                    properties.Add(nameof(FixQuality));
                     LocationLost?.Invoke(this, EventArgs.Empty);
                 }
             }
             if (isNewFix)
             {
-                Latitude = lat;
-                Longitude = lon;
-                IsFixValid = true;
+                if (Latitude != lat)
+                {
+                    properties.Add(nameof(Latitude));
+                    Latitude = lat;
+                }
+                if (Longitude != lon)
+                {
+                    properties.Add(nameof(Longitude));
+                    Longitude = lon;
+                }
+                if (!IsFixValid)
+                {
+                    properties.Add(nameof(IsFixValid));
+                    if (Gga == null)
+                        properties.Add(nameof(FixQuality));
+                    IsFixValid = true;
+                }
                 LocationChanged?.Invoke(this, EventArgs.Empty);
             }
+            if (properties.Count > 0)
+                OnPropertyChanged(properties);
         }
 
         /// <summary>
@@ -157,7 +250,7 @@ namespace NmeaParser.Gnss
         /// </remarks>
         /// <seealso cref="LocationLost"/>
         public bool IsFixValid { get; private set; }
-        
+
         /// <summary>
         /// Gets the latitude for the current or last known location.
         /// </summary>
@@ -171,7 +264,7 @@ namespace NmeaParser.Gnss
         /// <seealso cref="IsFixValid"/>
         /// <seealso cref="Latitude"/>
         public double Longitude { get; private set; } = double.NaN;
-        
+
         /// <summary>
         /// Gets the geight above the ellipsoid
         /// </summary>
@@ -254,22 +347,51 @@ namespace NmeaParser.Gnss
         /// <summary>
         /// Gets a list of satellite vehicles in the sky
         /// </summary>
-        public IEnumerable<SatelliteVehicle> Satellites => AllMessages.Values.OfType<Gsv>().SelectMany(s => s.SVs);
+        public IEnumerable<SatelliteVehicle> Satellites
+        {
+            get
+            {
+                lock (m_lock)
+                {
+                    return m_allMessages.Values.OfType<Gsv>().SelectMany(s => s.SVs).ToArray();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the number of satellites in the sky
         /// </summary>
-        public int SatellitesInView => AllMessages.Values.OfType<Gsv>().Sum(s => s.SatellitesInView);
+        public int SatellitesInView
+        {
+            get
+            {
+                lock (m_lock)
+                {
+                    return m_allMessages.Values.OfType<Gsv>().Sum(s => s.SatellitesInView);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets the quality of the current fix
         /// </summary>
         public Gga.FixQuality FixQuality => !IsFixValid ? Gga.FixQuality.Invalid : (Gga?.Quality ?? Gga.FixQuality.GpsFix);
 
+
         /// <summary>
         /// Gets a list of all NMEA messages currently part of this location
         /// </summary>
-        public Dictionary<string, NmeaMessage> AllMessages { get; } = new Dictionary<string, NmeaMessage>();
+        public IEnumerable<KeyValuePair<string, NmeaMessage>> AllMessages
+        {
+            get
+            {
+                lock (m_lock)
+                {
+                    return m_allMessages.ToArray();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating the current Datum being used.
@@ -301,5 +423,27 @@ namespace NmeaParser.Gnss
         /// </summary>
         /// <seealso cref="IsFixValid"/>
         public event EventHandler? LocationLost;
+
+        /// <inheritdoc />
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged(IEnumerable<string> properties)
+        {
+            if (PropertyChanged == null)
+                return;
+            if (SynchronizationContext != null)
+            {
+                SynchronizationContext.Post((d) =>
+                {
+                    foreach (string propertyName in (IEnumerable<string>)d)
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }, properties);
+            }
+            else
+            {
+                foreach (string propertyName in properties)
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }
