@@ -52,7 +52,7 @@ namespace NmeaParser.Messages
     /// <summary>
     /// NMEA Message base class.
     /// </summary>
-    public abstract class NmeaMessage
+    public abstract class NmeaMessage : IEquatable<NmeaMessage>
     {
         private readonly static Dictionary<string, ConstructorInfo> messageTypes;
 
@@ -299,6 +299,21 @@ namespace NmeaParser.Messages
                                    .Add(TimeSpan.FromSeconds(double.Parse(value.Substring(4), CultureInfo.InvariantCulture)));
             }
             return TimeSpan.Zero;
+        }
+
+        /// <inheritdoc />
+        public bool Equals(NmeaMessage other)
+        {
+            if (other.MessageType != MessageType)
+                return false;
+            if (other.MessageParts.Count != MessageParts.Count)
+                return false;
+            for (int i = 0; i < MessageParts.Count; i++)
+            {
+                if (other.MessageParts[i] != MessageParts[i])
+                    return false;
+            }
+            return true;
         }
 
         /// <summary>

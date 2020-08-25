@@ -75,7 +75,11 @@ namespace NmeaParser.Gnss
             double lon = 0;
             List<string> properties = new List<string>();
             lock (m_lock)
+            {
+                if(m_allMessages.ContainsKey(message.MessageType) && m_allMessages[message.MessageType].Equals(message))
+                        return; // Nothing to update/notify
                 m_allMessages[message.MessageType] = message;
+            }
             properties.Add(nameof(AllMessages));
             if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
                 m_supportGNMessages = true; // Support for GN* messages detected
