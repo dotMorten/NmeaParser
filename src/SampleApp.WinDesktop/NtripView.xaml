@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="SampleApp.WinDesktop.NtripView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SampleApp.WinDesktop"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="80" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Server: " />
+        <TextBox Text="esricaster.esri.com" Grid.Column="1" x:Name="host" />
+        <TextBlock Text="Port: "  Grid.Row="1" />
+        <TextBox Text="2101"  Grid.Row="1" Grid.Column="1" x:Name="port" />
+        <TextBlock Text="Username: " Grid.Row="2" />
+        <TextBox Text=""  Grid.Row="2" Grid.Column="1" x:Name="username" />
+        <TextBlock Text="Password: " Grid.Row="3" />
+        <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="password" />
+        <Button Content="Get Available Streams" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="5" Click="Button_Click"/>
+        <TextBlock Text="Available streams:"  Grid.Row="5" Grid.ColumnSpan="2" />
+        <ListView x:Name="sourceList" Grid.Row="6" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Identifier}" FontWeight="Bold" />
+                            <TextBlock Text=" (" />
+                            <TextBlock Text="{Binding CountryCode}" FontWeight="Bold" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Format}" />
+                            <TextBlock Text=" - " />
+                            <TextBlock Text="{Binding Carrier}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid Grid.Row="6" Grid.Column="1" DataContext="{Binding SelectedItem, ElementName=sourceList}">
+            <StackPanel>
+                <TextBlock Text="{Binding Identifier}" FontWeight="Bold" FontSize="14" />
+                <TextBlock Text="{Binding CountryCode, StringFormat='Country code: {0}'}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Location: " />
+                    <TextBlock Text="{Binding Latitude}" />
+                    <TextBlock Text="," />
+                    <TextBlock Text="{Binding Longitude}" />
+                </StackPanel>
+                <TextBlock Text="{Binding Carrier, StringFormat='Carrier: {0}'}" />
+                <TextBlock Text="{Binding Format, StringFormat='Format: {0}'}" />
+                <TextBlock Text="{Binding FormatDetails, StringFormat='Format details: {0}'}" />
+                <TextBlock Text="{Binding Mountpoint, StringFormat='Mount point: {0}'}" />
+                <TextBlock Text="{Binding Network, StringFormat='Network: {0}'}" />
+                <TextBlock Text="{Binding SupportsNmea, StringFormat='Supports NMEA: {0}'}" />
+                <Button Content="Connect" Click="Connect_Click" />
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Not connected" x:Name="ntripstatus" Grid.Column="1" Grid.Row="9" />
+    </Grid>
+</UserControl>

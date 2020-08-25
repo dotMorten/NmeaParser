@@ -39,6 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.NetCore", "Sample
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{73efb2ef-de40-46c4-9685-745a9815c0d2}*SharedItemsImports = 5
 		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{92cad93b-6c3b-45a0-a723-be046de50fec}*SharedItemsImports = 4
 		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{979ae182-eb59-4181-9d45-3fd6e4817f11}*SharedItemsImports = 13
 	EndGlobalSection

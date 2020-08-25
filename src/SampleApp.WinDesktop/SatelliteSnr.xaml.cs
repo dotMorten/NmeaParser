@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NmeaParser;
+using NmeaParser.Messages;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,23 +27,37 @@ namespace SampleApp.WinDesktop
 		{
 			InitializeComponent();
 		}
-
-		public NmeaParser.Messages.Gsv GsvMessage
+		Dictionary<Talker, Gsv> messages = new Dictionary<Talker, Gsv>();
+		public void SetGsv(Gsv message)
 		{
-			get { return (NmeaParser.Messages.Gsv)GetValue(GsvMessageProperty); }
-			set { SetValue(GsvMessageProperty, value); }
+			messages[message.TalkerId] = message;
+			UpdateSatellites();
+		}
+		public void ClearGsv()
+		{
+			messages.Clear();
+			UpdateSatellites();
 		}
 
-		public static readonly DependencyProperty GsvMessageProperty =
-			DependencyProperty.Register(nameof(GsvMessage), typeof(NmeaParser.Messages.Gsv), typeof(SatelliteSnr), new PropertyMetadata(null, OnGpgsvMessagePropertyChanged));
-
-		private static void OnGpgsvMessagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private void UpdateSatellites()
 		{
-			var gsv = e.NewValue as NmeaParser.Messages.Gsv;
-			if (gsv == null)
-				(d as SatelliteSnr).satellites.ItemsSource = null;
-			else
-				(d as SatelliteSnr).satellites.ItemsSource = gsv.SVs;
+			satellites.ItemsSource = messages.Values.SelectMany(g => g.SVs);
 		}		
 	}
+    public class SnrToHeightConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is SatelliteVehicle sv)
+            {
+				return Math.Max(10, sv.SignalToNoiseRatio * 2);
+            }
+			return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

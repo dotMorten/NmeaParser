@@ -21,7 +21,7 @@ namespace NmeaParser.Messages
     /// Recommended minimum navigation information
     /// </summary>
     /// <remarks>
-    /// <para>Navigation data from present position to a destination waypoint provided by a Loran-C, GNSS, DECCA, navigatin computer
+    /// <para>Navigation data from present position to a destination waypoint provided by a Loran-C, GNSS, DECCA, navigation computer
     /// or other integrated navigation system.</para>
     /// <para>
     /// This sentence always accompanies <see cref="Rma"/> and <see cref="Rmc"/> sentences when a destination is active when provided by a Loran-C or GNSS receiver,

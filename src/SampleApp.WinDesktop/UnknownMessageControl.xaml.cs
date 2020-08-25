@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,7 +49,7 @@ namespace SampleApp.WinDesktop
                 List<string> values = new List<string>();
                 foreach (var prop in props.OrderBy(t => t.Name))
                 {
-                    if (prop.Name == nameof(NmeaMessage.MessageType) || prop.Name == nameof(NmeaMessage.Checksum))
+                    if (prop.Name == nameof(NmeaMessage.MessageType) || prop.Name == nameof(NmeaMessage.Checksum) || prop.Name == nameof(NmeaMessage.Timestamp))
                         continue;
                     var value = prop.GetValue(e.NewValue);
                     if (!(value is string) && value is System.Collections.IEnumerable arr)
@@ -60,6 +61,13 @@ namespace SampleApp.WinDesktop
                     }
                     values.Add($"{prop.Name}: {value}");
                 }
+                if (e.NewValue is NmeaMessage msg)
+                {
+                    var age = (System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency) - msg.Timestamp;
+                    values.Add($"Timestamp: " + DateTime.Now.AddMilliseconds(-age).TimeOfDay.ToString("h\\:mm\\:ss"));
+                }
+                //;
+
                 ctrl.Values.ItemsSource = values;
             }
         }

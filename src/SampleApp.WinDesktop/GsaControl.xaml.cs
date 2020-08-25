@@ -33,6 +33,14 @@ namespace SampleApp.WinDesktop
 		}
 
 		public static readonly DependencyProperty MessageProperty =
-			DependencyProperty.Register(nameof(Message), typeof(Gsa), typeof(GsaControl), new PropertyMetadata(null));	
-	}
+			DependencyProperty.Register(nameof(Message), typeof(Gsa), typeof(GsaControl), new PropertyMetadata(null, (d, e) => ((GsaControl)d).OnGsaPropertyChanged(e)));
+
+        private void OnGsaPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+			if (Message == null)
+				vehicles.Value = null;
+			else
+				vehicles.Value = string.Join(",", Message?.SatelliteIDs);
+        }
+    }
 }

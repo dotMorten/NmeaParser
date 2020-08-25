@@ -97,7 +97,33 @@ namespace NmeaParser.Tests
                 }
             }
         }
-          
+
+        [TestMethod]
+        public void MissingChecksumAfterStar()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsNotNull(msg);
+        }
+
+        [TestMethod]
+        public void MissingChecksum()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsNotNull(msg);
+        }
+
+        [TestMethod]
+        public void IgnoreChecksum()
+        {
+            string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*00";
+            var msg = NmeaMessage.Parse(input, ignoreChecksum: true);
+            Assert.IsNotNull(msg);
+
+            Assert.ThrowsException<ArgumentException>(() => NmeaMessage.Parse(input, ignoreChecksum: false));
+        }
+
         [TestMethod]
         public void TestGprma()
         {
@@ -201,7 +227,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(-22.1, gga.GeoidalSeparation);
             Assert.AreEqual("M", gga.GeoidalSeparationUnits);
             Assert.AreEqual(-1, gga.DgpsStationId);
-            Assert.AreEqual(TimeSpan.MaxValue, gga.TimeSinceLastDgpsUpdate);
+            Assert.IsNull(gga.TimeSinceLastDgpsUpdate);
         }
 
         [TestMethod]
@@ -516,7 +542,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(1, gns.ModeIndicators.Length);
             Assert.AreEqual(19, gns.NumberOfSatellites);
             Assert.AreEqual(.6, gns.Hdop);
-            Assert.AreEqual(406.110, gns.OrhometricHeight);
+            Assert.AreEqual(406.110, gns.OrthometricHeight);
             Assert.AreEqual(-26.294, gns.GeoidalSeparation);
             Assert.AreEqual("0138", gns.DgpsStationId);
             Assert.AreEqual(Gns.NavigationalStatus.Safe, gns.Status);
@@ -542,7 +568,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(6, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
-            Assert.AreEqual(double.NaN, gns.OrhometricHeight);
+            Assert.AreEqual(double.NaN, gns.OrthometricHeight);
             Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.FromSeconds(2), gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual("0", gns.DgpsStationId);
@@ -573,9 +599,9 @@ namespace NmeaParser.Tests
             Assert.AreEqual(Gns.Mode.NoFix, gns.ModeIndicators[4]);
             Assert.AreEqual(10, gns.NumberOfSatellites);
             Assert.AreEqual(1.4, gns.Hdop);
-            Assert.AreEqual(402.411, gns.OrhometricHeight);
+            Assert.AreEqual(402.411, gns.OrthometricHeight);
             Assert.AreEqual(-32.133, gns.GeoidalSeparation);
-            Assert.AreEqual(TimeSpan.MaxValue, gns.TimeSinceLastDgpsUpdate);
+            Assert.IsNull(gns.TimeSinceLastDgpsUpdate);
             Assert.AreEqual(null, gns.DgpsStationId);
             Assert.AreEqual(Gns.NavigationalStatus.NotValid, gns.Status);
         }
@@ -621,7 +647,7 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gns.ModeIndicators.Length);
             Assert.AreEqual(4, gns.NumberOfSatellites);
             Assert.AreEqual(double.NaN, gns.Hdop);
-            Assert.AreEqual(double.NaN, gns.OrhometricHeight);
+            Assert.AreEqual(double.NaN, gns.OrthometricHeight);
             Assert.AreEqual(double.NaN, gns.GeoidalSeparation);
             Assert.AreEqual(TimeSpan.FromSeconds(2), gns.TimeSinceLastDgpsUpdate);
         }

@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="SampleApp.WinDesktop.PointPlotView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SampleApp.WinDesktop"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="GridLinesBrush" Color="#AAFFFFFF" />
+        <DoubleCollection x:Key="GridLinesDash">4 4</DoubleCollection>
+        <sys:Double x:Key="GridLinesWidth">.5</sys:Double>
+    </UserControl.Resources>
+    <Grid SizeChanged="Grid_SizeChanged" Background="Black" >
+        <Grid Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlotMap" SizeChanged="PlotMap_SizeChanged">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Ellipse HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.ColumnSpan="8" Grid.RowSpan="8" Grid.Row="1" Grid.Column="1" StrokeDashArray="{StaticResource GridLinesDash}" x:Name="OuterRing" />
+            <Ellipse HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.ColumnSpan="6" Grid.RowSpan="6" Grid.Row="2" Grid.Column="2" StrokeDashArray="{StaticResource GridLinesDash}" />
+            <Ellipse HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.ColumnSpan="4" Grid.RowSpan="4" Grid.Row="3" Grid.Column="3" StrokeDashArray="{StaticResource GridLinesDash}" />
+            <Ellipse HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="4" Grid.Column="4" StrokeDashArray="{StaticResource GridLinesDash}" />
+            <Path Data="M0,0 L1,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.RowSpan="8" Grid.ColumnSpan="8"  Grid.Row="1" Grid.Column="1" StrokeDashArray="{StaticResource GridLinesDash}" Stretch="Fill" />
+            <Path Data="M0,0 L0,1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Stroke="{StaticResource GridLinesBrush}" StrokeThickness="{StaticResource GridLinesWidth}" Grid.RowSpan="8" Grid.ColumnSpan="8"  Grid.Row="1" Grid.Column="1" StrokeDashArray="{StaticResource GridLinesDash}" Stretch="Fill" />
+            <TextBlock x:Name="FirstMeterLabel" Text="5m"  Margin="0,15,0,0" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Grid.RowSpan="10" Grid.Column="6" Grid.ColumnSpan="2" Background="#55000000" />
+            <TextBlock x:Name="SecondMeterLabel" Text="10m" Margin="0,15,-10,0" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" Grid.RowSpan="10" Grid.Column="8" Grid.ColumnSpan="1" Background="#55000000" />
+            <TextBlock Text="N" Margin="10" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="White" Grid.ColumnSpan="10" />
+            <TextBlock Text="S" Margin="10" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="10" Grid.Row="9" />
+            <TextBlock Text="W" Margin="10" FontSize="9" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" Grid.RowSpan="10" Grid.Column="0" />
+            <TextBlock Text="E" Margin="10" FontSize="9" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" Grid.RowSpan="10" Grid.Column="9" />
+            <Canvas Grid.RowSpan="10" Grid.ColumnSpan="10" x:Name="canvas" Opacity="0">
+                
+            </Canvas>
+            <Image x:Name="plot" Grid.RowSpan="8" Grid.ColumnSpan="8" Grid.Row="1" Grid.Column="1" MouseWheel="plot_MouseWheel" />
+        </Grid>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20" Orientation="Horizontal">
+            <Button Content="Clear" Padding="2" Margin="5" Click="ClearButton_Click" />
+            <ToggleButton IsChecked="True" x:Name="autoFitToggle" Content="Autofit" Padding="2" Margin="5" Unchecked="ToggleButton_Unchecked" Checked="ToggleButton_Checked" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20">
+            <TextBlock x:Name="Status" Foreground="White" FontSize="12" />
+        </StackPanel>
+    </Grid>
+</UserControl>

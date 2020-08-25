@@ -12,7 +12,7 @@
 		</Border>
 		<local:KeyValuePairControl Header="GPS Mode: " Value="{Binding Mode}"/>
         <local:KeyValuePairControl Header="Fix Mode: " Value="{Binding Fix, Mode=OneTime}" />
-        <local:KeyValuePairControl Header="Satellite vehicles: " Value="{Binding SatelliteIDs, Mode=OneTime}" />
+        <local:KeyValuePairControl Header="Satellite vehicles: " x:Name="vehicles" />
 		<local:KeyValuePairControl Header="HDOP: " Value="{Binding Hdop, Mode=OneTime}" />
 		<local:KeyValuePairControl Header="VDOP: " Value="{Binding Vdop, Mode=OneTime}" />
 		<local:KeyValuePairControl Header="PDOP: " Value="{Binding Pdop, Mode=OneTime}" />

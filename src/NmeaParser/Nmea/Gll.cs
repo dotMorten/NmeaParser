@@ -24,7 +24,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gll")]
     [NmeaMessageType("--GLL")]
-    public class Gll : NmeaMessage
+    public class Gll : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Gll"/> class.
@@ -84,6 +84,8 @@ namespace NmeaParser.Messages
         /// Positioning system Mode Indicator
         /// </summary>
         public Mode ModeIndicator { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixTime;
 
         /// <summary>
         /// Positioning system Mode Indicator

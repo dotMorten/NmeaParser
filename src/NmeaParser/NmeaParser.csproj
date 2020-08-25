@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;netcoreapp2.1;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.4;netcoreapp2.1;net451;monoandroid50;monoandroid70;xamarinios10;uap10.0.16299</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -9,9 +9,9 @@
     <Authors>Morten Nielsen</Authors>
     <Company>Morten Nielsen</Company>
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
-    <PackageTags>nmea winrt wpf uwp xamarin gps serialport bluetooth</PackageTags>
+    <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>2.0</Version>
+    <Version>2.1</Version>
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
@@ -20,7 +20,12 @@
     <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
-    <PackageReleaseNotes>New refined and easier to use v2 API</PackageReleaseNotes>
+    <PackageReleaseNotes>Added ITimestampedMessage interface to easily get time stamps from any message that supports it.
+Added IGeographicLocation interface to easily get any message that supports reporting a location.
+Added GnssMonitor for simplifying monitoring location messages and reporting a location.
+Added an NTRIP client for getting RTCM correctional messages from an NTRIP Server.
+Improved the buffered stream to more accurately emulate baud rates.
+All messages now have a unique timestamp useful to expire older messages.</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
@@ -30,9 +35,13 @@
     <Nullable>enable</Nullable>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
   </PropertyGroup>
   
@@ -66,7 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>

@@ -65,6 +65,7 @@ namespace NmeaParser.Messages
         {
             MessageType = messageType;
             MessageParts = messageParts;
+            Timestamp = System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency;
         }
 
         static NmeaMessage()
@@ -137,38 +138,58 @@ namespace NmeaParser.Messages
         /// </summary>
         /// <param name="message">The NMEA message string.</param>
         /// <param name="previousSentence">The previously received message (only used if parsing multi-sentence messages)</param>
+        /// <param name="ignoreChecksum">If <c>true</c> ignores the checksum completely, if <c>false</c> validates the checksum if present.</param>
         /// <returns>The nmea message that was parsed.</returns>
         /// <exception cref="System.ArgumentException">
         /// Invalid nmea message: Missing starting character '$'
         /// or checksum failure
         /// </exception>
-        public static NmeaMessage Parse(string message, IMultiSentenceMessage? previousSentence = null)
+        public static NmeaMessage Parse(string message, IMultiSentenceMessage? previousSentence = null, bool ignoreChecksum = false)
         {
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
 
             int checksum = -1;
             if (message[0] != '$')
-                throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
+                throw new ArgumentException("Invalid NMEA message: Missing starting character '$'");
             var idx = message.IndexOf('*');
             if (idx >= 0)
             {
-                checksum = Convert.ToInt32(message.Substring(idx + 1), 16);
+                if (message.Length > idx + 1)
+                {
+                    if (int.TryParse(message.Substring(idx + 1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int c))
+                        checksum = c;
+                    else
+                        throw new ArgumentException("Invalid checksum string");
+                }
                 message = message.Substring(0, message.IndexOf('*'));
             }
-            if (checksum > -1)
+            if (!ignoreChecksum && checksum > -1)
             {
                 int checksumTest = 0;
                 for (int i = 1; i < message.Length; i++)
                 {
-                    checksumTest ^= Convert.ToByte(message[i]);
+                    var c = message[i];
+                    if (c < 0x20 || c > 0x7E)
+                        throw new System.IO.InvalidDataException("NMEA Message contains invalid characters");
+                    checksumTest ^= Convert.ToByte(c);
                 }
                 if (checksum != checksumTest)
-                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid nmea message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
+                    throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Invalid NMEA message: Checksum failure. Got {0:X2}, Expected {1:X2}", checksum, checksumTest));
+            }
+            else
+            {
+                for (int i = 1; i < message.Length; i++)
+                {
+                    if (message[i] < 0x20 || message[i] > 0x7E)
+                        throw new System.IO.InvalidDataException("NMEA Message contains invalid characters");
+                }
             }
 
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
+            if (MessageType == string.Empty)
+                throw new ArgumentException("Missing NMEA Message Type");
             string[] MessageParts = parts.Skip(1).ToArray();
             if(previousSentence is NmeaMessage pmsg && pmsg.MessageType.Substring(2) == MessageType.Substring(2))
             {
@@ -233,7 +254,9 @@ namespace NmeaParser.Messages
                     checksumTest ^= 0x2C; //Comma separator
                 for (int i = 0; i < message.Length; i++)
                 {
-                    checksumTest ^= Convert.ToByte(message[i]);
+                    var c = message[i];
+                    if (c < 256)
+                        checksumTest ^= Convert.ToByte(c);
                 }
             }
             return Convert.ToByte(checksumTest);
@@ -277,5 +300,14 @@ namespace NmeaParser.Messages
             }
             return TimeSpan.Zero;
         }
+
+        /// <summary>
+        /// Gets a relative timestamp in milliseconds indicating the time the message was created.
+        /// </summary>
+        /// <remarks>
+        /// This value is deduced from <c>System.Diagnostics.Stopwatch.GetTimestamp() * 1000d / System.Diagnostics.Stopwatch.Frequency</c>.
+        /// You can use it to calculate the age of the message in milliseconds by calculating the difference between the timestamp and the above expression
+        /// </remarks>
+        public double Timestamp { get; }
     }
 }

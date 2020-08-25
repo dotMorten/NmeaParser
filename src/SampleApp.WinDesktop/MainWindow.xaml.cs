@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NmeaParser.Gnss;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace SampleApp.WinDesktop
     public partial class MainWindow : Window
     {
         private Queue<string> messages = new Queue<string>(101);
-        private NmeaParser.NmeaDevice currentDevice;
+        public static NmeaParser.NmeaDevice currentDevice;
+
         //Dialog for browsing to nmea log files
         private Microsoft.Win32.OpenFileDialog nmeaOpenFileDialog = new Microsoft.Win32.OpenFileDialog()
         {
@@ -36,15 +38,15 @@ namespace SampleApp.WinDesktop
             //var device = new NmeaParser.SerialPortDevice(portName);
 
             //Use a log file for playing back logged data
-            var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt");
-            StartDevice(device);
+            var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt") { EmulatedBaudRate = 9600, BurstRate = TimeSpan.FromSeconds(1d) };
+            _ = StartDevice(device);
         }
 
         /// <summary>
         /// Unloads the current device, and opens the next device
         /// </summary>
         /// <param name="device"></param>
-        private async void StartDevice(NmeaParser.NmeaDevice device)
+        private async Task StartDevice(NmeaParser.NmeaDevice device)
         {
             //Clean up old device
             if (currentDevice != null)
@@ -53,6 +55,12 @@ namespace SampleApp.WinDesktop
                 if (currentDevice.IsOpen)
                     await currentDevice.CloseAsync();
                 currentDevice.Dispose();
+                if (gnssMonitorView.Monitor != null)
+                {
+                    gnssMonitorView.Monitor.LocationChanged -= Monitor_LocationChanged;
+                    gnssMonitorView.Monitor = null;
+                }
+                mapplot.Clear();
             }
             output.Text = "";
             messages.Clear();
@@ -61,9 +69,14 @@ namespace SampleApp.WinDesktop
             gpgsaView.Message = null;
             gpgllView.Message = null;
             pgrmeView.Message = null;
-            satView.GsvMessage = null;
+            satView.ClearGsv();
+            satSnr.ClearGsv();
             //Start new device
             currentDevice = device;
+            foreach(var child in MessagePanel.Children.OfType<UnknownMessageControl>().ToArray())
+            {
+                MessagePanel.Children.Remove(child);
+            }
             currentDevice.MessageReceived += device_MessageReceived;
             view2d.NmeaDevice = device;
             view3d.NmeaDevice = device;
@@ -76,6 +89,15 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.PortName,
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
+            await device.OpenAsync();
+            gnssMonitorView.Monitor = new GnssMonitor(device);
+            gnssMonitorView.Monitor.LocationChanged += Monitor_LocationChanged;
+        }
+
+        private void Monitor_LocationChanged(object sender, EventArgs e)
+        {
+            var mon = sender as GnssMonitor;
+            mapplot.AddLocation(mon.Latitude, mon.Longitude, mon.Altitude, mon.FixQuality);
         }
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
@@ -89,7 +111,8 @@ namespace SampleApp.WinDesktop
 
                 if (args.Message is NmeaParser.Messages.Gsv gpgsv)
                 {
-                    satView.GsvMessage = gpgsv;
+                    satView.SetGsv(gpgsv);
+                    satSnr.SetGsv(gpgsv);
                 }
                 else if (args.Message is NmeaParser.Messages.Rmc)
                     gprmcView.Message = args.Message as NmeaParser.Messages.Rmc;
@@ -118,107 +141,45 @@ namespace SampleApp.WinDesktop
         }
 
         //Browse to nmea file and create device from selected file
-        private void OpenNmeaLogButton_Click(object sender, RoutedEventArgs e)
+        private async void OpenNmeaLogButton_Click(object sender, RoutedEventArgs e)
         {
             var result = nmeaOpenFileDialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
                 var file = nmeaOpenFileDialog.FileName;
                 var device = new NmeaParser.NmeaFileDevice(file);
-                StartDevice(device);
+                try
+                {
+                    await StartDevice(device);
+                }
+                catch(System.Exception ex)
+                {
+                    MessageBox.Show("Failed to start device: " + ex.Message);
+                }
             }
         }
 
         //Creates a serial port device from the selected settings
-        private void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
+        private async void ConnectToSerialButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 var portName = serialPorts.Text as string;
                 var baudRate = int.Parse(baudRates.Text);
                 var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
-                StartDevice(device);
+                try
+                {
+                    await StartDevice(device);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("Failed to start device: " + ex.Message);
+                }
             }
             catch(System.Exception ex)
             {
                 MessageBox.Show("Error connecting: " + ex.Message);
             }
-        }
-
-        //Attempts to perform an auto discovery of serial ports
-        private async void AutoDiscoverButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            button.IsEnabled = false;
-            System.IO.Ports.SerialPort port = await Task.Run<System.IO.Ports.SerialPort>(() => {
-                return FindPort(
-                    new System.Progress<string>((s) => { Dispatcher.BeginInvoke((Action)delegate() { autoDiscoverStatus.Text = s; }); }));
-            });
-            if (port != null) //we found a port
-            {
-                autoDiscoverStatus.Text = "";
-                serialPorts.Text = port.PortName;
-                baudRates.Text = port.BaudRate.ToString();
-                ConnectToSerialButton_Click(sender, e);
-            }
-            else
-                autoDiscoverStatus.Text = "No GPS port found";
-            button.IsEnabled = false;
-        }
-
-        //Iterates all serial ports and attempts to open them at different baud rates
-        //and looks for a GPS message.
-        private static System.IO.Ports.SerialPort FindPort(IProgress<string> progress = null)
-        {
-            var ports = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s => s);
-            foreach (var portName in ports)
-            {
-                using (var port = new System.IO.Ports.SerialPort(portName))
-                {
-                    var defaultRate = port.BaudRate;
-                    List<int> baudRatesToTest = new List<int>(new[] { 9600, 4800, 115200, 19200, 57600, 38400, 2400 }); //Ordered by likelihood
-                    //Move default rate to first spot
-                    if (baudRatesToTest.Contains(defaultRate)) baudRatesToTest.Remove(defaultRate);
-                    baudRatesToTest.Insert(0, defaultRate);
-                    foreach (var baud in baudRatesToTest)
-                    {
-
-                        if (progress != null)
-                            progress.Report(string.Format("Trying {0} @ {1}baud", portName, port.BaudRate));
-                        port.BaudRate = baud;
-                        port.ReadTimeout = 2000; //this might not be long enough
-                        bool success = false;
-                        try
-                        {
-                            port.Open();
-                            if (!port.IsOpen)
-                                continue; //couldn't open port
-                            try
-                            {
-                                port.ReadTo("$GP");
-                            }
-                            catch (TimeoutException)
-                            {
-                                continue;
-                            }
-                            success = true;
-                        }
-                        catch
-                        {
-                            //Error reading
-                        }
-                        finally
-                        {
-                            port.Close();
-                        }
-                        if (success)
-                        {
-                            return new System.IO.Ports.SerialPort(portName, baud);
-                        }
-                    }
-                }
-            }
-            return null;
         }
     }
                 

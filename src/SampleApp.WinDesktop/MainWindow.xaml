@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:SampleApp.WinDesktop"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-        Title="Sample App" Height="500" Width="625">
+        Title="NMEA Parser Sample App" Height="768" Width="1024">
     <Window.Resources>
         <local:NullToCollapsedConverter x:Key="nullConv" />
         <Style TargetType="UserControl" x:Key="card">
@@ -20,7 +20,7 @@
     </Window.Resources>
     <Grid>
         <TabControl>
-            <TabItem Header="GPS Info">
+            <TabItem Header="Messages">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Background="#FFEEEEEE">
                     <WrapPanel x:Name="MessagePanel">
                         <local:RmcControl x:Name="gprmcView" Style="{StaticResource card}" Visibility="{Binding Message, ElementName=gprmcView, Converter={StaticResource nullConv}}" />
@@ -35,13 +35,18 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
-                        <RowDefinition Height="100" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <local:SatelliteView MaxWidth="{Binding ActualHeight, ElementName=satView}"
                     Grid.Column="1" x:Name="satView" />
-                    <local:SatelliteSnr Grid.Row="1"
-                        GsvMessage="{Binding GsvMessage, ElementName=satView}" />
+                    <local:SatelliteSnr Grid.Row="1" x:Name="satSnr" />
                 </Grid>
+            </TabItem>
+            <TabItem Header="GNSS Monitor">
+                <local:GnssMonitorView x:Name="gnssMonitorView" />
+            </TabItem>
+            <TabItem Header="Deviation Map">
+                <local:PointPlotView x:Name="mapplot" />
             </TabItem>
             <TabItem Header="Map">
                 <local:View2D x:Name="view2d" />
@@ -49,7 +54,7 @@
             <TabItem Header="3D">
                 <local:View3D x:Name="view3d" />
             </TabItem>
-            <TabItem Header="Messages">
+            <TabItem Header="NMEA Log">
                 <TextBox x:Name="output"
                  AcceptsReturn="True"
                  IsReadOnly="True"
@@ -65,18 +70,12 @@
                             <TextBlock Text="None" x:Name="currentDeviceInfo" FontWeight="Bold" />
                         </StackPanel>
                         <Button Width="200" Content="Open NMEA Log..." Click="OpenNmeaLogButton_Click" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" />
-                        <StackPanel Orientation="Horizontal">
-                            <Button Width="200" Content="Auto-discover serial port"
-                                    HorizontalAlignment="Left" Padding="20,5" Margin="0,5" 
-                                    Click="AutoDiscoverButton_Click" />
-                            <TextBlock x:Name="autoDiscoverStatus" VerticalAlignment="Center" />
-                        </StackPanel>
                         <GroupBox Header="Open Serial device" Width="200" HorizontalAlignment="Left">
                             <StackPanel>
                                 <TextBlock Text="Serial port:" />
                                 <ComboBox x:Name="serialPorts" />
                                 <TextBlock Text="Baud rate:" />
-                                <ComboBox x:Name="baudRates" SelectedIndex="3">
+                                <ComboBox x:Name="baudRates" SelectedIndex="7">
                                     <ComboBoxItem>1200</ComboBoxItem>
                                     <ComboBoxItem>2400</ComboBoxItem>
                                     <ComboBoxItem>4800</ComboBoxItem>
@@ -91,6 +90,9 @@
                         </GroupBox>
                     </StackPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="NTRIP">
+                <local:NtripView />
             </TabItem>
         </TabControl>
 

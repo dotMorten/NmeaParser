@@ -38,7 +38,7 @@ namespace NmeaParser.Messages
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gns")]
     [NmeaMessageType("--GNS")]
-    public class Gns : NmeaMessage
+    public class Gns : NmeaMessage, ITimestampedMessage, IGeographicLocation
     {
         /*
          * Example of GNS messages:
@@ -149,13 +149,13 @@ namespace NmeaParser.Messages
             ModeIndicators = message[5].Select(t => ParseModeIndicator(t)).ToArray();
             NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
             Hdop = NmeaMessage.StringToDouble(message[7]);
-            OrhometricHeight = NmeaMessage.StringToDouble(message[8]);
+            OrthometricHeight = NmeaMessage.StringToDouble(message[8]);
             GeoidalSeparation = NmeaMessage.StringToDouble(message[9]);
             var timeInSeconds = StringToDouble(message[10]);
             if (!double.IsNaN(timeInSeconds))
                 TimeSinceLastDgpsUpdate = TimeSpan.FromSeconds(timeInSeconds);
             else
-                TimeSinceLastDgpsUpdate = TimeSpan.MaxValue;
+                TimeSinceLastDgpsUpdate = null;
             if (message[11].Length > 0)
                 DgpsStationId = message[11];
 
@@ -236,7 +236,7 @@ namespace NmeaParser.Messages
         /// <summary>
         /// Orthometric height in meters (MSL reference)
         /// </summary>
-        public double OrhometricHeight { get; }
+        public double OrthometricHeight { get; }
 
         /// <summary>
         /// Geoidal separation in meters - the difference between the earth ellipsoid surface and mean-sea-level (geoid) surface defined by the reference datum used in the position solution<br/>
@@ -247,7 +247,7 @@ namespace NmeaParser.Messages
         /// <summary>
         ///  Age of differential data - <see cref="TimeSpan.MaxValue"/> if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data
         /// </summary>
-        public TimeSpan TimeSinceLastDgpsUpdate { get; }
+        public TimeSpan? TimeSinceLastDgpsUpdate { get; }
 
         /// <summary>
         /// eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID
@@ -258,5 +258,7 @@ namespace NmeaParser.Messages
         /// Navigational status
         /// </summary>
         public NavigationalStatus Status { get; }
+
+        TimeSpan ITimestampedMessage.Timestamp => FixTime;
     }
 }
