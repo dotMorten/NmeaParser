@@ -95,22 +95,23 @@ namespace NmeaParser
             private bool _isNmeaSupported = false;
 
 #if API_LEVEL_24
-            void IOnNmeaMessageListener.OnNmeaMessage(string message, long timestamp)
+            void IOnNmeaMessageListener.OnNmeaMessage(string? message, long timestamp)
 #else
-            void GpsStatus.INmeaListener.OnNmeaReceived(long timestamp, string message)
+            void GpsStatus.INmeaListener.OnNmeaReceived(long timestamp, string? message)
 #endif
             {
                 _isNmeaSupported = true;
-                NmeaMessage?.Invoke(this, message);
+                if (message != null)
+                    NmeaMessage?.Invoke(this, message);
             }
 
             public event EventHandler<string>? NmeaMessage;
 
             public float Accuracy = float.NaN;
 
-            void ILocationListener.OnLocationChanged(Location location)
+            void ILocationListener.OnLocationChanged(Location? location)
             {
-                if (location.Provider != LocationManager.GpsProvider)
+                if (location?.Provider != LocationManager.GpsProvider)
                 {
                     Accuracy = float.NaN;
                     return;
@@ -164,11 +165,11 @@ namespace NmeaParser
                 NmeaMessage?.Invoke(this, string.Join(",", values) + "\n");
             }
 
-            void ILocationListener.OnProviderDisabled(string provider) { }
+            void ILocationListener.OnProviderDisabled(string? provider) { }
 
-            void ILocationListener.OnProviderEnabled(string provider) { }
+            void ILocationListener.OnProviderEnabled(string? provider) { }
 
-            void ILocationListener.OnStatusChanged(string provider, Availability status, Bundle extras) { }
+            void ILocationListener.OnStatusChanged(string? provider, Availability status, Bundle? extras) { }
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace NmeaParser
     /// </remarks>
     public class BluetoothDevice : NmeaDevice
     {
-        private static Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
+        private static Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB")!;
         private Android.Bluetooth.BluetoothDevice m_device;
         private BluetoothSocket? m_socket;
 
@@ -54,7 +54,7 @@ namespace NmeaParser
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
             if (adapter != null && adapter.IsEnabled)
             {
-                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids().Where(t => t.Uuid.ToString().Equals("00001101-0000-1000-8000-00805F9B34FB", StringComparison.InvariantCultureIgnoreCase)).Any()))
+                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids().Where(t => t.Uuid != null && t.Uuid.ToString()!.Equals("00001101-0000-1000-8000-00805F9B34FB", StringComparison.InvariantCultureIgnoreCase)).Any()))
                     yield return b;
             }
         }
@@ -75,9 +75,15 @@ namespace NmeaParser
             if (adapter?.IsEnabled != true)
                 throw new InvalidOperationException("Bluetooth Adapter not enabled");
             var d = adapter.GetRemoteDevice(m_device.Address);
+            if( d == null)
+                throw new InvalidOperationException($"Failed to get Remove device '{m_device.Address}'");
             var socket = d.CreateRfcommSocketToServiceRecord(SERIAL_UUID);
+            if (socket == null)
+                throw new InvalidOperationException($"Failed to create socket");
             socket.Connect();
             m_socket = socket;
+            if (socket.InputStream == null)
+                throw new InvalidOperationException($"Failed to create socket input stream");
             return Task.FromResult<Stream>(socket.InputStream);
         }
 
@@ -100,6 +106,8 @@ namespace NmeaParser
         {
             if (m_socket == null)
                 throw new InvalidOperationException("Device not open");
+            if (m_socket.OutputStream == null)
+                throw new InvalidOperationException("Device does not support writes");
             return m_socket.OutputStream.WriteAsync(buffer, offset, length);
         }
     }
