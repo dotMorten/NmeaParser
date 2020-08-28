@@ -7,10 +7,35 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<TextBox x:Name="output"
-				 AcceptsReturn="True"
-				 />
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <StackPanel x:Name="gnssMonitorView" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="3">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Latitude: " />
+                <TextBlock Text="{Binding Latitude}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Longitude: " />
+                <TextBlock Text="{Binding Longitude}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Altitude: " />
+                <TextBlock Text="{Binding Altitude}" />
+            </StackPanel>
+        </StackPanel>
+
+        <ComboBox Header="NMEA Device:" x:Name="nmeaDevicePicker" Grid.Row="1" Margin="0, 10" />
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button Content="Start" x:Name="startButton" Click="startButton_Click" />
+            <Button Content="Stop" IsEnabled="False" x:Name="stopButton" Click="stopButton_Click" />
+        </StackPanel>
+
+        <TextBox x:Name="output" Grid.Row="3" AcceptsReturn="True" Header="NMEA Messages" Margin="0, 10" />
 	</Grid>
 </Page>
