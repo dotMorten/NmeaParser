@@ -19,7 +19,7 @@
       <Link>NmeaSampleData.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.7.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.9.0" />
     <Content Include="car.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

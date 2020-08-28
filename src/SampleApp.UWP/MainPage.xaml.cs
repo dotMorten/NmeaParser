@@ -105,7 +105,7 @@ namespace SampleApp.UWP
 								serialDevice.BaudRate = 9600;
 								serialDevice.DataBits = 8;
 								serialDevice.Parity = SerialParity.None;
-								Task.FromResult<NmeaDevice>(new NmeaParser.SerialPortDevice(serialDevice));
+								return Task.FromResult<NmeaDevice>(new NmeaParser.SerialPortDevice(serialDevice));
 							}
 						});
 					}
