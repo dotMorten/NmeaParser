@@ -54,6 +54,7 @@ namespace SampleApp.Droid
         private void Stop()
         {
             listener.MessageReceived -= Listener_MessageReceived;
+            monitor.LocationChanged -= Monitor_LocationChanged;
             socket?.Close();
             socket?.Dispose();
             socket = null;
@@ -71,6 +72,7 @@ namespace SampleApp.Droid
         }
 
         private NmeaParser.NmeaDevice listener;
+        private NmeaParser.Gnss.GnssMonitor monitor;
         private TextView status;
         private bool launched;
         private Android.Bluetooth.BluetoothSocket socket;
@@ -134,6 +136,8 @@ namespace SampleApp.Droid
                 await listener.OpenAsync();
                 status.Text += "\nConnected!";
                 startButton.Enabled = !(stopButton.Enabled = true);
+                monitor = new NmeaParser.Gnss.GnssMonitor(listener);
+                monitor.LocationChanged += Monitor_LocationChanged;
             }
             else
             {
@@ -163,16 +167,14 @@ namespace SampleApp.Droid
                 if (messages.Count == 100) messages.Dequeue();
                 messages.Enqueue(message);
                 status.Text = string.Join("\n", messages.Reverse().Select(n=>n.ToString()));
-                if(message is Rmc rmc)
-                {
-                    FindViewById<TextView>(Resource.Id.latitude).Text = "Latitude = " + rmc.Latitude.ToString("0.0000000");
-                    FindViewById<TextView>(Resource.Id.longitude).Text = "Longitude = " + rmc.Longitude.ToString("0.0000000");
-                }
-                else if (message is Gga gga)
-                {
-                    FindViewById<TextView>(Resource.Id.altitude).Text = "Altitude = " + gga.Altitude.ToString() + " " + gga.AltitudeUnits.ToString();
-                }
             });
+        }
+
+        private void Monitor_LocationChanged(object sender, EventArgs e)
+        {
+            FindViewById<TextView>(Resource.Id.latitude).Text = "Latitude = " + monitor.Latitude.ToString("0.0000000");
+            FindViewById<TextView>(Resource.Id.longitude).Text = "Longitude = " + monitor.Longitude.ToString("0.0000000");
+            FindViewById<TextView>(Resource.Id.altitude).Text = "Altitude = " + monitor.Altitude.ToString();
         }
     }
 }

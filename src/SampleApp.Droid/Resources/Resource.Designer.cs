@@ -449,30 +449,14 @@ namespace SampleApp.Droid
 			}
 		}
 		
-		public partial class Mipmap
-		{
-			
-			// aapt resource value: 0x7F090000
-			public const int icon = 2131296256;
-			
-			static Mipmap()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Mipmap()
-			{
-			}
-		}
-		
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7F0A0000
-			public const int app_name = 2131361792;
+			// aapt resource value: 0x7F090000
+			public const int app_name = 2131296256;
 			
-			// aapt resource value: 0x7F0A0001
-			public const int status_bar_notification_info_overflow = 2131361793;
+			// aapt resource value: 0x7F090001
+			public const int status_bar_notification_info_overflow = 2131296257;
 			
 			static String()
 			{
@@ -487,41 +471,41 @@ namespace SampleApp.Droid
 		public partial class Style
 		{
 			
-			// aapt resource value: 0x7F0B0000
-			public const int TextAppearance_Compat_Notification = 2131427328;
+			// aapt resource value: 0x7F0A0000
+			public const int TextAppearance_Compat_Notification = 2131361792;
 			
-			// aapt resource value: 0x7F0B0001
-			public const int TextAppearance_Compat_Notification_Info = 2131427329;
+			// aapt resource value: 0x7F0A0001
+			public const int TextAppearance_Compat_Notification_Info = 2131361793;
 			
-			// aapt resource value: 0x7F0B0002
-			public const int TextAppearance_Compat_Notification_Info_Media = 2131427330;
+			// aapt resource value: 0x7F0A0002
+			public const int TextAppearance_Compat_Notification_Info_Media = 2131361794;
 			
-			// aapt resource value: 0x7F0B0003
-			public const int TextAppearance_Compat_Notification_Line2 = 2131427331;
+			// aapt resource value: 0x7F0A0003
+			public const int TextAppearance_Compat_Notification_Line2 = 2131361795;
 			
-			// aapt resource value: 0x7F0B0004
-			public const int TextAppearance_Compat_Notification_Line2_Media = 2131427332;
+			// aapt resource value: 0x7F0A0004
+			public const int TextAppearance_Compat_Notification_Line2_Media = 2131361796;
 			
-			// aapt resource value: 0x7F0B0005
-			public const int TextAppearance_Compat_Notification_Media = 2131427333;
+			// aapt resource value: 0x7F0A0005
+			public const int TextAppearance_Compat_Notification_Media = 2131361797;
 			
-			// aapt resource value: 0x7F0B0006
-			public const int TextAppearance_Compat_Notification_Time = 2131427334;
+			// aapt resource value: 0x7F0A0006
+			public const int TextAppearance_Compat_Notification_Time = 2131361798;
 			
-			// aapt resource value: 0x7F0B0007
-			public const int TextAppearance_Compat_Notification_Time_Media = 2131427335;
+			// aapt resource value: 0x7F0A0007
+			public const int TextAppearance_Compat_Notification_Time_Media = 2131361799;
 			
-			// aapt resource value: 0x7F0B0008
-			public const int TextAppearance_Compat_Notification_Title = 2131427336;
+			// aapt resource value: 0x7F0A0008
+			public const int TextAppearance_Compat_Notification_Title = 2131361800;
 			
-			// aapt resource value: 0x7F0B0009
-			public const int TextAppearance_Compat_Notification_Title_Media = 2131427337;
+			// aapt resource value: 0x7F0A0009
+			public const int TextAppearance_Compat_Notification_Title_Media = 2131361801;
 			
-			// aapt resource value: 0x7F0B000A
-			public const int Widget_Compat_NotificationActionContainer = 2131427338;
+			// aapt resource value: 0x7F0A000A
+			public const int Widget_Compat_NotificationActionContainer = 2131361802;
 			
-			// aapt resource value: 0x7F0B000B
-			public const int Widget_Compat_NotificationActionText = 2131427339;
+			// aapt resource value: 0x7F0A000B
+			public const int Widget_Compat_NotificationActionText = 2131361803;
 			
 			static Style()
 			{
