@@ -37,13 +37,13 @@ namespace NmeaParser.Messages
             }
 
             var time = StringToTimeSpan(message[0]);
-            var day = int.Parse(message[1], CultureInfo.InvariantCulture);
-            var month = int.Parse(message[2], CultureInfo.InvariantCulture);
-            var year = int.Parse(message[3], CultureInfo.InvariantCulture);
-
-            FixDateTime = new DateTimeOffset(year, month, day, time.Hours, time.Minutes,
-                time.Seconds, TimeSpan.Zero);
-
+            if (int.TryParse(message[1], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out int day) &&
+                int.TryParse(message[2], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out int month) &&
+                int.TryParse(message[3], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out int year))
+            {
+                FixDateTime = new DateTimeOffset(year, month, day, time.Hours, time.Minutes,
+                    time.Seconds, TimeSpan.Zero);
+            }
             // Index 4 and 5 is used to specify a local time zone.
             // However I haven't come across any receiver that actually
             // specify this, so we're just ignoring it.
