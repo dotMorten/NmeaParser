@@ -12,7 +12,7 @@ using NmeaParser.Messages;
 
 namespace SampleApp.Droid
 {
-    [Activity(Label = "NMEA Parser SampleApp", MainLauncher = true)]
+    [Activity(Label = "NMEA Parser SampleApp", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         private Button startButton;
@@ -33,9 +33,7 @@ namespace SampleApp.Droid
 
             devices.Add("System GPS", null);
             var devicePicker = FindViewById<Spinner>(Resource.Id.device_picker);
-            Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB");
-            var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
-            foreach (var d in adapter.BondedDevices.Where(d => d.GetUuids().Where(t => t.Uuid.ToString().Equals("00001101-0000-1000-8000-00805F9B34FB", StringComparison.InvariantCultureIgnoreCase)).Any()))
+            foreach(var d in NmeaParser.BluetoothDevice.GetBluetoothSerialDevices())
             {
                 devices[d.Name + " " + d.Address] = d.Address;
             }
