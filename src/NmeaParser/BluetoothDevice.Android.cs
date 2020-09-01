@@ -54,7 +54,7 @@ namespace NmeaParser
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
             if (adapter != null && adapter.IsEnabled)
             {
-                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids().Where(t => t.Uuid != null && t.Uuid.ToString()!.Equals("00001101-0000-1000-8000-00805F9B34FB", StringComparison.InvariantCultureIgnoreCase)).Any()))
+                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids().Any(t => SERIAL_UUID.CompareTo(t.Uuid) == 0)))
                     yield return b;
             }
         }
