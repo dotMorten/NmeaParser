@@ -26,7 +26,6 @@ namespace NmeaParser.Gnss
     /// </summary>
     public class GnssMonitor : INotifyPropertyChanged
     {
-        private bool m_supportGNMessages; // If device detect GN* messages, ignore all other Talker ID
         private bool m_supportGGaMessages; //If device support GGA, ignore RMC for location
         private Dictionary<string, NmeaMessage> m_allMessages { get; } = new Dictionary<string, NmeaMessage>();
         private object m_lock = new object();
@@ -81,10 +80,12 @@ namespace NmeaParser.Gnss
                 m_allMessages[message.MessageType] = message;
             }
             properties.Add(nameof(AllMessages));
-            if (message.TalkerId == NmeaParser.Talker.GlobalNavigationSatelliteSystem)
-                m_supportGNMessages = true; // Support for GN* messages detected
-            else if (m_supportGNMessages && message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv))
-                return; // If device supports combined GN* messages, ignore non-GN messages, except for Gsv
+            if(message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv))
+            {
+                // If device supports combined GN*** messages, ignore non-GN messages, except for Gsv
+                if (m_allMessages.ContainsKey("GN" + message.MessageType.Substring(2)))
+                    return;
+            }
 
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
             {
