@@ -54,137 +54,100 @@ namespace NmeaParser.ArcGIS
 ```
 
 ### Combining multiple NMEA messages into a single location event
-NMEA often happens in a burst of messages, which could be combined to one larger location object with more information available.
-By relying on the time stamp in most of the messages, we can combine them all to get better metadata about the location.
+NMEA often happens in a burst of messages, which could be combined to one larger location object with more information available, as well as containing information from multiple different satellite systems.
+By using the `GnssMonitor` class that aggregates these messages, we can create a much more robust location provider:
 ```
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Location;
-using NmeaParser;
-using NmeaParser.Messages;
+using NmeaParser.Gnss;
 
 namespace NmeaParser.ArcGIS
 {
-    public class NmeaLocationProvider : LocationDataSource
+   public class NmeaLocationDataSource : Esri.ArcGISRuntime.Location.LocationDataSource
     {
-        private readonly NmeaParser.NmeaDevice device;
-        private Gga lastGga;
-        private Rmc lastRmc;
-        private Gsa lastGsa;
-        private Gst lastGst;
+        private static SpatialReference wgs84_ellipsoidHeight = SpatialReference.Create(4326, 115700);
+        private readonly GnssMonitor m_gnssMonitor;
+        private readonly bool m_startStopDevice;
+        private double lastCourse = 0; // Course can fallback to NaN, but ArcGIS Datasource don't allow NaN course, so we cache last known as a fallback
 
-        public NmeaLocationProvider(NmeaParser.NmeaDevice device)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaLocationDataSource"/> class.
+        /// </summary>
+        /// <param name="device">The NMEA device to monitor</param>
+        /// <param name="startStopDevice">Whether starting this datasource also controls the underlying NMEA device</param>
+        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true) : this(new GnssMonitor(device), startStopDevice)
         {
-            this.device = device;
-            device.MessageReceived += NmeaMessageReceived;
         }
-        private void NmeaMessageReceived(object sender, NmeaMessageReceivedEventArgs e)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NmeaLocationDataSource"/> class.
+        /// </summary>
+        /// <param name="monitor">The NMEA device to monitor</param>
+        /// <param name="startStopDevice">Whether starting this datasource also controls the underlying NMEA device</param>
+        public NmeaLocationDataSource(NmeaParser.Gnss.GnssMonitor monitor, bool startStopDevice = true)
         {
-            var message = e.Message;
-            bool newFix = false;
-            if (message is Rmc rmc && rmc.Active)
-            {
-                lastRmc = rmc;
-                newFix = true;
-            }
-            else if (message is Gga gga)
-            {
-                lastGga = gga;
-                newFix = true;
-            }
-            else if (message is Gst gst)
-            {
-                lastGst = gst;
-                newFix = true;
-            }
-            else if (message is Gsa gsa)
-            {
-                lastGsa = gsa;
-            }
+            if (monitor == null)
+                throw new ArgumentNullException(nameof(monitor));
+            this.m_gnssMonitor = monitor;
+            m_startStopDevice = startStopDevice;
+        }
+
+        protected async override Task OnStartAsync()
+        {
+            m_gnssMonitor.LocationChanged += OnLocationChanged;
+            m_gnssMonitor.LocationLost += OnLocationChanged;
+            if (m_startStopDevice && !this.m_gnssMonitor.Device.IsOpen)
+                await this.m_gnssMonitor.Device.OpenAsync();
+
+            if (m_gnssMonitor.IsFixValid)
+                OnLocationChanged(this, EventArgs.Empty);
+        }
+
+        protected override Task OnStopAsync()
+        {
+            m_gnssMonitor.LocationChanged -= OnLocationChanged;
+            m_gnssMonitor.LocationLost -= OnLocationChanged;
+            if(m_startStopDevice)
+                return m_gnssMonitor.Device.CloseAsync();
             else
-            {
-                return;
-            }
-            // We require the timestamps to match to raise them together. Gsa doesn't have a time stamp so just using latest for that
-            TimeSpan? timeOfFixMax = MaxTime(lastRmc?.FixTime.TimeOfDay, lastGga?.FixTime, lastGst?.FixTime);
-            TimeSpan? timeOfFixMin = MinTime(lastRmc?.FixTime.TimeOfDay, lastGga?.FixTime, lastGst?.FixTime);
-            if (newFix && timeOfFixMax == timeOfFixMin)
-            {
-                var location = NmeaLocation.Create(timeOfFixMax.Value, lastRmc, lastGga, lastGsa, lastGst);
-                if (location != null)
-                    base.UpdateLocation(location);
-            }
+                return Task.CompletedTask;
         }
-        private static TimeSpan? MaxTime(params TimeSpan?[] timeSpans) => timeSpans.Where(t => t != null).Max();
-        private static TimeSpan? MinTime(params TimeSpan?[] timeSpans) => timeSpans.Where(t => t != null).Min();
-        protected override Task OnStartAsync() => device.OpenAsync();
 
-        protected override Task OnStopAsync() => device.CloseAsync();
-    }
+        private Esri.ArcGISRuntime.Location.Location currentLocation;
 
-    /// <summary>
-    /// Custom location class with the additional NMEA information associated with it
-    /// </summary>
-    public class NmeaLocation : Location
-    {
-        private NmeaLocation(DateTimeOffset? timestamp, MapPoint position, double horizontalAccuracy, double verticalAccuracy, double velocity, double course, bool isLastKnown)
-            : base(timestamp, position, horizontalAccuracy, verticalAccuracy, velocity, course, isLastKnown)
+        private void OnLocationChanged(object sender, EventArgs e)
         {
+            if (double.IsNaN(m_gnssMonitor.Longitude) || double.IsNaN(m_gnssMonitor.Latitude)) return;
+            if (!double.IsNaN(m_gnssMonitor.Course))
+                lastCourse = m_gnssMonitor.Course;
+            DateTimeOffset? timestamp = null;
+            if(m_gnssMonitor.FixTime.HasValue)
+                timestamp = new DateTimeOffset(DateTime.UtcNow.Date.Add(m_gnssMonitor.FixTime.Value));
+            var location = new Esri.ArcGISRuntime.Location.Location(
+                timestamp: timestamp,
+                position: !double.IsNaN(m_gnssMonitor.Altitude) ? new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, m_gnssMonitor.Altitude, wgs84_ellipsoidHeight) : new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, SpatialReferences.Wgs84),
+                horizontalAccuracy: m_gnssMonitor.HorizontalError,
+                verticalAccuracy: m_gnssMonitor.VerticalError,
+                velocity: double.IsNaN(m_gnssMonitor.Speed) ? 0 : m_gnssMonitor.Speed * 0.51444444,
+                course: lastCourse,
+                !m_gnssMonitor.IsFixValid);
+            // Avoid raising additional location events if nothing changed
+            if (currentLocation == null ||
+                currentLocation.Position.X != location.Position.X ||
+                currentLocation.Position.Y != location.Position.Y ||
+                currentLocation.Position.Z != location.Position.Z ||
+                currentLocation.Course != location.Course ||
+                currentLocation.Velocity != location.Velocity ||
+                currentLocation.HorizontalAccuracy != location.HorizontalAccuracy ||
+                currentLocation.VerticalAccuracy != location.VerticalAccuracy ||
+                currentLocation.IsLastKnown != location.IsLastKnown ||
+                timestamp != location.Timestamp)
+            {                
+                currentLocation = location;
+                UpdateLocation(currentLocation);
+            }
         }
-
-        public static NmeaLocation Create(TimeSpan timeOfFix, Rmc rmc, Gga gga, Gsa gsa, Gst gst)
-        {
-            MapPoint position = null;
-            double horizontalAccuracy = double.NaN;
-            double verticalAccuracy = double.NaN;
-            double velocity = 0;
-            double course = 0;
-            // Prefer GGA over RMC for location
-            if (gga != null && gga.FixTime == timeOfFix)
-            {
-                if (double.IsNaN(gga.Altitude))
-                    position = new MapPoint(gga.Longitude, gga.Latitude, SpatialReferences.Wgs84);
-                else
-                {
-                    // Vertical id 115700 == ellipsoid reference system. Gga is geoid, but we subtract GeoidalSeparation to simplify 
-                    // vertical transformations from the simpler/better known ellipsoidal model
-                    position = new MapPoint(gga.Longitude, gga.Latitude, gga.Altitude + gga.GeoidalSeparation, SpatialReference.Create(4326, 115700));
-                }
-            }
-            if (rmc != null && rmc.FixTime.TimeOfDay == timeOfFix)
-            {
-                if (position == null)
-                {
-                    position = new MapPoint(rmc.Longitude, rmc.Latitude, SpatialReferences.Wgs84);
-                }
-                velocity = double.IsNaN(rmc.Speed) ? 0 : rmc.Speed;
-                course = double.IsNaN(rmc.Course) ? 0 : rmc.Course;
-            }
-            if (gst != null && gst.FixTime == timeOfFix)
-            {
-                verticalAccuracy = gst.SigmaHeightError;
-                horizontalAccuracy = gst.SemiMajorError;
-            }
-            if (position == null)
-                return null;
-            var location = new NmeaLocation(DateTimeOffset.UtcNow.Date.Add(timeOfFix), position, horizontalAccuracy, verticalAccuracy, velocity, course, false);
-            location.Rmc = rmc;
-            location.Gga = gga;
-            location.Gsa = gsa;
-            location.Gst = gst?.FixTime == timeOfFix ? gst : null;
-            return location;
-        }
-        public Rmc Rmc { get; private set; }
-        public Gga Gga { get; private set; }
-        public Gsa Gsa { get; private set; }
-        public Gst Gst { get; private set; }
-
-        public int NumberOfSatellites => Gga?.NumberOfSatellites ?? -1;
-        public double Hdop => Gsa?.Hdop ?? Gga?.Hdop ?? double.NaN;
-        public double Pdop => Gsa?.Pdop ?? double.NaN;
-        public double Vdop => Gsa?.Vdop ?? double.NaN;
     }
 }
 ```
