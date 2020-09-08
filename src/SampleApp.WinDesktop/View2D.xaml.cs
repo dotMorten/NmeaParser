@@ -37,22 +37,22 @@ namespace SampleApp.WinDesktop
             mapView.LocationDisplay.IsEnabled = IsVisible;
         }
 
-        public NmeaDevice NmeaDevice
+        public NmeaParser.Gnss.GnssMonitor GnssMonitor
         {
-            get { return (NmeaDevice)GetValue(NmeaDeviceProperty); }
-            set { SetValue(NmeaDeviceProperty, value); }
+            get { return (NmeaParser.Gnss.GnssMonitor)GetValue(GnssMonitorProperty); }
+            set { SetValue(GnssMonitorProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NmeaDeviceProperty =
-            DependencyProperty.Register(nameof(NmeaDevice), typeof(NmeaDevice), typeof(View2D), new PropertyMetadata(null, OnNmeaDevicePropertyChanged));
+        public static readonly DependencyProperty GnssMonitorProperty =
+            DependencyProperty.Register(nameof(GnssMonitor), typeof(NmeaParser.Gnss.GnssMonitor), typeof(View2D), new PropertyMetadata(null, OnGnssMonitorPropertyChanged));
 
-        private static void OnNmeaDevicePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnGnssMonitorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((View2D)d).InitNmeaProvider(e.OldValue as NmeaDevice, e.NewValue as NmeaDevice);
+            ((View2D)d).InitNmeaProvider(e.OldValue as NmeaParser.Gnss.GnssMonitor, e.NewValue as NmeaParser.Gnss.GnssMonitor);
         }
 
-        private void InitNmeaProvider(NmeaDevice oldDevice, NmeaDevice newDevice)
+        private void InitNmeaProvider(NmeaParser.Gnss.GnssMonitor oldDevice, NmeaParser.Gnss.GnssMonitor newDevice)
         {
             mapView.LocationDisplay.IsEnabled = false;
             if (newDevice != null)

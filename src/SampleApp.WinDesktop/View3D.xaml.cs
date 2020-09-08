@@ -37,20 +37,21 @@ namespace SampleApp.WinDesktop
             if(IsVisible)
             {
                 graphic3D.Geometry = null;
-                if (NmeaDevice != null)
-                    NmeaDevice.MessageReceived += NmeaDevice_MessageReceived;
+                if (GnssMonitor != null)
+                    GnssMonitor.LocationChanged += GnssMonitor_LocationChanged;
             }
             else
             {
-                if (NmeaDevice != null)
-                    NmeaDevice.MessageReceived -= NmeaDevice_MessageReceived;
+                if (GnssMonitor != null)
+                    GnssMonitor.LocationChanged -= GnssMonitor_LocationChanged;
             }
         }
 
-        private void NmeaDevice_MessageReceived(object sender, NmeaMessageReceivedEventArgs e)
+        private void GnssMonitor_LocationChanged(object sender, EventArgs e)
         {
-            if (e.Message is Rmc rmc)
-                UpdateLocation(rmc.Latitude, rmc.Longitude, rmc.Course);
+            var monitor = (NmeaParser.Gnss.GnssMonitor)sender;
+            if (monitor.IsFixValid)
+                UpdateLocation(monitor.Latitude, monitor.Longitude, monitor.Course);
         }
 
         private Graphic graphic3D;
@@ -107,15 +108,14 @@ namespace SampleApp.WinDesktop
             }
         }
 
-        public NmeaDevice NmeaDevice
+        public NmeaParser.Gnss.GnssMonitor GnssMonitor
         {
-            get { return (NmeaDevice)GetValue(NmeaDeviceProperty); }
-            set { SetValue(NmeaDeviceProperty, value); }
+            get { return (NmeaParser.Gnss.GnssMonitor)GetValue(GnssMonitorProperty); }
+            set { SetValue(GnssMonitorProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NmeaDeviceProperty =
-            DependencyProperty.Register(nameof(NmeaDevice), typeof(NmeaDevice), typeof(View3D), new PropertyMetadata(null));
+        public static readonly DependencyProperty GnssMonitorProperty =
+            DependencyProperty.Register(nameof(GnssMonitor), typeof(NmeaParser.Gnss.GnssMonitor), typeof(View3D), new PropertyMetadata(null));
 
     }
 }

@@ -16,6 +16,7 @@ namespace SampleApp.WinDesktop
     {
         private Queue<string> messages = new Queue<string>(101);
         public static NmeaParser.NmeaDevice currentDevice;
+        public static GnssMonitor monitor;
 
         //Dialog for browsing to nmea log files
         private Microsoft.Win32.OpenFileDialog nmeaOpenFileDialog = new Microsoft.Win32.OpenFileDialog()
@@ -58,7 +59,7 @@ namespace SampleApp.WinDesktop
                 if (gnssMonitorView.Monitor != null)
                 {
                     gnssMonitorView.Monitor.LocationChanged -= Monitor_LocationChanged;
-                    gnssMonitorView.Monitor = null;
+                    gnssMonitorView.Monitor = monitor = null;
                 }
                 mapplot.Clear();
             }
@@ -78,8 +79,6 @@ namespace SampleApp.WinDesktop
                 MessagePanel.Children.Remove(child);
             }
             currentDevice.MessageReceived += device_MessageReceived;
-            view2d.NmeaDevice = device;
-            view3d.NmeaDevice = device;
 
             if (device is NmeaParser.NmeaFileDevice)
                 currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
@@ -90,8 +89,10 @@ namespace SampleApp.WinDesktop
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
             }
             await device.OpenAsync();
-            gnssMonitorView.Monitor = new GnssMonitor(device);
+            gnssMonitorView.Monitor = monitor = new GnssMonitor(device);
             gnssMonitorView.Monitor.LocationChanged += Monitor_LocationChanged;
+            view2d.GnssMonitor = monitor;
+            view3d.GnssMonitor = monitor;
         }
 
         private void Monitor_LocationChanged(object sender, EventArgs e)

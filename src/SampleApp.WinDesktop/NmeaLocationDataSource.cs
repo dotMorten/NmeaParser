@@ -31,7 +31,7 @@ namespace SampleApp.WinDesktop
         /// </summary>
         /// <param name="device">The NMEA device to monitor</param>
         /// <param name="startStopDevice">Whether starting this datasource also controls the underlying NMEA device</param>
-        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true) : this(new GnssMonitor(device), startStopDevice)
+        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true) : this(MainWindow.monitor, startStopDevice)
         {
         }
 
