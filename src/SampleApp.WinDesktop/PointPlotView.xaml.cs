@@ -1,7 +1,9 @@
 ﻿using Esri.ArcGISRuntime.Location;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Transactions;
 using System.Windows;
@@ -88,14 +90,15 @@ namespace SampleApp.WinDesktop
                 });
                 return;
             }
-            var latAvr = locations.Select(l => l.Latitude).Average();
-            var lonAvr = locations.Select(l => l.Longitude).Average();
+            var measurements = locations.ToArray(); // Grab copy to avoid threading issues
+            var latAvr = measurements.Select(l => l.Latitude).Average();
+            var lonAvr = measurements.Select(l => l.Longitude).Average();
             
             //List<double> lonDistances = new List<double>(locations.Count);
             //List<double> latDistances = new List<double>(locations.Count);
-            List<double> distances = new List<double>(locations.Count);
+            List<double> distances = new List<double>(measurements.Length);
             var locations2 = new List<Point>();
-            foreach (var l in locations)
+            foreach (var l in measurements)
             {
                 var d = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l.Latitude, l.Longitude);
                 var dLat = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l.Latitude, lonAvr);
@@ -180,8 +183,13 @@ namespace SampleApp.WinDesktop
             }
             var stdDevLat = Math.Sqrt(locations2.Sum(d => (d.Latitude - latAvr2) * (d.Latitude - latAvr2)) / locations2.Count);
             var stdDevLon = Math.Sqrt(locations2.Sum(d => (d.Longitude - lonAvr2) * (d.Longitude - lonAvr2)) / locations2.Count);
-            var zAvr = locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Average();
-            var stdDevZ = Math.Sqrt(locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / locations.Select(l => l.Z).Where(l => !double.IsNaN(l)).Count());
+            var zAvr = measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Average();
+            var stdDevZ = Math.Sqrt(measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Count());
+            var meanH = distances.Average();
+            var stdDevH = Math.Sqrt(distances.Sum(d => d * d) / distances.Count);
+            var stdErrorH = stdDevH / Math.Sqrt(distances.Count);
+            var marginOfErrorH = stdErrorH * 2;
+
             Dispatcher.Invoke(() =>
             {
                 SecondMeterLabel.Text = $"{maxDif.ToString("0.###")}m";
@@ -190,7 +198,7 @@ namespace SampleApp.WinDesktop
                 var writeableBitmap = new WriteableBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Bgra32, null);
                 writeableBitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, stride, 0);
                 plot.Source = writeableBitmap;
-                Status.Text = $"Measurements: {locations.Count}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {distances.Average().ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
+                Status.Text = $"Measurements: {measurements.Length}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {stdDevH.ToString("0.###")}m\n95% confidence: {marginOfErrorH.ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
             });
         }
 
