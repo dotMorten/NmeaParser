@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid >
+        <Grid.Resources>
+            <local:DistanceConverter x:Key="DistanceConverter" />
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MinWidth="80" />
             <ColumnDefinition />
@@ -66,6 +69,7 @@
                 <TextBlock Text="{Binding Mountpoint, StringFormat='Mount point: {0}'}" />
                 <TextBlock Text="{Binding Network, StringFormat='Network: {0}'}" />
                 <TextBlock Text="{Binding SupportsNmea, StringFormat='Supports NMEA: {0}'}" />
+                <TextBlock Text="{Binding Converter={StaticResource DistanceConverter}}" />
                 <Button Content="Connect" Click="Connect_Click" />
             </StackPanel>
         </Grid>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,13 +42,28 @@ namespace SampleApp.WinDesktop
             try
             {
                 sources = client.GetSourceTable().OfType<NtripStream>().ToList();
+                if(sources.Count == 0)
+                {
+                    MessageBox.Show($"No NTRIP data streams found at {host.Text}:{portNumber}");
+                    return;
+                }
             }
             catch(System.Exception ex)
             {
                 MessageBox.Show("Failed to connect: " + ex.Message);
                 return;
             }
-            sourceList.ItemsSource = sources.OrderBy(s=>s.CountryCode);
+            if (MainWindow.monitor != null && !double.IsNaN(MainWindow.monitor.Latitude) && !double.IsNaN(MainWindow.monitor.Longitude))
+            {
+                var lat = MainWindow.monitor.Latitude;
+                var lon = MainWindow.monitor.Longitude;
+                // Order by closest source
+                sourceList.ItemsSource = sources.OrderBy(s => PointPlotView.Vincenty.GetDistanceVincenty(lat, lon, s.Latitude, s.Longitude));
+            }
+            else
+            {
+                sourceList.ItemsSource = sources.OrderBy(s => s.CountryCode);
+            }
         }
         Stream ntripStream;
         private void Connect_Click(object sender, RoutedEventArgs e)
@@ -87,6 +103,25 @@ namespace SampleApp.WinDesktop
                 }
             });
             ntripstatus.Text = $"Connected";
+        }
+    }
+    public class DistanceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is NtripStream s && MainWindow.monitor?.IsFixValid == true)
+            {
+                var lat = MainWindow.monitor.Latitude;
+                var lon = MainWindow.monitor.Longitude;
+                var distance = PointPlotView.Vincenty.GetDistanceVincenty(lat, lon, s.Latitude, s.Longitude);
+                return "Distance: " + (distance / 1000).ToString("0.##") + "km";
+            }
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
