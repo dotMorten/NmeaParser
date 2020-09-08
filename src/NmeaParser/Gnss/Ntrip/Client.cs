@@ -38,7 +38,11 @@ namespace NmeaParser.Gnss.Ntrip
         /// <param name="port">Port, usually 2101</param>
         public Client(string host, int port)
         {
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
             _host = host;
+            if (port < 1)
+                throw new ArgumentOutOfRangeException(nameof(port));
             _port = port;
         }
 
@@ -49,9 +53,10 @@ namespace NmeaParser.Gnss.Ntrip
         /// <param name="port">Port, usually 2101</param>
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
-        public Client(string host, int port, string username, string password) : this(host, port)
+        public Client(string host, int port, string? username, string? password) : this(host, port)
         {
-            _auth = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
+            if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password))
+                _auth = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + ":" + password));
         }
 
         /// <summary>
