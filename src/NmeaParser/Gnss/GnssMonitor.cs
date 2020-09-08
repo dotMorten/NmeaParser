@@ -80,7 +80,7 @@ namespace NmeaParser.Gnss
                 m_allMessages[message.MessageType] = message;
             }
             properties.Add(nameof(AllMessages));
-            if(message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv))
+            if(message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv) && message.MessageType.Length > 2)
             {
                 // If device supports combined GN*** messages, ignore non-GN messages, except for Gsv
                 if (m_allMessages.ContainsKey("GN" + message.MessageType.Substring(2)))
