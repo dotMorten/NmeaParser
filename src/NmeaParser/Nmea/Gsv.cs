@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace NmeaParser.Messages
 {
@@ -58,12 +59,20 @@ namespace NmeaParser.Messages
             else if ( satellites != SatellitesInView)
                 return false; // Messages do not match
 
+            if ((message.Length - 3) % 4 == 1) // v4.1+ adds system id to the last message. Example L1=1, and L2=6 on GPS satellites
+            {
+                var id = message.Last();
+                if (id.Length == 1)
+                {
+                    GnssSignalId = id[0];
+                }
+            }
             for (int i = 3; i < message.Length - 3; i += 4)
             {
                 if (message[i].Length == 0)
                     continue;
                 else
-                    svs.Add(new SatelliteVehicle(talkerType, message, i));
+                    svs.Add(new SatelliteVehicle(talkerType, GnssSignalId, message, i));
             }
             return true;
         }
@@ -78,6 +87,78 @@ namespace NmeaParser.Messages
         /// Satellite vehicles in this message part.
         /// </summary>
         public IReadOnlyList<SatelliteVehicle> SVs => svs.AsReadOnly();
+
+        /// <summary>
+        /// Gets the GNSS Signal ID
+        /// </summary>
+        /// <remarks>
+        /// <table>
+        ///  <thead>
+        ///    <tr><th>System</th><th>Signal ID</th><th>Signal Channel</th></tr>
+        ///  </thead>
+        ///  <tbody>
+        ///    <tr><td>GPS</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>L1 C/1</td></tr>
+        ///    <tr><td></td><td>2</td><td>L1 P(Y)</td></tr>
+        ///    <tr><td></td><td>3</td><td>L1 M</td></tr>
+        ///    <tr><td></td><td>4</td><td>L2 P(Y)</td></tr>
+        ///    <tr><td></td><td>5</td><td>L2C-M</td></tr>
+        ///    <tr><td></td><td>6</td><td>L2C-L</td></tr>
+        ///    <tr><td></td><td>7</td><td>L5-I</td></tr>
+        ///    <tr><td></td><td>8</td><td>L5-Q</td></tr>
+        ///    <tr><td></td><td>9-F</td><td>Reserved</td></tr>
+        ///    <tr><td>GLONASS</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>G1 C/A</td></tr>
+        ///    <tr><td></td><td>2</td><td>G1 P</td></tr>
+        ///    <tr><td></td><td>3</td><td>G2 C/A</td></tr>
+        ///    <tr><td></td><td>4</td><td>GLONASS (M) G2 P</td></tr>
+        ///    <tr><td></td><td>5-F</td><td>Reserved</td></tr>
+        ///    <tr><td>GALILEO</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>E5a</td></tr>
+        ///    <tr><td></td><td>2</td><td>E5b</td></tr>
+        ///    <tr><td></td><td>3</td><td>E5 a+b</td></tr>
+        ///    <tr><td></td><td>4</td><td>E6-A</td></tr>
+        ///    <tr><td></td><td>5</td><td>E6-BC</td></tr>
+        ///    <tr><td></td><td>6</td><td>L1-A</td></tr>
+        ///    <tr><td></td><td>7</td><td>L1-BC</td></tr>
+        ///    <tr><td></td><td>8-F</td><td>Reserved</td></tr>
+        ///    <tr><td>BeiDou System</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>B1I</td></tr>
+        ///    <tr><td></td><td>2</td><td>B1Q</td></tr>
+        ///    <tr><td></td><td>3</td><td>B1C</td></tr>
+        ///    <tr><td></td><td>4</td><td>B1A</td></tr>
+        ///    <tr><td></td><td>5</td><td>B2-a</td></tr>
+        ///    <tr><td></td><td>6</td><td>B2-b</td></tr>
+        ///    <tr><td></td><td>7</td><td>B2 a+b</td></tr>
+        ///    <tr><td></td><td>8</td><td>B3I</td></tr>
+        ///    <tr><td></td><td>9</td><td>B3Q</td></tr>
+        ///    <tr><td></td><td>A</td><td>B3A</td></tr>
+        ///    <tr><td></td><td>B</td><td>B2I</td></tr>
+        ///    <tr><td></td><td>C</td><td>B2Q</td></tr>
+        ///    <tr><td></td><td>D-F</td><td>Reserved</td></tr>
+        ///    <tr><td>QZSS</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>L1 C/A</td></tr>
+        ///    <tr><td></td><td>2</td><td>L1C (D)</td></tr>
+        ///    <tr><td></td><td>3</td><td>L1C (P)</td></tr>
+        ///    <tr><td></td><td>4</td><td>LIS</td></tr>
+        ///    <tr><td></td><td>5</td><td>L2C-M</td></tr>
+        ///    <tr><td></td><td>6</td><td>L2C-L</td></tr>
+        ///    <tr><td></td><td>7</td><td>L5-I</td></tr>
+        ///    <tr><td></td><td>8</td><td>L5-Q</td></tr>
+        ///    <tr><td></td><td>9</td><td>L6D</td></tr>
+        ///    <tr><td></td><td>A</td><td>L6E</td></tr>
+        ///    <tr><td></td><td>B-F</td><td>Reserved</td></tr>
+        ///    <tr><td>NavIC (IRNSS)</td><td>0</td><td>All signals</td></tr>
+        ///    <tr><td></td><td>1</td><td>L5-SPS</td></tr>
+        ///    <tr><td></td><td>2</td><td>S-SPS</td></tr>
+        ///    <tr><td></td><td>3</td><td>L5-RS</td></tr>
+        ///    <tr><td></td><td>4</td><td>S-RS</td></tr>
+        ///    <tr><td></td><td>5</td><td>L1-SPS</td></tr>
+        ///    <tr><td></td><td>6-F</td><td>Reserved</td></tr>
+        ///  </tbody>
+        ///</table>
+        /// </remarks>
+        public char GnssSignalId { get; private set; } = '0';
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -103,7 +184,7 @@ namespace NmeaParser.Messages
     /// </summary>
     public sealed class SatelliteVehicle
     {
-        internal SatelliteVehicle(Talker talker, string[] message, int startIndex)
+        internal SatelliteVehicle(Talker talker, char signalId, string[] message, int startIndex)
         {
             Id = int.Parse(message[startIndex], CultureInfo.InvariantCulture);
             if (double.TryParse(message[startIndex + 1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double e))
@@ -113,6 +194,7 @@ namespace NmeaParser.Messages
             int snr = -1;
             if (int.TryParse(message[startIndex + 3], out snr))
                 SignalToNoiseRatio = snr;
+            GnssSignalId = signalId;
             TalkerId = talker;
         }
 
@@ -120,6 +202,12 @@ namespace NmeaParser.Messages
         /// Gets the talker ID for this vehicle
         /// </summary>
         public Talker TalkerId { get; }
+
+        /// <summary>
+        /// Gets the GNSS Signal ID.
+        /// </summary>
+        /// <seealso cref="Gsv.GnssSignalId"/>
+        public char GnssSignalId { get; }
 
         /// <summary>
         /// Satellite ID number

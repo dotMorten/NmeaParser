@@ -75,9 +75,12 @@ namespace NmeaParser.Gnss
             List<string> properties = new List<string>();
             lock (m_lock)
             {
-                if(m_allMessages.ContainsKey(message.MessageType) && m_allMessages[message.MessageType].Equals(message))
+                string msgid = message.MessageType;
+                if (message is Gsv gsv && gsv.GnssSignalId != '0')
+                    msgid = msgid + "|" + gsv.GnssSignalId;
+                    if (m_allMessages.ContainsKey(msgid) && m_allMessages[msgid].Equals(message))
                         return; // Nothing to update/notify
-                m_allMessages[message.MessageType] = message;
+                m_allMessages[msgid] = message;
             }
             properties.Add(nameof(AllMessages));
             if(message.TalkerId != NmeaParser.Talker.GlobalNavigationSatelliteSystem && !(message is Gsv) && message.MessageType.Length > 2)

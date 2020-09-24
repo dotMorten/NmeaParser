@@ -54,8 +54,30 @@
                             BorderBrush="Black" 
                             Margin="5,0" Width="20"
                             BorderThickness="1"
-                            ToolTip="{Binding SignalToNoiseRatio}"
                             VerticalAlignment="Bottom">
+                                <Border.ToolTip>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="System: " />
+                                            <TextBlock Text="{Binding Converter={StaticResource heightconv}, ConverterParameter=Name}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Azimuth: " />
+                                            <TextBlock Text="{Binding Azimuth}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Elevation: " />
+                                            <TextBlock Text="{Binding Elevation}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="SNR: " />
+                                            <TextBlock Text="{Binding SignalToNoiseRatio}" />
+                                            <TextBlock Text="dB" />
+                                        </StackPanel>
+                                        
+                                    </StackPanel>
+                                </Border.ToolTip>
+                            
                             <Border.Background>
                                 <SolidColorBrush Color="{Binding Converter={StaticResource conv}}" />
                             </Border.Background>

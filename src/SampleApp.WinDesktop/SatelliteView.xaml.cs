@@ -27,10 +27,10 @@ namespace SampleApp.WinDesktop
 		{
 			InitializeComponent();
 		}
-		Dictionary<Talker, Gsv> messages = new Dictionary<Talker, Gsv>();
+		Dictionary<string, Gsv> messages = new Dictionary<string, Gsv>();
 		public void SetGsv(Gsv message)
 		{
-			messages[message.TalkerId] = message;
+			messages[message.TalkerId + "+" + message.GnssSignalId] = message;
 			UpdateSatellites();
 		}
 		public void ClearGsv()
