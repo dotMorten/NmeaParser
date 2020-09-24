@@ -30,7 +30,7 @@ namespace SampleApp.WinDesktop
             InitializeComponent();
 
             //Get list of serial ports for device tab
-            var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s=>s);
+            var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s => s);
             serialPorts.ItemsSource = availableSerialPorts;
             serialPorts.SelectedIndex = 0;
             // Use serial portName:
@@ -41,6 +41,37 @@ namespace SampleApp.WinDesktop
             //Use a log file for playing back logged data
             var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt") { EmulatedBaudRate = 9600, BurstRate = TimeSpan.FromSeconds(1d) };
             _ = StartDevice(device);
+
+            LoadBluetoothDevices();
+
+        }
+        public class DeviceInfo
+        {
+            public Func<Task<NmeaParser.NmeaDevice>> CreateMethod { get; set; }
+            public string DisplayName { get; set; }
+            public override string ToString() => DisplayName;
+        }
+        private async void LoadBluetoothDevices()
+        {
+            var deviceList = new List<DeviceInfo>();
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.Bluetooth.Rfcomm.RfcommDeviceService"))
+            {
+                var btdevices = await BluetoothDevice.GetBluetoothSerialDevicesAsync();
+                foreach (var item in btdevices)
+                {
+                    deviceList.Add(new DeviceInfo()
+                    {
+                        DisplayName = $"{item.Device.Name} (Bluetooth)",
+                        CreateMethod = () =>
+                        {
+                            return Task.FromResult<NmeaParser.NmeaDevice>(new BluetoothDevice(item));
+                        }
+                    });
+                }
+            }
+            bluetoothDevices.ItemsSource = deviceList;
+            if (deviceList.Count > 0)
+                bluetoothDevices.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -74,7 +105,7 @@ namespace SampleApp.WinDesktop
             satSnr.ClearGsv();
             //Start new device
             currentDevice = device;
-            foreach(var child in MessagePanel.Children.OfType<UnknownMessageControl>().ToArray())
+            foreach (var child in MessagePanel.Children.OfType<UnknownMessageControl>().ToArray())
             {
                 MessagePanel.Children.Remove(child);
             }
@@ -87,6 +118,10 @@ namespace SampleApp.WinDesktop
                 currentDeviceInfo.Text = string.Format("SerialPortDevice( port={0}, baud={1} )",
                     ((NmeaParser.SerialPortDevice)device).Port.PortName,
                     ((NmeaParser.SerialPortDevice)device).Port.BaudRate);
+            }
+            else if (device is BluetoothDevice bd)
+            {
+                currentDeviceInfo.Text = $"Bluetooth {bd.Service.Device.Name}";
             }
             await device.OpenAsync();
             gnssMonitorView.Monitor = monitor = new GnssMonitor(device);
@@ -103,42 +138,42 @@ namespace SampleApp.WinDesktop
 
         private void device_MessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)
         {
-            Dispatcher.BeginInvoke((Action) delegate()
-            {
-                messages.Enqueue(args.Message.ToString());
-                if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
+            Dispatcher.BeginInvoke((Action)delegate ()
+           {
+               messages.Enqueue(args.Message.ToString());
+               if (messages.Count > 100) messages.Dequeue(); //Keep message queue at 100
                 output.Text = string.Join("\n", messages.ToArray());
-                output.Select(output.Text.Length - 1, 0); //scroll to bottom
+               output.Select(output.Text.Length - 1, 0); //scroll to bottom
 
                 if (args.Message is NmeaParser.Messages.Gsv gpgsv)
-                {
-                    satView.SetGsv(gpgsv);
-                    satSnr.SetGsv(gpgsv);
-                }
-                else if (args.Message is NmeaParser.Messages.Rmc)
-                    gprmcView.Message = args.Message as NmeaParser.Messages.Rmc;
-                else if (args.Message is NmeaParser.Messages.Gga)
-                    gpggaView.Message = args.Message as NmeaParser.Messages.Gga;
-                else if (args.Message is NmeaParser.Messages.Gsa)
-                    gpgsaView.Message = args.Message as NmeaParser.Messages.Gsa;
-                else if (args.Message is NmeaParser.Messages.Gll)
-                    gpgllView.Message = args.Message as NmeaParser.Messages.Gll;
-                else if (args.Message is NmeaParser.Messages.Garmin.Pgrme)
-                    pgrmeView.Message = args.Message as NmeaParser.Messages.Garmin.Pgrme;
-                else
-                {
-                    var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
-                    if (ctrl == null)
-                    {
-                        ctrl = new UnknownMessageControl()
-                        {
-                            Style = this.Resources["card"] as Style
-                        };
-                        MessagePanel.Children.Add(ctrl);
-                    }
-                    ctrl.Message = args.Message;
-                }
-            });
+               {
+                   satView.SetGsv(gpgsv);
+                   satSnr.SetGsv(gpgsv);
+               }
+               else if (args.Message is NmeaParser.Messages.Rmc)
+                   gprmcView.Message = args.Message as NmeaParser.Messages.Rmc;
+               else if (args.Message is NmeaParser.Messages.Gga)
+                   gpggaView.Message = args.Message as NmeaParser.Messages.Gga;
+               else if (args.Message is NmeaParser.Messages.Gsa)
+                   gpgsaView.Message = args.Message as NmeaParser.Messages.Gsa;
+               else if (args.Message is NmeaParser.Messages.Gll)
+                   gpgllView.Message = args.Message as NmeaParser.Messages.Gll;
+               else if (args.Message is NmeaParser.Messages.Garmin.Pgrme)
+                   pgrmeView.Message = args.Message as NmeaParser.Messages.Garmin.Pgrme;
+               else
+               {
+                   var ctrl = MessagePanel.Children.OfType<UnknownMessageControl>().Where(c => c.Message.MessageType == args.Message.MessageType).FirstOrDefault();
+                   if (ctrl == null)
+                   {
+                       ctrl = new UnknownMessageControl()
+                       {
+                           Style = this.Resources["card"] as Style
+                       };
+                       MessagePanel.Children.Add(ctrl);
+                   }
+                   ctrl.Message = args.Message;
+               }
+           });
         }
 
         //Browse to nmea file and create device from selected file
@@ -153,7 +188,7 @@ namespace SampleApp.WinDesktop
                 {
                     await StartDevice(device);
                 }
-                catch(System.Exception ex)
+                catch (System.Exception ex)
                 {
                     MessageBox.Show("Failed to start device: " + ex.Message);
                 }
@@ -177,13 +212,39 @@ namespace SampleApp.WinDesktop
                     MessageBox.Show("Failed to start device: " + ex.Message);
                 }
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Error connecting: " + ex.Message);
+            }
+        }
+
+
+        private async void ConnectToBluetoothButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var info = bluetoothDevices.SelectedItem as DeviceInfo;
+                if (info != null)
+                {
+                    var device = await info.CreateMethod();
+                    try
+                    {
+                        await StartDevice(device);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        MessageBox.Show("Failed to start device: " + ex.Message);
+                    }
+                }
+            }
+            catch (System.Exception ex)
             {
                 MessageBox.Show("Error connecting: " + ex.Message);
             }
         }
     }
-                
+
+
     public class ReverseConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

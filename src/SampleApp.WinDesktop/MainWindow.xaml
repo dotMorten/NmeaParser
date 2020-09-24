@@ -88,6 +88,12 @@
                                 <Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToSerialButton_Click" />
                             </StackPanel>
                         </GroupBox>
+                        <GroupBox Header="Open Bluetooth device" Width="200" HorizontalAlignment="Left">
+                            <StackPanel>
+                                <ComboBox x:Name="bluetoothDevices" />
+                                <Button Content="Connect" HorizontalAlignment="Left" Padding="20,5" Margin="0,5" Click="ConnectToBluetoothButton_Click" />
+                            </StackPanel>
+                        </GroupBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
