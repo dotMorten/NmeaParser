@@ -27,6 +27,10 @@ namespace SampleApp.WinDesktop
         public NtripView()
         {
             InitializeComponent();
+            host.Text = UserSettings.Default.NTRIPServer;
+            port.Text = UserSettings.Default.NTRIPPort.ToString();
+            username.Text = UserSettings.Default.NTRIPUsername;
+            password.Password = UserSettings.Default.NTRIPPassword;
         }
         NmeaParser.Gnss.Ntrip.Client client;
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -53,6 +57,12 @@ namespace SampleApp.WinDesktop
                 MessageBox.Show("Failed to connect: " + ex.Message);
                 return;
             }
+
+            UserSettings.Default.NTRIPServer = host.Text;
+            UserSettings.Default.NTRIPPort = portNumber;
+            UserSettings.Default.NTRIPUsername = username.Text;
+            UserSettings.Default.NTRIPPassword = password.Password;
+            UserSettings.Default.Save();
             if (MainWindow.monitor != null && !double.IsNaN(MainWindow.monitor.Latitude) && !double.IsNaN(MainWindow.monitor.Longitude))
             {
                 var lat = MainWindow.monitor.Latitude;
