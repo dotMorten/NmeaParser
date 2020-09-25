@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Location;
+using Esri.ArcGISRuntime.Tasks.Offline;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -61,22 +62,31 @@ namespace SampleApp.WinDesktop
             public double Longitude { get ;set; }
             public double Z { get ;set; }
             public NmeaParser.Messages.Gga.FixQuality Quality { get; set; }
+            public double LatError { get; set; }
+            public double LonError { get; set; }
+            public double ZError { get; set; }
         }
         
-        public void AddLocation(double latitude, double longitude, double altitude, NmeaParser.Messages.Gga.FixQuality quality)
-        {
-            if(quality == NmeaParser.Messages.Gga.FixQuality.Invalid)
+        public void AddLocation(double latitude, double longitude, double altitude, NmeaParser.Messages.Gga.FixQuality quality, 
+            double latError, double lonError, double zError)
+        { 
+            if(quality == NmeaParser.Messages.Gga.FixQuality.Invalid) 
                 return;
+            if (locations.Count == 1 && double.IsNaN(locations[0].LatError) && !double.IsNaN(latError) && locations[0].Latitude == latitude)
+                locations.RemoveAt(0); //First measurement probably came from RMC
             locations.Add(new Point { 
                 Latitude = latitude, 
                 Longitude = longitude, 
                 Z = altitude, 
-                Quality = quality 
+                Quality = quality,
+                LatError = latError,
+                LonError = lonError,
+                ZError = zError
             });
             UpdatePlot();
         }
 
-        
+        int filterIndex = 0;
         private void UpdatePlot()
         {
             if (size.Width == 0 || size.Height == 0 || !IsVisible)
@@ -91,9 +101,29 @@ namespace SampleApp.WinDesktop
                 return;
             }
             var measurements = locations.ToArray(); // Grab copy to avoid threading issues
+            if(filterIndex > 0)
+            {
+                measurements = measurements.Where(m =>
+                filterIndex == 1 && (m.Quality == NmeaParser.Messages.Gga.FixQuality.DgpsFix || m.Quality == NmeaParser.Messages.Gga.FixQuality.FloatRtk || m.Quality == NmeaParser.Messages.Gga.FixQuality.Rtk) ||
+                filterIndex == 2 && (m.Quality == NmeaParser.Messages.Gga.FixQuality.FloatRtk || m.Quality == NmeaParser.Messages.Gga.FixQuality.Rtk) ||
+                filterIndex == 3 && m.Quality == NmeaParser.Messages.Gga.FixQuality.Rtk).ToArray();
+            }
+            if(measurements.Length == 0)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Status.Text = "";
+                    plot.Source = null;
+                });
+                return;
+            }
             var latAvr = measurements.Select(l => l.Latitude).Average();
+            if (useWeightedAverage && !measurements.Any(m => double.IsNaN(m.LatError)))
+                latAvr = WeightedAverage(measurements, z => z.Latitude, z => 1 / z.LatError);
             var lonAvr = measurements.Select(l => l.Longitude).Average();
-            
+            if (useWeightedAverage && !measurements.Any(m => double.IsNaN(m.LonError)))
+                lonAvr = WeightedAverage(measurements, z => z.Longitude, z => 1 / z.LonError);
+
             //List<double> lonDistances = new List<double>(locations.Count);
             //List<double> latDistances = new List<double>(locations.Count);
             List<double> distances = new List<double>(measurements.Length);
@@ -104,18 +134,20 @@ namespace SampleApp.WinDesktop
                 var dLat = Vincenty.GetDistanceVincenty(latAvr, lonAvr, l.Latitude, lonAvr);
                 var dLon = Vincenty.GetDistanceVincenty(latAvr, lonAvr, latAvr, l.Longitude);
                 distances.Add(d);
-                //latDistances.Add(dLat);
-                //lonDistances.Add(dLon);
                 if (latAvr > l.Latitude) dLat = -dLat;
                 if (lonAvr > l.Longitude) dLon = -dLon;
-                locations2.Add(new Point() { Latitude = dLat, Longitude= dLon, Quality = l.Quality });
+                locations2.Add(new Point() { Latitude = dLat, Longitude= dLon, Quality = l.Quality, LatError = l.LatError, LonError = l.LonError, ZError = l.ZError });
             }
             var latMin = locations2.Select(l => l.Latitude).Min();
             var lonMin = locations2.Select(l => l.Longitude).Min();
             var latMax = locations2.Select(l => l.Latitude).Max();
             var lonMax = locations2.Select(l => l.Longitude).Max();
             var latAvr2 = locations2.Select(l => l.Latitude).Average();
+            if (useWeightedAverage && !measurements.Any(m => double.IsNaN(m.LatError)))
+                latAvr2 = WeightedAverage(locations2, z => z.Latitude, z => 1/z.LatError);
             var lonAvr2 = locations2.Select(l => l.Longitude).Average();
+            if (useWeightedAverage && !measurements.Any(m => double.IsNaN(m.LonError)))
+                lonAvr2 = WeightedAverage(locations2, z => z.Longitude, z => 1/z.LonError);
             var maxDifLat = Math.Max(latAvr2 - latMin, latMax - latAvr2);
             var maxDifLon = Math.Max(lonAvr2 - lonMin, lonMax - lonAvr2);
             //var maxDif = Math.Max(maxDifLat, maxDifLon);
@@ -183,7 +215,10 @@ namespace SampleApp.WinDesktop
             }
             var stdDevLat = Math.Sqrt(locations2.Sum(d => (d.Latitude - latAvr2) * (d.Latitude - latAvr2)) / locations2.Count);
             var stdDevLon = Math.Sqrt(locations2.Sum(d => (d.Longitude - lonAvr2) * (d.Longitude - lonAvr2)) / locations2.Count);
+            var zs = measurements.Where(l => !double.IsNaN(l.Z));
             var zAvr = measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Average();
+            if (useWeightedAverage && !measurements.Any(m => double.IsNaN(m.ZError)))
+                zAvr = WeightedAverage(zs, z => z.Z, z => 1 / z.ZError);
             var stdDevZ = Math.Sqrt(measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Sum(d => (d - zAvr) * (d - zAvr)) / measurements.Select(l => l.Z).Where(l => !double.IsNaN(l)).Count());
             var meanH = distances.Average();
             var stdDevH = Math.Sqrt(distances.Sum(d => d * d) / distances.Count);
@@ -201,7 +236,16 @@ namespace SampleApp.WinDesktop
                 Status.Text = $"Measurements: {measurements.Length}\nAverage:\n - Latitude: {latAvr.ToString("0.0000000")}\n - Longitude: {lonAvr.ToString("0.0000000")}\n - Elevation: {zAvr.ToString("0.000")}m\nStandard Deviation:\n - Latitude: {stdDevLat.ToString("0.###")}m\n - Longitude: {stdDevLon.ToString("0.###")}m\n - Horizontal: {stdDevH.ToString("0.###")}m\n95% confidence: {marginOfErrorH.ToString("0.###")}m\n - Elevation: {stdDevZ.ToString("0.###")}m";
             });
         }
+        public static double WeightedAverage<T>(IEnumerable<T> records, Func<T, double> value, Func<T, double> weight)
+        {
+            double weightedValueSum = records.Sum(x => value(x) * weight(x));
+            double weightSum = records.Sum(x => weight(x));
 
+            if (weightSum != 0)
+                return weightedValueSum / weightSum;
+            else
+                throw new DivideByZeroException("Your message here");
+        }
         internal static class Vincenty
         {
             private const double D2R = 0.01745329251994329576923690768489; //Degrees to radians
@@ -305,6 +349,19 @@ namespace SampleApp.WinDesktop
             {
                 UpdatePlot();
             }
+        }
+
+        private void filterSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            filterIndex = filterSelector.SelectedIndex;
+            UpdatePlot();
+        }
+        
+        bool useWeightedAverage = true;
+        private void WeightedAverageChecked(object sender, RoutedEventArgs e)
+        {
+            useWeightedAverage = ((CheckBox)sender).IsChecked.Value;
+            UpdatePlot();
         }
     }
 }

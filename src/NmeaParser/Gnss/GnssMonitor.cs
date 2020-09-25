@@ -29,6 +29,7 @@ namespace NmeaParser.Gnss
         private bool m_supportGGaMessages; //If device support GGA, ignore RMC for location
         private Dictionary<string, NmeaMessage> m_allMessages { get; } = new Dictionary<string, NmeaMessage>();
         private object m_lock = new object();
+        private bool m_isLearning = true; // Indicates that we still haven't seen a full round of location messages yet
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GnssMonitor"/> class.
@@ -73,6 +74,10 @@ namespace NmeaParser.Gnss
             double lat = 0;
             double lon = 0;
             List<string> properties = new List<string>();
+            if (m_isLearning && message is IGeographicLocation && m_allMessages.ContainsKey(message.MessageType))
+            {
+                m_isLearning = false; // We've received a full round of messages. Now start report locations
+            }
             lock (m_lock)
             {
                 string msgid = message.MessageType;
@@ -89,7 +94,6 @@ namespace NmeaParser.Gnss
                 if (m_allMessages.ContainsKey("GN" + message.MessageType.Substring(2)))
                     return;
             }
-
             if (message is NmeaParser.Messages.Garmin.Pgrme rme)
             {
                 if (rme.HorizontalError != HorizontalError)
@@ -244,7 +248,8 @@ namespace NmeaParser.Gnss
                         properties.Add(nameof(FixQuality));
                     IsFixValid = true;
                 }
-                LocationChanged?.Invoke(this, EventArgs.Empty);
+                if (!m_isLearning)
+                    LocationChanged?.Invoke(this, EventArgs.Empty);
             }
             if (properties.Count > 0)
                 OnPropertyChanged(properties);
