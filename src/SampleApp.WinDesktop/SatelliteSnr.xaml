@@ -57,24 +57,7 @@
                             VerticalAlignment="Bottom">
                                 <Border.ToolTip>
                                     <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="System: " />
-                                            <TextBlock Text="{Binding Converter={StaticResource heightconv}, ConverterParameter=Name}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Azimuth: " />
-                                            <TextBlock Text="{Binding Azimuth}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Elevation: " />
-                                            <TextBlock Text="{Binding Elevation}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="SNR: " />
-                                            <TextBlock Text="{Binding SignalToNoiseRatio}" />
-                                            <TextBlock Text="dB" />
-                                        </StackPanel>
-                                        
+                                        <TextBlock Text="{Binding Converter={StaticResource heightconv}, ConverterParameter=Name}" />
                                     </StackPanel>
                                 </Border.ToolTip>
                             

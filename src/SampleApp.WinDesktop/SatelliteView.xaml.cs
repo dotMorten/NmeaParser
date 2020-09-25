@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -98,10 +99,22 @@ namespace SampleApp.WinDesktop
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			Talker? talker = null;
+			int snr = 0;
 			if (value is SatelliteVehicle sv)
 			{
-				byte alpha = (byte)(sv.SignalToNoiseRatio <= 0 ? 80 : 255);
-				switch (sv.TalkerId)
+				talker = sv.TalkerId;
+				snr = sv.SignalToNoiseRatio;
+			}
+			else if (value is SatelliteSnr.SatelliteInfo info)
+			{
+				talker = info.TalkerId;
+				snr = info.SignalToNoiseRatio;
+			}
+			if(talker != null)
+			{
+				byte alpha = (byte)(snr <= 0 ? 80 : 255);
+				switch (talker)
 				{
 					case Talker.GlobalPositioningSystem: return Color.FromArgb(alpha, 255, 0, 0);
 					case Talker.GalileoPositioningSystem: return Color.FromArgb(alpha, 0, 255, 0);

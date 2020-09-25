@@ -41,8 +41,24 @@ namespace SampleApp.WinDesktop
 
 		private void UpdateSatellites()
 		{
-			satellites.ItemsSource = messages.Values.SelectMany(g => g.SVs).OrderBy(s=>s.GnssSignalId).OrderBy(s => s.Id).OrderByDescending(s => s.TalkerId);
-		}
+			//satellites.ItemsSource = messages.Values.SelectMany(g => g.SVs).OrderBy(s=>s.GnssSignalId).OrderBy(s => s.Id).OrderByDescending(s => s.TalkerId);
+            var sats = messages.Values.SelectMany(g => g.SVs).GroupBy(s => s.TalkerId.ToString() + s.Id);
+            var infos = sats.Select(s => new SatelliteInfo()
+            {
+                Id = s.First().Id,
+                TalkerId = s.First().TalkerId,
+                SNRs = new Dictionary<char, int>(s.Select(s => new KeyValuePair<char, int>(s.GnssSignalId, s.SignalToNoiseRatio)), null)
+            });
+            satellites.ItemsSource = infos;
+        }
+
+        public struct SatelliteInfo
+        {
+            public int Id;
+            public Talker TalkerId;
+            public Dictionary<char, int> SNRs;
+            public int SignalToNoiseRatio => SNRs.Max(s=>s.Value);
+        }
 
         internal static string SignalIdToName(char signalId, Talker talkerId)
         {
@@ -139,7 +155,7 @@ namespace SampleApp.WinDesktop
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is SatelliteVehicle sv)
+            if(value is SatelliteSnr.SatelliteInfo sv)
             {
 				if (parameter as string == "Name")
 				{
@@ -156,10 +172,11 @@ namespace SampleApp.WinDesktop
 						name = "NavIC IRNSS";
 					else
 						name = sv.TalkerId.ToString();
-                    var signalName = SatelliteSnr.SignalIdToName(sv.GnssSignalId, sv.TalkerId);
-                    if (!string.IsNullOrEmpty(signalName))
-						name += " (" + signalName + ")";
-					return name;
+                    var snrs = string.Join("\n", sv.SNRs.Select(snr => SatelliteSnr.SignalIdToName(snr.Key, sv.TalkerId) + ": " + snr.Value + "dB"));
+                    if (!string.IsNullOrEmpty(snrs))
+                        name += $"\n{snrs}";
+                    
+                    return name;
 				}
 				else
 					return Math.Max(10, sv.SignalToNoiseRatio * 2);
