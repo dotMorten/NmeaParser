@@ -267,7 +267,11 @@ namespace NmeaParser
         /// <seealso cref="CanWrite"/>
         public virtual Task WriteAsync(byte[] buffer, int offset, int length)
         {
-            throw new NotSupportedException();
+            if (m_stream is null)
+                throw new InvalidOperationException("Device not opened");
+            if (!m_stream.CanWrite)
+                throw new NotSupportedException();
+            return m_stream.WriteAsync(buffer, offset, length);
         }
     }
 
