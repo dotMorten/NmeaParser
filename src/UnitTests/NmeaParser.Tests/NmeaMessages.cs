@@ -21,8 +21,10 @@ using System.Text;
 using NmeaParser.Messages;
 using System.Threading.Tasks;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
+using NmeaParser.Nmea.Class;
 
 namespace NmeaParser.Tests
 {
@@ -836,6 +838,71 @@ namespace NmeaParser.Tests
             Assert.IsInstanceOfType(msg, typeof(Zda));
             var zda = (Zda)msg;
             Assert.AreEqual(new DateTimeOffset(2015, 09, 21, 22, 56, 27, 00, TimeSpan.Zero), zda.FixDateTime);
+        }
+
+        [TestMethod]
+        public void TestHdt()
+        {
+            const string input = "$HEHDT,11.8,T*17";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Hdt));
+            Hdt hdt = (Hdt)msg;
+            Assert.AreEqual(11.8, hdt.HeadingInDeg);
+            Assert.IsTrue(hdt.HeadingRelToTrueNorth);
+        }
+
+        [TestMethod]
+        public void TestMda()
+        {
+            const string input = "$WIMDA,30.3332,I,1.0272,B,5.5,C,1.2,C,22,33,2,C,172.7,T,170.2,M,3.8,N,2.0,M*0F";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Mda));
+            Mda mda = (Mda)msg;
+            Assert.AreEqual(30.3332, mda.BarometricPresI);
+            Assert.AreEqual(Unit.Inc, mda.BarometricPresIUnit);
+            Assert.AreEqual(1.0272, mda.BarometricPresBar);
+            Assert.AreEqual(Unit.Bar, mda.BarometricPresBarUnit);
+            Assert.AreEqual(5.5, mda.AirTemp);
+            Assert.AreEqual(Unit.C, mda.AirTempUnit);
+            Assert.AreEqual(1.2, mda.WaterTemp);
+            Assert.AreEqual(Unit.C, mda.WaterTempUnit);
+            Assert.AreEqual(22, mda.RelativeHumidity);
+            Assert.AreEqual(33, mda.AbsoluteHumidity);
+            Assert.AreEqual(2, mda.DewPoint);
+            Assert.AreEqual(Unit.C, mda.DewPointUnit);
+            Assert.AreEqual(172.7, mda.WindDirTrue);
+            Assert.AreEqual(Reference.True, mda.WindDirTrueReference);
+            Assert.AreEqual(170.2, mda.WindDirMag);
+            Assert.AreEqual(Reference.Magnetic, mda.WindDirMegReference);
+            Assert.AreEqual(3.8, mda.WindSpeedKnot);
+            Assert.AreEqual(Unit.Knot, mda.WindSpeedKnotUnit);
+            Assert.AreEqual(2.0, mda.WindSpeedMsec);
+            Assert.AreEqual(Unit.Msec, mda.WindSpeedMsecUnit);
+        }
+
+        [TestMethod]
+        public void TestMwv()
+        {
+            const string input = "$WIMWV,132.8,R,1.2,N,A*28";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Mwv));
+            Mwv mwv = (Mwv)msg;
+            Assert.AreEqual(132.8, mwv.WindAngle);
+            Assert.AreEqual(Reference.Relative, mwv.Reference);
+            Assert.AreEqual(1.2, mwv.WindSpeed);
+            Assert.AreEqual(Unit.Knot, mwv.WindSpeedUnit);
+            Assert.AreEqual(Validation.Ok, mwv.Validation);
+        }
+
+        [TestMethod]
+        public void TestRot()
+        {
+            const string input = "$TIROT,1.69,A*05";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Rot));
+            Rot rot = (Rot)msg;
+            Assert.AreEqual(1.69, rot.RateOfTurn);
+            Assert.AreEqual(Validation.Ok,rot.Validation);
         }
 
         [TestMethod]
