@@ -73,7 +73,7 @@ namespace NmeaParser
         /// <item>Generic bluetooth serial: <c> 00001101-0000-1000-8000-00805F9B34FB</c></item>
         /// </list>
         /// <para>If you know of other MFI certificed NMEA devices, please make a request to have it added here: https://github.com/dotMorten/NmeaParser/issues/new
-        /// or you can use <see cref="EAAccessoryManager.SharedAccessoryManager.ConnectedAccessories"/> to iterate and find the devices yourself.</para>
+        /// or you can use <c>EAAccessoryManager.SharedAccessoryManager.ConnectedAccessories</c> to iterate and find the devices yourself.</para>
         /// </remarks>
         /// <returns>A list of supported devices</returns>
         public static IEnumerable<EAAccessoryDevice> GetDevices()
