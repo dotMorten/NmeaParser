@@ -20,7 +20,7 @@ You can get the library via [NuGet](http://www.nuget.org) if you have the extens
  device.OpenAsync();
 
  // Create event handler for receiving messages:
- private void device_NmeaMessageReceived(NmeaDevice sender, NmeaMessageReceivedEventArgs args)
+ private void device_NmeaMessageReceived(object sender, NmeaMessageReceivedEventArgs args)
  {
     // called when a message is received
     if(args.Message is NmeaParser.Messages.Rmc rmc)
