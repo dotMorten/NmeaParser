@@ -14,7 +14,7 @@ See here for details: https://github.com/sponsors/dotMorten
 
 ## Getting started:
 
-Read the [Getting Started](concepts/index.html) notes
+Read the [Getting Started](concepts/index.md) notes
 
 
 ![sampleapp2](https://cloud.githubusercontent.com/assets/1378165/5062460/10cc3064-6d77-11e4-8365-1e9c7c346afc.png)

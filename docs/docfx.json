@@ -70,20 +70,81 @@
   ],
   "build": {
     "content": [
-	{
-        "files": [
-          "api/**/index.md"
-        ]
+	  {
+        "version": "netstandard1.4",
+        "files": [ "api/netstd/**.md" ]
       },
       {
+        "version": "netstandard1.4",
         "files": [
-          "api/**.yml",
-          "api/**/toc.yml"         
+          "api/netstd/**.yml",
+          "api/netstd/toc.yml",
+        ],
+		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "net451",
+        "files": [ "api/netfx/**.md" ]
+      },
+      {
+        "version": "net451",
+        "files": [
+          "api/netfx/**.yml",
+          "api/netfx/toc.yml",
+        ],
+		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "netcoreapp2.1",
+        "files": [ "api/netcore/**.md" ]
+      },
+      {
+        "version": "netcoreapp2.1",
+        "files": [
+          "api/netcore/**.yml",
+          "api/netcore/toc.yml",
+        ],
+		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "monoandroid70",
+        "files": [ "api/android/**.md" ]
+      },
+      {
+        "version": "monoandroid70",
+        "files": [
+          "api/android/**.yml",
+          "api/android/toc.yml",
+        ],
+		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "xamarinios10",
+        "files": [ "api/ios/**.md" ]
+      },
+      {
+        "version": "xamarinios10",
+        "files": [
+          "api/ios/**.yml",
+          "api/ios/toc.yml",
+        ],
+		"src" : "../artifacts/docs"
+      },
+	  {
+        "version": "uap10.0.16299",
+        "files": [ "api/uwp/**.md" ]
+      },
+      {
+        "version": "uap10.0.16299",
+        "files": [
+          "api/uwp/**.yml",   
+          "api/uwp/toc.yml",
         ],
 		"src" : "../artifacts/docs"
       },
       {
         "files": [
+          "api/index.md",
           "concepts/**.md",
           "concepts/**/toc.yml",
           "toc.yml",
@@ -124,6 +185,8 @@
       }
     },
     "dest": "../artifacts/docs_site",
+    "monikerDefinition": "monikerDefinition.json",
+    "_skipMonikerValidation": true,
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [

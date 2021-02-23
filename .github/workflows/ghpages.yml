@@ -40,7 +40,6 @@ jobs:
       run: |
         nuget install memberpage -Version 2.48.1 -OutputDirectory docs
         .tools/docfx/docfx.exe docs/docfx.json
-        powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path artifacts\docs_site\api\
       
     - name: Publish Documentation
       env:
