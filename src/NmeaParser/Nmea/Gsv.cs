@@ -246,7 +246,10 @@ namespace NmeaParser.Messages
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a string that represents the satellite vehicle.
+        /// </summary>
+        /// <returns>A string that represents the satellite vehicle.</returns>
         public override string ToString()
         {
             switch (TalkerId)

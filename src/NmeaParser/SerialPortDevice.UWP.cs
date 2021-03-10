@@ -68,7 +68,7 @@ namespace NmeaParser
         /// Initializes a new instance of the <see cref="SerialPortDevice" /> class.
         /// </summary>
         /// <param name="device">The serial port.</param>
-        /// <exception cref="System.ArgumentNullException">port</exception>
+        /// <exception cref="ArgumentNullException">port</exception>
         public SerialPortDevice(SerialDevice device)
         {
             if (device == null)

@@ -233,7 +233,10 @@ namespace NmeaParser.Messages
         /// </summary>
         public bool IsProprietary => MessageType[0] == 'P'; //Appendix B
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns the original NMEA string that represents this message.
+        /// </summary>
+        /// <returns>An original NMEA string that represents this message.</returns>
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "${0},{1}*{2:X2}", MessageType, string.Join(",", MessageParts), Checksum);
@@ -301,7 +304,11 @@ namespace NmeaParser.Messages
             return TimeSpan.Zero;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
         public bool Equals(NmeaMessage other)
         {
             if (other.MessageType != MessageType)

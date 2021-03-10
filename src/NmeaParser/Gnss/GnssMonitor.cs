@@ -437,7 +437,7 @@ namespace NmeaParser.Gnss
         /// <seealso cref="IsFixValid"/>
         public event EventHandler? LocationLost;
 
-        /// <inheritdoc />
+        /// <summary>Occurs when a property value changes.</summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged(IEnumerable<string> properties)
