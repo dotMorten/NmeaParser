@@ -5,7 +5,8 @@
 - name: Getting Started
   href: concepts/index.md
 - name: API Reference
-  href: api/index.md
+  href: api/
+  topicHref: api/index.md
 - name: Sponsor NMEA Parser
   href: https://github.com/sponsors/dotMorten
 - name: GitHub

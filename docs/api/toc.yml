@@ -1,0 +1,18 @@
+- name: API Reference
+- name: NmeaParser
+  items:
+  - name: .NET Standard
+    href: netstd/index.html
+  - name: .NET Core
+    href: netcore/index.html
+  - name: .NET Framework
+    href: netfx/index.html
+  - name: Windows Universal
+    href: uwp/index.html
+  - name: Xamarin.Android
+    href: android/index.html
+  - name: Xamarin.iOS
+    href: ios/index.html
+- name: Object Model Diagram
+  href: omd.html
+  

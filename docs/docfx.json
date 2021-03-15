@@ -6,84 +6,146 @@
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         },
-	  ],
+      ],
+      "group": "netstandard1.4",
       "dest": "../artifacts/docs/api/netstd",
       "properties": { "TargetFramework": "netstandard1.4" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    {
+      "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "group": "net451",
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net451" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    {
+      "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "group": "netcoreapp2.1",
       "dest": "../artifacts/docs/api/netcore",
       "properties": { "TargetFramework": "netcoreapp2.1" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    {
+      "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "group": "monoandroid7.0",
       "dest": "../artifacts/docs/api/android",
       "properties": { "TargetFramework": "monoandroid70" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    {
+      "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "group": "xamarinios10",
       "dest": "../artifacts/docs/api/ios",
       "properties": { "TargetFramework": "xamarinios10" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    {
+      "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "group": "uap10.0.16299",
       "dest": "../artifacts/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.16299" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
   ],
+
   "build": {
-    "content": [
-	{
-        "files": [
-          "api/**/index.md"
-        ]
+    "content": [     
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/netfx",
+        "group": "net451"
+      },      
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/netstd",
+        "group": "netstandard1.4"
+      },
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/uwp",
+        "group": "uap10.0.16299"
+      },
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/android",
+        "group": "monoandroid70"
+      },      
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/netcore",
+        "group": "netcoreapp2.1"
+      },
+      {
+        "files": [ "**.yml" ],
+        "src" : "../artifacts/docs/api/ios",
+        "group": "xamarinios10"
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "netstandard1.4",
+        "src" : "api/netstd",
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "uap10.0.16299",
+        "src" : "api/uwp",
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "monoandroid70",
+        "src" : "api/android",
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "netcoreapp2.1",
+        "src" : "api/netcore",
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "net451",
+        "src" : "api/netfx",
+      },
+      {
+        "files": [ "index.md" ],
+        "group": "xamarinios10",
+        "src" : "api/ios",
       },
       {
         "files": [
-          "api/**.yml",
-          "api/**/toc.yml"         
-        ],
-		"src" : "../artifacts/docs"
-      },
-      {
-        "files": [
+          "api/index.md",
+          "api/toc.yml",
           "concepts/**.md",
           "concepts/**/toc.yml",
           "toc.yml",
@@ -91,6 +153,14 @@
         ]
       }
     ],
+    "groups": {
+      "net451": { "dest": "api/netfx", },
+      "netstandard1.4": { "dest": "api/netstd" },
+      "xamarinios10": { "dest": "api/ios" },
+      "monoandroid70": { "dest": "api/android" },
+      "uap10.0.16299": { "dest": "api/uwp" },
+      "netcoreapp2.1": { "dest": "api/netcore" }
+    },
     "resource": [
       {
         "files": [
@@ -98,14 +168,14 @@
           "favicon.ico"
         ]
       },
-	   {
+      {
         "files": [
            "api/omd.html"
         ],
-		"src" : "../artifacts/docs"
+        "src" : "../artifacts/docs"
       }
     ],
-    "overwrite": [
+    "overwrite": [      
       {
         "files": [
           "api_overwrites/**.md"
@@ -113,7 +183,14 @@
         "exclude": [
           "obj/**",
           "_site/**"
-        ]
+        ],
+      },
+      {
+        "files": [
+          "applies-to-overwrite.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "netstandard1.4",
       }
     ],
     "globalMetadata": {

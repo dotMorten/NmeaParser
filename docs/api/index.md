@@ -2,17 +2,17 @@
 
 **Select your platform:**
 
-- [.NET Standard API Reference](netstd/index.md)
+- [.NET Standard API Reference](netstd/index.html)
 
-- [.NET Framework API Reference](netfx/index.md)
+- [.NET Framework API Reference](netfx/index.html)
 
-- [.NET Core API Reference](netcore/index.md)
+- [.NET Core API Reference](netcore/index.html)
 
-- [UWP API Reference](uwp/index.md)
+- [UWP API Reference](uwp/index.html)
 
-- [Android API Reference](android/index.md)
+- [Android API Reference](android/index.html)
 
-- [iOS API Reference](ios/index.md)
+- [iOS API Reference](ios/index.html)
 
 ### Object model diagrams
 Click below to see the full object model diagram:
