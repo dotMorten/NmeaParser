@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DocFXAppliesToGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "e:\\GitHub\\dotMorten\\NmeaParser.DocFX\\docs\\appliesToList.json"
+    }
+  }
+}
