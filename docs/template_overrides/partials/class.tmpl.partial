@@ -59,11 +59,20 @@
 {{/seealso.0}}
 {{#appliesTo.0}}
 <h3 id="appliesTo">Applies to</h3>
-<div class="seealso">
+
+<div class="appliesto">
+  <div>
+    <table>
+      <thead><th>Target</th><th>Versions</th></thead>
+        <tbody>
 {{/appliesTo.0}}
 {{#appliesTo}}
-<div><b>{{{platform}}}</b><br/>{{{versions}}}<br/><br/></div>
+          <tr><td><b>{{platform}}</b></td><td>{{versions}}</td></tr>
 {{/appliesTo}}
-{{#appliesTo.0}}
+{{#appliesTo.0}}  
+        </tbody>
+      </thead>
+    </table>
+  </div>
 </div>
 {{/appliesTo.0}}
