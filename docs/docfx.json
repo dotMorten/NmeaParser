@@ -79,7 +79,6 @@
       "disableDefaultFilter": false
     }
   ],
-
   "build": {
     "content": [     
       {
@@ -185,12 +184,54 @@
           "_site/**"
         ],
       },
+           {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "net451",
+      },
       {
         "files": [
-          "applies-to-overwrite.md"
+          "*.md"
         ],
         "src" : "../artifacts/docs/api_overwrites",
         "group": "netstandard1.4",
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "xamarinios10",
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "monoandroid70",
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "uap10.0.16299",
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "netstandard1.4",
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites",
+        "group": "netcoreapp2.1",
       }
     ],
     "globalMetadata": {
@@ -209,7 +250,6 @@
       "template_overrides"
     ],
     "postProcessors": [],
-    "markdownEngineName": "markdig",
     "noLangKeyword": false,
     "keepFileLink": false,
     "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
