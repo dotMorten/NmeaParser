@@ -23,6 +23,11 @@ mkdir %~dp0../artifacts/docs/api
 %~dp0..\.tools\nuget install memberpage -Version 2.56.7 -OutputDirectory %~dp0
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
 %DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
+
+REM Build applies-to version/framework info 
+dotnet build AppliesToGenerator\DocFXAppliesToGenerator.csproj
+AppliesToGenerator\bin\Debug\netcoreapp3.1\DocFXAppliesToGenerator.exe appliesToList.json
+
 ECHO Fixing API Reference Links
 powershell -ExecutionPolicy ByPass -command "%~dp0FixApiRefLinks.ps1" -Path %~dp0..\artifacts\docs_site\api\
 start http://localhost:8080

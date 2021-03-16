@@ -114,6 +114,12 @@
           "obj/**",
           "_site/**"
         ]
+      },
+      {
+        "files": [
+          "*.md"
+        ],
+        "src" : "../artifacts/docs/api_overwrites"
       }
     ],
     "globalMetadata": {
@@ -132,7 +138,6 @@
       "template_overrides"
     ],
     "postProcessors": [],
-    "markdownEngineName": "markdig",
     "noLangKeyword": false,
     "keepFileLink": false,
     "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
