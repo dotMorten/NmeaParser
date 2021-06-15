@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET DocFXVersion=2.56.7
+SET DocFXVersion=2.58
 SET DocFxFolder=%~dp0..\.tools\docfx
 
 REM Download DocFx
@@ -20,7 +20,7 @@ dotnet tool install --tool-path %~dp0../.tools/omd dotMorten.OmdGenerator --vers
 mkdir %~dp0../artifacts/docs/api
 %~dp0..\.tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
 
-%~dp0..\.tools\nuget install memberpage -Version 2.56.7 -OutputDirectory %~dp0
+%~dp0..\.tools\nuget install memberpage -Version 2.58.0 -OutputDirectory %~dp0
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
 %DocFxFolder%\v%DocFXVersion%\docfx.exe metadata %~dp0\docfx.json
 

@@ -21,7 +21,7 @@ jobs:
         Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx.zip" -OutFile ".tools/docfx/docfx.zip"
         [System.IO.Compression.ZipFile]::ExtractToDirectory(".tools/docfx/docfx.zip", ".tools/docfx" )
       env:
-        DOCFXVERSION: 2.56.7
+        DOCFXVERSION: 2.58
 
     - name: Install .NET OMD Generator
       run: dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.2.0
@@ -38,7 +38,7 @@ jobs:
       env:         
         DOCFX_SOURCE_BRANCH_NAME: main
       run: |
-        nuget install memberpage -Version 2.56.7 -OutputDirectory docs
+        nuget install memberpage -Version 2.58.0 -OutputDirectory docs
         .tools/docfx/docfx.exe metadata docs/docfx.json
         dotnet build docs/AppliesToGenerator\DocFXAppliesToGenerator.csproj
         docs/AppliesToGenerator\bin\Debug\netcoreapp3.1\DocFXAppliesToGenerator.exe docs/appliesToList.json
