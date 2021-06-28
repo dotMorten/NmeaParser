@@ -252,6 +252,16 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestGPGGA_NoSats()
+        {
+            string input = "$GPGGA,181651.98,3403.47163804,N,11711.80926595,W,0,,,,M,,M,,*6E";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gga));
+            Gga gga = (Gga)msg;
+            Assert.AreEqual(0, gga.NumberOfSatellites);
+        }
+
+        [TestMethod]
         public void TestPtlna()
         {
             string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";

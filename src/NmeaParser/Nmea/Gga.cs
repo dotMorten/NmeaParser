@@ -41,7 +41,8 @@ namespace NmeaParser.Messages
             Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
             Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
             Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
-            NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(message[6]))
+                NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
             Hdop = NmeaMessage.StringToDouble(message[7]);
             Altitude = NmeaMessage.StringToDouble(message[8]);
             AltitudeUnits = message[9];
