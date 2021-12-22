@@ -165,6 +165,7 @@ namespace NmeaParser
             private BurstEmulationSettings m_settings;
             private CancellationTokenSource m_tcs;
             private Task m_readTask;
+            private AutoResetEvent m_dataAvailableEvent = new AutoResetEvent(false);
             
             /// <summary>
             /// Initializes a new instance of the <see cref="BufferedStream"/> class.
@@ -232,6 +233,7 @@ namespace NmeaParser
                     m_buffer.CopyTo(newBuffer, 0);
                     bytes.CopyTo(newBuffer, m_buffer.Length);
                     m_buffer = newBuffer;
+                    m_dataAvailableEvent.Set();
                 }
                 var delay = bytes.Length * 10d / m_settings.EmulatedBaudRate; // 8 bits + 1 parity + 1 stop bit = 10bits per byte;
 
@@ -286,6 +288,7 @@ namespace NmeaParser
             /// <inheritdoc />
             public override int Read(byte[] buffer, int offset, int count)
             {
+                m_dataAvailableEvent.WaitOne();
                 lock (lockObj)
                 {
                     if (this.m_buffer.Length <= count)
