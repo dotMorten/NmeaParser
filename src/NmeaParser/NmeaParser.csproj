@@ -87,4 +87,19 @@ All messages now have a unique timestamp useful to expire older messages.</Packa
     <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
 
+  <Target Name="SignAssemblies" Condition="Exists($(CertificatePath)) AND '$(CertificatePassword)'!=''" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
+    <ItemGroup>
+      <FilesToSign Include="@(IntermediateAssembly)" />
+      <FilesToSign Include="@(IntermediateRefAssembly)" />
+      <FilesToSign Include="@(IntermediateSatelliteAssembliesWithTargetPath)" />
+    </ItemGroup>
+    <ItemGroup>
+      <FilesToSignFiltered Include="@(FilesToSign)" Condition="Exists(%(FilesToSign.Identity))" />
+    </ItemGroup>
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="signtool sign /v /fd SHA1 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA1 &quot;%(FilesToSignFiltered.Identity)&quot;"
+          WorkingDirectory="$(ProjectDir)" EchoOff="true" />
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="signtool sign /v /as /d &quot;Authorization Summary&quot; /fd SHA256 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA256 &quot;%(FilesToSignFiltered.Identity)&quot;"
+          WorkingDirectory="$(ProjectDir)" EchoOff="true" />
+  </Target>
+
 </Project>
