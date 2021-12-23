@@ -88,17 +88,22 @@ All messages now have a unique timestamp useful to expire older messages.</Packa
   </ItemGroup>
 
   <Target Name="SignAssemblies" Condition="Exists($(CertificatePath)) AND '$(CertificatePassword)'!=''" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
+    <PropertyGroup>
+      <SignToolPath>$(ProgramFiles)\Windows Kits\10\bin\x64\signtool.exe</SignToolPath>
+      <SignToolPath Condition="!Exists($(SignToolPath))">$(ProgramFiles)\Windows Kits\10\bin\x86\signtool.exe</SignToolPath>
+      <SignToolPath Condition="!Exists($(SignToolPath))">$(ProgramFiles)\Windows Kits\10\bin\10.0.18362.0\x64\signtool.exe</SignToolPath>    
+      <SignToolPath Condition="!Exists($(SignToolPath))">$(WindowsSDK80Path)bin\x64\signtool.exe</SignToolPath>
+      <SignToolPath Condition="!Exists($(SignToolPath))">signtool.exe</SignToolPath> <!-- fallback to use PATH environment -->  
+    </PropertyGroup>
     <ItemGroup>
       <FilesToSign Include="@(IntermediateAssembly)" />
       <FilesToSign Include="@(IntermediateRefAssembly)" />
       <FilesToSign Include="@(IntermediateSatelliteAssembliesWithTargetPath)" />
-    </ItemGroup>
-    <ItemGroup>
       <FilesToSignFiltered Include="@(FilesToSign)" Condition="Exists(%(FilesToSign.Identity))" />
     </ItemGroup>
-    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="signtool sign /v /fd SHA1 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA1 &quot;%(FilesToSignFiltered.Identity)&quot;"
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="&quot;$(SignToolPath)&quot; sign /v /fd SHA1 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA1 &quot;%(FilesToSignFiltered.Identity)&quot;"
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
-    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="signtool sign /v /as /d &quot;Authorization Summary&quot; /fd SHA256 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA256 &quot;%(FilesToSignFiltered.Identity)&quot;"
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="&quot;$(SignToolPath)&quot; sign /v /as /d &quot;Authorization Summary&quot; /fd SHA256 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA256 &quot;%(FilesToSignFiltered.Identity)&quot;"
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
   </Target>
 
