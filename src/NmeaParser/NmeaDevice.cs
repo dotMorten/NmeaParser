@@ -130,10 +130,17 @@ namespace NmeaParser
                     m_cts.Cancel();
                 m_cts = null;
             }
-            if (m_ParserTask != null)
+            if (m_ParserTask != null && !m_ParserTask.IsCompleted)
+            {
                 await m_ParserTask;
+                /*try
+                {
+                    await m_ParserTask.ConfigureAwait(false);
+                }
+                catch { } // Ignore any exit errors*/
+            }
             if (m_stream != null)
-                await CloseStreamAsync(m_stream);
+                await CloseStreamAsync(m_stream).ConfigureAwait(false);
             _lastMultiMessage = null;
             m_stream = null;
             lock (m_lockObject)
