@@ -11,7 +11,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version>2.2</Version>
+    <Version Condition="'$(Version)'==''">2.3</Version>
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
