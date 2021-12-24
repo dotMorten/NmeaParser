@@ -11,7 +11,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version Condition="'$(Version)'==''">2.3</Version>
+    <Version Condition="'$(Version)'==''">2.2.1</Version>
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
@@ -20,12 +20,7 @@
     <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
-    <PackageReleaseNotes>Added ITimestampedMessage interface to easily get time stamps from any message that supports it.
-Added IGeographicLocation interface to easily get any message that supports reporting a location.
-Added GnssMonitor for simplifying monitoring location messages and reporting a location.
-Added an NTRIP client for getting RTCM correctional messages from an NTRIP Server.
-Improved the buffered stream to more accurately emulate baud rates.
-All messages now have a unique timestamp useful to expire older messages.</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
