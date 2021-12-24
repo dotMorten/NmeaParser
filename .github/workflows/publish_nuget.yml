@@ -2,7 +2,11 @@ name: Publish NuGet
 
 on:
   workflow_dispatch:
-    
+   inputs:
+      version:
+        description: 'Package version override'
+        required: false
+        default: ''    
 jobs:
   build:
 
