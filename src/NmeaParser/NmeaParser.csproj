@@ -1,6 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+    <Sdk Name="Microsoft.DotNet.PackageValidation" Version="1.0.0-preview.7.21379.12" />
 
-  <PropertyGroup>
+    <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.4;netcoreapp2.1;net452;monoandroid50;monoandroid70;xamarinios10;uap10.0.18362</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -11,7 +12,7 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version Condition="'$(Version)'==''">2.2.1</Version>
+    <Version Condition="'$(Version)'==''">2.2.2</Version> <!-- Note: Also update PackageValidationBaselineVersion -->
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
@@ -30,7 +31,15 @@
     <Nullable>enable</Nullable>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+  </PropertyGroup>
+    
+  <PropertyGroup Label="PackageValidationSettings">
+      <EnablePackageValidation>true</EnablePackageValidation>
+      <PackageValidationBaselineVersion>2.2.0</PackageValidationBaselineVersion>
+      <!-- When updating this, make sure to delete PackageValidationSuppression.txt files -->
+      <GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+      <!-- Set to true to generate suppresion files used to ignore _intended_ breaking changes. Should never be checked in true -->
+      <CompatibilitySuppressionFilePath Condition="('$(GenerateCompatibilitySuppressionFile)'=='true') OR Exists('$(MSBuildProjectDirectory)\PackageValidationSuppression.txt')">PackageValidationSuppression.txt</CompatibilitySuppressionFilePath>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
@@ -40,7 +49,7 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net451'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
   </PropertyGroup>
 

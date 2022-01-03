@@ -19,7 +19,7 @@
         }
 	  ],
       "dest": "../artifacts/docs/api/netfx",
-      "properties": { "TargetFramework": "net451" },
+      "properties": { "TargetFramework": "net452" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
