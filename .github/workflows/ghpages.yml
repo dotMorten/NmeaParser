@@ -14,7 +14,14 @@ jobs:
         
     - name: Clone NmeaParser
       uses: actions/checkout@v1
+    
+    - name: Setup Visual Studio Command Prompt
+      uses: microsoft/setup-msbuild@v1.0.2
 
+    - name: Restore
+      run: |
+        msbuild /restore /t:Restore src/NmeaParser/NmeaParser.csproj /p:Configuration=Release
+        
     - name: Download DocFX
       run: |
         mkdir .tools/docfx
@@ -24,7 +31,7 @@ jobs:
         DOCFXVERSION: 2.58
 
     - name: Install .NET OMD Generator
-      run: dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.2.0
+      run: dotnet tool install --tool-path .tools/omd dotMorten.OmdGenerator --version 1.3.1
     
     - name: Generate OMD
       run: |

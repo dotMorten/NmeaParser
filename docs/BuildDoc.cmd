@@ -16,7 +16,7 @@ IF NOT EXIST "..\.tools\nuget.exe" (
 )
 
 REM Generate OMD
-dotnet tool install --tool-path %~dp0../.tools/omd dotMorten.OmdGenerator --version 1.2.0
+dotnet tool install --tool-path %~dp0../.tools/omd dotMorten.OmdGenerator --version 1.3.1
 mkdir %~dp0../artifacts/docs/api
 %~dp0..\.tools\omd\generateomd /source=%~dp0../src/NmeaParser /output=%~dp0../artifacts/docs/api/omd.html /preprocessors=NETSTANDARD1_4;NETSTANDARD
 
