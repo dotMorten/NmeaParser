@@ -63,7 +63,7 @@
         }
 	  ],
       "dest": "../artifacts/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.16299" },
+      "properties": { "TargetFramework": "uap10.0.18362" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
