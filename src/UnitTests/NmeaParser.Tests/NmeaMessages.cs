@@ -261,6 +261,28 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0, gga.NumberOfSatellites);
         }
 
+
+        [TestMethod]
+        public void TestGPGGA_Empty()
+        {
+            string input = "$GPGGA,,,,,,,,,,,,,,*56";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Gga));
+            Gga gga = (Gga)msg;
+            Assert.AreEqual(0, gga.NumberOfSatellites);
+            Assert.AreEqual(Gga.FixQuality.Invalid, gga.Quality);
+            Assert.IsTrue(double.IsNaN(gga.GeoidalSeparation));
+            Assert.AreEqual(string.Empty, gga.GeoidalSeparationUnits);
+            Assert.IsTrue(double.IsNaN(gga.Longitude));
+            Assert.IsTrue(double.IsNaN(gga.Latitude));
+            Assert.IsTrue(double.IsNaN(gga.Altitude));
+            Assert.AreEqual(string.Empty, gga.AltitudeUnits);
+            Assert.IsTrue(double.IsNaN(gga.Hdop));
+            Assert.IsNull(gga.TimeSinceLastDgpsUpdate);
+            Assert.AreEqual(TimeSpan.Zero, gga.FixTime);
+            Assert.AreEqual(-1, gga.DgpsStationId);
+        }
+
         [TestMethod]
         public void TestPtlna()
         {

@@ -40,7 +40,8 @@ namespace NmeaParser.Messages
             FixTime = StringToTimeSpan(message[0]);
             Latitude = NmeaMessage.StringToLatitude(message[1], message[2]);
             Longitude = NmeaMessage.StringToLongitude(message[3], message[4]);
-            Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(message[5]))
+                Quality =  (Gga.FixQuality)int.Parse(message[5], CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(message[6]))
                 NumberOfSatellites = int.Parse(message[6], CultureInfo.InvariantCulture);
             Hdop = NmeaMessage.StringToDouble(message[7]);
