@@ -102,26 +102,6 @@ public class MainActivity : Activity
             try
             {
                 listener = new NmeaParser.BluetoothDevice(btAddress, ApplicationContext!);
-                //status.Text = "Opening bluetooth...";
-                //var bluetoothManager = ApplicationContext!.GetSystemService(Android.Content.Context.BluetoothService) as Android.Bluetooth.BluetoothManager;
-                //var adapter = bluetoothManager?.Adapter;
-                //var bt = adapter.GetRemoteDevice(btAddress);
-                //Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB"); //UUID for Serial Device Service
-                //socket = bt.CreateRfcommSocketToServiceRecord(SERIAL_UUID);
-                //try
-                //{
-                //    await socket.ConnectAsync();
-                //}
-                //catch (Java.IO.IOException)
-                //{
-                //    // This sometimes fails. Use fallback approach to open socket
-                //    // Based on https://stackoverflow.com/a/41627149
-                //    socket?.Dispose();
-                //    var m = bt.Class.GetMethod("createRfcommSocket", new Java.Lang.Class[] { Java.Lang.Integer.Type });
-                //    socket = (Android.Bluetooth.BluetoothSocket)m.Invoke(bt, new Java.Lang.Object[] { 1 })!;
-                //    socket.Connect();
-                //}
-                //listener = new NmeaParser.StreamDevice(socket.InputStream);
             }
             catch (System.Exception ex)
             {
