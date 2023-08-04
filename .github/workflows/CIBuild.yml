@@ -24,7 +24,11 @@ jobs:
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v1.0.2
-      
+
+    - name: Install Android SDK
+      run: |
+         "%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --install platforms;android-24
+
     - name: Build
       run: |
         msbuild /restore /t:Build src/NmeaParser.sln /p:Configuration=Release
