@@ -68,7 +68,11 @@ namespace NmeaParser
             stream = new StringStream();
             listener = new Listener();
             listener.NmeaMessage += (s, e) => stream?.Append(e);
+#if MONOANDROID50
             bool success = manager.AddNmeaListener(listener);
+#else
+            bool success = manager.AddNmeaListener(listener, null);
+#endif
             manager.RequestLocationUpdates(LocationManager.GpsProvider, 0, 0f, listener );
             return Task.FromResult<Stream>(stream);
         }
@@ -76,10 +80,13 @@ namespace NmeaParser
         /// <inheritdoc />
         protected override Task CloseStreamAsync(Stream stream)
         {
-            manager.RemoveUpdates(listener);
-            manager.RemoveNmeaListener(listener);
-            listener?.Dispose();
-            listener = null;
+            if (listener is not null)
+            {
+                manager.RemoveUpdates(listener);
+                manager.RemoveNmeaListener(listener);
+                listener.Dispose();
+                listener = null;
+            }
             stream.Dispose();
             return Task.CompletedTask;
         }

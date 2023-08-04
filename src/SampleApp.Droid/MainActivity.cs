@@ -1,4 +1,5 @@
 using Android;
+using Android.Bluetooth;
 using Android.Content.PM;
 using AndroidX.Core.App;
 
@@ -32,15 +33,15 @@ public class MainActivity : Activity
             return;
         }
 
-        foreach (var d in NmeaParser.BluetoothDevice.GetBluetoothSerialDevices())
+        foreach (var d in NmeaParser.BluetoothDevice.GetBluetoothSerialDevices(ApplicationContext))
         {
-            devices[d.Name + " " + d.Address] = d.Address;
+            devices[d.Name + " " + d.Address] = d;
         }
         devicePicker.Adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleSpinnerDropDownItem, devices.Keys.ToArray());
         devicePicker.SetSelection(0);
     }
 
-    private Dictionary<string, string?> devices = new Dictionary<string, string?>();
+    private Dictionary<string, BluetoothDevice?> devices = new Dictionary<string, BluetoothDevice?>();
 
     private void StopButton_Click(object? sender, EventArgs e)
     {
@@ -100,25 +101,27 @@ public class MainActivity : Activity
         {
             try
             {
-                status.Text = "Opening bluetooth...";
-                var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
-                var bt = Android.Bluetooth.BluetoothAdapter.DefaultAdapter.GetRemoteDevice(btAddress);
-                Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB"); //UUID for Serial Device Service
-                socket = bt.CreateRfcommSocketToServiceRecord(SERIAL_UUID);
-                try
-                {
-                    await socket.ConnectAsync();
-                }
-                catch (Java.IO.IOException)
-                {
-                    // This sometimes fails. Use fallback approach to open socket
-                    // Based on https://stackoverflow.com/a/41627149
-                    socket?.Dispose();
-                    var m = bt.Class.GetMethod("createRfcommSocket", new Java.Lang.Class[] { Java.Lang.Integer.Type });
-                    socket = (Android.Bluetooth.BluetoothSocket)m.Invoke(bt, new Java.Lang.Object[] { 1 })!;
-                    socket.Connect();
-                }
-                listener = new NmeaParser.StreamDevice(socket.InputStream);
+                listener = new NmeaParser.BluetoothDevice(btAddress, ApplicationContext!);
+                //status.Text = "Opening bluetooth...";
+                //var bluetoothManager = ApplicationContext!.GetSystemService(Android.Content.Context.BluetoothService) as Android.Bluetooth.BluetoothManager;
+                //var adapter = bluetoothManager?.Adapter;
+                //var bt = adapter.GetRemoteDevice(btAddress);
+                //Java.Util.UUID SERIAL_UUID = Java.Util.UUID.FromString("00001101-0000-1000-8000-00805F9B34FB"); //UUID for Serial Device Service
+                //socket = bt.CreateRfcommSocketToServiceRecord(SERIAL_UUID);
+                //try
+                //{
+                //    await socket.ConnectAsync();
+                //}
+                //catch (Java.IO.IOException)
+                //{
+                //    // This sometimes fails. Use fallback approach to open socket
+                //    // Based on https://stackoverflow.com/a/41627149
+                //    socket?.Dispose();
+                //    var m = bt.Class.GetMethod("createRfcommSocket", new Java.Lang.Class[] { Java.Lang.Integer.Type });
+                //    socket = (Android.Bluetooth.BluetoothSocket)m.Invoke(bt, new Java.Lang.Object[] { 1 })!;
+                //    socket.Connect();
+                //}
+                //listener = new NmeaParser.StreamDevice(socket.InputStream);
             }
             catch (System.Exception ex)
             {
@@ -132,11 +135,23 @@ public class MainActivity : Activity
         {
             listener.MessageReceived += Listener_MessageReceived;
             status!.Text += "\nOpening device...";
-            await listener.OpenAsync();
-            status.Text += "\nConnected!";
-            startButton.Enabled = !(stopButton.Enabled = true);
-            monitor = new NmeaParser.Gnss.GnssMonitor(listener);
-            monitor.LocationChanged += Monitor_LocationChanged;
+            try
+            {
+                await listener.OpenAsync();
+                status.Text += "\nConnected!";
+                monitor = new NmeaParser.Gnss.GnssMonitor(listener);
+                monitor.LocationChanged += Monitor_LocationChanged;
+                startButton.Enabled = !(stopButton.Enabled = true);
+            }
+            catch (Exception ex)
+            {
+                status.Text += "\nError opening device:\n" + ex.Message;
+                startButton.Enabled = true;
+                stopButton.Enabled = false;
+            }
+            finally
+            {
+            }
         }
         else
         {

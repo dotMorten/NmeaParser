@@ -31,6 +31,7 @@
     <Nullable>enable</Nullable>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
+    <CheckEolWorkloads>false</CheckEolWorkloads>
   </PropertyGroup>
     
   <PropertyGroup Label="PackageValidationSettings">
