@@ -27,11 +27,13 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);NU1505</NoWarn>
     <CodeAnalysisTreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</CodeAnalysisTreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <CheckEolWorkloads>false</CheckEolWorkloads>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
     
   <PropertyGroup Label="PackageValidationSettings">
