@@ -45,7 +45,7 @@ jobs:
       
     - name: Tests
       run: |
-        dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/netcoreapp3.1/NmeaParser.Tests.Net.dll -v normal
+        dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/net6.0/NmeaParser.Tests.Net.dll -v normal
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
