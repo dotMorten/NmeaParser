@@ -2,7 +2,7 @@
     <Sdk Name="Microsoft.DotNet.PackageValidation" Version="1.0.0-preview.7.21379.12" />
 
     <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.4;netcoreapp2.1;net452;monoandroid50;monoandroid70;xamarinios10;uap10.0.18362</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.4;netcoreapp2.1;net452;monoandroid50;monoandroid70;xamarinios10;uap10.0.18362;net6.0;net6.0-ios;net6.0-android;net6.0-windows10.0.19041.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -12,20 +12,20 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version Condition="'$(Version)'==''">2.2.2</Version> <!-- Note: Also update PackageValidationBaselineVersion -->
+    <Version Condition="'$(Version)'==''">2.3.0</Version> <!-- Note: Also update PackageValidationBaselineVersion -->
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-2023</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</CodeAnalysisTreatWarningsAsErrors>
     <Nullable>enable</Nullable>
@@ -48,26 +48,31 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
   </PropertyGroup>
-  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
     <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
-    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
+    <DefineConstants>$(DefineConstants);API_LEVEL_21</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
     <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
     <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
-    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
+    <DefineConstants>$(DefineConstants);API_LEVEL_24</DefineConstants>
     <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
     <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+    <DefineConstants>$(DefineConstants);API_LEVEL_24</DefineConstants>
+  </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
     <NoWarn>$(NoWarn);VSX1000</NoWarn>
   </PropertyGroup>
   
@@ -87,7 +92,7 @@
     <None Include="logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)'=='net6.0-windows10.0.19041.0'">
     <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
 

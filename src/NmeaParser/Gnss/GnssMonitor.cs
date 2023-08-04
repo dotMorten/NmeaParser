@@ -58,7 +58,7 @@ namespace NmeaParser.Gnss
         /// </summary>
         public NmeaDevice Device { get; }
 
-        private void NmeaMessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs e)
+        private void NmeaMessageReceived(object? sender, NmeaParser.NmeaMessageReceivedEventArgs e)
         {
             OnMessageReceived(e.Message);
         }
@@ -448,7 +448,7 @@ namespace NmeaParser.Gnss
             {
                 SynchronizationContext.Post((d) =>
                 {
-                    foreach (string propertyName in (IEnumerable<string>)d)
+                    foreach (string propertyName in (IEnumerable<string>)d!)
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
                 }, properties);
             }

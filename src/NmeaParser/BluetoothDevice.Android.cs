@@ -52,9 +52,9 @@ namespace NmeaParser
         public static IEnumerable<Android.Bluetooth.BluetoothDevice> GetBluetoothSerialDevices()
         {
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
-            if (adapter != null && adapter.IsEnabled)
+            if (adapter != null && adapter.IsEnabled && adapter.BondedDevices is not null)
             {
-                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids().Any(t => SERIAL_UUID.CompareTo(t.Uuid) == 0)))
+                foreach (var b in adapter.BondedDevices.Where(d => d.GetUuids()?.Any(t => SERIAL_UUID.CompareTo(t.Uuid) == 0) == true))
                     yield return b;
             }
         }
