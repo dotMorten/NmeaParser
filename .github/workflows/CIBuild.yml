@@ -35,7 +35,7 @@ jobs:
          echo y>>license_accepter.txt
          echo y>>license_accepter.txt
          echo y>>license_accepter.txt
-         CALL "%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --licenses < license_accepter.txt
+         CALL /c '"%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --licenses < license_accepter.txt'
          CALL "%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --install "platforms;android-24"
 
     - name: Build
