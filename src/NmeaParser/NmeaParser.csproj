@@ -36,7 +36,7 @@
     
   <PropertyGroup Label="PackageValidationSettings">
       <EnablePackageValidation>true</EnablePackageValidation>
-      <PackageValidationBaselineVersion>2.2.0</PackageValidationBaselineVersion>
+      <PackageValidationBaselineVersion>2.2.2</PackageValidationBaselineVersion>
       <!-- When updating this, make sure to delete PackageValidationSuppression.txt files -->
       <GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
       <!-- Set to true to generate suppresion files used to ignore _intended_ breaking changes. Should never be checked in true -->
