@@ -68,10 +68,17 @@ namespace NmeaParser
             stream = new StringStream();
             listener = new Listener();
             listener.NmeaMessage += (s, e) => stream?.Append(e);
-#if MONOANDROID50
-            bool success = manager.AddNmeaListener(listener);
+#if NETCOREAPP
+            if (OperatingSystem.IsAndroidVersionAtLeast(24))
+                manager.AddNmeaListener((IOnNmeaMessageListener)listener, null);
+            else
+                manager.AddNmeaListener((GpsStatus.INmeaListener)listener);
 #else
-            bool success = manager.AddNmeaListener(listener, null);
+#if !API_LEVEL_24
+            manager.AddNmeaListener(listener);
+#else
+            manager.AddNmeaListener(listener, null);
+#endif
 #endif
             manager.RequestLocationUpdates(LocationManager.GpsProvider, 0, 0f, listener );
             return Task.FromResult<Stream>(stream);
@@ -83,7 +90,14 @@ namespace NmeaParser
             if (listener is not null)
             {
                 manager.RemoveUpdates(listener);
+#if NETCOREAPP
+                if (OperatingSystem.IsAndroidVersionAtLeast(24))
+                    manager.RemoveNmeaListener((IOnNmeaMessageListener)listener);
+                else
+                    manager.RemoveNmeaListener((GpsStatus.INmeaListener)listener);
+#else
                 manager.RemoveNmeaListener(listener);
+#endif
                 listener.Dispose();
                 listener = null;
             }
@@ -92,21 +106,25 @@ namespace NmeaParser
         }
 
         private class Listener : Java.Lang.Object,
-#if API_LEVEL_24
+#if API_LEVEL_24 || NETCOREAPP
             IOnNmeaMessageListener,
-#else
+#endif
+#if !API_LEVEL_24 || NETCOREAPP
             GpsStatus.INmeaListener,
 #endif
             ILocationListener
         {
             private bool _isNmeaSupported = false;
 
-#if API_LEVEL_24
-            void IOnNmeaMessageListener.OnNmeaMessage(string? message, long timestamp)
-#else
-            void GpsStatus.INmeaListener.OnNmeaReceived(long timestamp, string? message)
+#if API_LEVEL_24 || NETCOREAPP
+            void IOnNmeaMessageListener.OnNmeaMessage(string? message, long timestamp) => OnMessage(timestamp, message);
 #endif
+#if !API_LEVEL_24 || NETCOREAPP
+            void GpsStatus.INmeaListener.OnNmeaReceived(long timestamp, string? message) => OnMessage(timestamp, message);
+#endif
+            private void OnMessage(long timestamp, string? message)
             {
+
                 _isNmeaSupported = true;
                 if (message != null)
                     NmeaMessage?.Invoke(this, message);
