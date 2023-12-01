@@ -5,54 +5,10 @@
       "PlatformName": ".NET Standard 1.4",
       "Versions" : [
          { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/netstd/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/netstd/.manifest" },
          { "Name" : "v2.2", "Manifest": "manifests/v2.2/netstd/.manifest" },
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/netstd/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/netstd/.manifest" },
-      ]
-    },
-    { 
-      "PlatformName": ".NET Framework",
-      "Versions" : [
-         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/netfx/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/netfx/.manifest" },
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/netfx/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/netfx/.manifest" }
-      ]
-    },
-    { 
-      "PlatformName": ".NET Core",
-      "Versions" : [
-         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/netcore/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/netcore/.manifest" },
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/netcore/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/netcore/.manifest" }
-      ]
-    },
-    { 
-      "PlatformName": "Xamarin.Android",
-      "Versions" : [
-         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/android/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/android/.manifest" },
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/android/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/android/.manifest" }
-      ]
-    },
-    {
-      "PlatformName": "Xamarin.iOS",
-      "Versions" : [
-         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/ios/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/ios/.manifest" },    
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/ios/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/ios/.manifest" }
-      ]
-    },
-    { 
-      "PlatformName": "UWP",
-      "Versions" : [
-         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/uwp/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/uwp/.manifest" },    
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/uwp/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/uwp/.manifest" }
       ]
     },
     { 
@@ -60,6 +16,13 @@
       "Versions" : [
          { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net/.manifest" },
          { "Name" : "v2.3", "Manifest": "manifests/v2.3/net/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET Windows",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net-windows/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net-windows/.manifest" }
       ]
     },
     { 
@@ -77,10 +40,43 @@
       ]
     },
     { 
-      "PlatformName": ".NET Windows",
+      "PlatformName": ".NET Framework",
       "Versions" : [
-         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net-windows/.manifest" },
-         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net-windows/.manifest" }
+         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/netfx/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/netfx/.manifest" },
+         { "Name" : "v2.2", "Manifest": "manifests/v2.2/netfx/.manifest" },
+         { "Name" : "v2.1", "Manifest": "manifests/v2.1/netfx/.manifest" },
+         { "Name" : "v2.0", "Manifest": "manifests/v2.0/netfx/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": "UWP",
+      "Versions" : [
+         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/uwp/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/uwp/.manifest" },    
+         { "Name" : "v2.2", "Manifest": "manifests/v2.2/uwp/.manifest" },    
+         { "Name" : "v2.1", "Manifest": "manifests/v2.1/uwp/.manifest" },
+         { "Name" : "v2.0", "Manifest": "manifests/v2.0/uwp/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": "Xamarin.Android",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/android/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/android/.manifest" },
+         { "Name" : "v2.2", "Manifest": "manifests/v2.2/android/.manifest" },
+         { "Name" : "v2.1", "Manifest": "manifests/v2.1/android/.manifest" },
+         { "Name" : "v2.0", "Manifest": "manifests/v2.0/android/.manifest" }
+      ]
+    },
+    {
+      "PlatformName": "Xamarin.iOS",
+      "Versions" : [
+         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/ios/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/ios/.manifest" },    
+         { "Name" : "v2.2", "Manifest": "manifests/v2.2/ios/.manifest" },    
+         { "Name" : "v2.1", "Manifest": "manifests/v2.1/ios/.manifest" },
+         { "Name" : "v2.0", "Manifest": "manifests/v2.0/ios/.manifest" }
       ]
     },
    ]

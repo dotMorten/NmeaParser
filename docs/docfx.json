@@ -18,6 +18,17 @@
           "src" : "../src/"
         }
       ],
+      "dest": "../artifacts/docs/api/net",
+      "properties": { "TargetFramework": "net6.0" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net452" },
       "disableGitFeatures": false,
