@@ -54,6 +54,34 @@
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/uwp/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/uwp/.manifest" }
       ]
-    }
+    },
+    { 
+      "PlatformName": ".NET 6+",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET Android",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net-android/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net-android/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET iOS",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net-ios/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net-ios/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET Windows",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net-windows/.manifest" },
+         { "Name" : "v2.3", "Manifest": "manifests/v2.3/net-windows/.manifest" }
+      ]
+    },
    ]
 }

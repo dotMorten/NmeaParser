@@ -51,6 +51,9 @@ namespace NmeaParser
         /// </summary>
         /// <returns>A set of bluetooth devices available that supports serial connections</returns>
         [Obsolete("Use GetBluetoothSerialDevices(Context)")]
+#if NETCOREAPP
+        [System.Runtime.Versioning.ObsoletedOSPlatform("android31.0")]
+#endif
         public static IEnumerable<Android.Bluetooth.BluetoothDevice> GetBluetoothSerialDevices()
         {
             var adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
@@ -110,7 +113,9 @@ namespace NmeaParser
             else
             {
 #pragma warning disable CS0618 // Type or member is obsolete. Only used if deprecated constructor is used
+#pragma warning disable CA1422 // Validate platform compatibility
                 adapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
+#pragma warning restore CA1422 // Validate platform compatibility
 #pragma warning restore CS0618 // Type or member is obsolete
             }
             if (adapter?.IsEnabled != true)

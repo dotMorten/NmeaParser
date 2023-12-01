@@ -6,62 +6,84 @@
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         },
-	  ],
+      ],
       "dest": "../artifacts/docs/api/netstd",
       "properties": { "TargetFramework": "netstandard1.4" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net452" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
-      "dest": "../artifacts/docs/api/netcore",
-      "properties": { "TargetFramework": "netcoreapp2.1" },
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-	{ "src": [
-        {
-          "files": [ "NmeaParser/NmeaParser.csproj" ],
-          "src" : "../src/"
-        }
-	  ],
+      ],
       "dest": "../artifacts/docs/api/android",
       "properties": { "TargetFramework": "monoandroid70" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "dest": "../artifacts/docs/api/net-android",
+      "properties": { "TargetFramework": "net7.0-android" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
       "dest": "../artifacts/docs/api/ios",
       "properties": { "TargetFramework": "xamarinios10" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "dest": "../artifacts/docs/api/net-ios",
+      "properties": { "TargetFramework": "net7.0-ios" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
+      "dest": "../artifacts/docs/api/net-windows",
+      "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
       "dest": "../artifacts/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.18362" },
       "disableGitFeatures": false,
@@ -70,7 +92,7 @@
   ],
   "build": {
     "content": [
-	{
+    {
         "files": [
           "api/**/index.md"
         ]
@@ -80,7 +102,7 @@
           "api/**.yml",
           "api/**/toc.yml"         
         ],
-		"src" : "../artifacts/docs"
+        "src" : "../artifacts/docs"
       },
       {
         "files": [
@@ -98,11 +120,11 @@
           "favicon.ico"
         ]
       },
-	   {
+       {
         "files": [
            "api/omd.html"
         ],
-		"src" : "../artifacts/docs"
+        "src" : "../artifacts/docs"
       }
     ],
     "overwrite": [
@@ -134,7 +156,7 @@
     "fileMetadataFiles": [],
     "template": [
       "default",
-      "memberpage.2.58.0/content",
+      "memberpage.2.59.0/content",
       "template_overrides"
     ],
     "postProcessors": [],
