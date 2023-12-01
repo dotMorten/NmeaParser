@@ -65,7 +65,7 @@ namespace NmeaParser
             return m_stream;
         }
 
-        private void OnEndOfStreamReached(object sender, EventArgs e)
+        private void OnEndOfStreamReached(object? sender, EventArgs e)
         {
             EndOfStreamReached?.Invoke(this, e);
             if (m_stream is BufferedStream stream && !stream.CanRewind && IsOpen)

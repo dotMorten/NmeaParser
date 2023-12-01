@@ -125,7 +125,7 @@ namespace NmeaParser.Messages
                 if (pinfo.Length == 2 && pinfo[0].ParameterType == typeof(string) && pinfo[1].ParameterType == typeof(string[]))
                 {
                     if (!replace && messageTypes.ContainsKey(nmeaType))
-                        throw new InvalidOperationException($"Message type {nmeaType} declared in {typeInfo.FullName} is already registered by {messageTypes[nmeaType].DeclaringType.FullName}");
+                        throw new InvalidOperationException($"Message type {nmeaType} declared in {typeInfo.FullName} is already registered by {messageTypes[nmeaType].DeclaringType?.FullName}");
                     messageTypes[nmeaType] = c;
                     return;
                 }
@@ -309,8 +309,9 @@ namespace NmeaParser.Messages
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
-        public bool Equals(NmeaMessage other)
+        public bool Equals(NmeaMessage? other)
         {
+            if (other is null) return false;
             if (other.MessageType != MessageType)
                 return false;
             if (other.MessageParts.Count != MessageParts.Count)
