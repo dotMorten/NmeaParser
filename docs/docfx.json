@@ -52,7 +52,7 @@
         }
       ],
       "dest": "../artifacts/docs/api/net-android",
-      "properties": { "TargetFramework": "net7.0-android" },
+      "properties": { "TargetFramework": "net8.0-android" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -74,7 +74,7 @@
         }
       ],
       "dest": "../artifacts/docs/api/net-ios",
-      "properties": { "TargetFramework": "net7.0-ios" },
+      "properties": { "TargetFramework": "net8.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
