@@ -12,7 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS
 using System;
 using System.Collections.Generic;
 using System.Linq;
