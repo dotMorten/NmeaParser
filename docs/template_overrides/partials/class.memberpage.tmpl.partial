@@ -1,4 +1,4 @@
-{{!Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See LICENSE file in the project root for full license information.}}
+{{!Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license.}}
 
 {{>partials/class.header}}
 {{#children}}
@@ -7,7 +7,7 @@
 {{/overload}}
 <h3 id="{{id}}">{{>partials/classSubtitle}}</h3>
 {{#children.0}}
-<table class="table table-bordered table-striped table-condensed">
+<table class="table table-bordered table-condensed">
   <thead>
     <tr>
       <th>{{__global.name}}</th>
@@ -23,7 +23,7 @@
       </td>
       <td class="markdown level1 summary">{{{summary}}}</td>
     </tr>
-    {{/children}}    
+    {{/children}}
   {{#children.0}}
   </tbody>
 </table>
@@ -57,8 +57,9 @@
 {{#seealso.0}}
 </div>
 {{/seealso.0}}
+
 {{#appliesTo.0}}
-<h3 id="appliesTo">Applies to</h3>
+<h3 id="appliesTo">Applies</h3>
 
 <div class="appliesto">
   <div>

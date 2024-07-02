@@ -2,7 +2,7 @@ Nmea Parser
 =========
 
 Library for reading and parsing NMEA data message streams.
-It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Universal, Windows Desktop/.NET and Windows Universal apps as well as Xamarin/.NET for iOS and Android.
+It makes it easy to connect and listen for NMEA messages coming from various devices in Windows Universal, Windows Desktop/.NET and Windows Universal apps as well as .NET for iOS and Android.
 
 
 ## Sponsoring

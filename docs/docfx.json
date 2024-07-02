@@ -8,9 +8,10 @@
         },
       ],
       "dest": "../artifacts/docs/api/netstd",
-      "properties": { "TargetFramework": "netstandard1.4" },
+      "properties": { "TargetFramework": "netstandard2.0" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -21,7 +22,8 @@
       "dest": "../artifacts/docs/api/net",
       "properties": { "TargetFramework": "net6.0" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -32,7 +34,8 @@
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net452" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -41,20 +44,10 @@
         }
       ],
       "dest": "../artifacts/docs/api/android",
-      "properties": { "TargetFramework": "monoandroid70" },
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-    { "src": [
-        {
-          "files": [ "NmeaParser/NmeaParser.csproj" ],
-          "src" : "../src/"
-        }
-      ],
-      "dest": "../artifacts/docs/api/net-android",
       "properties": { "TargetFramework": "net8.0-android" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -63,20 +56,10 @@
         }
       ],
       "dest": "../artifacts/docs/api/ios",
-      "properties": { "TargetFramework": "xamarinios10" },
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-    { "src": [
-        {
-          "files": [ "NmeaParser/NmeaParser.csproj" ],
-          "src" : "../src/"
-        }
-      ],
-      "dest": "../artifacts/docs/api/net-ios",
       "properties": { "TargetFramework": "net8.0-ios" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -84,10 +67,11 @@
           "src" : "../src/"
         }
       ],
-      "dest": "../artifacts/docs/api/net-windows",
+      "dest": "../artifacts/docs/api/netwin",
       "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
     { "src": [
         {
@@ -96,9 +80,10 @@
         }
       ],
       "dest": "../artifacts/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.19041" },
+      "properties": { "TargetFramework": "uap10.0.19041", "DocfxBuild": "true", "MSBuildExtensionsPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\MSBuild" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     }
   ],
   "build": {
@@ -160,14 +145,14 @@
       "_gitContribute": {
         "branch": "main",
         "apiSpecFolder": "docs/api_overwrites"
-      }
+      },
+	  "memberLayout":"separatePages"
     },
     "dest": "../artifacts/docs_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
       "default",
-      "memberpage.2.59.0/content",
       "template_overrides"
     ],
     "postProcessors": [],
