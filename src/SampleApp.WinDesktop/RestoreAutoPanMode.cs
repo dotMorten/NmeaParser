@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.ComponentModel;
-#if NETFX_CORE
+#if WINDOWS_UWP
 using Windows.UI.Xaml;
 #else
 using System.Windows.Threading;
@@ -28,7 +28,7 @@ namespace SampleApp.WinDesktop
             }
 
 
-#if NETFX_CORE
+#if WINDOWS_UWP
             void m_timer_Tick(object sender, object e)
 #else
             void m_timer_Tick(object sender, EventArgs e)

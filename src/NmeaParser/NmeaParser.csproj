@@ -18,7 +18,7 @@
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2023</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-$([System.DateTime]::Now.ToString('yyyy'))</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
     <PackageReleaseNotes></PackageReleaseNotes>
@@ -34,7 +34,7 @@
     <PackageIconUrl />
     <CheckEolWorkloads>false</CheckEolWorkloads>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-	<_SdkIgnoreMSBuildCoreWarning>true</_SdkIgnoreMSBuildCoreWarning>
+    <_SdkIgnoreMSBuildCoreWarning>true</_SdkIgnoreMSBuildCoreWarning>
   </PropertyGroup>
     
   <PropertyGroup Label="PackageValidationSettings">
@@ -91,11 +91,11 @@
     <NoWarn>$(NoWarn);VSX1000</NoWarn>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.19041'">
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.19041'">
     <EmbeddedResource Include="**\*.rd.xml" />
   </ItemGroup>
 

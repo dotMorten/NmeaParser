@@ -31,14 +31,14 @@ namespace NmeaParser.Tests
     {
         [TestMethod]
         public
-#if NETFX_CORE
+#if WINDOWS_UWP
             async Task
 #else
             void
 #endif
             ParseNmeaFile()
         {
-#if NETFX_CORE
+#if WINDOWS_UWP
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
             System.IO.StreamReader reader = new System.IO.StreamReader(await file.OpenStreamForReadAsync());
 #else
@@ -64,14 +64,14 @@ namespace NmeaParser.Tests
         }
         [TestMethod]
         public
-#if NETFX_CORE
+#if WINDOWS_UWP
             async Task
 #else
             void
 #endif
             ParseTrimbleR2NmeaFile()
         {
-#if NETFX_CORE
+#if WINDOWS_UWP
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///TrimbleR2SampleData.txt"));
             System.IO.StreamReader reader = new System.IO.StreamReader(await file.OpenStreamForReadAsync());
 #else
