@@ -47,10 +47,10 @@ namespace NmeaParser.Messages
                 var day = int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture);
                 var hour = int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture);
                 var minute = int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture);
-                var seconds = double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture);
+                var secondTicks = (long)(decimal.Parse(message[0].Substring(4), CultureInfo.InvariantCulture) * TimeSpan.TicksPerSecond);
 
                 FixTime = new DateTimeOffset(year, month, day, hour, minute, 0, TimeSpan.Zero)
-                    .AddSeconds(seconds);
+                    .AddTicks(secondTicks);
             }
             Active = (message[1] == "A");
             Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
