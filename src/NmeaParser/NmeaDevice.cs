@@ -80,7 +80,12 @@ namespace NmeaParser
                         readCount = await ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
                         failcounter = 0;
                     }
-                    catch(System.Exception ex)
+                    catch (TimeoutException t)
+                    {
+                        OnDisconnecting(t);
+                        break;
+                    }
+                    catch (Exception ex)
                     {
                         failcounter++;
                         if (failcounter > 10)
