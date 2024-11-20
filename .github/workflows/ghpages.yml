@@ -51,21 +51,40 @@ jobs:
         docs/AppliesToGenerator\bin\Debug\net6.0\DocFXAppliesToGenerator.exe docs/appliesToList.json
         .tools/docfx/docfx.exe build docs/docfx.json
         powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path artifacts\docs_site\api\
-      
-    - name: Publish Documentation
-      env:
-        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        DOCSFOLDER: artifacts/docs_site
-      shell: cmd
-      run: |
-         cd  %DOCSFOLDER%
-         git init
-         git config --local user.name "%GITHUB_ACTOR%"
-         git config --local user.email "%GITHUB_ACTOR%@users.noreply.github.com"
-         git config --local core.autocrlf false
-         git add .
-         git commit -m "Auto-update doc from commit %GITHUB_SHA%"
-         git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git master:%BRANCH%
-         rmdir .git /S /Q
+        
+    - name: Upload static files as artifact
+      id: deployment
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: artifacts/docs_site
+        
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${\{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
+    #- name: Publish Documentation
+    #  env:
+    #    ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #    BRANCH: gh-pages
+    #    DOCSFOLDER: artifacts/docs_site
+    #  shell: cmd
+    #  run: |
+    #     cd  %DOCSFOLDER%
+    #     git init
+    #     git config --local user.name "%GITHUB_ACTOR%"
+    #     git config --local user.email "%GITHUB_ACTOR%@users.noreply.github.com"
+    #     git config --local core.autocrlf false
+    #     git add .
+    #     git commit -m "Auto-update doc from commit %GITHUB_SHA%"
+    #     git push --force https://%ACCESS_TOKEN%@github.com/%GITHUB_REPOSITORY%.git master:%BRANCH%
+    #     rmdir .git /S /Q
          
