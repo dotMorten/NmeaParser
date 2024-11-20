@@ -48,7 +48,7 @@ jobs:
         dotnet test src/UnitTests/NmeaParser.Tests.NET/bin/Release/net6.0/NmeaParser.Tests.Net.dll -v normal
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: NuGet Packages
         path: artifacts/NuGet/Release
