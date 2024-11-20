@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>OMD</title>
+      <style>
+         body { padding: 0; }
+		 ul { list-style:none; padding-left: 20px; margin-right:10px; }
+         .objectBox { border-style:solid; border-width:1px; margin:10px; float:left; border-radius:10px;}
+         .objectBox > .header { font-size:10px; padding:10px; border-radius:10px 10px 0 0;}
+         .objectBox > .header.noMembers { border-radius: 10px; }
+         .objectBox > .header > span { font-size:20px; }
+		 .class {  background: linear-gradient(to right, rgb(211, 220, 239), white);  }
+         .struct { background: linear-gradient(to right, rgb(211, 220, 239), white); }
+         .enum { background: linear-gradient(to right, rgb(221, 214, 239), white); }
+         .interface { background: linear-gradient(to right, rgb(231, 240, 220), white); }
+         .delegate { background: linear-gradient(to right, rgb(237, 218, 220), white); }
+         
+         .members > h4 { font-size:14px; background:rgb(240, 242, 239); display:block; padding:5px; margin:0; font-weight:normal; }
+         .typeExisting { border-color:#ddd; }
+		 .existing { opacity: .5; }
+         .typeRemoved { border-color:red; border-style:dashed; border-width:3px; text-decoration: line-through;border-style:dashed; border-width:3px; }
+         .memberRemoved { color: red; text-decoration: line-through; }
+         .obsolete { text-decoration: line-through; opacity:.75; }
+         .static { background-image: url(data:image/gif;base64,R0lGODlhDQAKAPcPAOhfF/nXxfbDqOx9Q/GbbvOvi/Klffvh0+6HUe+RYOlpJutzNPjNtvzr4v718AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAA8ALAAAAAANAAoAAAhMAB8IDJBAAYCDBxccEGgAocODAQQ+LBCAQYEBER88RCDAgcCPBB4e5PjxgYABIgEQELjwQYOTDyUOMCAgQEiHElMeLCCw4MMFBCIGBAA7); background-repeat: no-repeat; background-position: left center; margin-left:-35px; padding-left:35px; }
+ 
+         .members li {  background-repeat: no-repeat; padding-left:20px; background-position: left center; }
+         .pubevent { background-image: url(data:image/gif;base64,R0lGODlhCgAMANU3APzksP7y2ebl4u+9kOvj1Pf39vDGkunm4V5HMIyCXOLd1a6XYN7YzpeDU+fQiZVvH+qwf6eUYFhTS8/Bofbv0/jz3vv6+Nva1Ih6SuilfObPienl36CLRsC5pKyXamtPKWpiSN3Mjp94HciyeIxoIumqfuXg1+mggefj3q2CIPXAbsq+n93FguXh2vn048a4kPLMlHlsRu7Cif/kf/rRdufIWeGHgv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAADcALAAAAAAKAAwAAAZXwNvNFXJoWCPPRFgDzGQZm6Rwq9QCtJINJGACaBAbpnujXFU2zkV4q81msMHJhtjcFo1Ygmb7mNgWL3wkDGw3K3wPLYYEBjYiCoY3HQMpKJI3BBEHmDdBADs=); padding-left:20px; background-position: left center; }
+         .protevent { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZPAOGHgt28WvjYaOfIWaOALvrRdtO4f+7AL//kf8ipX49uIu3iyubl4vDr3//PMvzksO+9kP7y2a6XYN3Mjufj3umggaaFOJVvH93FgvDo1uTbxu7blvXssnlsRvv6+Pbv0/f39u7CiaCLRu7q3oyCXMiyeMuvdWtPKefQia2CIOjIXdva1OmqfvXrrufXs5eDU/by6V5HMOnl36eUYObPicq+n8a4kFhTS8Cyj+ilfOXh2oh6Ss/Bofn046yXauvj1OXTq4xrH4xoIuLd1eqwf+Xg1/71rPLMlN7Yzp94Hfjz3mpiSPXAbunm4fDGkv///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAE8ALAAAAAAQABAAAAeRgE+Cg4SFhoM9Eyg0GCU+PIdPAw8IITkANyCHSgMRBSwASwyRkwVEADujhx+dTAAiK5GSCAhHEBUAMTKCCwYmCUASLx0kBQAnRbwGHAICFi4eNsZCSIMGLUZBAQ4ENcYXOoQGGwIBAQcETgBJQ4UZCQ4C6DgQKRSHGgECBCM/M02y9KGTNSiACgUNCAqCgVBhIAA7); }
+         .privevent { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZYAOGHgt/j6ufIWfrRdqy3y0FLWMnQ3crR3sjO2f/kf+Pm6vDy9PzksKCrwrK7zv7y2bjA0r7H1ubl4tLX4v///4h6Suqwf21/lvXAbunm4enl38a4kGpiSJCetN3Mjldqgp94Hfbv0/n044yCXHuJneLd1bvD1IxoIubPifLMlPjz3mR2jd7YzufQide4kpinvMTM2l5widva1HWFnOilfKeUZayXaqCLRumqfsTM2e7CiW+Al4eUpVhTS++9kJeDU+mggbvF1GdRPGR2jrG6zW5SLefj3sC4nuXh2t3Fgq2CIOXg13qKociyeE9jfGN1jb3G1qu3y3lsRs/BobjB0md3kE9ie5VvH////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFgALAAAAAAQABAAAAehgFiCg4SFhoMiHi0oSU02U4dYAgwJOjQAPRSHKgIPAzgAHBKRkwMWABWjhyGdGAA3MpqHAgkJKT5AAEIaggsHEEQENT9SIwMARUuDBwEEDVBMWBvHJyyDCzkvggQ7R8dXSIQKQR0GBitDLgAgJYUGAfABExFPSkaGJgEF+xMQPBmHCARAUAABAgckIjU4ACMCFQdRrERSMONClRgfnCiIFAgAOw==); }
+         .privprotevent { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZYAOGHgt/j6ufIWfrRdqy3y0FLWMnQ3crR3sjO2f/kf+Pm6vDy9PzksKCrwrK7zv7y2bjA0r7H1ubl4tLX4v///4h6Suqwf21/lvXAbunm4enl38a4kGpiSJCetN3Mjldqgp94Hfbv0/n044yCXHuJneLd1bvD1IxoIubPifLMlPjz3mR2jd7YzufQide4kpinvMTM2l5widva1HWFnOilfKeUZayXaqCLRumqfsTM2e7CiW+Al4eUpVhTS++9kJeDU+mggbvF1GdRPGR2jrG6zW5SLefj3sC4nuXh2t3Fgq2CIOXg13qKociyeE9jfGN1jb3G1qu3y3lsRs/BobjB0md3kE9ie5VvH////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFgALAAAAAAQABAAAAehgFiCg4SFhoMiHi0oSU02U4dYAgwJOjQAPRSHKgIPAzgAHBKRkwMWABWjhyGdGAA3MpqHAgkJKT5AAEIaggsHEEQENT9SIwMARUuDBwEEDVBMWBvHJyyDCzkvggQ7R8dXSIQKQR0GBitDLgAgJYUGAfABExFPSkaGJgEF+xMQPBmHCARAUAABAgckIjU4ACMCFQdRrERSMONClRgfnCiIFAgAOw==); }
+         
+         .pubmethod { background-image: url(data:image/gif;base64,R0lGODlhEAALANU/AM9p0Ky1rvDV8Pfwq/qY++6l79XVrLtvvPLb8n4ufqhQqZ48nunlq/Lg8/qr+3wtffqZ+9Vv1ZZSl92Y3tNu1Pqb++zS7LW7rY01jpikruTK5OKv4uuR7KlSqnEkcu3Y7e6+7vqf+8zOrPTm9I5Gj5BOkevR64qZrtFt0pU4lvDj8O6d7/Pj86dPqPqu++Xiq6ZQp+jR6Hore+aY55ynrubM5uOs48HErOmQ6n8wgKlQqn4wf3wufHUndc+Iz////yH5BAEAAD8ALAAAAAAQAAsAAAZmwJ9wSET4VMTk0GjzsZREgQ/k4vgaxIEhcPr5Ng4CAecbQX+wQ6FCgMxKvwHDcAtkfi2UOrSS8M4dABEHEyQLCUIDLyIXND8aCigUOwsYD2c/MToACSkyApg/Hwo5PSahQhYeNUJBADs=); }
+         .protmethod { background-image: url(data:image/gif;base64,R0lGODlhEQAQALMPAKdUqPCf8e3lq+rS68+0ePXq8+3l06WvrfXGMIIxg6SBMI5tIfjYaN28Ws+Iz////yH5BAEAAA8ALAAAAAARABAAAARk8MlJ33ClankD3tQ1BF5GCcJxFA7pfiDQugEgoan6yIALJKCdY+j4AR8GgpIwsABkiSgwKWAwFALOU9okoBYNhGIyMDYfXkYjPCYnzkgCgiE2BCWGxtV+l+jFfX4NC3x9BYR9EQA7); }
+         .privmethod { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZoAP///9/j6s+Iz9LX4kFLWKy3y8jO2bK7zuPm6srR3vDy9PqY+8nQ3ahQqdXVrO6l77tvvPfwq34ufrjA0r7H1qCrwvLb8u6+7uOs43UndalQqqy1rWFyiejR6Onlq+vR67jB0sTM2uTK5JinvLxwvVVnf6pVq+aY5/Lg89Nu1Ky0rq1crt2Y3o5Gj5ZSl2d3kN+w31dqgtVv1fDV8I01jtWY1ebM5pikrn4wf9Fq0oqZrnWFnHwufHEkcumQ6o2brfqu++6d72R2jZ88n/v7/Pqb+5U4lstnzJ+qu3wtffTm9NJr038wgPPj89PY2/DU8OzS7JBOkXore09jfLvD1L3G1l5wie3Y7fqr+/Dj8G1/lmR2jvqZ+5w8neKv4vqf++uR7MHErKpYq5CetNFt0nqInau3y29/lP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAGgALAAAAAAQABAAAAe4gGiCg4QWAlmEiYOGGAJNioRPAhdAYDUohBEOKjoAMF5YCws+AkoAkGIQD0ULXCdRABEeDmEbN2gmZKpfQS48p4orOTIkLC1dEgAKCRMHBU5oIg1LKThDNEkACQEFFQNIgh0aRxJGUjMKAyMAAFU/CoJXDUwZH2gIA2MMDEJbCINQetgQxCCAwQADKJSBhIZKAAIQB0w4w7BAAAMEDBg4wIFhhQQhKIA4YKYEQwQ7tLywEmMKEYaBAAA7); }
+         .privprotmethod { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZoAP///9/j6s+Iz9LX4kFLWKy3y8jO2bK7zuPm6srR3vDy9PqY+8nQ3ahQqdXVrO6l77tvvPfwq34ufrjA0r7H1qCrwvLb8u6+7uOs43UndalQqqy1rWFyiejR6Onlq+vR67jB0sTM2uTK5JinvLxwvVVnf6pVq+aY5/Lg89Nu1Ky0rq1crt2Y3o5Gj5ZSl2d3kN+w31dqgtVv1fDV8I01jtWY1ebM5pikrn4wf9Fq0oqZrnWFnHwufHEkcumQ6o2brfqu++6d72R2jZ88n/v7/Pqb+5U4lstnzJ+qu3wtffTm9NJr038wgPPj89PY2/DU8OzS7JBOkXore09jfLvD1L3G1l5wie3Y7fqr+/Dj8G1/lmR2jvqZ+5w8neKv4vqf++uR7MHErKpYq5CetNFt0nqInau3y29/lP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAGgALAAAAAAQABAAAAe4gGiCg4QWAlmEiYOGGAJNioRPAhdAYDUohBEOKjoAMF5YCws+AkoAkGIQD0ULXCdRABEeDmEbN2gmZKpfQS48p4orOTIkLC1dEgAKCRMHBU5oIg1LKThDNEkACQEFFQNIgh0aRxJGUjMKAyMAAFU/CoJXDUwZH2gIA2MMDEJbCINQetgQxCCAwQADKJSBhIZKAAIQB0w4w7BAAAMEDBg4wIFhhQQhKIA4YKYEQwQ7tLywEmMKEYaBAAA7); }
+
+         .pubproperty { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZ9AKKvxP/////9+0ZOVH2d3//rbqykj/b////taE1PVOjw/MHI0cHI0nBhSktPUnBhS/7//y4hAkxPUvnhcjMnFVOsQVlNV/3+/pmPeu3r5+LNeuz5/9+yMsSTFT+XKcjP2d7BYU86MNbl/9DIwtLi+Liso1t4We/0+3N1fImSp0GeMuq7MWBcXfbbaZWEU4BrV87Kwvnjf+Xk38ve/fL2/cDH0WdgUqq62s3Iv6TF/1FmQJm2k4XMheHw/6TTmuyoEffdatLq/zKMGPj7/qOXgIR1XhsQC4BxXClmHNzp/4mcadapLubu++Pt/39tW/PSWLWmgUxQU/bhg5adpNDi//q6IvrrsAoHEPj6/VA9QWVWT+3HS66YWH3BcLfK8dXq//ricvz+/qaiX/z+/45iFEtOUd7p+qytsPn7/3JcQcLJ0/LPVty9VN3Z1EtLTqCWgIyQUO3DQPTXZ7nJ5YtyUcS4ldPZ45OFc+np4uXThsiZHU1RVv/QH////wAAAAAAACH5BAEAAH0ALAAAAAAQABAAAAe+gH2Cg4SFhSV1bVBEbxh3Rzg+XYQjVk4FmGBybHRKPIQZLwhcBRNAa1tVYhUErTcGMS4IIS1PcSs/cCoEOXMGUg8aNghZHHodZDoeBF4GeQ8pDSAWfBRXEVomQgsBeEUyATANS0YsU4I7SNwCAgEBYWdpdk0DhDUB7AEXQzQKCkn1BqkJAAAAhIIIRQQUxACfgDFYTjAxQ4LKwj4NC6JBWHDGxQ8OD4jc0ONLkIso3CRYuSeKAwkOylw0RHNQIAA7); }
+         .protproperty { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeKAP///6KvxP/9+/jYaN28WqOALn2d39O4f//rbk1PVO7AL6ykj//taPb////PMnBhS/Dr349uIktPUsHI0XBhSsipX8HI0pmPesSTFeXTq87KwpWEU4BxXO3HS/j7/padpDKMGO7q3omSpylmHFt4Wf7//4BrV+Xk3+XThnJcQVFmQKe+pOjIXfz+/ktLTt3Z1FA9QfTXZ/bhg+/0+/fdavn7/8uvdeyoEaq62uHw/4mcaZOFc66YWN7BYWdgUsDH0a2urLnJ5dDIwv71rOzjqE86ME1RVvby6UxQUwoHEPnhcvLPVmVWT/rrsMiZHYxrH+3r5/rics3Iv+fXs1OsQdapLj+XKRsQC/q6Iunp4uLNellNV0xPUn9tW9y9VIR1Xvnjf+z5/zMnFcLJ07fK8fPSWMS4lXN1fPj6/YXMhaOXgPbbacbMxi4hAqCWgO3DQPLqsmBcXevhzerZleDayLWmgcjP2fL2/f3+/qbBrqytsN+yMv/QH45iFItyUaaFONTNuvz+/7iso+bu+6aiX+q7MUGeMpy4mYyQUKTF/////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAIoALAAAAAAQABAAAAjsABUJVCTIzIs6atxc2MFByqE8AxUJadIFgcUoMbz40ZEmIhQTDHggUEJjSQcshKgYWIljAZgNDIqsKfOm0A1EhgwkCrJAxgMtPhjA2OMEQx8VVgyQWYDigQgKPbbwEZOkDRMSICYAyPLlBAANFKpcifNB4IoRWgUIAACghZ4UgA7YqJBB4A8AagHg8XCHzgE4Awb8maJoDIAAAUogDnCAyJAnBBwUUGQBr4BAaGYMOjBnAAECCiZXRlxjMZAKDgaElqPIjuUGsMPkYENgQIEQAs+4SMDbCBIJXCTUDh2x+EACLCJAMG78iPKBAQEAOw==); }
+         .privproperty { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeYAP///6KvxP/9+9/j6n2d36y3y//rbkFLWMjO2fb//6ykj//taE1PVMnQ3crR3rjA0uPm6r7H1rK7zsHI0nBhS3BhSqCrwtLX4sHI0YBxXPj7/uDl63WFnGR2jW1/lsLJ0+np4sSTFTMnFd3Z1OyoEZOFc9bY2JWEU+/0++3HS6u3y/TXZ66YWO3DQPj6/d7BYXqKoU9ie9y9VIBrV1FmQOjw/IXMhWVWTwoHEPLPVhsQC/nhcvrrsPnjf45iFImcaXN1fGBcXbvF1Liso//QH/bhg6TF/1OsQUtLTqq62vz+/zKMGOq7MZmPerfK8ffdasTM2r3G1vPSWPrick9jfLjB0sTM2fbbaUxQU1VogZinvG+Al11vh9jd5sjP2ZCetN+yMmd3kM3Iv39tW8iZHT+XKbnJ5Vt4WaaiX3JcQU1RVomSp1A9QZadpMS4leXk31dqgn1/goyQUEGeMqCWgGdgUotyUWN1jfz+/qOXgOLm7Pq6Ii4hAtapLk86MPL2/eXThqbBrs7KwuLNeqytsFlNV2R2jvn7//3+/py4me76/+Xr8+bu+8DH0ae+pClmHP7//7G6zYR1Xl5widDIwrvD1O3r57Wmgf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJgALAAAAAAQABAAAAj7ADEJxDTEzYhLeeg0KZFBTKJAAzFR4jHGgMUpK2TY+WEjoqUZC1gY2PEkR4o9aI4QWJlEQY8TC/xckdKCCQk5cwgYMaOgCIVBdRawAUMmhA8aZQg4UQCIwpoKLwoREYGDz40zSzAAACHpDQBBFfroCNJGoKNHWgUIAAAAD6E0ehw8iFRAYCMAagEg0vCnhoMBBSxEgYHpA4AAASAhDrDBihYTAApswTQBrwAlLlAwWiTkS4MGHQxRPhzgEOIuDQaoHnAhwh0vlhPIVlRpwIHbFx5wAYKEgW81WOIUGIDgAAIEErJEjGjBAZQIVSSoiLF8IAQOHsJMgkMFQkAAOw==); }
+         .privprotproperty { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeYAP///6KvxP/9+9/j6n2d36y3y//rbkFLWMjO2fb//6ykj//taE1PVMnQ3crR3rjA0uPm6r7H1rK7zsHI0nBhS3BhSqCrwtLX4sHI0YBxXPj7/uDl63WFnGR2jW1/lsLJ0+np4sSTFTMnFd3Z1OyoEZOFc9bY2JWEU+/0++3HS6u3y/TXZ66YWO3DQPj6/d7BYXqKoU9ie9y9VIBrV1FmQOjw/IXMhWVWTwoHEPLPVhsQC/nhcvrrsPnjf45iFImcaXN1fGBcXbvF1Liso//QH/bhg6TF/1OsQUtLTqq62vz+/zKMGOq7MZmPerfK8ffdasTM2r3G1vPSWPrick9jfLjB0sTM2fbbaUxQU1VogZinvG+Al11vh9jd5sjP2ZCetN+yMmd3kM3Iv39tW8iZHT+XKbnJ5Vt4WaaiX3JcQU1RVomSp1A9QZadpMS4leXk31dqgn1/goyQUEGeMqCWgGdgUotyUWN1jfz+/qOXgOLm7Pq6Ii4hAtapLk86MPL2/eXThqbBrs7KwuLNeqytsFlNV2R2jvn7//3+/py4me76/+Xr8+bu+8DH0ae+pClmHP7//7G6zYR1Xl5widDIwrvD1O3r57Wmgf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJgALAAAAAAQABAAAAj7ADEJxDTEzYhLeeg0KZFBTKJAAzFR4jHGgMUpK2TY+WEjoqUZC1gY2PEkR4o9aI4QWJlEQY8TC/xckdKCCQk5cwgYMaOgCIVBdRawAUMmhA8aZQg4UQCIwpoKLwoREYGDz40zSzAAACHpDQBBFfroCNJGoKNHWgUIAAAAD6E0ehw8iFRAYCMAagEg0vCnhoMBBSxEgYHpA4AAASAhDrDBihYTAApswTQBrwAlLlAwWiTkS4MGHQxRPhzgEOIuDQaoHnAhwh0vlhPIVlRpwIHbFx5wAYKEgW81WOIUGIDgAAIEErJEjGjBAZQIVSSoiLF8IAQOHsJMgkMFQkAAOw==); }
+
+         .pubfield { background-image: url(data:image/gif;base64,R0lGODlhEAAQANUsAAAzmVub2JnN/7LY+1qa15W+5nmw47XE4efx+6HQ/pHD8d7t+oq97oK36sXb8X2y5ShXr77L5Ut0vB5OqdPn+q/W/Hmw5NLm+dLm+I7C87rX8f///8LZ8NXo+4vA9M3j+b/Y7zVjtZ/Q/p3J8pDE9qPR/niv43yz553P/lyb2Hy06ay93v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAACwALAAAAAAQABAAAAZUQJZwSCwaj0gi5oFIDj8mhmHhpFhIgozhguxoPAJBYiRBnhQogWgwASALjUFpAAG4j4WAqhKyAzZHKQEBfgARSCAEhHYHThwEjE5CDgArkpeYmURBADs=); }
+         .protfield { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZIAAAzmf////jYaN28WqOALlub2JnN/+7AL9O4f7LY+1qa1+fXs/Tu4MipX7XE4Y9uIvDr33mw453J8vDo1ny06fH2/I7C83iv432y5TVjtf71rOXVtB5OqYq97vXrrovA9Pby6eTw+4O04rfP5v/aZClasO7q3oxrH3mw5KPR/uDu/JDE9v/PMvXssp3G7ev0/KHQ/ujIXcuvdcLZ8J/Q/u7blubMgoW04uby/IK36uTx/MXb8ZHD8b7L5ay93ihXr3uy5Z3P/lyb2K/W/OvhzeTbxqaFONLm+f///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAEgALAAAAAAQABAAAAeXgEiCg4RIAYWIgwEhGBWHiYIBKhcdES+PiAE6KCsGFhFHkDhAHwYGMBIlkC48QQY0CRwAkQG1hyI5CSkJPwCzAQwIMg0LATcFFEMZvrPBLQICRgtCBQXMAD1IGx4aJwMsBCMK1r4Oggg1AgMDBwRIMwrlgxMNJALtRII7AD6FRQMCCJiARMjGPXcEBQ2I8QBCQkEgGiYMBAA7); }
+         .privfield { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZRAAAzmd/j6lub2Ky3y0FLWJnN/+Pm6rLY+8jO2crR3snQ3Vqa177H1rjA0rK7zrXE4fDy9HSq3qCrwtLX4nmw473G1sTM2ZCetGd3kFdqgp3P/m1/lp3J8pDE9tLm+LfP5ny06bjB0q/W/IvA9J/Q/rvF1B5OqXyz59Lm+dXo+77L5cXb8SlasJinvKu3y83j+X2y5aPR/rG6zV5wiZHD8XqKoVyb2IKRpDVjtXiv4yhXr7vD1MTM2tPn+vv7/N7t+nWFnGR2jU9ie2p7kay93sLZ8G+Al47C86HQ/niGm2R2joK36oq97qPJ7E9jfHuy5efx+////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFEALAAAAAAQABAAAAebgFGCg4SFhoYeMFCHhS85TBQ/jII9TR0FRxQojClPIwUFSBwsjCc0GgUkByYAjBFLBzEHOgCtURAJDTIDEBECICI4tbYJAQMSFTU2AgLDACqCFi2CA0YfC821D4IGJRcKCkFKBkUL2oMKAeoBEww3USsARIQ7AQT3Ew1JjAMBCAQIEDgYwkhCAh4MQjhwIYSRDyAbMMzI4MTAoUAAOw==); }
+         .privprotfield { background-image: url(data:image/gif;base64,R0lGODlhEAAQAOZRAAAzmd/j6lub2Ky3y0FLWJnN/+Pm6rLY+8jO2crR3snQ3Vqa177H1rjA0rK7zrXE4fDy9HSq3qCrwtLX4nmw473G1sTM2ZCetGd3kFdqgp3P/m1/lp3J8pDE9tLm+LfP5ny06bjB0q/W/IvA9J/Q/rvF1B5OqXyz59Lm+dXo+77L5cXb8SlasJinvKu3y83j+X2y5aPR/rG6zV5wiZHD8XqKoVyb2IKRpDVjtXiv4yhXr7vD1MTM2tPn+vv7/N7t+nWFnGR2jU9ie2p7kay93sLZ8G+Al47C86HQ/niGm2R2joK36oq97qPJ7E9jfHuy5efx+////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAFEALAAAAAAQABAAAAebgFGCg4SFhoYeMFCHhS85TBQ/jII9TR0FRxQojClPIwUFSBwsjCc0GgUkByYAjBFLBzEHOgCtURAJDTIDEBECICI4tbYJAQMSFTU2AgLDACqCFi2CA0YfC821D4IGJRcKCkFKBkUL2oMKAeoBEww3USsARIQ7AQT3Ew1JjAMBCAQIEDgYwkhCAh4MQjhwIYSRDyAbMMzI4MTAoUAAOw==); }
+
+         .pubdelegate { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPebAP///9tw3PqY+6M+pOfq7dJl07fB0owtjUFVb83T2qu2y6Ctw/T1+E9je7nD05k2murlq9fWrJs4nPr6/LKgy0ped6I+o8HFrJ2pwtht2a24zJqnv1hrg0hbdY2ctsfO3EBSbLjB0qOvxqqzraexx+jq8f39/mx9lNZt0vLz9uPn7cW02jxRa8nP3VRmf5mlruqL65ejreLl7N/j6ubo7+Dj68HJ2M7PrPX2+Pqt+rO6rdvf5/qm+8LI0ZeMs+js8bS90MDI15ekvbG7zktfecmm1uTn7vn6+5ShuurmrF9xiK23zGByipilvp2pu73G1sDI2JOguTtPaThOaNne55OhurO90JWjtdne5jhNZ0RYcpyowK+5zZaStpumtK21rfqx+vHy9tNn1PDy9aayx7yq0ZKfudLY4rvE1f7+/qezyPb3+Zqmru3u8/f4+ubiq/v7/JCesJajvHiJn87U4dG84uuQ7Npu28HJ16GtxMjP3FpthbC7zbG8z+vu877H1tHW4nqKoOXX7mZ3kFVngLbA0urs8aA8oaq1xN3D6Y6dtqlFqrjC09jXrKm0yevt8qWwx5Shs8PGrHKDmtbc5rzF1ejZ8HCAl+Tn69vg6EVZc////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJsALAAAAAAQABAAAAjuADcJHEjAyhISBAYqJIjIyZVAl3osVPgkzg4ARpoomTjQQCQcAABU4bAQExQ0hfpocARpAYYNcsx4SLDJRkgAaY6kMCQoQCI9QUK42FTp5gQGfiwFyBGgjoMhDTYZAPDmhg42NAKA4SEgwAoFRDYBAWDCzZgSM1DYEcB2EZkOm7gkaSTpywssBQLAEDBgQB4tmxTAYdBGRaYzYu4E6HtoC4JNatZAiHBhRIwiBTIMkHBACIhNIsL8qEGJzoc/ZQpYONAlipRNCx7JoAKoBR5GfCg88IFEUZZNCeZMOjGIyR5CDSpoQsBiiheO0DcFBAA7); }
+         .protdelegate { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeQAP///9tw3N28WvjYaKM+pKOALvqY+9O4f+fq7dJl0+7AL6Ctw4wtjc3T2v/PMk9je8ipX49uIkFVb5s4nJ2pwtpu2+3kqZqnv5Shs7Kgy2ByirjB0qWwx5qmrqayx6u2y6q1xMHJ2L7H1oxrH/Xsslhrg+3iyuXX7uTn6/7+/ubo75yowEBSbFVngPqt+sLI0ZeMs253gPT1+KGtxJShusHJ13CAl5ajvJ2pu3qKoFpthd3D6aaFOJk2msmm1paStpKfuaGhnUped7vE1Y6dtrG8z0VZc8++k19xiOjZ8PLz9o2ctrbA0sDI18DI2Pr6/KA8oeqL68vMyeTn7khbddne5tvf55ejrTtPabO90Ovu85Ohuvn6+9G84ktfed/PrqlFqpekvcW02vDr3/X2+MnP3bC7zd/j6qm0ybGulb3G1sfO3NZt0pCesKI+o/qx+v71rLjC0zhNZ1Rmf9ht2ers8bG7zsS/sK23zKexx7yq0ebVkc7U4TxRa9LY4ujIXThOaMuvdZWjtZilvsjP3LzF1euQ7ERYcvqm+7nD0/Do1tNn1K24zJOguZumtLfB0v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJAALAAAAAAQABAAAAjuACEJHIggC548CAYqJAgCh6AcNl4sVKimjRVIUwYhmTjwEQYykABsKbEQhZMhTIowQsNhAYULN4AsaQApBICbKbgoqXMiwA5CTTbMgVToJoAnMrQkCeAiQJdEdh5AunMgEIQjHVQEeIPIQAAxH7yYOEBiwAAeX86wMWSgLRgPVA5YgDNCgIMCVRIEiGKAAIEZhw7sGSBAgIICfhZVCOAXygoJiiA4GHA4zRUfCegQmMAgDAtIQQQMKCCFzxoRehK4YfCjERZIC0QfLlMjjpkMPWDQICIHUgMBfyLE0KCjxQMhRiT0AeRoYIQxHBUGBAA7); }
+         .privdelegate { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeWAP///9tw3PqY+6M+pEFLWOHl7OPm6qy3y77H1sjO2efq7dJl09/j6srR3rjA0tLX4owtjbG6zU9je73G1rK7zqCrwkFVb7jB0jhNZ6A8odpu20hbdbfB0qayx6exx9ht2cnQ3dvf56lFquvu8+rs8ZCesEped/Lz9pinvLvD1PT1+KWwx09jfKGtxKq1xLvE1Y6dtnqKoebo76Ctw8TM2am0yVRmf7Kgy8TM2ps4nLnD0/7+/md3kPqm+2+Al9Zt0kRYcr7H05eMs/Dy9EBSbJShupk2mpaStsHJ2Pqx+ktfecDI2E9ie2R2jvr6/Ovr1a24zEVZc6u3y7bA0ldqgrvF1GN1jWR2jTtPad7i6ZShs7C7zZOgudNn1JWjtZCetMjP3NG84uXX7sLI0byq0euQ7HqKoLzF1fqt+s7U3vn6+8DI17O90N3D6eTn61VngF9xiJumtLG8z+Di1cmm1lVogeTn7pOhurjC05yowDxRa9PZ3PX2+K23zFhrg42ctpekvau2y6I+o3WFnJKfuV5wiThOaM3T2rG7zl1vh5ilvujZ8LS9zG1/lsW02uqL65qnv+Pn7ZajvJ2pwnCAl52pu////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJYALAAAAAAQABAAAAjyAC0JHKiATR8PCgYqJOiikhczlMYsVDihRAgAdhTBmTiQgxY+AADc8bPQzZIXU+RAqbFixiRIkgj9OWQJSUgAO9ScICEmQBsway7YsHTmphMVIxYFQBMgjA5EEixlaeAgwoE9MgIk6SEggKNASiw1YHCgAqMYDH6UEcBWRIcNQ2igeDJngo80CwI8EjBgQAsgBqp8qXqlSZAuGgL0zZDHAohIBSI/QGCFzoIPA3JAAEQkRQECoB84SISAzAJBEI5wwXKAQQICCRJQqINnyw0jQorAwFChAQ4EFyhIYfJGgokoFvQYimNgUCMehaiwMMDRUkAAOw==); }
+         .privprotdelegate { background-image: url(data:image/gif;base64,R0lGODlhEAAQAPeWAP///9tw3PqY+6M+pEFLWOHl7OPm6qy3y77H1sjO2efq7dJl09/j6srR3rjA0tLX4owtjbG6zU9je73G1rK7zqCrwkFVb7jB0jhNZ6A8odpu20hbdbfB0qayx6exx9ht2cnQ3dvf56lFquvu8+rs8ZCesEped/Lz9pinvLvD1PT1+KWwx09jfKGtxKq1xLvE1Y6dtnqKoebo76Ctw8TM2am0yVRmf7Kgy8TM2ps4nLnD0/7+/md3kPqm+2+Al9Zt0kRYcr7H05eMs/Dy9EBSbJShupk2mpaStsHJ2Pqx+ktfecDI2E9ie2R2jvr6/Ovr1a24zEVZc6u3y7bA0ldqgrvF1GN1jWR2jTtPad7i6ZShs7C7zZOgudNn1JWjtZCetMjP3NG84uXX7sLI0byq0euQ7HqKoLzF1fqt+s7U3vn6+8DI17O90N3D6eTn61VngF9xiJumtLG8z+Di1cmm1lVogeTn7pOhurjC05yowDxRa9PZ3PX2+K23zFhrg42ctpekvau2y6I+o3WFnJKfuV5wiThOaM3T2rG7zl1vh5ilvujZ8LS9zG1/lsW02uqL65qnv+Pn7ZajvJ2pwnCAl52pu////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJYALAAAAAAQABAAAAjyAC0JHKiATR8PCgYqJOiikhczlMYsVDihRAgAdhTBmTiQgxY+AADc8bPQzZIXU+RAqbFixiRIkgj9OWQJSUgAO9ScICEmQBsway7YsHTmphMVIxYFQBMgjA5EEixlaeAgwoE9MgIk6SEggKNASiw1YHCgAqMYDH6UEcBWRIcNQ2igeDJngo80CwI8EjBgQAsgBqp8qXqlSZAuGgL0zZDHAohIBSI/QGCFzoIPA3JAAEQkRQECoB84SISAzAJBEI5wwXKAQQICCRJQqINnyw0jQorAwFChAQ4EFyhIYfJGgokoFvQYimNgUCMehaiwMMDRUkAAOw==); }
+
+          .expander {font-size: 18px; background-color: black; color:white; clear:both; cursor: pointer;padding: 10px;border: none;text-align: left;outline: none;margin:0 0 2px 0;transition: 0.4s;}
+          .expander:hover {background-color: #555;}
+          .expander:after {content: '\002B';color: #FFF;font-weight: bold;float: right;margin-left: 5px;}
+          .active:after {content: "\2212";}
+          .collapse {display: none;}
+      </style>
+    </head>
+<body>
+
+Generated with <a href="https://github.com/dotMorten/DotNetOMDGenerator">.NET Object Model Diagram Generator</a><br /><br />
+
+
+<section id='NmeaParser'>
+<h3 class='expander active'>NmeaParser</h3><div>
+<div class='objectBox' id='NmeaParser.BufferedStreamDevice'>
+<div class='header class'>
+<span title="An abstract generic NMEA device that reads a stream at a decreased pace,
+    mostly used to emulate NMEA input from files and strings.">BufferedStreamDevice : <a href='#NmeaParser.NmeaDevice'>NmeaDevice</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes a new instance of the BufferedStreamDevice class.">BufferedStreamDevice</span>()</li>
+<li class='protmethod'><span title="Initializes a new instance of the BufferedStreamDevice class.">BufferedStreamDevice</span>(int <span title="The time to wait between each group of lines being read in milliseconds">burstRate</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets or sets the emulated burst rate - that is the frequency of each burst of messages. Defaults to 1 second (1hz).">BurstRate</span> { get; set; } : TimeSpan</li>
+<li class='pubproperty'><span title="Gets or sets the separator between each burst of data. Defaults to FirstToken.">BurstSeparator</span> { get; set; } : <span title="Defined how a burst of data is separated">BurstEmulationSeparator</span></li>
+<li class='pubproperty'><span title="Gets or sets the emulated baud rate. Defaults to 115200">EmulatedBaudRate</span> { get; set; } : uint</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='protmethod'><span title="Gets the stream to perform buffer reads on.">GetStreamAsync</span>() : Task&lt;Stream&gt;</li>
+</ul></div>
+<div class='members'><h4>Events</h4><ul>
+<li class='pubevent'><span title="Raised when the stream has reached the end. If the stream can be revound, it&#39;ll start over, unless you stop the device in this thread.">EndOfStreamReached</span> : EventHandler?</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.BurstEmulationSeparator'>
+<div class='header enum'>
+<span title="Defined how a burst of data is separated">BurstEmulationSeparator : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="The first NMEA token encountered will be used as an indicator for pauses between bursts">FirstToken</span> = 0</li>
+<li class='pubfield'><span title="An empty line in the NMEA stream should indicate a pause in the burst of messages">EmptyLine</span> = 1</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.IMultiSentenceMessage'>
+<div class='header interface'>
+<span title="Interface used for NMEA messages that span multiple sentences">IMultiSentenceMessage</span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets a value indicating whether this message is fully loaded from all its sentences">IsComplete</span> { get; } : bool</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='pubmethod'><span title="Attempts to append one message to an existing one">TryAppend</span>(string messageType, String[] values) : bool</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaDevice'>
+<div class='header class'>
+<span title="A generic abstract NMEA device">NmeaDevice : IDisposable</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes a new instance of the NmeaDevice class.">NmeaDevice</span>()</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets a value indicating whether this device supports writing">CanWrite</span> { get; } : bool</li>
+<li class='pubproperty'><span title="Gets a value indicating whether this device is open.">IsOpen</span> { get; } : bool</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='pubmethod'><span title="Closes the device.">CloseAsync</span>() : Task</li>
+<li class='protmethod'><span title="Closes the stream the NmeaDevice is working on top off.">CloseStreamAsync</span>(Stream <span title="The stream to be closed.">stream</span>) : Task</li>
+<li class='pubmethod'><span title="Releases unmanaged and - optionally - managed resources.">Dispose</span>()</li>
+<li class='protmethod'><span title="Releases unmanaged and - optionally - managed resources.">Dispose</span>(bool <span title="true to release both managed and unmanaged resources; false to release only unmanaged resources.">disposing</span>)</li>
+<li class='pubmethod'><span title="Creates and opens the stream the NmeaDevice will be working on top off.">OpenAsync</span>() : Task</li>
+<li class='protmethod'><span title="Creates and opens the stream the NmeaDevice is working on top off.">OpenStreamAsync</span>() : Task&lt;Stream&gt;</li>
+<li class='protmethod'><span title="Performs a read operation of the stream">ReadAsync</span>(Byte[] <span title="The buffer to write the data into.">buffer</span>, int <span title="The byte offset in buffer at which to begin writing data from the stream.">offset</span>, int <span title="The maximum number of bytes to read.">count</span>, CancellationToken <span title="The token to monitor for cancellation requests. The default value is System.Threading.CancellationToken.None.">cancellationToken</span>) : Task&lt;Int32&gt;</li>
+<li class='pubmethod'><span title="Writes to the device stream. Useful for transmitting RTCM corrections to the device
+    Check the CanWrite property before calling this method.">WriteAsync</span>(Byte[] <span title="The byte array that contains the data to write to the port.">buffer</span>, int <span title="The zero-based byte offset in the buffer parameter at which to begin copying 
+    bytes to the port.">offset</span>, int <span title="The number of bytes to write.">length</span>) : Task</li>
+</ul></div>
+<div class='members'><h4>Events</h4><ul>
+<li class='pubevent'><span title="Raised when a device raises the same error multiple times and can&#39;t recover.">DeviceDisconnected</span> : EventHandler&lt;Exception&gt;?</li>
+<li class='pubevent'><span title="Occurs when an NMEA message is received.">MessageReceived</span> : EventHandler&lt;<a href='#NmeaParser.NmeaMessageReceivedEventArgs'>NmeaMessageReceivedEventArgs</a>&gt;?</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaFileDevice'>
+<div class='header class'>
+<span title="A file-based NMEA device reading from a NMEA log file.">NmeaFileDevice : <a href='#NmeaParser.BufferedStreamDevice'>BufferedStreamDevice</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the NmeaFileDevice class.">NmeaFileDevice</span>(string fileName)</li>
+<li class='pubmethod'><span title="Initializes a new instance of the NmeaFileDevice class.">NmeaFileDevice</span>(string fileName, int <span title="The time to wait between each group of lines being read in milliseconds">readSpeed</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the name of the nmea file this device is using.">FileName</span> { get; } : string</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaMessageReceivedEventArgs'>
+<div class='header class'>
+<span title="Event argument for the MessageReceived">NmeaMessageReceivedEventArgs : EventArgs</span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the nmea message.">Message</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.StreamDevice'>
+<div class='header class'>
+<span title="Generic stream device">StreamDevice : <a href='#NmeaParser.NmeaDevice'>NmeaDevice</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the StreamDevice class.">StreamDevice</span>(Stream <span title="The stream.">stream</span>)</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.Talker'>
+<div class='header enum'>
+<span title="Talker Identifier">Talker : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Multiple talker IDs sometimes seen in IMultiSentenceMessage">Multiple</span></li>
+<li class='pubfield'><span title="Unrecognized Talker ID">Unknown</span></li>
+<li class='pubfield'><span title="Independent AIS Base Station">IndependentAISBaseStation</span></li>
+<li class='pubfield'><span title="Dependent AIS Base Station">DependentAISBaseStation</span></li>
+<li class='pubfield'><span title="Heading Track Controller (Autopilot) - General">HeadingTrackControllerGeneral</span></li>
+<li class='pubfield'><span title="Heading Track Controller (Autopilot) - Magnetic">HeadingTrackControllerMagnetic</span></li>
+<li class='pubfield'><span title="Mobile Class A or B AIS Station">MobileClassAorBAISStation</span></li>
+<li class='pubfield'><span title="AIS Aids to Navigation Station">AISAidstoNavigationStation</span></li>
+<li class='pubfield'><span title="AIS Receiving Station">AISReceivingStation</span></li>
+<li class='pubfield'><span title="AIS Station (ITU_R M1371,  (“Limited Base Station’)">AISStation</span></li>
+<li class='pubfield'><span title="AIS Transmitting Station">AISTransmittingStation</span></li>
+<li class='pubfield'><span title="AIS Simplex Repeater Station">AISSimplexRepeaterStation</span></li>
+<li class='pubfield'><span title="BeiDou Navigation Satellite System">BeiDouNavigationSatelliteSystem</span></li>
+<li class='pubfield'><span title="Bilge Systems">BilgeSystems</span></li>
+<li class='pubfield'>DigitalSelectiveCalling</li>
+<li class='pubfield'>DataReceiver</li>
+<li class='pubfield'>Satellite</li>
+<li class='pubfield'>RadioTelephoneMFHF</li>
+<li class='pubfield'>RadioTelephoneVHF</li>
+<li class='pubfield'>ScanningReceiver</li>
+<li class='pubfield'>DECCANavigator</li>
+<li class='pubfield'>DirectionFinder</li>
+<li class='pubfield'>DuplexRepeaterStation</li>
+<li class='pubfield'>ElectronicChartSystem</li>
+<li class='pubfield'>ElectronicChartDisplayInformationSystem</li>
+<li class='pubfield'>EmergencyPositionIndicatingBeacon</li>
+<li class='pubfield'>EngineRoomMonitoringSystems</li>
+<li class='pubfield'>FireDoorControllerMonitoringPoint</li>
+<li class='pubfield'>FireExtinguisherSystem</li>
+<li class='pubfield'>FireDetectionPoint</li>
+<li class='pubfield'>FireSprinklerSystem</li>
+<li class='pubfield'><span title="Galileo Positioning System">GalileoPositioningSystem</span></li>
+<li class='pubfield'><span title="GLONASS Receiver">GlonassReceiver</span></li>
+<li class='pubfield'><span title="Global Navigation Satellite System (GNSS)">GlobalNavigationSatelliteSystem</span></li>
+<li class='pubfield'><span title="Global Positioning System (GPS)">GlobalPositioningSystem</span></li>
+<li class='pubfield'><span title="Heading Sensor - Compass, Magnetic">CompassMagnetic</span></li>
+<li class='pubfield'><span title="Heading Sensor - Gyro, North Seeking">GyroNorthSeeking</span></li>
+<li class='pubfield'><span title="Heading Sensor - Fluxgate">Fluxgate</span></li>
+<li class='pubfield'><span title="Heading Sensor - Gyro, Non-North Seeking">GyroNonNorthSeeking</span></li>
+<li class='pubfield'><span title="Hull Door Controller/Monitoring Panel">HullDoorControllerMonitoringPanel</span></li>
+<li class='pubfield'><span title="Hull Stress Monitoring">HullStressMonitoring</span></li>
+<li class='pubfield'><span title="Indian Regional Navigation Satellite System (IRNSS)">IndianRegionalNavigationSatelliteSystem</span></li>
+<li class='pubfield'><span title="Integrated Instrumentation">IntegratedInstrumentation</span></li>
+<li class='pubfield'><span title="Integrated Navigation">IntegratedNavigation</span></li>
+<li class='pubfield'><span title="Loran C">LoranC</span></li>
+<li class='pubfield'>ProprietaryCode</li>
+<li class='pubfield'>RadarAndOrRadarPlotting</li>
+<li class='pubfield'>PropulsionMachineryIncludingRemoteControl</li>
+<li class='pubfield'>PhysicalShoreAISStation</li>
+<li class='pubfield'>SounderDepth</li>
+<li class='pubfield'>SteeringGearSteeringEngine</li>
+<li class='pubfield'>ElectronicPositioningSystem</li>
+<li class='pubfield'>SounderScanning</li>
+<li class='pubfield'>TurnRateIndicator</li>
+<li class='pubfield'>MicroprocessorController</li>
+<li class='pubfield'><span title="User configured talker identifier">UserID0</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID1</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID2</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID3</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID4</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID5</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID6</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID7</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID8</span></li>
+<li class='pubfield'><span title="User configured talker identifier">UserID9</span></li>
+<li class='pubfield'><span title="Velocity sensor - Doppler">Doppler</span></li>
+<li class='pubfield'><span title="Velocity sensor - Speed Log, Water, Magnetic">SpeedLogWaterMagnetic</span></li>
+<li class='pubfield'><span title="Velocity sensor - Speed Log, Water Mechanical">SpeedLogWaterMechanical</span></li>
+<li class='pubfield'><span title="Voyage Data Recorder">VoyageDataRecorder</span></li>
+<li class='pubfield'><span title="Watertight Door Controller/Monitoring Panel">WatertightDoorControllerMonitoringPanel</span></li>
+<li class='pubfield'><span title="Weather Instruments">WeatherInstruments</span></li>
+<li class='pubfield'><span title="Water Level Detection Systems">WaterLevelDetectionSystems</span></li>
+<li class='pubfield'><span title="Transducer">Transducer</span></li>
+<li class='pubfield'><span title="Time keeper - Atomics Clock">AtomicsClock</span></li>
+<li class='pubfield'><span title="Time keeper - Chronometer">Chronometer</span></li>
+<li class='pubfield'><span title="Time keeper - Quartz">Quartz</span></li>
+<li class='pubfield'><span title="Quasi-Zenith Satellite System (QZSS)">QuasiZenithSatelliteSystem</span></li>
+<li class='pubfield'><span title="Time keeper - Radio Update">RadioUpdate</span></li>
+</ul>
+</div>
+</div></section>
+<section id='NmeaParser.Gnss'>
+<h3 class='expander active'>NmeaParser.Gnss</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.GnssMonitor'>
+<div class='header class'>
+<span title="Helper class for monitoring GNSS messages and combine them into a single useful location info">GnssMonitor : INotifyPropertyChanged</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the GnssMonitor class.">GnssMonitor</span>(<a href='#NmeaParser.NmeaDevice'>NmeaDevice</a> <span title="The NMEA device to monitor for GNSS messages">device</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets a list of all NMEA messages currently part of this location">AllMessages</span> { get; } : IEnumerable&lt;KeyValuePair&lt;String, <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a>&gt;&gt;</li>
+<li class='pubproperty'><span title="Gets the geight above the ellipsoid">Altitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the current cource">Course</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets a value indicating the current Datum being used.">Datum</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the NMEA device that is being monitored">Device</span> { get; } : <a href='#NmeaParser.NmeaDevice'>NmeaDevice</a></li>
+<li class='pubproperty'><span title="Gets the latest known DTM message.">Dtm</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Dtm'>Dtm</a>?</li>
+<li class='pubproperty'><span title="Gets the quality of the current fix">FixQuality</span> { get; } : <span title="Fix quality indicater">FixQuality</span></li>
+<li class='pubproperty'><span title="Gets the current fix time">FixTime</span> { get; } : TimeSpan?</li>
+<li class='pubproperty'><span title="Gets the Geoid Height. Add this value to Altitude to get the Geoid heights which is roughly MSL heights.">GeoidHeight</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the latest known GGA message.">Gga</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Gga'>Gga</a>?</li>
+<li class='pubproperty'><span title="Gets the latest known GSA message.">Gsa</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Gsa'>Gsa</a>?</li>
+<li class='pubproperty'><span title="Gets the latest known GST message.">Gst</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Gst'>Gst</a>?</li>
+<li class='pubproperty'><span title="Gets the horizontal dilution of precision">Hdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets an estimate of the horizontal error in meters">HorizontalError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets a value indicating whether the current fix is valid.">IsFixValid</span> { get; } : bool</li>
+<li class='pubproperty'><span title="Gets the latitude for the current or last known location.">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the longitude for the current or last known location.">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the 3D point dilution of precision">Pdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the latest known RMC message.">Rmc</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Rmc'>Rmc</a>?</li>
+<li class='pubproperty'><span title="Gets a list of satellite vehicles in the sky">Satellites</span> { get; } : IEnumerable&lt;<a href='#NmeaParser.NmeaParser.Messages.SatelliteVehicle'>SatelliteVehicle</a>&gt;</li>
+<li class='pubproperty'><span title="Gets the number of satellites in the sky">SatellitesInView</span> { get; } : int</li>
+<li class='pubproperty'><span title="Gets the speed in knots">Speed</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets or sets the syncronization context that PropertyChanged should be fired on">SynchronizationContext</span> { get; set; } : SynchronizationContext?</li>
+<li class='pubproperty'><span title="Gets the vertical dilution of precision">Vdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets an estimate of the vertical error in meters">VerticalError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the latest known VTG message.">Vtg</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.Vtg'>Vtg</a>?</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='protmethod'><span title="Called when a message is received.">OnMessageReceived</span>(<a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a> <span title="The NMEA message that was received">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Events</h4><ul>
+<li class='pubevent'><span title="Raised when a new location has been updated">LocationChanged</span> : EventHandler?</li>
+<li class='pubevent'><span title="Raised if location tracking was lost">LocationLost</span> : EventHandler?</li>
+<li class='pubevent'><span title="Occurs when a property value changes.">PropertyChanged</span> : PropertyChangedEventHandler?</li>
+</ul></div>
+</div>
+</div></section>
+<section id='NmeaParser.Gnss.Ntrip'>
+<h3 class='expander active'>NmeaParser.Gnss.Ntrip</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.Carrier'>
+<div class='header enum'>
+<span title="Enumeration for the carrier used by the NtripStream">Carrier : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="None / unknown">None</span></li>
+<li class='pubfield'><span title="L1 wave">L1</span></li>
+<li class='pubfield'><span title="L1 and L2 waves">L1L2</span></li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.Caster'>
+<div class='header class'>
+<span title="Gets metadata about the NTRIP Caster">Caster : <a href='#NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripSource'>NtripSource</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Caster class.">Caster</span>(IPAddress address, int port, string identifier, string _operator, bool supportsNmea, string countryCode, double latitude, double longitude, IPAddress fallbackkAddress)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the caster IP Address">Address</span> { get; } : IPAddress</li>
+<li class='pubproperty'><span title="Gets the country code for the caster origin">CountryCode</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the fallback address for the caster">FallbackAddress</span> { get; } : IPAddress</li>
+<li class='pubproperty'><span title="Gets the caster identifier">Identifier</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the latitude for the caster">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the longitude for the caster">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the caster operator">Operator</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the caster port">Port</span> { get; } : int</li>
+<li class='pubproperty'><span title="Gets a value indicating whether it supports NMEA">SupportsNmea</span> { get; } : bool</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.Client'>
+<div class='header class'>
+<span title="NTRIP Client for querying an NTRIP server and opening an NTRIP stream">Client</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Client class">Client</span>(string <span title="Host name">host</span>, int <span title="Port, usually 2101">port</span>)</li>
+<li class='pubmethod'><span title="Initializes a new instance of the Client class">Client</span>(string <span title="Host name">host</span>, int <span title="Port, usually 2101">port</span>, String? <span title="Username">username</span>, String? <span title="Password">password</span>)</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='pubmethod'><span title="Gets a list of sources from the NTRIP endpoint">GetSourceTable</span>() : IEnumerable&lt;<a href='#NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripSource'>NtripSource</a>&gt;</li>
+<li class='pubmethod'><span title="Connects to the endpoint for the specified Mountpoint">OpenStream</span>(string mountPoint) : Stream</li>
+<li class='pubmethod'><span title="Connects to the endpoint for the specified Mountpoint">OpenStream</span>(<a href='#NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripStream'>NtripStream</a> stream) : Stream</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripSource'>
+<div class='header class'>
+<span title="Baseclass for the sources returned from an NTRIP Service">NtripSource</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes a new instance of the NtripSource class.">NtripSource</span>()</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripStream'>
+<div class='header class'>
+<span title="Metadata on an NTRIP Data Stream">NtripStream : <a href='#NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.NtripSource'>NtripSource</a></span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the wave carrier for the stream">Carrier</span> { get; } : <a href='#NmeaParser.NmeaParser.Gnss.NmeaParser.Gnss.Ntrip.Carrier'>Carrier</a></li>
+<li class='pubproperty'><span title="Gets the country code for where the stream originates">CountryCode</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the stream format">Format</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the details about the format">FormatDetails</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the unique identifier for the stream">Identifier</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the latitude location of the base station">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the longitude location of the base station">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="The mountpoint used with String)">Mountpoint</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the network for the stream">Network</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets a value indicating whether the stream supports NMEA">SupportsNmea</span> { get; } : bool</li>
+</ul></div>
+</div>
+</div></section>
+<section id='NmeaParser.Messages'>
+<h3 class='expander active'>NmeaParser.Messages</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Bod'>
+<div class='header class'>
+<span title="Bearing - Origin to Destination">Bod : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Bod class.">Bod</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Name of destination waypoint ID">DestinationId</span> { get; } : String?</li>
+<li class='pubproperty'><span title="Magnetic Bearing in degrees from start to destination">MagneticBearing</span> { get; } : double</li>
+<li class='pubproperty'><span title="Name of origin waypoint ID">OriginId</span> { get; } : String?</li>
+<li class='pubproperty'><span title="True Bearing in degrees from start to destination">TrueBearing</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Dtm'>
+<div class='header class'>
+<span title="Local geodetic datum and datum offsets from a reference datum.">Dtm : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gll class.">Dtm</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Altitude Offset in minutes">AltitudeOffset</span> { get; } : double</li>
+<li class='pubproperty'><span title="Latitude Offset, decimal degrees">LatitudeOffset</span> { get; } : double</li>
+<li class='pubproperty'><span title="Local datum code">LocalDatumCode</span> { get; } : string</li>
+<li class='pubproperty'><span title="Local datum subdivision code.">LocalDatumSubdivisionCode</span> { get; } : Char?</li>
+<li class='pubproperty'><span title="Longitude Offset in minutes">LongitudeOffset</span> { get; } : double</li>
+<li class='pubproperty'><span title="Reference datum code">ReferenceDatumCode</span> { get; } : string</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gbs'>
+<div class='header class'>
+<span title="GNSS Satellite Fault Detection">Gbs : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gbs class.">Gbs</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Expected Error in altitude">AltitudeError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Estimate of bias in meters on most likely failed satellite">BiasEstimate</span> { get; } : double</li>
+<li class='pubproperty'><span title="UTC time of the GGA or GNS fix associated with this sentence.">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Expected Error in latitude">LatitudeError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Expected Error in longitude">LongitudeError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Probability of missed detection for most likely failed satellite">MissedDetectionProbability</span> { get; } : double</li>
+<li class='pubproperty'><span title="ID number of most likely failed satellite">SatelliteId</span> { get; } : Int32?</li>
+<li class='pubproperty'><span title="Standard deviation of bias estimate">StandardDeviation</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gga'>
+<div class='header class'>
+<span title="Global Positioning System Fix Data">Gga : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a>, <a href='#NmeaParser.NmeaParser.Messages.IGeographicLocation'>IGeographicLocation</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gga class.">Gga</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Altitude">Altitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Altitude units (&#39;M&#39; for Meters)">AltitudeUnits</span> { get; } : string</li>
+<li class='pubproperty'><span title="Differential Reference Station ID">DgpsStationId</span> { get; } : int</li>
+<li class='pubproperty'><span title="Time of day fix was taken">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Geoidal separation: the difference between the WGS-84 earth ellipsoid surface and mean-sea-level (geoid) surface.">GeoidalSeparation</span> { get; } : double</li>
+<li class='pubproperty'><span title="Altitude units (&#39;M&#39; for Meters)">GeoidalSeparationUnits</span> { get; } : string</li>
+<li class='pubproperty'><span title="Horizontal Dilution of Precision">Hdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Latitude">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Longitude">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Number of satellites being tracked">NumberOfSatellites</span> { get; } : int</li>
+<li class='pubproperty'><span title="Fix Quality">Quality</span> { get; } : <span title="Fix quality indicater">FixQuality</span></li>
+<li class='pubproperty'><span title="Time since last DGPS update (ie age of the differential GPS data)">TimeSinceLastDgpsUpdate</span> { get; } : TimeSpan?</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.FixQuality'>
+<div class='header enum'>
+<span title="Fix quality indicater">FixQuality : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Fix not available or invalid">Invalid</span></li>
+<li class='pubfield'><span title="GPS SPS Mode, fix valid">GpsFix</span></li>
+<li class='pubfield'><span title="Differential GPS, SPS Mode, or Satellite Based Augmentation System (SBAS), fix valid">DgpsFix</span></li>
+<li class='pubfield'><span title="GPS PPS (Precise Positioning Service) mode, fix valid">PpsFix</span></li>
+<li class='pubfield'><span title="Real Time Kinematic (Fixed). System used in RTK mode with fixed integers">Rtk</span></li>
+<li class='pubfield'><span title="Real Time Kinematic (Floating). Satellite system used in RTK mode, floating integers">FloatRtk</span></li>
+<li class='pubfield'><span title="Estimated (dead reckoning) mode">Estimated</span></li>
+<li class='pubfield'><span title="Manual input mode">ManualInput</span></li>
+<li class='pubfield'><span title="Simulator mode">Simulation</span></li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gll'>
+<div class='header class'>
+<span title="Geographic position, latitude / longitude.">Gll : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a>, <a href='#NmeaParser.NmeaParser.Messages.IGeographicLocation'>IGeographicLocation</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gll class.">Gll</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets a value indicating whether data is active.">DataActive</span> { get; } : bool</li>
+<li class='pubproperty'><span title="Time since last DGPS update">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Latitude">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Longitude">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Positioning system Mode Indicator">ModeIndicator</span> { get; } : <span title="Positioning system Mode Indicator">Mode</span></li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Mode'>
+<div class='header enum'>
+<span title="Positioning system Mode Indicator">Mode : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Autonomous mode">Autonomous</span> = 0</li>
+<li class='pubfield'><span title="Differential mode">Differential</span> = 1</li>
+<li class='pubfield'><span title="Estimated (dead reckoning) mode">EstimatedDeadReckoning</span> = 2</li>
+<li class='pubfield'><span title="Manual input mode">Manual</span> = 3</li>
+<li class='pubfield'><span title="Simulator mode">Simulator</span> = 4</li>
+<li class='pubfield'><span title="Data not valid">DataNotValid</span> = 5</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gns'>
+<div class='header class'>
+<span title="Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems">Gns : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a>, <a href='#NmeaParser.NmeaParser.Messages.IGeographicLocation'>IGeographicLocation</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gns class.">Gns</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Mode indicator for Beidou (BDS)">BDSModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID">DgpsStationId</span> { get; } : String?</li>
+<li class='pubproperty'><span title="Time of day fix was taken">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Mode indicator for Galileo">GalileoModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="Geoidal separation in meters - the difference between the earth ellipsoid surface and mean-sea-level (geoid) surface defined by the reference datum used in the position solution
+    &#39;-&#39; = mean-sea-level surface below ellipsoid.">GeoidalSeparation</span> { get; } : double</li>
+<li class='pubproperty'><span title="Mode indicator for GLONASS">GlonassModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="Mode indicator for GPS">GpsModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="Horizontal Dilution of Precision (HDOP), calculated using all the satellites (GPS, GLONASS, and any future satellites) used in computing the solution reported in each GNS sentence.">Hdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Latitude">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Longitude">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Mode indicator for future constallations">ModeIndicators</span> { get; } : <span title="GNS Mode Indicator">Mode</span>[]</li>
+<li class='pubproperty'><span title="Mode indicator for NavIC (IRNSS)">NavICModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="Number of satellites (SVs) in use">NumberOfSatellites</span> { get; } : int</li>
+<li class='pubproperty'><span title="Orthometric height in meters (MSL reference)">OrthometricHeight</span> { get; } : double</li>
+<li class='pubproperty'><span title="Mode indicator for QZSS">QZSSModeIndicator</span> { get; } : <span title="GNS Mode Indicator">Mode</span></li>
+<li class='pubproperty'><span title="Navigational status">Status</span> { get; } : <span title="Navigational status">NavigationalStatus</span></li>
+<li class='pubproperty'><span title="Age of differential data - MaxValue if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data">TimeSinceLastDgpsUpdate</span> { get; } : TimeSpan?</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Mode'>
+<div class='header enum'>
+<span title="GNS Mode Indicator">Mode : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="No fix. Satellite system not used in position fix, or fix not valid">NoFix</span> = 0</li>
+<li class='pubfield'><span title="Autonomous. Satellite system used in non-differential mode in position fix">Autonomous</span> = 1</li>
+<li class='pubfield'><span title="Differential (including all OmniSTAR services). Satellite system used in differential mode in position fix">Differential</span> = 2</li>
+<li class='pubfield'><span title="Precise. Satellite system used in precision mode. Precision mode is defined as no deliberate degradation (such as Selective Availability) and higher resolution code (P-code) is used to compute position fix.">Precise</span> = 3</li>
+<li class='pubfield'><span title="Real Time Kinematic. Satellite system used in RTK mode with fixed integers">RealTimeKinematic</span> = 4</li>
+<li class='pubfield'><span title="Float RTK. Satellite system used in real time kinematic mode with floating integers">FloatRtk</span> = 5</li>
+<li class='pubfield'><span title="Estimated (dead reckoning) mode">Estimated</span> = 6</li>
+<li class='pubfield'><span title="Manual input mode">Manual</span> = 7</li>
+<li class='pubfield'><span title="Simulator mode">Simulator</span> = 8</li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NavigationalStatus'>
+<div class='header enum'>
+<span title="Navigational status">NavigationalStatus : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Navigational status not valid, equipment is not providing navigational status indication.">NotValid</span></li>
+<li class='pubfield'><span title="Safe: When the estimated positioning accuracy (95% confidence) is within the selected accuracy level corresponding
+    to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
+    and a new valid position has been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.">Safe</span></li>
+<li class='pubfield'><span title="Caution: When integrity is not available">Caution</span></li>
+<li class='pubfield'><span title="Unsafe When the estimated positioning accuracy (95% confidence) is less than the selected accuracy level corresponding
+    to the actual navigation mode, and integrity is available and within the requirements for the actual navigation mode,
+    and/or a new valid position has not been calculated within 1s for a conventional craft, and 0.5s for a high speed craft.">Unsafe</span></li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Grs'>
+<div class='header class'>
+<span title="GNSS Range Residuals">Grs : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gbs class.">Grs</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="UTC time of the GGA or GNS fix associated with this sentence">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Residual calculation mode">Mode</span> { get; } : <span title="Determines the way the Grs residuals were calculated.">GrsMode</span></li>
+<li class='pubproperty'><span title="Range residuals in meters for satellites used in the navigation solution">Residuals</span> { get; } : Double[]</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.GrsMode'>
+<div class='header enum'>
+<span title="Determines the way the Grs residuals were calculated.">GrsMode : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Residuals were used to calculate the position given in the matching GGA or GNS sentence">UsedForPosition</span> = 0</li>
+<li class='pubfield'><span title="Residuals were recomputed after the GGA or GNS position was computed">RecomputedFromPosition</span> = 1</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gsa'>
+<div class='header class'>
+<span title="Global Positioning System DOP and active satellites">Gsa : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gsa class.">Gsa</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Mode">Fix</span> { get; } : <span title="Fix Mode">FixType</span></li>
+<li class='pubproperty'><span title="Horizontal dilution of precision">Hdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="Mode">Mode</span> { get; } : <span title="Mode selection">ModeSelection</span></li>
+<li class='pubproperty'><span title="Dilution of precision">Pdop</span> { get; } : double</li>
+<li class='pubproperty'><span title="ID numbers of satellite vehicles used in the solution.">SatelliteIDs</span> { get; } : Int32[]</li>
+<li class='pubproperty'><span title="Vertical dilution of precision">Vdop</span> { get; } : double</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.FixType'>
+<div class='header enum'>
+<span title="Fix Mode">FixType : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Not available">NotAvailable</span></li>
+<li class='pubfield'><span title="2D Fix">Fix2D</span></li>
+<li class='pubfield'><span title="3D Fix">Fix3D</span></li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.ModeSelection'>
+<div class='header enum'>
+<span title="Mode selection">ModeSelection : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Automatic, allowed to automatically switch 2D/3D">Auto</span> = 0</li>
+<li class='pubfield'><span title="Manual mode">Manual</span> = 1</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gst'>
+<div class='header class'>
+<span title="Pseudorange error statistics">Gst : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gst class.">Gst</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Orientation of semi-major axis of error ellipse (degrees from true north).">ErrorOrientation</span> { get; } : double</li>
+<li class='pubproperty'><span title="UTC of position fix">FixTime</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="RMS value of the standard deviation of the range inputs in the navigation process. Range inputs include pseudoranges and DGNSS corrections.">Rms</span> { get; } : double</li>
+<li class='pubproperty'><span title="Standard deviation of semi-major axis of error ellipse in meters.">SemiMajorError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Standard deviation of semi-minor axis of error ellipse in meters.">SemiMinorError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Standard deviation of altitude error in meters.">SigmaHeightError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Standard deviation of latitude error in meters.">SigmaLatitudeError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Standard deviation of longitude error in meters.">SigmaLongitudeError</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Gsv'>
+<div class='header class'>
+<span title="GNSS Satellites in view">Gsv : <a href='#NmeaParser.NmeaParser.Messages.NmeaMultiSentenceMessage'>NmeaMultiSentenceMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Gsv class.">Gsv</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the GNSS Signal ID">GnssSignalId</span> { get; } : char</li>
+<li class='pubproperty'><span title="Total number of satellite vehicles (SV) in view">SatellitesInView</span> { get; } : int</li>
+<li class='pubproperty'><span title="Satellite vehicles in this message part.">SVs</span> { get; } : IReadOnlyList&lt;<a href='#NmeaParser.NmeaParser.Messages.SatelliteVehicle'>SatelliteVehicle</a>&gt;</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='pubmethod'><span title="Returns an enumerator that iterates through the collection.">GetEnumerator</span>() : IEnumerator&lt;<a href='#NmeaParser.NmeaParser.Messages.SatelliteVehicle'>SatelliteVehicle</a>&gt;</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.IGeographicLocation'>
+<div class='header interface'>
+<span title="Indicates a message that contains a latitude and longitude value">IGeographicLocation</span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the latitude component of the location">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the longitude component of the location">Longitude</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.ITimestampedMessage'>
+<div class='header interface'>
+<span title="Indicates this message has a time stamp">ITimestampedMessage</span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the time of day for the message">Timestamp</span> { get; } : TimeSpan</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.LaserRangeMessage'>
+<div class='header class'>
+<span title="Laser Range Measurement">LaserRangeMessage : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes a new instance of the LaserRangeMessage class.">LaserRangeMessage</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the horizontal angle.">HorizontalAngle</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the HorizontalAngle value.">HorizontalAngleUnits</span> { get; } : char</li>
+<li class='pubproperty'><span title="Gets the horizontal distance.">HorizontalDistance</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the HorizontalDistance value.">HorizontalDistanceUnits</span> { get; } : char</li>
+<li class='pubproperty'><span title="Gets the horizontal vector.">HorizontalVector</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the slope distance.">SlopeDistance</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the SlopeDistance value.">SlopeDistanceUnits</span> { get; } : char</li>
+<li class='pubproperty'><span title="Gets the vertical angle.">VerticalAngle</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the VerticalAngle value.">VerticalAngleUnits</span> { get; } : char</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaMessage'>
+<div class='header class'>
+<span title="NMEA Message base class.">NmeaMessage : IEquatable&lt;<a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a>&gt;</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes an instance of the NMEA message">NmeaMessage</span>(string <span title="Type">messageType</span>, String[] <span title="Message values">messageParts</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the checksum value of the message.">Checksum</span> { get; } : byte</li>
+<li class='pubproperty'><span title="Gets a value indicating whether this message type is proprietary">IsProprietary</span> { get; } : bool</li>
+<li class='protproperty'><span title="Gets the NMEA message parts.">MessageParts</span> { get; } : IReadOnlyList&lt;String&gt;</li>
+<li class='pubproperty'><span title="Gets the NMEA type id for the message.">MessageType</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the talker ID for this message (">TalkerId</span> { get; } : <a href='#NmeaParser.Talker'>Talker</a></li>
+<li class='pubproperty'><span title="Gets a relative timestamp in milliseconds indicating the time the message was created.">Timestamp</span> { get; } : double</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='pubmethod'><span title="Indicates whether the current object is equal to another object of the same type.">Equals</span>(<a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a>? <span title="An object to compare with this object.">other</span>) : bool</li>
+<li class='pubmethod'><span class='static'></span><span title="Parses the specified NMEA message.">Parse</span>(string <span title="The NMEA message string.">message</span>, <a href='#NmeaParser.IMultiSentenceMessage'>IMultiSentenceMessage</a>? <span title="The previously received message (only used if parsing multi-sentence messages)">previousSentence</span> = null, bool <span title="If true ignores the checksum completely, if false validates the checksum if present.">ignoreChecksum</span> = False) : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></li>
+<li class='pubmethod'><span class='static'></span><span title="Registers messages from a different assembly">RegisterAssembly</span>(Assembly <span title="The assembly to load custom message types from">assembly</span>, bool <span title="Set to true if you want to replace already registered type. Otherwise this method will throw.">replace</span> = False) : int</li>
+<li class='pubmethod'><span class='static'></span><span title="Registers a specific NMEA Message type">RegisterNmeaMessage</span>(TypeInfo <span title="TypeInfo for the class being registered">typeInfo</span>, string <span title="The 5-character NMEA Type name (eg GPGLL). If null, it&#39;ll expect the NmeaMessageTypeAttribute to be declared on the class.">nmeaType</span> = , bool <span title="Set to true if you want to replace already registered type. Otherwise this method will throw.">replace</span> = False)</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaMessageTypeAttribute'>
+<div class='header class'>
+<span title="Nmea message attribute type used on concrete NmeaMessage implementations.">NmeaMessageTypeAttribute : Attribute</span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the NmeaMessageTypeAttribute class.">NmeaMessageTypeAttribute</span>(string <span title="The 5-character NMEA type name, for instance GPRMC, or --RMC to make it apply to all talkers.">nmeaType</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the NMEA message type name.">NmeaType</span> { get; } : string</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaMultiSentenceMessage'>
+<div class='header class'>
+<span title="Base class for easily creating message that are spread across multiple sentences">NmeaMultiSentenceMessage : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.IMultiSentenceMessage'>IMultiSentenceMessage</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='protmethod'><span title="Initializes an instance of the NmeaMultiSentenceMessage class.">NmeaMultiSentenceMessage</span>(string <span title="Type">messageType</span>, String[] <span title="Message values">messageParts</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='protproperty'><span title="Gets the index in the MessageParts where the total count of messages is listed.">MessageCountIndex</span> { get; } : int</li>
+<li class='protproperty'><span title="Gets the index in the MessageParts where the message number is listed.">MessageNumberIndex</span> { get; } : int</li>
+</ul></div>
+<div class='members'><h4>Methods</h4><ul>
+<li class='protmethod'><span title="Parses the messages or any message being appended. False should be returned if it&#39;s a message being appended doesn&#39;t appear to match what has already been loded.">ParseSentences</span>(<a href='#NmeaParser.Talker'>Talker</a> talkerType, String[] message) : bool</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Rma'>
+<div class='header class'>
+<span title="Recommended minimum specific Loran-C Data">Rma : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.IGeographicLocation'>IGeographicLocation</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Rma class.">Rma</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Course over ground in degrees from true north">Course</span> { get; } : double</li>
+<li class='pubproperty'><span title="Latitude">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Longitude">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Magnetic variation in degrees.">MagneticVariation</span> { get; } : double</li>
+<li class='pubproperty'><span title="Positioning system mode indicator">Mode</span> { get; } : <span title="Positioning system mode indicator">PositioningMode</span></li>
+<li class='pubproperty'><span title="Speed over ground in knots.">Speed</span> { get; } : double</li>
+<li class='pubproperty'><span title="Positioning system status">Status</span> { get; } : <span title="Positioning system status field">PositioningStatus</span></li>
+<li class='pubproperty'><span title="Time difference A">TimeDifferenceA</span> { get; } : TimeSpan</li>
+<li class='pubproperty'><span title="Time difference B">TimeDifferenceB</span> { get; } : TimeSpan</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.PositioningMode'>
+<div class='header enum'>
+<span title="Positioning system mode indicator">PositioningMode : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Data not valid">NotValid</span></li>
+<li class='pubfield'><span title="Autonomous mode">Autonomous</span></li>
+<li class='pubfield'><span title="Differential mode">Differential</span></li>
+<li class='pubfield'><span title="Estimated (dead reckoning) mode">Estimated</span></li>
+<li class='pubfield'><span title="Manual input mode">Manual</span></li>
+<li class='pubfield'><span title="Simulator mode">Simulator</span></li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.PositioningStatus'>
+<div class='header enum'>
+<span title="Positioning system status field">PositioningStatus : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Data not valid">Invalid</span></li>
+<li class='pubfield'><span title="Autonomous">Autonomous</span></li>
+<li class='pubfield'><span title="Differential">Differential</span></li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Rmb'>
+<div class='header class'>
+<span title="Recommended minimum navigation information">Rmb : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Rmb class.">Rmb</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Arrived (true if arrived)">Arrived</span> { get; } : bool</li>
+<li class='pubproperty'><span title="Cross-track error (steer left when negative, right when positive)">CrossTrackError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Destination Latitude">DestinationLatitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Destination Longitude">DestinationLongitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Destination waypoint ID">DestinationWaypointId</span> { get; } : double</li>
+<li class='pubproperty'><span title="Origin waypoint ID">OriginWaypointId</span> { get; } : double</li>
+<li class='pubproperty'><span title="Range to destination in nautical miles">RangeToDestination</span> { get; } : double</li>
+<li class='pubproperty'><span title="Data Status">Status</span> { get; } : <span title="Data status">DataStatus</span></li>
+<li class='pubproperty'><span title="True bearing to destination">TrueBearing</span> { get; } : double</li>
+<li class='pubproperty'><span title="Velocity towards destination in knots">Velocity</span> { get; } : double</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.DataStatus'>
+<div class='header enum'>
+<span title="Data status">DataStatus : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Ok">Ok</span> = 0</li>
+<li class='pubfield'><span title="Warning">Warning</span> = 1</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Rmc'>
+<div class='header class'>
+<span title="Recommended Minimum specific GNSS data">Rmc : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a>, <a href='#NmeaParser.NmeaParser.Messages.IGeographicLocation'>IGeographicLocation</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Rmc class.">Rmc</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets a value whether the device is active">Active</span> { get; } : bool</li>
+<li class='pubproperty'><span title="Track angle in degrees True">Course</span> { get; } : double</li>
+<li class='pubproperty'><span title="Fix Time">FixTime</span> { get; } : DateTimeOffset</li>
+<li class='pubproperty'><span title="Latitude">Latitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Longitude">Longitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Magnetic Variation">MagneticVariation</span> { get; } : double</li>
+<li class='pubproperty'><span title="Speed over the ground in knots">Speed</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Rte'>
+<div class='header class'>
+<span title="Routes">Rte : <a href='#NmeaParser.NmeaParser.Messages.NmeaMultiSentenceMessage'>NmeaMultiSentenceMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Rte class.">Rte</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the type of the list.">ListType</span> { get; } : <span title="Waypoint tpe">WaypointListType</span></li>
+<li class='pubproperty'><span title="Gets the route identifier.">RouteId</span> { get; } : string</li>
+<li class='pubproperty'><span title="Waypoints">Waypoints</span> { get; } : IReadOnlyList&lt;String&gt;</li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.WaypointListType'>
+<div class='header enum'>
+<span title="Waypoint tpe">WaypointListType : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Complete list of waypoints">CompleteWaypointsList</span> = 0</li>
+<li class='pubfield'><span title="List of remaining waypoints">RemainingWaypointsList</span> = 1</li>
+</ul>
+</div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.SatelliteSystem'>
+<div class='header enum'>
+<span title="Satellite system">SatelliteSystem : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Unknown">Unknown</span> = 0</li>
+<li class='pubfield'><span title="GPS - Global Positioning System (NAVSTAR)">Gps</span> = 1</li>
+<li class='pubfield'><span title="WAAS - Wide Area Augmentation System">Waas</span> = 2</li>
+<li class='pubfield'><span title="GLONASS - Globalnaya navigatsionnaya sputnikovaya sistema">Glonass</span> = 3</li>
+<li class='pubfield'><span title="Galileo">Galileo</span> = 4</li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.SatelliteVehicle'>
+<div class='header class'>
+<span title="Satellite vehicle">SatelliteVehicle</span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Azimuth, degrees from true north, 000 to 359">Azimuth</span> { get; } : double</li>
+<li class='pubproperty'><span title="Elevation in degrees, 90 maximum">Elevation</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the GNSS Signal ID.">GnssSignalId</span> { get; } : char</li>
+<li class='pubproperty'><span title="Satellite ID number">Id</span> { get; } : int</li>
+<li class='pubproperty'><span title="Signal-to-Noise ratio, 0-99 dB (-1 when not tracking)">SignalToNoiseRatio</span> { get; } : int</li>
+<li class='pubproperty'><span title="Satellite system">System</span> { get; } : <a href='#NmeaParser.NmeaParser.Messages.SatelliteSystem'>SatelliteSystem</a></li>
+<li class='pubproperty'><span title="Gets the talker ID for this vehicle">TalkerId</span> { get; } : <a href='#NmeaParser.Talker'>Talker</a></li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.UnknownMessage'>
+<div class='header class'>
+<span title="Represents an unknown message type">UnknownMessage : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the nmea value array.">Values</span> { get; } : IReadOnlyList&lt;String&gt;</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Vlw'>
+<div class='header class'>
+<span title="Dual Ground/Water Distance">Vlw : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Vlw class.">Vlw</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Total cumulative ground distance, nautical miles">GroundDistanceCumulative</span> { get; } : double</li>
+<li class='pubproperty'><span title="Ground distance since reset, nautical miles">GroundDistanceSinceReset</span> { get; } : double</li>
+<li class='pubproperty'><span title="Total cumulative water distance, nautical miles">WaterDistanceCumulative</span> { get; } : double</li>
+<li class='pubproperty'><span title="Water distance since reset, nautical miles">WaterDistanceSinceReset</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Vtg'>
+<div class='header class'>
+<span title="Course over ground and ground speed">Vtg : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Vtg class.">Vtg</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Course over ground relative to magnetic north">CourseMagnetic</span> { get; } : double</li>
+<li class='pubproperty'><span title="Course over ground relative to true north">CourseTrue</span> { get; } : double</li>
+<li class='pubproperty'><span title="Speed over ground in knots">SpeedKnots</span> { get; } : double</li>
+<li class='pubproperty'><span title="Speed over ground in kilometers/hour">SpeedKph</span> { get; } : double</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.Zda'>
+<div class='header class'>
+<span title="Date and time of fix">Zda : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+<br/>Implements <a href='#NmeaParser.NmeaParser.Messages.ITimestampedMessage'>ITimestampedMessage</a></div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Zda class.">Zda</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the time of fix">FixDateTime</span> { get; } : DateTimeOffset</li>
+</ul></div>
+</div>
+</div></section>
+<section id='NmeaParser.Messages.Garmin'>
+<h3 class='expander active'>NmeaParser.Messages.Garmin</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Garmin.Pgrme'>
+<div class='header class'>
+<span title="Recommended Minimum">Pgrme : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Pgrme class.">Pgrme</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Estimated horizontal position error in meters (HPE)">HorizontalError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Horizontal Error unit (&#39;M&#39; for Meters)">HorizontalErrorUnits</span> { get; } : string</li>
+<li class='pubproperty'><span title="Overall spherical equivalent position error (EPE)">SphericalError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Spherical Error unit (&#39;M&#39; for Meters)">SphericalErrorUnits</span> { get; } : string</li>
+<li class='pubproperty'><span title="Estimated vertical position error in meters (VPE)">VerticalError</span> { get; } : double</li>
+<li class='pubproperty'><span title="Vertical Error unit (&#39;M&#39; for Meters)">VerticalErrorUnits</span> { get; } : string</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Garmin.Pgrmz'>
+<div class='header class'>
+<span title="Altitude Information">Pgrmz : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Pgrmz class.">Pgrmz</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Current altitude">Altitude</span> { get; } : double</li>
+<li class='pubproperty'><span title="Fix type">FixType</span> { get; } : <span title="Position Fix Dimension">PositionFixType</span></li>
+<li class='pubproperty'><span title="Horizontal Error unit (&#39;f&#39; for Meters)">Unit</span> { get; } : <span title="Altitude unit">AltitudeUnit</span></li>
+</ul></div>
+<div class='members'><h4>Nested Types</h4></div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Garmin.AltitudeUnit'>
+<div class='header enum'>
+<span title="Altitude unit">AltitudeUnit : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Unknown">Unknown</span> = 0</li>
+<li class='pubfield'><span title="Feet">Feet</span> = 1</li>
+</ul>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Garmin.PositionFixType'>
+<div class='header enum'>
+<span title="Position Fix Dimension">PositionFixType : int</span>
+</div>
+<ul class='members'>
+<li class='pubfield'><span title="Unknown">Unknown</span></li>
+<li class='pubfield'><span title="No fix">NoFix</span></li>
+<li class='pubfield'><span title="2D Fix">Fix2D</span></li>
+<li class='pubfield'><span title="3D Fix">Fix3D</span></li>
+</ul>
+</div>
+</div>
+</div></section>
+<section id='NmeaParser.Messages.LaserTech'>
+<h3 class='expander active'>NmeaParser.Messages.LaserTech</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.LaserTech.Pltit'>
+<div class='header class'>
+<span title="Laser Range">Pltit : <a href='#NmeaParser.NmeaParser.Messages.LaserRangeMessage'>LaserRangeMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Pltit class.">Pltit</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+</div>
+</div></section>
+<section id='NmeaParser.Messages.Trimble'>
+<h3 class='expander active'>NmeaParser.Messages.Trimble</h3><div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Trimble.Ptnla'>
+<div class='header class'>
+<span title="Laser Range Burden finder">Ptnla : <a href='#NmeaParser.NmeaParser.Messages.LaserRangeMessage'>LaserRangeMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Ptnla class.">Ptnla</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+</div>
+<div class='objectBox' id='NmeaParser.NmeaParser.Messages.NmeaParser.Messages.Trimble.Ptnlb'>
+<div class='header class'>
+<span title="Laser Range Tree Measurement">Ptnlb : <a href='#NmeaParser.NmeaParser.Messages.NmeaMessage'>NmeaMessage</a></span>
+</div>
+<div class='members'>
+<h4>Constructors</h4>
+<ul>
+<li class='pubmethod'><span title="Initializes a new instance of the Ptnlb class.">Ptnlb</span>(string <span title="The message type">type</span>, String[] <span title="The NMEA message values.">message</span>)</li>
+</ul></div>
+<div class='members'><h4>Properties</h4><ul>
+<li class='pubproperty'><span title="Gets the measured tree diameter.">MeasuredTreeDiameter</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the MeasuredTreeDiameter value.">MeasuredTreeDiameterUnits</span> { get; } : char</li>
+<li class='pubproperty'><span title="Gets the message height of the tree.">MeasuredTreeHeight</span> { get; } : double</li>
+<li class='pubproperty'><span title="Gets the units of the MeasuredTreeHeight value.">MeasuredTreeHeightUnits</span> { get; } : char</li>
+<li class='pubproperty'><span title="Gets the tree diameter.">TreeDiameter</span> { get; } : string</li>
+<li class='pubproperty'><span title="Gets the height of the tree.">TreeHeight</span> { get; } : string</li>
+</ul></div>
+</div>
+</div></section>
+<hr style="clear: both; " />Command line:<br/>
+<pre style="padding: 5px; background-color:#eee">
+dotnet tool install --global dotMorten.OmdGenerator
+generateomd D:\a\NmeaParser\NmeaParser\.tools\omd\.store\dotmorten.omdgenerator\1.4.0\dotmorten.omdgenerator\1.4.0\tools\net5.0\any\generateomd.dll /source=src/NmeaParser /output=artifacts/docs/api/omd.html
+</pre>
+?<br /><br /><hr style="clear:both;" />
+Generated with <a href="https://github.com/dotMorten/DotNetOMDGenerator">.NET Object Model Diagram Generator</a><br /><br />
+<script>var acc = document.getElementsByClassName("expander"); var i; for (i = 0; i < acc.length; i++) { acc[i].addEventListener("click", function () { var active = this.classList.toggle("active"); var panel = this.nextElementSibling; panel.classList.toggle("collapse"); }); }</script>
+</body>
+</html>

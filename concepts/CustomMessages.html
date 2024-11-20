@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Creating custom NMEA messages </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Creating custom NMEA messages ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="creating-custom-nmea-messages">Creating custom NMEA messages</h1>
+
+<p>Custom NMEA messages can be registered for parsing as well.
+To create a new message, add the NmeaMessageType attribute to the class, and declare the 5-character message type.</p>
+<p><em>Note: You can use <code>--</code> as the first two characters to make it independent of the Talker Type.</em></p>
+<p>Next ensure you have a constructor that takes the <code>TypeName</code> string parameter first, and a second <code>string[]</code> parameter that will contain all the message values:</p>
+<p>Example:</p>
+<pre><code class="lang-cs">[NmeaMessageType(&quot;PTEST&quot;)]
+public class CustomMessage : NmeaMessage
+{
+    public CustomMessage(string type, string[] parameters) : base(type, parameters)
+    {
+        Value = parameters[0];
+    }
+    public string Value { get; }
+}
+</code></pre>
+<p>Next register this with the NMEA Parser using either:</p>
+<pre><code class="lang-cs">NmeaMessage.RegisterAssembly(typeof(CustomMessage).Assembly); //Registers all types in the provided assembly
+NmeaMessage.RegisterMessage(typeof(CustomMessage).GetTypeInfo());  //Registers a single NMEA message
+</code></pre>
+<p>Note that these methods will throw if the NMEA type has already been registered (there's an overload where you can declare the <code>replace</code> parameter to <code>true</code> to overwrite already registered messages.</p>
+<p>Next you should be able to test this method using the Parse method:</p>
+<pre><code class="lang-cs">var input = &quot;$PTEST,TEST*7C&quot;;
+var msg = NmeaMessage.Parse(input);
+</code></pre>
+<h1 id="creating-a-multi-sentence-message">Creating a multi-sentence message</h1>
+<p>A NMEA message cannot exceed 82 characters, so often messages are split into multiple sentences. To create a custom multi message, either implement <code>IMultiSentenceMessage</code> or simply subclass <code>NmeaMultiSentenceMessage</code>.</p>
+<pre><code class="lang-cs">[NmeaMessageType(&quot;PTST2&quot;)]
+private class CustomMultiMessage : NmeaMultiSentenceMessage, IMultiSentenceMessage
+{   
+    public CustomMultiMessage(string type, string[] parameters) : base(type, parameters)
+    {
+    }
+    public string Id { get; private set; }
+    public List&lt;string&gt; Values { get; } = new List&lt;string&gt;();
+    // Set index in the message where the total count is:
+    protected override int MessageCountIndex =&gt; 0;
+    // Set index in the message where the message number is:
+    protected override int MessageNumberIndex =&gt; 1;
+    protected override bool ParseSentences(Talker talkerType, string[] message)
+    {
+        // Ensure this message matches the previous message.
+        // Use any indicator to detect message difference, so you can error out and avoid
+        // appending the wrong message
+        if (Id == null)
+            Id = message[2]; //First time it's not set
+        else if (Id != message[2])
+            return false;
+        Values.AddRange(message.Skip(3));
+        return true;
+    }
+}
+</code></pre>
+<p>Note that the message is parsed in the <code>ParseSentences</code> method, and not the constructor. Also note that the talkerType is parsed to you, because multi-sentence messages allows a mix of talker types, if you use the <code>--</code> prefex in the NMEA type.</p>
+<p>Next we can parse the two messages and have the second one be appended to the first one:</p>
+<pre><code class="lang-cs">NmeaMessage.RegisterNmeaMessage(typeof(CustomMultiMessage).GetTypeInfo());
+var input1 = &quot;$PTST2,2,1,123,A,B,C,D*2A&quot;;
+var input2 = &quot;$PTST2,2,2,123,E,F,G,H*21&quot;;
+var msg1 = NmeaMessage.Parse(input1);
+var msg2 = NmeaMessage.Parse(input2, msg1 as IMultiSentenceMessage);
+</code></pre>
+<p>If msg1 and msg2 aren't the same instance, it means the message couldn't be added to the previous message, and a new message was generated.</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/docs/concepts/CustomMessages.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
