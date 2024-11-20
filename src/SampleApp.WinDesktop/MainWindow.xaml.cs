@@ -84,6 +84,7 @@ namespace SampleApp.WinDesktop
             if (currentDevice != null)
             {
                 currentDevice.MessageReceived -= device_MessageReceived;
+                currentDevice.DeviceDisconnected -= device_DeviceDisconnected;
                 if (currentDevice.IsOpen)
                     await currentDevice.CloseAsync();
                 currentDevice.Dispose();
@@ -110,7 +111,7 @@ namespace SampleApp.WinDesktop
                 MessagePanel.Children.Remove(child);
             }
             currentDevice.MessageReceived += device_MessageReceived;
-
+            currentDevice.DeviceDisconnected += device_DeviceDisconnected;
             if (device is NmeaParser.NmeaFileDevice)
                 currentDeviceInfo.Text = string.Format("NmeaFileDevice( file={0} )", ((NmeaParser.NmeaFileDevice)device).FileName);
             else if (device is NmeaParser.SerialPortDevice)
@@ -128,6 +129,11 @@ namespace SampleApp.WinDesktop
             gnssMonitorView.Monitor.LocationChanged += Monitor_LocationChanged;
             view2d.GnssMonitor = monitor;
             view3d.GnssMonitor = monitor;
+        }
+
+        private void device_DeviceDisconnected(object sender, Exception e)
+        {
+            MessageBox.Show("Device disconnected: " + e.Message);
         }
 
         private void Monitor_LocationChanged(object sender, EventArgs e)

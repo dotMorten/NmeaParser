@@ -70,6 +70,7 @@ namespace NmeaParser
             System.Diagnostics.Debug.WriteLine("Starting parser...");
             m_ParserTask = Task.Run(async () =>
             {
+                int failcounter = 0;
                 byte[] buffer = new byte[1024];
                 while (!token.IsCancellationRequested)
                 {
@@ -77,8 +78,17 @@ namespace NmeaParser
                     try
                     {
                         readCount = await ReadAsync(buffer, 0, 1024, token).ConfigureAwait(false);
+                        failcounter = 0;
                     }
-                    catch { }
+                    catch(System.Exception ex)
+                    {
+                        failcounter++;
+                        if (failcounter > 10)
+                        {
+                            OnDisconnecting(ex);
+                            break;
+                        }
+                    }
                     if (token.IsCancellationRequested)
                         break;
                     if (readCount > 0)
@@ -88,6 +98,16 @@ namespace NmeaParser
                     await Task.Yield();
                 }
             });
+        }
+
+        private async void OnDisconnecting(Exception ex)
+        {
+            try
+            {
+                await this.CloseAsync().ConfigureAwait(false);
+            }
+            catch { }
+            DeviceDisconnected.Invoke(this, ex);
         }
 
         /// <summary>
@@ -218,6 +238,11 @@ namespace NmeaParser
         /// Occurs when an NMEA message is received.
         /// </summary>
         public event EventHandler<NmeaMessageReceivedEventArgs>? MessageReceived;
+
+        /// <summary>
+        /// Raised when a device raises the same error multiple times and can't recover.
+        /// </summary>
+        public event EventHandler<Exception> DeviceDisconnected;
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
