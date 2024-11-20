@@ -60,6 +60,7 @@ namespace NmeaParser
     /// }
     /// </code>
     /// </remarks>
+    [Obsolete("Use WinRTSerialDevice type instead")]
     public class SerialPortDevice : NmeaDevice
     {
         private SerialDevice m_port;

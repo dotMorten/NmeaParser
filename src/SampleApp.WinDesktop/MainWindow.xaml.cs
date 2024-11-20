@@ -1,4 +1,5 @@
-﻿using NmeaParser.Gnss;
+﻿using NmeaParser;
+using NmeaParser.Gnss;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Windows.Devices.Enumeration;
+using Windows.Devices.SerialCommunication;
 
 namespace SampleApp.WinDesktop
 {
@@ -28,22 +31,32 @@ namespace SampleApp.WinDesktop
         public MainWindow()
         {
             InitializeComponent();
-
-            //Get list of serial ports for device tab
-            var availableSerialPorts = System.IO.Ports.SerialPort.GetPortNames().OrderBy(s => s);
-            serialPorts.ItemsSource = availableSerialPorts;
-            serialPorts.SelectedIndex = 0;
-            // Use serial portName:
-            //var comPort = availableSerialPorts.First();
-            //var portName = new System.IO.Ports.SerialPort(comPort, 4800);
-            //var device = new NmeaParser.SerialPortDevice(portName);
-
             //Use a log file for playing back logged data
             var device = new NmeaParser.NmeaFileDevice("NmeaSampleData.txt") { EmulatedBaudRate = 9600, BurstRate = TimeSpan.FromSeconds(1d) };
             _ = StartDevice(device);
 
+            LoadSerialDevices();
             LoadBluetoothDevices();
+        }
 
+        //Get list of serial ports for device tab
+        private async void LoadSerialDevices()
+        {
+            var deviceList = new List<DeviceInfo>();
+            var devices = await WinRTSerialDevice.GetSerialDevicesAsync();
+            foreach (var item in devices)
+            {
+                deviceList.Add(new DeviceInfo()
+                {
+                    DisplayName = $"{item.PortName}",
+                    CreateMethod = () =>
+                    {
+                        return Task.FromResult<NmeaParser.NmeaDevice>(new WinRTSerialDevice(item));
+                    }
+                });
+            }
+            serialPorts.ItemsSource = deviceList;
+            serialPorts.SelectedIndex = 0;
         }
         public class DeviceInfo
         {
@@ -206,9 +219,10 @@ namespace SampleApp.WinDesktop
         {
             try
             {
-                var portName = serialPorts.Text as string;
-                var baudRate = int.Parse(baudRates.Text);
-                var device = new NmeaParser.SerialPortDevice(new System.IO.Ports.SerialPort(portName, baudRate));
+                var portName = serialPorts.SelectedItem as DeviceInfo;
+                var baudRate = uint.Parse(baudRates.Text);
+                var device = await portName.CreateMethod() as WinRTSerialDevice;
+                device.SerialDevice.BaudRate = baudRate;
                 try
                 {
                     await StartDevice(device);

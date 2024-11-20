@@ -19,6 +19,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.IO.Ports;
+using System.Threading;
 
 namespace NmeaParser
 {
@@ -42,6 +44,9 @@ namespace NmeaParser
     /// }
     /// </code>
     /// </remarks>
+#if WINDOWS && NET6_0_OR_GREATER
+    [Obsolete("Use WinRTSerialDevice type instead, as the underlying SerialPort implementation comes with a range of issues")]
+#endif
     public class SerialPortDevice : NmeaDevice
     {
         /// <summary>
@@ -68,6 +73,26 @@ namespace NmeaParser
                 Port.Open();
             return Task.FromResult<System.IO.Stream>(Port.BaseStream);
         }
+
+        //private class SerialPortStreamWrapper : Stream
+        //{
+        //    private SerialPort port;
+        //    public SerialPortStreamWrapper(SerialPort port)
+        //    {
+        //        this.port = port;
+        //    }
+
+        //    public override int Read(byte[] buffer, int offset, int count) => port.Read(buffer, offset, count);
+
+        //    public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        //    {
+
+        //        return base.ReadAsync(buffer, offset, count, cancellationToken);
+        //    }
+        //    public override int ReadTimeout { get => port.ReadTimeout ; set => port.ReadTimeout = value; }
+
+        //    public override int WriteTimeout { get => port.WriteTimeout; set => port.WriteTimeout = value; }
+        //}
 
         /// <inheritdoc />
         protected override Task CloseStreamAsync(System.IO.Stream stream)
