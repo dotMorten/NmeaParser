@@ -210,6 +210,19 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        [WorkItem(116)]
+        public void TestGprmc_DateCheck()
+        {
+            // Tests a behavior change in TimeSpan.AddSeconds introduced in .NET 7
+            string input = "$GPRMC,141825.2,A,4249.92297,N,08548.52186,W,000.01,227.1,040322,005.5,W*54";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Rmc));
+            Rmc rmc = (Rmc)msg;
+            Assert.AreEqual("GPRMC", rmc.MessageType);
+            Assert.AreEqual(new DateTimeOffset(2022, 3, 4, 14, 18, 25, 200, TimeSpan.Zero), rmc.FixTime);            
+        }
+        
+        [TestMethod]
         public void TestGpgga()
         {
             string input = "$GPGGA,235236,3925.9479,N,11945.9211,W,1,10,0.8,1378.0,M,-22.1,M,,*46";

@@ -42,15 +42,13 @@ namespace NmeaParser.Messages
             
             if (message[8].Length == 6 && message[0].Length >= 6)
             {
-                var year = int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000;
-                var month = int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture);
-                var day = int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture);
-                var hour = int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture);
-                var minute = int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture);
-                var secondTicks = (long)(decimal.Parse(message[0].Substring(4), CultureInfo.InvariantCulture) * TimeSpan.TicksPerSecond);
-
-                FixTime = new DateTimeOffset(year, month, day, hour, minute, 0, TimeSpan.Zero)
-                    .AddTicks(secondTicks);
+                FixTime = new DateTimeOffset(int.Parse(message[8].Substring(4, 2), CultureInfo.InvariantCulture) + 2000,
+                                       int.Parse(message[8].Substring(2, 2), CultureInfo.InvariantCulture),
+                                       int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture),
+                                       int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
+                                       int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
+                                       0, TimeSpan.Zero).
+                                       AddTicks((long)(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture) * TimeSpan.TicksPerSecond));
             }
             Active = (message[1] == "A");
             Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);
