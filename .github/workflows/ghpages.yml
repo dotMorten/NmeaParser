@@ -25,7 +25,8 @@ jobs:
     - name: Download DocFX
       run: |
         mkdir .tools/docfx
-        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx-win-x64-v{env:DOCFXVERSION}.zip" -OutFile ".tools/docfx/docfx.zip"
+        Invoke-WebRequest -Uri "https://github.com/dotnet/docfx/releases/download/v${env:DOCFXVERSION}/docfx-win-x64-v${env:DOCFXVERSION}.zip" -OutFile ".tools/docfx/docfx.zip"
+  
         [System.IO.Compression.ZipFile]::ExtractToDirectory(".tools/docfx/docfx.zip", ".tools/docfx" )
       env:
         DOCFXVERSION: 2.77.0
