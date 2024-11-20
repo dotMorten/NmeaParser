@@ -6,9 +6,9 @@
 
 - [.NET 6+ Windows API Reference](netwin/index.md)
 
-- [.NET 6+ iOS API Reference](ios/index.md)
+- [.NET 8+ iOS API Reference](ios/index.md)
 
-- [.NET 6+ Android API Reference](android/index.md)
+- [.NET 8+ Android API Reference](android/index.md)
 
 #### Legacy:
 
