@@ -54,7 +54,7 @@ jobs:
       
     - name: Publish Documentation
       env:
-        ACCESS_TOKEN: ${{ secrets.GH_PAT }}
+        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
         DOCSFOLDER: artifacts/docs_site
       shell: cmd
