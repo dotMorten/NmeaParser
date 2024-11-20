@@ -1,8 +1,8 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.22">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
     <Sdk Name="Microsoft.DotNet.PackageValidation" Version="1.0.0-preview.7.21379.12" />
-
-    <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.4;netcoreapp2.1;net452;monoandroid50;monoandroid70;xamarinios10;uap10.0.18362</TargetFrameworks>
+    
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net452;uap10.0.19041;net6.0;net8.0-ios;net8.0-android;net6.0-windows10.0.19041.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Configurations>Debug;Release</Configurations>
@@ -12,25 +12,29 @@
     <Description>An NMEA stream parser for serial port, bluetooth and file-based nmea simulation.</Description>
     <PackageTags>NMEA GPS GNSS Serialport Bluetooth Navigation NTRIP RTCM Galileo GLONASS BeiDou Garmin Trimble</PackageTags>
     <PackageId>SharpGIS.NmeaParser</PackageId>
-    <Version Condition="'$(Version)'==''">2.2.2</Version> <!-- Note: Also update PackageValidationBaselineVersion -->
+    <Version Condition="'$(Version)'==''">3.0.0</Version> <!-- Note: Also update PackageValidationBaselineVersion -->
     <Product>NMEA Parser</Product>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://dotmorten.github.io/NmeaParser/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dotMorten/NmeaParser</RepositoryUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Copyright>Copyright © Morten Nielsen 2015-2020</Copyright>
+    <Copyright>Copyright © Morten Nielsen 2015-$([System.DateTime]::Now.ToString('yyyy'))</Copyright>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\NmeaParser\$(Configuration)</OutputPath>
     <PackageOutputPath>..\..\artifacts\NuGet\$(Configuration)\</PackageOutputPath>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);NU1505</NoWarn>
     <CodeAnalysisTreatWarningsAsErrors Condition="'$(Configuration)'=='Release'">true</CodeAnalysisTreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
+    <CheckEolWorkloads>false</CheckEolWorkloads>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <_SdkIgnoreMSBuildCoreWarning>true</_SdkIgnoreMSBuildCoreWarning>
   </PropertyGroup>
     
   <PropertyGroup Label="PackageValidationSettings">
@@ -41,41 +45,38 @@
       <!-- Set to true to generate suppresion files used to ignore _intended_ breaking changes. Should never be checked in true -->
       <CompatibilitySuppressionFilePath Condition="('$(GenerateCompatibilitySuppressionFile)'=='true') OR Exists('$(MSBuildProjectDirectory)\PackageValidationSuppression.txt')">PackageValidationSuppression.txt</CompatibilitySuppressionFilePath>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.4'">
-    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+
+  <PropertyGroup>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
   </PropertyGroup>
-  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
     <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid50'">
-    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
-    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_21</DefineConstants>
-    <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
-    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
-    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
-    <DefineConstants>$(DefineConstants);XAMARIN;API_LEVEL_24</DefineConstants>
-    <NoWarn>$(NoWarn);XA0113;XA0114</NoWarn>
-    <AndroidEnableGooglePlayStoreChecks>false</AndroidEnableGooglePlayStoreChecks>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+    <DefineConstants>$(DefineConstants);API_LEVEL_24</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
-    <NoWarn>$(NoWarn);VSX1000</NoWarn>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.19041'">
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.19041'">
     <EmbeddedResource Include="**\*.rd.xml" />
   </ItemGroup>
 
@@ -87,7 +88,7 @@
     <None Include="logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)'=='net6.0-windows10.0.19041.0'">
     <PackageReference Include="System.IO.Ports" Version="4.7.0" />
   </ItemGroup>
 
@@ -110,5 +111,4 @@
     <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="&quot;$(SignToolPath)&quot; sign /v /as /d &quot;Authorization Summary&quot; /fd SHA256 /f &quot;$(CertificatePath)&quot; /p &quot;$(CertificatePassword)&quot; /tr http://timestamp.digicert.com /td SHA256 &quot;%(FilesToSignFiltered.Identity)&quot;"
           WorkingDirectory="$(ProjectDir)" EchoOff="true" />
   </Target>
-
 </Project>

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SampleApp.Maui.MainPage">
+
+    <Grid Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Stroke="Black" StrokeThickness="1" >
+            <StackLayout x:Name="gnssMonitorView" Padding="5" >
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Latitude: " />
+                    <Label Text="{Binding Latitude}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Longitude: " />
+                    <Label Text="{Binding Longitude}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Altitude: " />
+                    <Label Text="{Binding Altitude}" />
+                </StackLayout>
+            </StackLayout>
+        </Border>
+
+        <Picker Title="NMEA Device:" x:Name="nmeaDevicePicker" Grid.Row="1" Margin="0, 10" />
+        <StackLayout Orientation="Horizontal" Grid.Row="2">
+            <Button Text="Start" x:Name="startButton" Clicked="startButton_Click" />
+            <Button Text="Stop" IsEnabled="False" x:Name="stopButton" Clicked="stopButton_Click" />
+        </StackLayout>
+
+        <Editor IsReadOnly="True" x:Name="output" Grid.Row="3" Margin="0, 10" VerticalTextAlignment="Start" />
+        
+    </Grid>
+
+</ContentPage>

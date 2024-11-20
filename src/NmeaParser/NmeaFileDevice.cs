@@ -26,7 +26,7 @@ namespace NmeaParser
     /// </summary>
     public class NmeaFileDevice : BufferedStreamDevice
     {
-#if NETFX_CORE
+#if WINDOWS_UWP
         private Windows.Storage.IStorageFile? m_storageFile;
 #endif
         private string m_filename;
@@ -40,7 +40,7 @@ namespace NmeaParser
         {
         }
 
-#if NETFX_CORE
+#if WINDOWS_UWP
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
@@ -59,7 +59,7 @@ namespace NmeaParser
             m_filename = fileName;
         }
 
-#if NETFX_CORE
+#if WINDOWS_UWP
         /// <summary>
         /// Initializes a new instance of the <see cref="NmeaFileDevice"/> class.
         /// </summary>
@@ -89,7 +89,7 @@ namespace NmeaParser
         protected override Task<Stream> GetStreamAsync()
         {
 
-#if NETFX_CORE
+#if WINDOWS_UWP
             if (m_storageFile != null)
                 return m_storageFile.OpenStreamForReadAsync();
 #endif

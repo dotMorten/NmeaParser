@@ -198,7 +198,7 @@ namespace NmeaParser.Gnss.Ntrip
 
             private void ReceiveCallback(IAsyncResult ar)
             {
-                TaskCompletionSource<int> tcs = (TaskCompletionSource<int>)ar.AsyncState;
+                TaskCompletionSource<int> tcs = (TaskCompletionSource<int>)ar.AsyncState!;
                 if (tcs.Task.IsCanceled) return;
                 try
                 {

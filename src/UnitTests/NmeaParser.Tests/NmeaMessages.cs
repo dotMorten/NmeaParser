@@ -31,14 +31,14 @@ namespace NmeaParser.Tests
     {
         [TestMethod]
         public
-#if NETFX_CORE
+#if WINDOWS_UWP
             async Task
 #else
             void
 #endif
             ParseNmeaFile()
         {
-#if NETFX_CORE
+#if WINDOWS_UWP
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///NmeaSampleData.txt"));
             System.IO.StreamReader reader = new System.IO.StreamReader(await file.OpenStreamForReadAsync());
 #else
@@ -64,14 +64,14 @@ namespace NmeaParser.Tests
         }
         [TestMethod]
         public
-#if NETFX_CORE
+#if WINDOWS_UWP
             async Task
 #else
             void
 #endif
             ParseTrimbleR2NmeaFile()
         {
-#if NETFX_CORE
+#if WINDOWS_UWP
             var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///TrimbleR2SampleData.txt"));
             System.IO.StreamReader reader = new System.IO.StreamReader(await file.OpenStreamForReadAsync());
 #else
@@ -209,6 +209,19 @@ namespace NmeaParser.Tests
             Assert.AreEqual(0.019, rmc.Speed);
         }
 
+        [TestMethod]
+        [WorkItem(116)]
+        public void TestGprmc_DateCheck()
+        {
+            // Tests a behavior change in TimeSpan.AddSeconds introduced in .NET 7
+            string input = "$GPRMC,141825.2,A,4249.92297,N,08548.52186,W,000.01,227.1,040322,005.5,W*54";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Rmc));
+            Rmc rmc = (Rmc)msg;
+            Assert.AreEqual("GPRMC", rmc.MessageType);
+            Assert.AreEqual(new DateTimeOffset(2022, 3, 4, 14, 18, 25, 200, TimeSpan.Zero), rmc.FixTime);            
+        }
+        
         [TestMethod]
         public void TestGpgga()
         {

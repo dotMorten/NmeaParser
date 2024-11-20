@@ -2,17 +2,21 @@
 
 **Select your platform:**
 
+- [.NET 6+ API Reference](net/index.md)
+
+- [.NET 6+ Windows API Reference](netwin/index.md)
+
+- [.NET 8+ iOS API Reference](ios/index.md)
+
+- [.NET 8+ Android API Reference](android/index.md)
+
+#### Legacy:
+
 - [.NET Standard API Reference](netstd/index.md)
 
 - [.NET Framework API Reference](netfx/index.md)
 
-- [.NET Core API Reference](netcore/index.md)
-
 - [UWP API Reference](uwp/index.md)
-
-- [Android API Reference](android/index.md)
-
-- [iOS API Reference](ios/index.md)
 
 ### Object model diagrams
 Click below to see the full object model diagram:

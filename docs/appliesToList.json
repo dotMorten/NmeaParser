@@ -2,36 +2,66 @@
    "Output": "../artifacts/docs/api_overwrites/applies-to-overwrite.md",
    "Metadata": [
     {
-      "PlatformName": ".NET Standard 1.4",
+      "PlatformName": ".NET Standard 2.0",
       "Versions" : [
          { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/netstd/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/netstd/.manifest" },
          { "Name" : "v2.2", "Manifest": "manifests/v2.2/netstd/.manifest" },
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/netstd/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/netstd/.manifest" },
       ]
     },
     { 
+      "PlatformName": ".NET",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/net/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/net/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET Windows",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/netwin/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/netwin/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET Android",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/android/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/android/.manifest" }
+      ]
+    },
+    { 
+      "PlatformName": ".NET iOS",
+      "Versions" : [
+         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/ios/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/ios/.manifest" }
+      ]
+    },
+    { 
       "PlatformName": ".NET Framework",
       "Versions" : [
          { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/netfx/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/netfx/.manifest" },
          { "Name" : "v2.2", "Manifest": "manifests/v2.2/netfx/.manifest" },
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/netfx/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/netfx/.manifest" }
       ]
     },
     { 
-      "PlatformName": ".NET Core",
+      "PlatformName": "UWP",
       "Versions" : [
-         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/netcore/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/netcore/.manifest" },
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/netcore/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/netcore/.manifest" }
+         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/uwp/.manifest" },
+         { "Name" : "v3.0", "Manifest": "manifests/v3.0/uwp/.manifest" },    
+         { "Name" : "v2.2", "Manifest": "manifests/v2.2/uwp/.manifest" },    
+         { "Name" : "v2.1", "Manifest": "manifests/v2.1/uwp/.manifest" },
+         { "Name" : "v2.0", "Manifest": "manifests/v2.0/uwp/.manifest" }
       ]
     },
     { 
       "PlatformName": "Xamarin.Android",
       "Versions" : [
-         { "Name": "GitHub", "Manifest": "../artifacts/docs/api/android/.manifest" },
          { "Name" : "v2.2", "Manifest": "manifests/v2.2/android/.manifest" },
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/android/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/android/.manifest" }
@@ -40,20 +70,10 @@
     {
       "PlatformName": "Xamarin.iOS",
       "Versions" : [
-         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/ios/.manifest" },
          { "Name" : "v2.2", "Manifest": "manifests/v2.2/ios/.manifest" },    
          { "Name" : "v2.1", "Manifest": "manifests/v2.1/ios/.manifest" },
          { "Name" : "v2.0", "Manifest": "manifests/v2.0/ios/.manifest" }
       ]
     },
-    { 
-      "PlatformName": "UWP",
-      "Versions" : [
-         { "Name" : "GitHub", "Manifest": "../artifacts/docs/api/uwp/.manifest" },
-         { "Name" : "v2.2", "Manifest": "manifests/v2.2/uwp/.manifest" },    
-         { "Name" : "v2.1", "Manifest": "manifests/v2.1/uwp/.manifest" },
-         { "Name" : "v2.0", "Manifest": "manifests/v2.0/uwp/.manifest" }
-      ]
-    }
    ]
 }

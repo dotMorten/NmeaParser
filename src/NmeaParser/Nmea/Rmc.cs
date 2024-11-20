@@ -47,7 +47,8 @@ namespace NmeaParser.Messages
                                        int.Parse(message[8].Substring(0, 2), CultureInfo.InvariantCulture),
                                        int.Parse(message[0].Substring(0, 2), CultureInfo.InvariantCulture),
                                        int.Parse(message[0].Substring(2, 2), CultureInfo.InvariantCulture),
-                                       0, TimeSpan.Zero).AddSeconds(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture));
+                                       0, TimeSpan.Zero).
+                                       AddTicks((long)(double.Parse(message[0].Substring(4), CultureInfo.InvariantCulture) * TimeSpan.TicksPerSecond));
             }
             Active = (message[1] == "A");
             Latitude = NmeaMessage.StringToLatitude(message[2], message[3]);

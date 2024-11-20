@@ -1,4 +1,5 @@
 ﻿// Bluetooth device using the Win10 contracts
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,7 @@ namespace SampleApp.WinDesktop
             m_disposeService = disposeService;
         }
 
-        public RfcommDeviceService Service => m_deviceService;
+        public RfcommDeviceService? Service => m_deviceService;
 
         /// <inheritdoc />
         protected override void Dispose(bool disposing)

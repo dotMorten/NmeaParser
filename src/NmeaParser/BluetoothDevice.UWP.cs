@@ -12,7 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
-#if NETFX_CORE
+#if WINDOWS_UWP || WINDOWS
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,17 +48,17 @@ namespace NmeaParser
     /// <para>Make sure your Bluetooth device is paired with your Windows Device.</para>
     /// <code lang="cs">
     /// //Get list of devices
-    ///     string serialDeviceType = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
-    ///     var devices = await DeviceInformation.FindAllAsync(serialDeviceType);
-    ///     //Select device by name (in this case TruePulse 360B Laser Range Finder)
-    ///     var TruePulse360B = devices.Where(t => t.Name.StartsWith("TP360B-")).FirstOrDefault();
-    ///     //Get service
-    ///     RfcommDeviceService rfcommService = await RfcommDeviceService.FromIdAsync(TruePulse360B.Id);
+    /// string serialDeviceType = RfcommDeviceService.GetDeviceSelector(RfcommServiceId.SerialPort);
+    /// var devices = await DeviceInformation.FindAllAsync(serialDeviceType);
+    /// //Select device by name (in this case TruePulse 360B Laser Range Finder)
+    /// var TruePulse360B = devices.Where(t => t.Name.StartsWith("TP360B-")).FirstOrDefault();
+    /// //Get service
+    /// RfcommDeviceService rfcommService = await RfcommDeviceService.FromIdAsync(TruePulse360B.Id);
     /// if (rfcommService != null)
     /// {
-    /// 	var rangeFinder = new NmeaParser.BluetoothDevice(rfcommService);
+    ///     var rangeFinder = new NmeaParser.BluetoothDevice(rfcommService);
     ///     rangeFinder.MessageReceived += device_NmeaMessageReceived;
-    /// 	await rangeFinder.OpenAsync();
+    ///     await rangeFinder.OpenAsync();
     /// }
     /// ...
     /// private void device_NmeaMessageReceived(object sender, NmeaParser.NmeaMessageReceivedEventArgs args)

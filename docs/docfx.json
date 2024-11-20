@@ -6,71 +6,89 @@
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         },
-	  ],
+      ],
       "dest": "../artifacts/docs/api/netstd",
-      "properties": { "TargetFramework": "netstandard1.4" },
+      "properties": { "TargetFramework": "netstandard2.0" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
+      "dest": "../artifacts/docs/api/net",
+      "properties": { "TargetFramework": "net6.0" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
       "dest": "../artifacts/docs/api/netfx",
       "properties": { "TargetFramework": "net452" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
-      "dest": "../artifacts/docs/api/netcore",
-      "properties": { "TargetFramework": "netcoreapp2.1" },
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-	{ "src": [
-        {
-          "files": [ "NmeaParser/NmeaParser.csproj" ],
-          "src" : "../src/"
-        }
-	  ],
+      ],
       "dest": "../artifacts/docs/api/android",
-      "properties": { "TargetFramework": "monoandroid70" },
+      "properties": { "TargetFramework": "net8.0-android" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
+      ],
       "dest": "../artifacts/docs/api/ios",
-      "properties": { "TargetFramework": "xamarinios10" },
+      "properties": { "TargetFramework": "net8.0-ios" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     },
-	{ "src": [
+    { "src": [
         {
           "files": [ "NmeaParser/NmeaParser.csproj" ],
           "src" : "../src/"
         }
-	  ],
-      "dest": "../artifacts/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.18362" },
+      ],
+      "dest": "../artifacts/docs/api/netwin",
+      "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
+    },
+    { "src": [
+        {
+          "files": [ "NmeaParser/NmeaParser.csproj" ],
+          "src" : "../src/"
+        }
+      ],
+      "dest": "../artifacts/docs/api/uwp",
+      "properties": { "TargetFramework": "uap10.0.19041", "DocfxBuild": "true", "MSBuildExtensionsPath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\MSBuild" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+	  "memberLayout":"separatePages"
     }
   ],
   "build": {
     "content": [
-	{
+    {
         "files": [
           "api/**/index.md"
         ]
@@ -80,7 +98,7 @@
           "api/**.yml",
           "api/**/toc.yml"         
         ],
-		"src" : "../artifacts/docs"
+        "src" : "../artifacts/docs"
       },
       {
         "files": [
@@ -98,11 +116,11 @@
           "favicon.ico"
         ]
       },
-	   {
+       {
         "files": [
            "api/omd.html"
         ],
-		"src" : "../artifacts/docs"
+        "src" : "../artifacts/docs"
       }
     ],
     "overwrite": [
@@ -127,14 +145,14 @@
       "_gitContribute": {
         "branch": "main",
         "apiSpecFolder": "docs/api_overwrites"
-      }
+      },
+	  "memberLayout":"separatePages"
     },
     "dest": "../artifacts/docs_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
       "default",
-      "memberpage.2.58.0/content",
       "template_overrides"
     ],
     "postProcessors": [],

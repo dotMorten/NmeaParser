@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.0.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NmeaParser", "NmeaParser", "{1701F3BA-A09C-4706-A612-24FD9340FC18}"
 EndProject
@@ -29,20 +29,46 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NmeaParser.Tests.UWP", "Uni
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NmeaParser.Tests", "UnitTests\NmeaParser.Tests\NmeaParser.Tests.shproj", "{979AE182-EB59-4181-9D45-3FD6E4817F11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Android", "Android", "{456E7573-3324-43CB-8BA0-8D9C300EEB50}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Droid", "SampleApp.Droid\SampleApp.Droid.csproj", "{48540D33-4349-42D2-9D49-144A7049565A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NmeaParser.Tests.Net", "UnitTests\NmeaParser.Tests.NET\NmeaParser.Tests.Net.csproj", "{73EFB2EF-DE40-46C4-9685-745A9815C0D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.NetCore", "SampleApp.WinDesktop\SampleApp.NetCore.csproj", "{6F97C607-42A0-458B-B9E9-CF5AF53CBB1E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maui", "Maui", "{09136598-F229-45CD-8AEA-97DC890C3314}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.Maui", "SampleApp.Maui\SampleApp.Maui.csproj", "{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{8B60BBAA-7CA6-40DF-AD08-06AE7573EF68}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\appliesToList.json = ..\docs\appliesToList.json
+		..\docs\BuildDoc.cmd = ..\docs\BuildDoc.cmd
+		..\docs\docfx.json = ..\docs\docfx.json
+		..\docs\Features.md = ..\docs\Features.md
+		..\docs\index.md = ..\docs\index.md
+		..\docs\toc.yml = ..\docs\toc.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "concepts", "concepts", "{E6CF1B94-DD5C-4B3A-9D00-164394435CAC}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\concepts\ArcGISRuntime.md = ..\docs\concepts\ArcGISRuntime.md
+		..\docs\concepts\BluetoothAndroid.md = ..\docs\concepts\BluetoothAndroid.md
+		..\docs\concepts\BluetoothiOS.md = ..\docs\concepts\BluetoothiOS.md
+		..\docs\concepts\BluetoothUWP.md = ..\docs\concepts\BluetoothUWP.md
+		..\docs\concepts\CustomMessages.md = ..\docs\concepts\CustomMessages.md
+		..\docs\concepts\index.md = ..\docs\concepts\index.md
+		..\docs\concepts\MigrateFromV1.md = ..\docs\concepts\MigrateFromV1.md
+		..\docs\concepts\ntrip.md = ..\docs\concepts\ntrip.md
+		..\docs\concepts\SerialPortNetCore.md = ..\docs\concepts\SerialPortNetCore.md
+		..\docs\concepts\SerialPortNetFX.md = ..\docs\concepts\SerialPortNetFX.md
+		..\docs\concepts\SerialPortUWP.md = ..\docs\concepts\SerialPortUWP.md
+		..\docs\concepts\toc.yml = ..\docs\concepts\toc.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{7CE7906E-983F-415E-93D3-A2531D3EC9A3}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\api\index.md = ..\docs\api\index.md
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{73efb2ef-de40-46c4-9685-745a9815c0d2}*SharedItemsImports = 5
-		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{92cad93b-6c3b-45a0-a723-be046de50fec}*SharedItemsImports = 4
-		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{979ae182-eb59-4181-9d45-3fd6e4817f11}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -116,30 +142,6 @@ Global
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.ActiveCfg = Release|x86
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.Build.0 = Release|x86
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC}.Release|x86.Deploy.0 = Release|x86
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|ARM.Build.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|ARM.Deploy.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x64.Build.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x64.Deploy.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x86.Build.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Debug|x86.Deploy.0 = Debug|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|ARM.ActiveCfg = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|ARM.Build.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|ARM.Deploy.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x64.ActiveCfg = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x64.Build.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x64.Deploy.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x86.ActiveCfg = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x86.Build.0 = Release|Any CPU
-		{48540D33-4349-42D2-9D49-144A7049565A}.Release|x86.Deploy.0 = Release|Any CPU
 		{73EFB2EF-DE40-46C4-9685-745A9815C0D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{73EFB2EF-DE40-46C4-9685-745A9815C0D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73EFB2EF-DE40-46C4-9685-745A9815C0D2}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -172,6 +174,30 @@ Global
 		{6F97C607-42A0-458B-B9E9-CF5AF53CBB1E}.Release|x64.Build.0 = Release|Any CPU
 		{6F97C607-42A0-458B-B9E9-CF5AF53CBB1E}.Release|x86.ActiveCfg = Release|Any CPU
 		{6F97C607-42A0-458B-B9E9-CF5AF53CBB1E}.Release|x86.Build.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|ARM.Build.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|ARM.Deploy.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x86.Build.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|ARM.Build.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|ARM.Deploy.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x64.Build.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x64.Deploy.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x86.Build.0 = Release|Any CPU
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,12 +210,19 @@ Global
 		{1ADC3666-1DDB-48C4-9811-1E58B6D09A7C} = {1701F3BA-A09C-4706-A612-24FD9340FC18}
 		{92CAD93B-6C3B-45A0-A723-BE046DE50FEC} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
 		{979AE182-EB59-4181-9D45-3FD6E4817F11} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
-		{456E7573-3324-43CB-8BA0-8D9C300EEB50} = {A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}
-		{48540D33-4349-42D2-9D49-144A7049565A} = {456E7573-3324-43CB-8BA0-8D9C300EEB50}
 		{73EFB2EF-DE40-46C4-9685-745A9815C0D2} = {28B8E327-C504-4E08-B2CE-09D1CBB8B904}
 		{6F97C607-42A0-458B-B9E9-CF5AF53CBB1E} = {7ABA337E-6748-484E-A0F4-E1715E1C95F1}
+		{09136598-F229-45CD-8AEA-97DC890C3314} = {A4B9D59A-C8C6-4199-A7F3-F3AF0C748281}
+		{9C02F330-0392-41F3-BBC1-D6E389FA9CCC} = {09136598-F229-45CD-8AEA-97DC890C3314}
+		{E6CF1B94-DD5C-4B3A-9D00-164394435CAC} = {8B60BBAA-7CA6-40DF-AD08-06AE7573EF68}
+		{7CE7906E-983F-415E-93D3-A2531D3EC9A3} = {8B60BBAA-7CA6-40DF-AD08-06AE7573EF68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03788B53-C0BF-485B-AA19-A9EAB0E9AF7B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{73efb2ef-de40-46c4-9685-745a9815c0d2}*SharedItemsImports = 5
+		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{92cad93b-6c3b-45a0-a723-be046de50fec}*SharedItemsImports = 4
+		UnitTests\NmeaParser.Tests\NmeaParser.Tests.projitems*{979ae182-eb59-4181-9d45-3fd6e4817f11}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
