@@ -112,7 +112,7 @@ namespace NmeaParser
                 await this.CloseAsync().ConfigureAwait(false);
             }
             catch { }
-            DeviceDisconnected.Invoke(this, ex);
+            DeviceDisconnected?.Invoke(this, ex);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace NmeaParser
         /// <summary>
         /// Raised when a device raises the same error multiple times and can't recover.
         /// </summary>
-        public event EventHandler<Exception> DeviceDisconnected;
+        public event EventHandler<Exception>? DeviceDisconnected;
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
