@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class Gns </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class Gns ">
+    
+    <meta name="description" content="Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="NmeaParser.Messages.Gns">
+
+
+
+  <h1 id="NmeaParser_Messages_Gns" data-uid="NmeaParser.Messages.Gns" class="text-break">Class Gns</h1>
+  <div class="markdown level0 summary"><p>Fixes data for single or combined (GPS, GLONASS, possible future satellite systems, and systems combining these) satellite navigation systems</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="NmeaParser.Messages.NmeaMessage.html">NmeaMessage</a></div>
+    <div class="level2"><span class="xref">Gns</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="NmeaParser.Messages.NmeaMessage.html">NmeaMessage</a>&gt;</div>
+    <div><a class="xref" href="NmeaParser.Messages.ITimestampedMessage.html">ITimestampedMessage</a></div>
+    <div><a class="xref" href="NmeaParser.Messages.IGeographicLocation.html">IGeographicLocation</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.RegisterAssembly.html#NmeaParser_Messages_NmeaMessage_RegisterAssembly_System_Reflection_Assembly_System_Boolean_">NmeaMessage.RegisterAssembly(Assembly, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.RegisterNmeaMessage.html#NmeaParser_Messages_NmeaMessage_RegisterNmeaMessage_System_Reflection_TypeInfo_System_String_System_Boolean_">NmeaMessage.RegisterNmeaMessage(TypeInfo, string, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.Parse.html#NmeaParser_Messages_NmeaMessage_Parse_System_String_NmeaParser_IMultiSentenceMessage_System_Boolean_">NmeaMessage.Parse(string, IMultiSentenceMessage, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.MessageParts.html#NmeaParser_Messages_NmeaMessage_MessageParts">NmeaMessage.MessageParts</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.MessageType.html#NmeaParser_Messages_NmeaMessage_MessageType">NmeaMessage.MessageType</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.TalkerId.html#NmeaParser_Messages_NmeaMessage_TalkerId">NmeaMessage.TalkerId</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.IsProprietary.html#NmeaParser_Messages_NmeaMessage_IsProprietary">NmeaMessage.IsProprietary</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.ToString.html#NmeaParser_Messages_NmeaMessage_ToString">NmeaMessage.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.Checksum.html#NmeaParser_Messages_NmeaMessage_Checksum">NmeaMessage.Checksum</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.Equals.html#NmeaParser_Messages_NmeaMessage_Equals_NmeaParser_Messages_NmeaMessage_">NmeaMessage.Equals(NmeaMessage)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.Messages.NmeaMessage.Timestamp.html#NmeaParser_Messages_NmeaMessage_Timestamp">NmeaMessage.Timestamp</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="NmeaParser.html">NmeaParser</a>.<a class="xref" href="NmeaParser.Messages.html">Messages</a></h6>
+  <h6><strong>Assembly</strong>: NmeaParser.dll</h6>
+  <h5 id="NmeaParser_Messages_Gns_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[NmeaMessageType(&quot;--GNS&quot;)]
+public class Gns : NmeaMessage, IEquatable&lt;NmeaMessage&gt;, ITimestampedMessage, IGeographicLocation</code></pre>
+  </div>
+  <h5 id="NmeaParser_Messages_Gns_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>This sentence provides fix data for GPS, GLONASS, BDS, QZSS, NavIC (IRNSS) and possible future satellite systems, and systems combining these.
+This sentence could be used with the talker identification of <a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_GlobalPositioningSystem">GlobalPositioningSystem</a> for GPS, <a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_GlonassReceiver">GlonassReceiver</a> for GLONASS,
+<a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_GalileoPositioningSystem">GalileoPositioningSystem</a> for Galileo, <a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_BeiDouNavigationSatelliteSystem">BeiDouNavigationSatelliteSystem</a> for BDS, <a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_QuasiZenithSatelliteSystem">QuasiZenithSatelliteSystem</a> for QZSS,
+<a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_IndianRegionalNavigationSatelliteSystem">IndianRegionalNavigationSatelliteSystem</a> for NavIC (IRNSS), and <a class="xref" href="NmeaParser.Talker.html#NmeaParser_Talker_GlobalNavigationSatelliteSystem">GlobalNavigationSatelliteSystem</a> for GNSS combined systems, as well as future identifiers.
+</p>
+<p>
+If a GNSS receiver is capable simultanously of producing a position using combined satellite systems, as well as a position using only one of the satellite systems, then separate GNS sentences
+with different <a class="xref" href="NmeaParser.Messages.NmeaMessage.TalkerId.html#NmeaParser_Messages_NmeaMessage_TalkerId">TalkerId</a> may be used to report the data calculated from the individual systems.
+</p>
+<p>
+If a GNSS receiver is set up to use more than one satellite system, but for some reason one or more of the systems are not available, then it may continue to report the positions
+using <code>GNGNS</code>, and use the <a class="xref" href="NmeaParser.Messages.Gns.GpsModeIndicator.html#NmeaParser_Messages_Gns_GpsModeIndicator">GpsModeIndicator</a> to show which satellit esystems are being used.
+</p>
+</div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Messages_Gns__ctor_System_String_System_String___" data-uid="NmeaParser.Messages.Gns.#ctor(System.String,System.String[])">
+          <a class="xref" href="NmeaParser.Messages.Gns.-ctor.html#NmeaParser_Messages_Gns__ctor_System_String_System_String___">Gns(string, string[])</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="NmeaParser.Messages.Gns.html">Gns</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_BDSModeIndicator" data-uid="NmeaParser.Messages.Gns.BDSModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.BDSModeIndicator.html#NmeaParser_Messages_Gns_BDSModeIndicator">BDSModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for Beidou (BDS)</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_DgpsStationId" data-uid="NmeaParser.Messages.Gns.DgpsStationId">
+          <a class="xref" href="NmeaParser.Messages.Gns.DgpsStationId.html#NmeaParser_Messages_Gns_DgpsStationId">DgpsStationId</a>
+        </td>
+        <td class="markdown level1 summary"><p>eference station ID1, range 0000-4095 - Null if talker ID is GN, additional GNS messages follow with GP and/or GL Reference station ID</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_FixTime" data-uid="NmeaParser.Messages.Gns.FixTime">
+          <a class="xref" href="NmeaParser.Messages.Gns.FixTime.html#NmeaParser_Messages_Gns_FixTime">FixTime</a>
+        </td>
+        <td class="markdown level1 summary"><p>Time of day fix was taken</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_GalileoModeIndicator" data-uid="NmeaParser.Messages.Gns.GalileoModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.GalileoModeIndicator.html#NmeaParser_Messages_Gns_GalileoModeIndicator">GalileoModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for Galileo</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_GeoidalSeparation" data-uid="NmeaParser.Messages.Gns.GeoidalSeparation">
+          <a class="xref" href="NmeaParser.Messages.Gns.GeoidalSeparation.html#NmeaParser_Messages_Gns_GeoidalSeparation">GeoidalSeparation</a>
+        </td>
+        <td class="markdown level1 summary"><p>Geoidal separation in meters - the difference between the earth ellipsoid surface and mean-sea-level (geoid) surface defined by the reference datum used in the position solution<br>
+'-' = mean-sea-level surface below ellipsoid.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_GlonassModeIndicator" data-uid="NmeaParser.Messages.Gns.GlonassModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.GlonassModeIndicator.html#NmeaParser_Messages_Gns_GlonassModeIndicator">GlonassModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for GLONASS</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_GpsModeIndicator" data-uid="NmeaParser.Messages.Gns.GpsModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.GpsModeIndicator.html#NmeaParser_Messages_Gns_GpsModeIndicator">GpsModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for GPS</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_Hdop" data-uid="NmeaParser.Messages.Gns.Hdop">
+          <a class="xref" href="NmeaParser.Messages.Gns.Hdop.html#NmeaParser_Messages_Gns_Hdop">Hdop</a>
+        </td>
+        <td class="markdown level1 summary"><p>Horizontal Dilution of Precision (HDOP), calculated using all the satellites (GPS, GLONASS, and any future satellites) used in computing the solution reported in each GNS sentence.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_Latitude" data-uid="NmeaParser.Messages.Gns.Latitude">
+          <a class="xref" href="NmeaParser.Messages.Gns.Latitude.html#NmeaParser_Messages_Gns_Latitude">Latitude</a>
+        </td>
+        <td class="markdown level1 summary"><p>Latitude</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_Longitude" data-uid="NmeaParser.Messages.Gns.Longitude">
+          <a class="xref" href="NmeaParser.Messages.Gns.Longitude.html#NmeaParser_Messages_Gns_Longitude">Longitude</a>
+        </td>
+        <td class="markdown level1 summary"><p>Longitude</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_ModeIndicators" data-uid="NmeaParser.Messages.Gns.ModeIndicators">
+          <a class="xref" href="NmeaParser.Messages.Gns.ModeIndicators.html#NmeaParser_Messages_Gns_ModeIndicators">ModeIndicators</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for future constallations</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_NavICModeIndicator" data-uid="NmeaParser.Messages.Gns.NavICModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.NavICModeIndicator.html#NmeaParser_Messages_Gns_NavICModeIndicator">NavICModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for NavIC (IRNSS)</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_NumberOfSatellites" data-uid="NmeaParser.Messages.Gns.NumberOfSatellites">
+          <a class="xref" href="NmeaParser.Messages.Gns.NumberOfSatellites.html#NmeaParser_Messages_Gns_NumberOfSatellites">NumberOfSatellites</a>
+        </td>
+        <td class="markdown level1 summary"><p>Number of satellites (SVs) in use</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_OrthometricHeight" data-uid="NmeaParser.Messages.Gns.OrthometricHeight">
+          <a class="xref" href="NmeaParser.Messages.Gns.OrthometricHeight.html#NmeaParser_Messages_Gns_OrthometricHeight">OrthometricHeight</a>
+        </td>
+        <td class="markdown level1 summary"><p>Orthometric height in meters (MSL reference)</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_QZSSModeIndicator" data-uid="NmeaParser.Messages.Gns.QZSSModeIndicator">
+          <a class="xref" href="NmeaParser.Messages.Gns.QZSSModeIndicator.html#NmeaParser_Messages_Gns_QZSSModeIndicator">QZSSModeIndicator</a>
+        </td>
+        <td class="markdown level1 summary"><p>Mode indicator for QZSS</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_Status" data-uid="NmeaParser.Messages.Gns.Status">
+          <a class="xref" href="NmeaParser.Messages.Gns.Status.html#NmeaParser_Messages_Gns_Status">Status</a>
+        </td>
+        <td class="markdown level1 summary"><p>Navigational status</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_Gns_TimeSinceLastDgpsUpdate" data-uid="NmeaParser.Messages.Gns.TimeSinceLastDgpsUpdate">
+          <a class="xref" href="NmeaParser.Messages.Gns.TimeSinceLastDgpsUpdate.html#NmeaParser_Messages_Gns_TimeSinceLastDgpsUpdate">TimeSinceLastDgpsUpdate</a>
+        </td>
+        <td class="markdown level1 summary"><p>Age of differential data - <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan.maxvalue">MaxValue</a> if talker ID is GN, additional GNS messages follow with GP and/or GL Age of differential data</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="appliesTo">Applies</h3>
+
+  <div class="appliesto">
+    <div>
+      <table>
+        <thead><th>Target</th><th>Versions</th></thead>
+          <tbody>
+            <tr><td><b>.NET Standard 2.0</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>.NET</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Windows</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Android</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET iOS</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Framework</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>UWP</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>Xamarin.Android</b></td><td>v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>Xamarin.iOS</b></td><td>v2.2, v2.1, v2.0</td></tr>
+          </tbody>
+        
+      </table>
+    </div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/artifacts/docs/api_overwrites/applies-to-overwrite.md/#L3742" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/src/NmeaParser/Nmea/Gns.cs/#L39" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

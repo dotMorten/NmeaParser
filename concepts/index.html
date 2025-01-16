@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Getting started: </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Getting started: ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="getting-started">Getting started:</h1>
+
+<h3 id="1-install-from-nuget">1. Install from NuGET:</h3>
+<p>You can get the library via <a href="http://www.nuget.org">NuGet</a> if you have the extension installed for Visual Studio or via the PowerShell package manager.  This control is published via NuGet at <a href="https://nuget.org/packages/SharpGIS.NmeaParser">SharpGIS.NmeaParser</a>.</p>
+<table border="4px">
+<tr><td>
+            <code>PM&gt; Install-Package SharpGIS.NmeaParser</code>
+</td></tr></table>
+<h3 id="2-create-a-new-device">2. Create a new device:</h3>
+<pre><code class="lang-cs"> // Create one of the NMEA devices
+ var device = new NmeaFileDevice(&quot;PathToNmeaLogFile.txt&quot;, 1000);
+ // Listen to messages from the device: 
+ device.MessageReceived += device_NmeaMessageReceived;
+ // Open the device and start receiving:
+ device.OpenAsync();
+
+ // Create event handler for receiving messages:
+ private void device_NmeaMessageReceived(object sender, NmeaMessageReceivedEventArgs args)
+ {
+    // called when a message is received
+    if(args.Message is NmeaParser.Messages.Rmc rmc)
+    {
+        Console.WriteLine($&quot;Your current location is: {rmc.Latitude} , {rmc.Longitude}&quot;);
+    }
+ }
+</code></pre>
+<p>See the Platform specific device creation section in the menu for more specifics on device creation.</p>
+<h3 id="3-browse-the-api-reference">3. <a href="../api/index.html">Browse the API Reference</a></h3>
+<h3 id="4-explore-the-object-model-diagrams">4. Explore the Object Model Diagrams</h3>
+<p><a href="../api/omd.html">.NET Standard OMD</a></p>
+<h3 id="5-explore-the-samples-on-github">5. Explore the samples on GitHub:</h3>
+<ul>
+<li><a href="https://github.com/dotMorten/NmeaParser/tree/master/src/SampleApp.WinDesktop">Desktop app</a> (.NET Framework / .NET Core)</li>
+<li><a href="https://github.com/dotMorten/NmeaParser/tree/master/src/SampleApp.UWP">Windows Universal app</a></li>
+<li><a href="https://github.com/dotMorten/NmeaParser/tree/master/src/SampleApp.Droid">Android app</a></li>
+</ul>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/docs/concepts/index.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

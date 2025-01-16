@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class GnssMonitor </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class GnssMonitor ">
+    
+    <meta name="description" content="Helper class for monitoring GNSS messages and combine them into a single useful location info">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="NmeaParser.Gnss.GnssMonitor">
+
+
+
+  <h1 id="NmeaParser_Gnss_GnssMonitor" data-uid="NmeaParser.Gnss.GnssMonitor" class="text-break">Class GnssMonitor</h1>
+  <div class="markdown level0 summary"><p>Helper class for monitoring GNSS messages and combine them into a single useful location info</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">GnssMonitor</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="NmeaParser.html">NmeaParser</a>.<a class="xref" href="NmeaParser.Gnss.html">Gnss</a></h6>
+  <h6><strong>Assembly</strong>: NmeaParser.dll</h6>
+  <h5 id="NmeaParser_Gnss_GnssMonitor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class GnssMonitor : INotifyPropertyChanged</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor__ctor_NmeaParser_NmeaDevice_" data-uid="NmeaParser.Gnss.GnssMonitor.#ctor(NmeaParser.NmeaDevice)">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.-ctor.html#NmeaParser_Gnss_GnssMonitor__ctor_NmeaParser_NmeaDevice_">GnssMonitor(NmeaDevice)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="NmeaParser.Gnss.GnssMonitor.html">GnssMonitor</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_AllMessages" data-uid="NmeaParser.Gnss.GnssMonitor.AllMessages">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.AllMessages.html#NmeaParser_Gnss_GnssMonitor_AllMessages">AllMessages</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of all NMEA messages currently part of this location</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Altitude" data-uid="NmeaParser.Gnss.GnssMonitor.Altitude">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Altitude.html#NmeaParser_Gnss_GnssMonitor_Altitude">Altitude</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the geight above the ellipsoid</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Course" data-uid="NmeaParser.Gnss.GnssMonitor.Course">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Course.html#NmeaParser_Gnss_GnssMonitor_Course">Course</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the current cource</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Datum" data-uid="NmeaParser.Gnss.GnssMonitor.Datum">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Datum.html#NmeaParser_Gnss_GnssMonitor_Datum">Datum</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating the current Datum being used.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Device" data-uid="NmeaParser.Gnss.GnssMonitor.Device">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Device.html#NmeaParser_Gnss_GnssMonitor_Device">Device</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the NMEA device that is being monitored</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Dtm" data-uid="NmeaParser.Gnss.GnssMonitor.Dtm">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Dtm.html#NmeaParser_Gnss_GnssMonitor_Dtm">Dtm</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known DTM message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_FixQuality" data-uid="NmeaParser.Gnss.GnssMonitor.FixQuality">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.FixQuality.html#NmeaParser_Gnss_GnssMonitor_FixQuality">FixQuality</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the quality of the current fix</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_FixTime" data-uid="NmeaParser.Gnss.GnssMonitor.FixTime">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.FixTime.html#NmeaParser_Gnss_GnssMonitor_FixTime">FixTime</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the current fix time</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_GeoidHeight" data-uid="NmeaParser.Gnss.GnssMonitor.GeoidHeight">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.GeoidHeight.html#NmeaParser_Gnss_GnssMonitor_GeoidHeight">GeoidHeight</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the Geoid Height. Add this value to <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Altitude.html#NmeaParser_Gnss_GnssMonitor_Altitude">Altitude</a> to get the Geoid heights which is roughly MSL heights.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Gga" data-uid="NmeaParser.Gnss.GnssMonitor.Gga">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Gga.html#NmeaParser_Gnss_GnssMonitor_Gga">Gga</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known GGA message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Gsa" data-uid="NmeaParser.Gnss.GnssMonitor.Gsa">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Gsa.html#NmeaParser_Gnss_GnssMonitor_Gsa">Gsa</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known GSA message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Gst" data-uid="NmeaParser.Gnss.GnssMonitor.Gst">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Gst.html#NmeaParser_Gnss_GnssMonitor_Gst">Gst</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known GST message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Hdop" data-uid="NmeaParser.Gnss.GnssMonitor.Hdop">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Hdop.html#NmeaParser_Gnss_GnssMonitor_Hdop">Hdop</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the horizontal dilution of precision</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_HorizontalError" data-uid="NmeaParser.Gnss.GnssMonitor.HorizontalError">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.HorizontalError.html#NmeaParser_Gnss_GnssMonitor_HorizontalError">HorizontalError</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets an estimate of the horizontal error in meters</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_IsFixValid" data-uid="NmeaParser.Gnss.GnssMonitor.IsFixValid">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.IsFixValid.html#NmeaParser_Gnss_GnssMonitor_IsFixValid">IsFixValid</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether the current fix is valid.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Latitude" data-uid="NmeaParser.Gnss.GnssMonitor.Latitude">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Latitude.html#NmeaParser_Gnss_GnssMonitor_Latitude">Latitude</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latitude for the current or last known location.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Longitude" data-uid="NmeaParser.Gnss.GnssMonitor.Longitude">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Longitude.html#NmeaParser_Gnss_GnssMonitor_Longitude">Longitude</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the longitude for the current or last known location.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Pdop" data-uid="NmeaParser.Gnss.GnssMonitor.Pdop">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Pdop.html#NmeaParser_Gnss_GnssMonitor_Pdop">Pdop</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the 3D point dilution of precision</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Rmc" data-uid="NmeaParser.Gnss.GnssMonitor.Rmc">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Rmc.html#NmeaParser_Gnss_GnssMonitor_Rmc">Rmc</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known RMC message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Satellites" data-uid="NmeaParser.Gnss.GnssMonitor.Satellites">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Satellites.html#NmeaParser_Gnss_GnssMonitor_Satellites">Satellites</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of satellite vehicles in the sky</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_SatellitesInView" data-uid="NmeaParser.Gnss.GnssMonitor.SatellitesInView">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.SatellitesInView.html#NmeaParser_Gnss_GnssMonitor_SatellitesInView">SatellitesInView</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the number of satellites in the sky</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Speed" data-uid="NmeaParser.Gnss.GnssMonitor.Speed">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Speed.html#NmeaParser_Gnss_GnssMonitor_Speed">Speed</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the speed in knots</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_SynchronizationContext" data-uid="NmeaParser.Gnss.GnssMonitor.SynchronizationContext">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.SynchronizationContext.html#NmeaParser_Gnss_GnssMonitor_SynchronizationContext">SynchronizationContext</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets or sets the syncronization context that <a class="xref" href="NmeaParser.Gnss.GnssMonitor.PropertyChanged.html">PropertyChanged</a> should be fired on</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Vdop" data-uid="NmeaParser.Gnss.GnssMonitor.Vdop">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Vdop.html#NmeaParser_Gnss_GnssMonitor_Vdop">Vdop</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the vertical dilution of precision</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_VerticalError" data-uid="NmeaParser.Gnss.GnssMonitor.VerticalError">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.VerticalError.html#NmeaParser_Gnss_GnssMonitor_VerticalError">VerticalError</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets an estimate of the vertical error in meters</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_Vtg" data-uid="NmeaParser.Gnss.GnssMonitor.Vtg">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.Vtg.html#NmeaParser_Gnss_GnssMonitor_Vtg">Vtg</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the latest known VTG message.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_OnMessageReceived_NmeaParser_Messages_NmeaMessage_" data-uid="NmeaParser.Gnss.GnssMonitor.OnMessageReceived(NmeaParser.Messages.NmeaMessage)">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.OnMessageReceived.html#NmeaParser_Gnss_GnssMonitor_OnMessageReceived_NmeaParser_Messages_NmeaMessage_">OnMessageReceived(NmeaMessage)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Called when a message is received.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_LocationChanged" data-uid="NmeaParser.Gnss.GnssMonitor.LocationChanged">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.LocationChanged.html">LocationChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Raised when a new location has been updated</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_LocationLost" data-uid="NmeaParser.Gnss.GnssMonitor.LocationLost">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.LocationLost.html">LocationLost</a>
+        </td>
+        <td class="markdown level1 summary"><p>Raised if location tracking was lost</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Gnss_GnssMonitor_PropertyChanged" data-uid="NmeaParser.Gnss.GnssMonitor.PropertyChanged">
+          <a class="xref" href="NmeaParser.Gnss.GnssMonitor.PropertyChanged.html">PropertyChanged</a>
+        </td>
+        <td class="markdown level1 summary"><p>Occurs when a property value changes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="appliesTo">Applies</h3>
+
+  <div class="appliesto">
+    <div>
+      <table>
+        <thead><th>Target</th><th>Versions</th></thead>
+          <tbody>
+            <tr><td><b>.NET Standard 2.0</b></td><td>main, v3.0, v2.2, v2.1</td></tr>
+            <tr><td><b>.NET</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Windows</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Android</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET iOS</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Framework</b></td><td>main, v3.0, v2.2, v2.1</td></tr>
+            <tr><td><b>UWP</b></td><td>main, v3.0, v2.2, v2.1</td></tr>
+            <tr><td><b>Xamarin.Android</b></td><td>v2.2, v2.1</td></tr>
+            <tr><td><b>Xamarin.iOS</b></td><td>v2.2, v2.1</td></tr>
+          </tbody>
+        
+      </table>
+    </div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/artifacts/docs/api_overwrites/applies-to-overwrite.md/#L332" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/src/NmeaParser/Gnss/GnssMonitor.cs/#L27" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

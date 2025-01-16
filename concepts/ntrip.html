@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Using NTRIP for DGPS </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Using NTRIP for DGPS ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="using-ntrip-for-dgps">Using NTRIP for DGPS</h1>
+
+<p>You can use data from a nearby NTRIP server to improve the accuracy if your GPS position, if your device supports it.
+The Serial and Bluetooth devices supports writing to them, so you merely need to stream the data from the NTRIP server directly to your device.</p>
+<p>We'll first create a simple NTRIP client library:</p>
+<pre><code class="lang-cs">using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+
+namespace Ntrip
+{
+    public abstract class NtripSource
+    {
+    }
+
+    public class Caster : NtripSource
+    {
+        public IPAddress Address { get; set; }
+        public int Port { get; set; }
+        public string Identifier { get; set; }
+        public string Operator { get; set; }
+        public bool SupportsNmea { get; set; }
+        public string CountryCode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public IPAddress FallbackAddress { get; set; }
+    }
+
+    public class NtripStream : NtripSource
+    {
+        public string Mountpoint { get; set; }
+        public string Identifier { get; set; }
+        public string Format { get; set; }
+        public string FormatDetails { get; set; }
+        public Carrier Carrier { get; set; }
+        public string Network { get; set; }
+        public string CountryCode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public bool SupportsNmea { get; set; }
+    }
+
+    public enum Carrier : int
+    {
+        No = 0,
+        L1 = 1,
+        L1L2 = 2
+    }
+
+    public class Client : IDisposable
+    {
+        private readonly string _host;
+        private readonly int _port;
+        private string _auth;
+        private Socket sckt;
+        public Client(string host, int port)
+        {
+            _host = host;
+            _port = port;
+        }
+        public Client(string host, int port, string username, string password) : this(host, port)
+        {
+            _auth = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(username + &quot;:&quot; + password));
+        }
+        public IEnumerable&lt;NtripSource&gt; GetSourceTable()
+        {
+            string data = &quot;&quot;;
+            byte[] buffer = new byte[1024];
+            using (var sck = Request(&quot;&quot;))
+            {
+                int count;
+                while ((count = sck.Receive(buffer)) &gt; 0)
+                {
+                    data += System.Text.Encoding.UTF8.GetString(buffer, 0, count);
+                }
+            }
+            var lines = data.Split('\n');
+            List&lt;NtripSource&gt; sources = new List&lt;NtripSource&gt;();
+            foreach (var item in lines)
+            {
+                var d = item.Split(';');
+                if (d.Length == 0) continue;
+                if (d[0] == &quot;ENDSOURCETABLE&quot;)
+                    break;
+                if (d[0] == &quot;CAS&quot;)
+                {
+                    var c = new Caster();
+                    var a = d[1].Split(':');
+                    c.Address = IPAddress.Parse(a[0]);
+                    c.Port = int.Parse(a[1]);
+                    c.Identifier = d[3];
+                    c.Operator = d[4];
+                    c.SupportsNmea = d[5] == &quot;1&quot;;
+                    c.CountryCode = d[6];
+                    c.Latitude = double.Parse(d[7], CultureInfo.InvariantCulture);
+                    c.Longitude = double.Parse(d[8], CultureInfo.InvariantCulture);
+                    c.FallbackAddress = IPAddress.Parse(d[9]);
+                    sources.Add(c);
+                }
+                else if (d[0] == &quot;STR&quot;)
+                {
+                    var str = new NtripStream();
+                    str.Mountpoint = d[1];
+                    str.Identifier = d[2];
+                    str.Format = d[3];
+                    str.FormatDetails = d[4];
+                    str.Carrier = (Carrier)int.Parse(d[5]);
+                    str.Network = d[7];
+                    str.CountryCode = d[8];
+                    str.Latitude = double.Parse(d[9], CultureInfo.InvariantCulture);
+                    str.Longitude = double.Parse(d[10], CultureInfo.InvariantCulture);
+                    str.SupportsNmea = d[11] == &quot;1&quot;;
+                    sources.Add(str);
+                }
+            }
+            return sources;
+        }
+
+        private Socket Request(string path)
+        {
+            var sckt = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            sckt.Blocking = true;
+            sckt.Connect(_host, _port);
+
+            string msg = $&quot;GET /{path} HTTP/1.1\r\n&quot;;
+            msg += &quot;User-Agent: NTRIP ntripclient\r\n&quot;;
+            if (_auth != null)
+            {
+                msg += &quot;Authorization: Basic &quot; + _auth + &quot;\r\n&quot;;
+            }
+            msg += &quot;Accept: */*\r\nConnection: close\r\n&quot;;
+            msg += &quot;\r\n&quot;;
+
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(msg);
+            sckt.Send(data);
+            return sckt;
+        }
+
+        public void Connect(string strName)
+        {
+            if (sckt != null) throw new Exception(&quot;Connection already open&quot;);
+            sckt = Request(strName);
+            connected = true;
+            runningTask = Task.Run(ReceiveThread);
+        }
+
+        private bool connected;
+        private Task runningTask;
+        private async Task ReceiveThread()
+        {
+            byte[] buffer = new byte[65536];
+
+            while (connected)
+            {
+                int count = sckt.Receive(buffer);
+                if(count &gt; 0)
+                {
+                    DataReceived?.Invoke(this, buffer.Take(count).ToArray());
+                }
+                await Task.Delay(10);
+            }
+            sckt.Shutdown(SocketShutdown.Both);
+            sckt.Close();
+            sckt = null;
+        }
+
+        public Task CloseAsync()
+        {
+            if (runningTask != null)
+            {
+                connected = false;
+                var t = runningTask;
+                runningTask = null;
+                return t;
+            }
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _ = CloseAsync();
+        }
+
+        public event EventHandler&lt;byte[]&gt; DataReceived;
+    }
+}
+</code></pre>
+<p>You can next connect to your NTRIP server, pick a stream and start streaming it to your device.</p>
+<p>Example:</p>
+<pre><code class="lang-cs">string hostname = &quot;esricaster.esri.com&quot;; // Replace with a server near you
+int port = 2101; //Port for the ntrip server
+var client = new Ntrip.Client(hostname, port);
+// Get the source table from the server:
+var table = client.GetSourceTable();
+// Just pick the first Ntrip datastream:
+var str = table.OfType&lt;NtripStream&gt;().First();
+// Listen for data, and simply forward it to the NMEA device:
+client.DataReceived += (sender, ntripData) =&gt; {
+   nmeaDevice.WriteAsync(ntripData, 0, ntripData.Length);   
+};
+// Connect to the stream
+client.Connect(str.Mountpoint);
+</code></pre>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/docs/concepts/ntrip.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

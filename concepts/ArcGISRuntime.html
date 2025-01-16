@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Creating a location provider for ArcGIS Runtime SDK </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Creating a location provider for ArcGIS Runtime SDK ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="creating-a-location-provider-for-arcgis-runtime-sdk">Creating a location provider for ArcGIS Runtime SDK</h1>
+
+<p>Below is an implementation for use with the <a href="http://developers.arcgis.com/net">ArcGIS Runtime SDK for .NET</a>. Use this location provider on the MapView's LocationDisplay to send it location data from your NMEA device to display your current location on a map.</p>
+<p>Below is an example implementation of this.
+You can also check out the Desktop Sample app in the <a href="https://github.com/dotMorten/NmeaParser/blob/main/src/SampleApp.WinDesktop/NmeaProvider.cs">Github Repo</a> which uses this to display a map.</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="lang-csharp">NmeaParser.NmeaDevice device = new NmeaParser.NmeaFileDevice(&quot;NmeaSampleData.txt&quot;);
+mapView.LocationDisplay.DataSource = new NmeaLocationProvider(device);
+mapView.LocationDisplay.InitialZoomScale = 20000;
+mapView.LocationDisplay.IsEnabled = true;
+</code></pre>
+<p><strong>NmeaLocationProvider.cs</strong></p>
+<pre><code class="lang-csharp">using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
+using NmeaParser;
+
+namespace NmeaParser.ArcGIS
+{
+    public class NmeaLocationProvider : LocationDataSource
+    {
+        private readonly NmeaParser.NmeaDevice device;
+
+        public NmeaLocationProvider(NmeaParser.NmeaDevice device)
+        {
+            this.device = device;
+            device.MessageReceived += NmeaMessageReceived;
+        }
+
+        private void NmeaMessageReceived(object sender, NmeaMessageReceivedEventArgs e)
+        {
+            var message = e.Message;
+            if (message is NmeaParser.Messages.Rmc rmc &amp;&amp; rmc.Active)
+            {
+                base.UpdateLocation(new Location(
+                    new MapPoint(rmc.Longitude, rmc.Latitude, SpatialReferences.Wgs84),
+                    horizontalAccuracy: double.NaN,
+                    velocity: double.IsNaN(rmc.Speed) ? 0 : rmc.Speed,
+                    course: double.IsNaN(rmc.Course) ? 0 : rmc.Course, // Current ArcGIS Runtime limitation that course can't be NaN
+                    isLastKnown: false));
+            }
+        }
+        protected override Task OnStartAsync() =&gt; device.OpenAsync();
+
+        protected override Task OnStopAsync() =&gt; device.CloseAsync();
+    }
+}
+
+</code></pre>
+<h3 id="combining-multiple-nmea-messages-into-a-single-location-event">Combining multiple NMEA messages into a single location event</h3>
+<p>NMEA often happens in a burst of messages, which could be combined to one larger location object with more information available, as well as containing information from multiple different satellite systems.
+By using the <code>GnssMonitor</code> class that aggregates these messages, we can create a much more robust location provider:</p>
+<pre><code>using System;
+using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
+using NmeaParser.Gnss;
+
+namespace NmeaParser.ArcGIS
+{
+   public class NmeaLocationDataSource : Esri.ArcGISRuntime.Location.LocationDataSource
+    {
+        private static SpatialReference wgs84_ellipsoidHeight = SpatialReference.Create(4326, 115700);
+        private readonly GnssMonitor m_gnssMonitor;
+        private readonly bool m_startStopDevice;
+        private double lastCourse = 0; // Course can fallback to NaN, but ArcGIS Datasource don't allow NaN course, so we cache last known as a fallback
+
+        /// &lt;summary&gt;
+        /// Initializes a new instance of the &lt;see cref=&quot;NmeaLocationDataSource&quot;/&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;device&quot;&gt;The NMEA device to monitor&lt;/param&gt;
+        /// &lt;param name=&quot;startStopDevice&quot;&gt;Whether starting this datasource also controls the underlying NMEA device&lt;/param&gt;
+        public NmeaLocationDataSource(NmeaParser.NmeaDevice device, bool startStopDevice = true) : this(new GnssMonitor(device), startStopDevice)
+        {
+        }
+
+        /// &lt;summary&gt;
+        /// Initializes a new instance of the &lt;see cref=&quot;NmeaLocationDataSource&quot;/&gt; class.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;monitor&quot;&gt;The NMEA device to monitor&lt;/param&gt;
+        /// &lt;param name=&quot;startStopDevice&quot;&gt;Whether starting this datasource also controls the underlying NMEA device&lt;/param&gt;
+        public NmeaLocationDataSource(NmeaParser.Gnss.GnssMonitor monitor, bool startStopDevice = true)
+        {
+            if (monitor == null)
+                throw new ArgumentNullException(nameof(monitor));
+            this.m_gnssMonitor = monitor;
+            m_startStopDevice = startStopDevice;
+        }
+
+        protected async override Task OnStartAsync()
+        {
+            m_gnssMonitor.LocationChanged += OnLocationChanged;
+            m_gnssMonitor.LocationLost += OnLocationChanged;
+            if (m_startStopDevice &amp;&amp; !this.m_gnssMonitor.Device.IsOpen)
+                await this.m_gnssMonitor.Device.OpenAsync();
+
+            if (m_gnssMonitor.IsFixValid)
+                OnLocationChanged(this, EventArgs.Empty);
+        }
+
+        protected override Task OnStopAsync()
+        {
+            m_gnssMonitor.LocationChanged -= OnLocationChanged;
+            m_gnssMonitor.LocationLost -= OnLocationChanged;
+            if(m_startStopDevice)
+                return m_gnssMonitor.Device.CloseAsync();
+            else
+                return Task.CompletedTask;
+        }
+
+        private Esri.ArcGISRuntime.Location.Location currentLocation;
+
+        private void OnLocationChanged(object sender, EventArgs e)
+        {
+            if (double.IsNaN(m_gnssMonitor.Longitude) || double.IsNaN(m_gnssMonitor.Latitude)) return;
+            if (!double.IsNaN(m_gnssMonitor.Course))
+                lastCourse = m_gnssMonitor.Course;
+            DateTimeOffset? timestamp = null;
+            if(m_gnssMonitor.FixTime.HasValue)
+                timestamp = new DateTimeOffset(DateTime.UtcNow.Date.Add(m_gnssMonitor.FixTime.Value));
+            var location = new Esri.ArcGISRuntime.Location.Location(
+                timestamp: timestamp,
+                position: !double.IsNaN(m_gnssMonitor.Altitude) ? new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, m_gnssMonitor.Altitude, wgs84_ellipsoidHeight) : new MapPoint(m_gnssMonitor.Longitude, m_gnssMonitor.Latitude, SpatialReferences.Wgs84),
+                horizontalAccuracy: m_gnssMonitor.HorizontalError,
+                verticalAccuracy: m_gnssMonitor.VerticalError,
+                velocity: double.IsNaN(m_gnssMonitor.Speed) ? 0 : m_gnssMonitor.Speed * 0.51444444,
+                course: lastCourse,
+                !m_gnssMonitor.IsFixValid);
+            // Avoid raising additional location events if nothing changed
+            if (currentLocation == null ||
+                currentLocation.Position.X != location.Position.X ||
+                currentLocation.Position.Y != location.Position.Y ||
+                currentLocation.Position.Z != location.Position.Z ||
+                currentLocation.Course != location.Course ||
+                currentLocation.Velocity != location.Velocity ||
+                currentLocation.HorizontalAccuracy != location.HorizontalAccuracy ||
+                currentLocation.VerticalAccuracy != location.VerticalAccuracy ||
+                currentLocation.IsLastKnown != location.IsLastKnown ||
+                timestamp != location.Timestamp)
+            {                
+                currentLocation = location;
+                UpdateLocation(currentLocation);
+            }
+        }
+    }
+}
+</code></pre>
+<p><img src="https://user-images.githubusercontent.com/1378165/73328707-95990e80-420f-11ea-85a7-43149e29bd21.png" alt="Screenshot"></p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/docs/concepts/ArcGISRuntime.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

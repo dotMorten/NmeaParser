@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class NmeaMessage </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class NmeaMessage ">
+    
+    <meta name="description" content="NMEA Message base class.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="NmeaParser.Messages.NmeaMessage">
+
+
+
+  <h1 id="NmeaParser_Messages_NmeaMessage" data-uid="NmeaParser.Messages.NmeaMessage" class="text-break">Class NmeaMessage</h1>
+  <div class="markdown level0 summary"><p>NMEA Message base class.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">NmeaMessage</span></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Bod.html">Bod</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Bod.html">Bod</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Bod.html">Bod</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Dtm.html">Dtm</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Dtm.html">Dtm</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Dtm.html">Dtm</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrme.html">Pgrme</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrme.html">Pgrme</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrme.html">Pgrme</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrmz.html">Pgrmz</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrmz.html">Pgrmz</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Garmin.Pgrmz.html">Pgrmz</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gbs.html">Gbs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gbs.html">Gbs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gbs.html">Gbs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gga.html">Gga</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gga.html">Gga</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gga.html">Gga</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gll.html">Gll</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gll.html">Gll</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gll.html">Gll</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gns.html">Gns</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gns.html">Gns</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gns.html">Gns</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Grs.html">Grs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Grs.html">Grs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Grs.html">Grs</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gsa.html">Gsa</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gsa.html">Gsa</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gsa.html">Gsa</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gst.html">Gst</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gst.html">Gst</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Gst.html">Gst</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.LaserRangeMessage.html">LaserRangeMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.LaserRangeMessage.html">LaserRangeMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.LaserRangeMessage.html">LaserRangeMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.NmeaMultiSentenceMessage.html">NmeaMultiSentenceMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.NmeaMultiSentenceMessage.html">NmeaMultiSentenceMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.NmeaMultiSentenceMessage.html">NmeaMultiSentenceMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rma.html">Rma</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rma.html">Rma</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rma.html">Rma</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmb.html">Rmb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmb.html">Rmb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmb.html">Rmb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmc.html">Rmc</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmc.html">Rmc</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Rmc.html">Rmc</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Trimble.Ptnlb.html">Ptnlb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Trimble.Ptnlb.html">Ptnlb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Trimble.Ptnlb.html">Ptnlb</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.UnknownMessage.html">UnknownMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.UnknownMessage.html">UnknownMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.UnknownMessage.html">UnknownMessage</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vlw.html">Vlw</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vlw.html">Vlw</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vlw.html">Vlw</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vtg.html">Vtg</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vtg.html">Vtg</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Vtg.html">Vtg</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Zda.html">Zda</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Zda.html">Zda</a></div>
+      <div class="level2"><a class="xref" href="NmeaParser.Messages.Zda.html">Zda</a></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="NmeaParser.Messages.NmeaMessage.html">NmeaMessage</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="NmeaParser.html">NmeaParser</a>.<a class="xref" href="NmeaParser.Messages.html">Messages</a></h6>
+  <h6><strong>Assembly</strong>: NmeaParser.dll</h6>
+  <h5 id="NmeaParser_Messages_NmeaMessage_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class NmeaMessage : IEquatable&lt;NmeaMessage&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage__ctor_System_String_System_String___" data-uid="NmeaParser.Messages.NmeaMessage.#ctor(System.String,System.String[])">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.-ctor.html#NmeaParser_Messages_NmeaMessage__ctor_System_String_System_String___">NmeaMessage(string, string[])</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes an instance of the NMEA message</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_Checksum" data-uid="NmeaParser.Messages.NmeaMessage.Checksum">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.Checksum.html#NmeaParser_Messages_NmeaMessage_Checksum">Checksum</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the checksum value of the message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_IsProprietary" data-uid="NmeaParser.Messages.NmeaMessage.IsProprietary">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.IsProprietary.html#NmeaParser_Messages_NmeaMessage_IsProprietary">IsProprietary</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether this message type is proprietary</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_MessageParts" data-uid="NmeaParser.Messages.NmeaMessage.MessageParts">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.MessageParts.html#NmeaParser_Messages_NmeaMessage_MessageParts">MessageParts</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the NMEA message parts.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_MessageType" data-uid="NmeaParser.Messages.NmeaMessage.MessageType">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.MessageType.html#NmeaParser_Messages_NmeaMessage_MessageType">MessageType</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the NMEA type id for the message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_TalkerId" data-uid="NmeaParser.Messages.NmeaMessage.TalkerId">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.TalkerId.html#NmeaParser_Messages_NmeaMessage_TalkerId">TalkerId</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the talker ID for this message (</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_Timestamp" data-uid="NmeaParser.Messages.NmeaMessage.Timestamp">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.Timestamp.html#NmeaParser_Messages_NmeaMessage_Timestamp">Timestamp</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a relative timestamp in milliseconds indicating the time the message was created.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_Equals_NmeaParser_Messages_NmeaMessage_" data-uid="NmeaParser.Messages.NmeaMessage.Equals(NmeaParser.Messages.NmeaMessage)">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.Equals.html#NmeaParser_Messages_NmeaMessage_Equals_NmeaParser_Messages_NmeaMessage_">Equals(NmeaMessage?)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Indicates whether the current object is equal to another object of the same type.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_Parse_System_String_NmeaParser_IMultiSentenceMessage_System_Boolean_" data-uid="NmeaParser.Messages.NmeaMessage.Parse(System.String,NmeaParser.IMultiSentenceMessage,System.Boolean)">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.Parse.html#NmeaParser_Messages_NmeaMessage_Parse_System_String_NmeaParser_IMultiSentenceMessage_System_Boolean_">Parse(string, IMultiSentenceMessage?, bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Parses the specified NMEA message.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_RegisterAssembly_System_Reflection_Assembly_System_Boolean_" data-uid="NmeaParser.Messages.NmeaMessage.RegisterAssembly(System.Reflection.Assembly,System.Boolean)">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.RegisterAssembly.html#NmeaParser_Messages_NmeaMessage_RegisterAssembly_System_Reflection_Assembly_System_Boolean_">RegisterAssembly(Assembly, bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Registers messages from a different assembly</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_RegisterNmeaMessage_System_Reflection_TypeInfo_System_String_System_Boolean_" data-uid="NmeaParser.Messages.NmeaMessage.RegisterNmeaMessage(System.Reflection.TypeInfo,System.String,System.Boolean)">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.RegisterNmeaMessage.html#NmeaParser_Messages_NmeaMessage_RegisterNmeaMessage_System_Reflection_TypeInfo_System_String_System_Boolean_">RegisterNmeaMessage(TypeInfo, string, bool)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Registers a specific NMEA Message type</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_Messages_NmeaMessage_ToString" data-uid="NmeaParser.Messages.NmeaMessage.ToString">
+          <a class="xref" href="NmeaParser.Messages.NmeaMessage.ToString.html#NmeaParser_Messages_NmeaMessage_ToString">ToString()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Returns the original NMEA string that represents this message.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="appliesTo">Applies</h3>
+
+  <div class="appliesto">
+    <div>
+      <table>
+        <thead><th>Target</th><th>Versions</th></thead>
+          <tbody>
+            <tr><td><b>.NET Standard 2.0</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>.NET</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Windows</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Android</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET iOS</b></td><td>main, v3.0</td></tr>
+            <tr><td><b>.NET Framework</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>UWP</b></td><td>main, v3.0, v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>Xamarin.Android</b></td><td>v2.2, v2.1, v2.0</td></tr>
+            <tr><td><b>Xamarin.iOS</b></td><td>v2.2, v2.1, v2.0</td></tr>
+          </tbody>
+        
+      </table>
+    </div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/artifacts/docs/api_overwrites/applies-to-overwrite.md/#L5832" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/src/NmeaParser/Nmea/NmeaMessage.cs/#L55" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

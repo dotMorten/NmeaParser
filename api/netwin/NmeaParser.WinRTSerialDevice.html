@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class WinRTSerialDevice </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class WinRTSerialDevice ">
+    
+    <meta name="description" content="A Serial Port NMEA device using Windows&#39; WinRT APIs.">
+      <link rel="shortcut icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../../styles/docfx.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta property="docfx:navrel" content="../../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="NmeaParser.WinRTSerialDevice">
+
+
+
+  <h1 id="NmeaParser_WinRTSerialDevice" data-uid="NmeaParser.WinRTSerialDevice" class="text-break">Class WinRTSerialDevice</h1>
+  <div class="markdown level0 summary"><p>A Serial Port NMEA device using Windows' WinRT APIs.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="NmeaParser.NmeaDevice.html">NmeaDevice</a></div>
+    <div class="level2"><span class="xref">WinRTSerialDevice</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.OpenAsync.html#NmeaParser_NmeaDevice_OpenAsync">NmeaDevice.OpenAsync()</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.ReadAsync.html#NmeaParser_NmeaDevice_ReadAsync_System_Byte___System_Int32_System_Int32_System_Threading_CancellationToken_">NmeaDevice.ReadAsync(byte[], int, int, CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.CloseAsync.html#NmeaParser_NmeaDevice_CloseAsync">NmeaDevice.CloseAsync()</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.MessageReceived.html">NmeaDevice.MessageReceived</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.DeviceDisconnected.html">NmeaDevice.DeviceDisconnected</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.Dispose.html#NmeaParser_NmeaDevice_Dispose">NmeaDevice.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.Dispose.html#NmeaParser_NmeaDevice_Dispose_System_Boolean_">NmeaDevice.Dispose(bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="NmeaParser.NmeaDevice.IsOpen.html#NmeaParser_NmeaDevice_IsOpen">NmeaDevice.IsOpen</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="NmeaParser.html">NmeaParser</a></h6>
+  <h6><strong>Assembly</strong>: NmeaParser.dll</h6>
+  <h5 id="NmeaParser_WinRTSerialDevice_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class WinRTSerialDevice : NmeaDevice, IDisposable</code></pre>
+  </div>
+  <h5 id="NmeaParser_WinRTSerialDevice_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>
+To use the NMEA Parser against a serial device in a Windows 10 Universal app, ensure the serial device capability is enabled by opening package.appxmanifest in a text editor, and add the following to the <code>&lt;Capabilities&gt;</code> section:
+</p>
+<pre><code class="lang-csharp">&lt;DeviceCapability Name="serialcommunication"&gt; 
+  &lt;Device Id="any"&gt;
+    &lt;Function Type="name:serialPort" /&gt; 
+  &lt;/Device&gt; 
+&lt;/DeviceCapability&gt;</code></pre>
+<pre><code class="lang-csharp">var selector = SerialDevice.GetDeviceSelector("COM3"); //Get the serial port on port '3'
+var devices = await DeviceInformation.FindAllAsync(selector);
+if(devices.Any()) //if the device is found
+{
+	var deviceInfo = devices.First();
+    var serialDevice = await SerialDevice.FromIdAsync(deviceInfo.Id);
+    //Set up serial device according to device specifications:
+    //This might differ from device to device
+    serialDevice.BaudRate = 4800;
+	serialDevice.DataBits = 8;
+	serialDevice.Parity = SerialParity.None;
+	var device = new NmeaParser.SerialPortDevice(serialDevice);
+    device.MessageReceived += device_NmeaMessageReceived;
+}
+...
+private void device_NmeaMessageReceived(NmeaParser.NmeaDevice sender, NmeaMessageReceivedEventArgs args)
+{
+    // called when a message is received
+}</code></pre>
+</div>
+  <h3 id="constructors">Constructors
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice__ctor_Windows_Devices_SerialCommunication_SerialDevice_" data-uid="NmeaParser.WinRTSerialDevice.#ctor(Windows.Devices.SerialCommunication.SerialDevice)">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.-ctor.html#NmeaParser_WinRTSerialDevice__ctor_Windows_Devices_SerialCommunication_SerialDevice_">WinRTSerialDevice(SerialDevice)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="NmeaParser.SerialPortDevice.html">SerialPortDevice</a> class.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_CanWrite" data-uid="NmeaParser.WinRTSerialDevice.CanWrite">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.CanWrite.html#NmeaParser_WinRTSerialDevice_CanWrite">CanWrite</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a value indicating whether this device supports writing</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_SerialDevice" data-uid="NmeaParser.WinRTSerialDevice.SerialDevice">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.SerialDevice.html#NmeaParser_WinRTSerialDevice_SerialDevice">SerialDevice</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets the active serial port.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_CloseStreamAsync_System_IO_Stream_" data-uid="NmeaParser.WinRTSerialDevice.CloseStreamAsync(System.IO.Stream)">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.CloseStreamAsync.html#NmeaParser_WinRTSerialDevice_CloseStreamAsync_System_IO_Stream_">CloseStreamAsync(Stream)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Closes the stream the NmeaDevice is working on top off.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_GetSerialDevicesAsync" data-uid="NmeaParser.WinRTSerialDevice.GetSerialDevicesAsync">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.GetSerialDevicesAsync.html#NmeaParser_WinRTSerialDevice_GetSerialDevicesAsync">GetSerialDevicesAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Gets a list of serial devices available.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_OpenStreamAsync" data-uid="NmeaParser.WinRTSerialDevice.OpenStreamAsync">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.OpenStreamAsync.html#NmeaParser_WinRTSerialDevice_OpenStreamAsync">OpenStreamAsync()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Creates and opens the stream the NmeaDevice is working on top off.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_Write_System_Byte___System_Int32_System_Int32_" data-uid="NmeaParser.WinRTSerialDevice.Write(System.Byte[],System.Int32,System.Int32)">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.Write.html#NmeaParser_WinRTSerialDevice_Write_System_Byte___System_Int32_System_Int32_">Write(byte[], int, int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Writes data to the serial port (useful for RTCM/dGPS scenarios)</p>
+</td>
+      </tr>
+      <tr>
+        <td id="NmeaParser_WinRTSerialDevice_WriteAsync_System_Byte___System_Int32_System_Int32_" data-uid="NmeaParser.WinRTSerialDevice.WriteAsync(System.Byte[],System.Int32,System.Int32)">
+          <a class="xref" href="NmeaParser.WinRTSerialDevice.WriteAsync.html#NmeaParser_WinRTSerialDevice_WriteAsync_System_Byte___System_Int32_System_Int32_">WriteAsync(byte[], int, int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Writes to the device stream. Useful for transmitting RTCM corrections to the device
+Check the <a class="xref" href="NmeaParser.NmeaDevice.CanWrite.html#NmeaParser_NmeaDevice_CanWrite">CanWrite</a> property before calling this method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="appliesTo">Applies</h3>
+
+  <div class="appliesto">
+    <div>
+      <table>
+        <thead><th>Target</th><th>Versions</th></thead>
+          <tbody>
+            <tr><td><b>.NET Windows</b></td><td>main</td></tr>
+            <tr><td><b>UWP</b></td><td>main</td></tr>
+          </tbody>
+        
+      </table>
+    </div>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/artifacts/docs/api_overwrites/applies-to-overwrite.md/#L11236" class="contribution-link">Edit this page</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/dotMorten/NmeaParser/blob/main/src/NmeaParser/WinRTSerialDevice.cs/#L64" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
