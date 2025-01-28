@@ -297,6 +297,17 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestHEHDT()
+        {
+            const string input = "$HEHDT,13.37,T*29";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Hdt));
+            Hdt hdt = (Hdt)msg;
+            Assert.AreEqual(13.37, hdt.HeadingInDeg);
+            Assert.IsTrue(hdt.HeadingRelToTrueNorth);
+        }
+
+        [TestMethod]
         public void TestPtlna()
         {
             string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
