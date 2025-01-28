@@ -125,6 +125,18 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestDPT()
+        {
+            string input = "$--DPT,149.5,000.5,1000.0*7F";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Dpt));
+            Dpt dpt = (Dpt)msg;
+            Assert.AreEqual(149.5, dpt.DepthMeters);
+            Assert.AreEqual(0.5, dpt.DepthOffsetMeters);
+            Assert.AreEqual(1000, dpt.MaxDepthRangeMeters);
+        }
+
+        [TestMethod]
         public void TestGprma()
         {
             string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*38";
