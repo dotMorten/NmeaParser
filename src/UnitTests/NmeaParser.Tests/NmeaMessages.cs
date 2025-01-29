@@ -338,6 +338,23 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestPtnlGgk()
+        {
+            string input = "$PTNL,GGK,133703.14,012925,6104.64373420,N,01027.91199999,E,2,08,1.0,0.0,M,*0B";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Ggk));
+            Ggk ggk = (Ggk)msg;
+            Assert.AreEqual(new DateTime(2025, 1, 29, 13, 37, 3, 140, DateTimeKind.Utc), ggk.UtcTime);
+            Assert.AreEqual(61.07739557, ggk.Latitude);
+            Assert.AreEqual(10.465199999833333, ggk.Longitude);
+            Assert.AreEqual(Ggk.QualityIndicator.RtkFloat, ggk.Quality);
+            Assert.AreEqual(8, ggk.NumberOfSatellites);
+            Assert.AreEqual(1, ggk.DilutionOfPrecision);
+            Assert.AreEqual(0, ggk.EllipsoidalHeightOfFix);
+            Assert.IsTrue(ggk.EllipsoidalHeightIsMeasuredInMeters);
+        }
+
+        [TestMethod]
         public void TestPgrme()
         {
             string input = "$PGRME,2.3,M,3.3,M,4.0,M*2B";
