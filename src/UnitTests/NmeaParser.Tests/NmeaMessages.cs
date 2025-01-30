@@ -321,6 +321,19 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestKMXDR()
+        {
+            string input = "$KMXDR,P,123.4,M,DEPTH*32";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Xdr));
+            Xdr xdr = (Xdr)msg;
+            Assert.AreEqual("P", xdr.Type);
+            Assert.AreEqual(123.4, xdr.Data);
+            Assert.AreEqual("M", xdr.Unit);
+            Assert.AreEqual("DEPTH", xdr.ID);
+        }
+
+        [TestMethod]
         public void TestPtlna()
         {
             string input = "$PTNLA,HV,002.94,M,288.1,D,008.6,D,002.98,M*74";
