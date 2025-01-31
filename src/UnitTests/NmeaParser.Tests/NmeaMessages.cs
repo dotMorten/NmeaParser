@@ -86,6 +86,7 @@ namespace NmeaParser.Tests
                     var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
                     if (line.IndexOf("PTNL,") > 0) continue; // TODO PTNL
+                    if (line.IndexOf("AML,") > 0) continue; // TODO AML
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
                     {
@@ -123,6 +124,20 @@ namespace NmeaParser.Tests
             Assert.IsNotNull(msg);
 
             Assert.ThrowsException<ArgumentException>(() => NmeaMessage.Parse(input, ignoreChecksum: false));
+        }
+
+        [TestMethod]
+        public void TestAmlSvm()
+        {
+            string input = "$AML,SVM,1468.951,TC,15.753,SN,168753*0F";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Svm));
+            Svm svm = (Svm)msg;
+            Assert.AreEqual(1468.951, svm.SoundVelocity);
+            Assert.AreEqual("TC", svm.TemperatureUnit);
+            Assert.AreEqual(15.753, svm.Temperature);
+            Assert.IsTrue(svm.IsSerialNumber);
+            Assert.AreEqual(168753, svm.SerialNumber);
         }
 
         [TestMethod]

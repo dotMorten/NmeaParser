@@ -188,8 +188,9 @@ namespace NmeaParser.Messages
 
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
-            if (MessageType == "PTNL") {
+            if (MessageType is "PTNL" or "AML") {
                 // PTNL is parent to e.g. AVR, GGK etc.
+                // AML is parent to e.g. SVT, SV, SVP etc
                 MessageType = parts[1];
                 parts = parts.Skip(1).ToArray();
             }
