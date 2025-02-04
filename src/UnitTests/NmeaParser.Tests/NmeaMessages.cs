@@ -85,8 +85,6 @@ namespace NmeaParser.Tests
                 {
                     var msg = NmeaMessage.Parse(line, previousMessage as IMultiSentenceMessage);
                     Assert.IsNotNull(msg);
-                    if (line.IndexOf("PTNL,") > 0) continue; // TODO PTNL
-                    if (line.IndexOf("AML,") > 0) continue; // TODO AML
                     var idx = line.IndexOf('*');
                     if (idx >= 0)
                     {
@@ -124,20 +122,6 @@ namespace NmeaParser.Tests
             Assert.IsNotNull(msg);
 
             Assert.ThrowsException<ArgumentException>(() => NmeaMessage.Parse(input, ignoreChecksum: false));
-        }
-
-        [TestMethod]
-        public void TestAmlSvm()
-        {
-            string input = "$AML,SVM,1468.951,TC,15.753,SN,168753*0F";
-            var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(Svm));
-            Svm svm = (Svm)msg;
-            Assert.AreEqual(1468.951, svm.SoundVelocity);
-            Assert.AreEqual("TC", svm.TemperatureUnit);
-            Assert.AreEqual(15.753, svm.Temperature);
-            Assert.IsTrue(svm.IsSerialNumber);
-            Assert.AreEqual(168753, svm.SerialNumber);
         }
 
         [TestMethod]
@@ -364,23 +348,6 @@ namespace NmeaParser.Tests
             Assert.AreEqual('D', ptlna.VerticalAngleUnits);
             Assert.AreEqual(2.98, ptlna.SlopeDistance);
             Assert.AreEqual('M', ptlna.SlopeDistanceUnits);
-        }
-
-        [TestMethod]
-        public void TestPtnlGgk()
-        {
-            string input = "$PTNL,GGK,133703.14,012925,6104.64373420,N,01027.91199999,E,2,08,1.0,0.0,M,*0B";
-            var msg = NmeaMessage.Parse(input);
-            Assert.IsInstanceOfType(msg, typeof(Ggk));
-            Ggk ggk = (Ggk)msg;
-            Assert.AreEqual(new DateTime(2025, 1, 29, 13, 37, 3, 140, DateTimeKind.Utc), ggk.UtcTime);
-            Assert.AreEqual(61.07739557, ggk.Latitude);
-            Assert.AreEqual(10.465199999833333, ggk.Longitude);
-            Assert.AreEqual(Ggk.QualityIndicator.RtkFloat, ggk.Quality);
-            Assert.AreEqual(8, ggk.NumberOfSatellites);
-            Assert.AreEqual(1, ggk.DilutionOfPrecision);
-            Assert.AreEqual(0, ggk.EllipsoidalHeightOfFix);
-            Assert.IsTrue(ggk.EllipsoidalHeightIsMeasuredInMeters);
         }
 
         [TestMethod]

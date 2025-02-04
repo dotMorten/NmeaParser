@@ -188,12 +188,6 @@ namespace NmeaParser.Messages
 
             string[] parts = message.Split(new char[] { ',' });
             string MessageType = parts[0].Substring(1);
-            if (MessageType is "PTNL" or "AML") {
-                // PTNL is parent to e.g. AVR, GGK etc.
-                // AML is parent to e.g. SVT, SV, SVP etc
-                MessageType = parts[1];
-                parts = parts.Skip(1).ToArray();
-            }
             if (MessageType == string.Empty)
                 throw new ArgumentException("Missing NMEA Message Type");
             string[] MessageParts = parts.Skip(1).ToArray();
@@ -308,68 +302,6 @@ namespace NmeaParser.Messages
                                    .Add(TimeSpan.FromSeconds(double.Parse(value.Substring(4), CultureInfo.InvariantCulture)));
             }
             return TimeSpan.Zero;
-        }
-
-        /// <summary>
-        /// Parse from mmddyy + hhmmss.ss to DateTime (used in e.g. Ggk)
-        /// https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_PTNL_GGK.html
-        /// </summary>
-        internal static DateTime? StringsToUtcDateTime(string dateField, string timeField)
-        {
-            if (string.IsNullOrWhiteSpace(dateField) || string.IsNullOrWhiteSpace(timeField))
-                return null;
-
-            // 2. Parse date (mmddyy)
-            //    - Typically the year is 2 digits; you must decide how to handle the century.
-            //    - For example, if year < 80 => 20xx; else => 19xx
-            if (dateField.Length < 6) return null;
-            if (!int.TryParse(dateField.Substring(0, 2), out int month)) return null;     // mm
-            if (!int.TryParse(dateField.Substring(2, 2), out int day)) return null;       // dd
-            if (!int.TryParse(dateField.Substring(4, 2), out int year)) return null;      // yy
-
-            int fullYear = (year < 80) ? (2000 + year) : (1900 + year);
-
-            // 3. Parse time (hhmmss.ss)
-            //    - The fractional seconds might be optional or might have variable length.
-            //    - Parse hours, minutes, and then the part after the decimal.
-            //    - Time can be "hhmmss", or "hhmmss.sss", etc.
-            // Example: "102939.00" => hh=10, mm=29, ss=39, fraction=0
-            if (timeField.Length < 6) return null;
-            if (!int.TryParse(timeField.Substring(0, 2), out int hours)) return null;     // hh
-            if (!int.TryParse(timeField.Substring(2, 2), out int minutes)) return null;   // mm
-
-            // The seconds part can have a decimal fraction
-            // So we split around the decimal point:
-            double secondsDouble;
-            if (timeField.Length > 4)
-            {
-                string secString = timeField.Substring(4);  // "39.00 in example above"
-                if (!double.TryParse(secString,
-                                     System.Globalization.NumberStyles.Float,
-                                     System.Globalization.CultureInfo.InvariantCulture,
-                                     out secondsDouble))
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                secondsDouble = 0.0;
-            }
-            int seconds = (int)secondsDouble;
-            int milliseconds = (int)((secondsDouble - seconds) * 1000.0);
-
-            // 4. Construct the UTC DateTime
-            try
-            {
-                var result = new DateTime(fullYear, month, day, hours, minutes, seconds, milliseconds, DateTimeKind.Utc);
-                return result;
-            }
-            catch
-            {
-                // If the date/time is invalid (e.g. month=13, day=32), we return null or handle differently
-                return null;
-            }
         }
 
         /// <summary>
