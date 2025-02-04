@@ -125,6 +125,18 @@ namespace NmeaParser.Tests
         }
 
         [TestMethod]
+        public void TestDPT()
+        {
+            string input = "$--DPT,149.5,000.5,1000.0*7F";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Dpt));
+            Dpt dpt = (Dpt)msg;
+            Assert.AreEqual(149.5, dpt.DepthMeters);
+            Assert.AreEqual(0.5, dpt.DepthOffsetMeters);
+            Assert.AreEqual(1000, dpt.MaxDepthRangeMeters);
+        }
+
+        [TestMethod]
         public void TestGprma()
         {
             string input = "$GPRMA,A,4917.24,S,12309.57,W,1000.0,2000.0,123.4,321.0,10,E,A*38";
@@ -294,6 +306,30 @@ namespace NmeaParser.Tests
             Assert.IsNull(gga.TimeSinceLastDgpsUpdate);
             Assert.AreEqual(TimeSpan.Zero, gga.FixTime);
             Assert.AreEqual(-1, gga.DgpsStationId);
+        }
+
+        [TestMethod]
+        public void TestHEHDT()
+        {
+            const string input = "$HEHDT,13.37,T*29";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Hdt));
+            Hdt hdt = (Hdt)msg;
+            Assert.AreEqual(13.37, hdt.HeadingInDeg);
+            Assert.IsTrue(hdt.HeadingRelToTrueNorth);
+        }
+
+        [TestMethod]
+        public void TestKMXDR()
+        {
+            string input = "$KMXDR,P,123.4,M,DEPTH*32";
+            var msg = NmeaMessage.Parse(input);
+            Assert.IsInstanceOfType(msg, typeof(Xdr));
+            Xdr xdr = (Xdr)msg;
+            Assert.AreEqual("P", xdr.Type);
+            Assert.AreEqual(123.4, xdr.Data);
+            Assert.AreEqual("M", xdr.Unit);
+            Assert.AreEqual("DEPTH", xdr.ID);
         }
 
         [TestMethod]
