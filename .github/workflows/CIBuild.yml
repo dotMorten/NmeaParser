@@ -35,9 +35,13 @@ jobs:
          echo y>>license_accepter.txt
          echo y>>license_accepter.txt
          echo y>>license_accepter.txt
-         cmd /c '"%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --licenses < license_accepter.txt'
-         cmd /c '"%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --install "platforms;android-24"'
-         cmd /c '"%ProgramFiles(x86)%\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat" --install "platforms;android-21"'
+         $sdkmanager = "$env:ANDROID_SDK_ROOT\cmdline-tools\latest\bin\sdkmanager.bat"
+         if (!(Test-Path $sdkmanager) -and $env:ANDROID_HOME) {
+            $sdkmanager = "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat"
+         }
+         cmd /c "\"$sdkmanager\" --licenses < license_accepter.txt"
+         cmd /c "\"$sdkmanager\" --install \"platforms;android-24\""
+         cmd /c "\"$sdkmanager\" --install \"platforms;android-21\""
 
     - name: Build
       run: |
