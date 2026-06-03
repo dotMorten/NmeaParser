@@ -32,7 +32,7 @@ namespace NmeaParser.Messages
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gprte")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [NmeaMessageType("--RTE")]
-    public sealed class Rte : NmeaMultiSentenceMessage, IEnumerable<string>
+    public class Rte : NmeaMultiSentenceMessage, IEnumerable<string>
     {
         private readonly List<string> _waypoints = new List<string>();
         
